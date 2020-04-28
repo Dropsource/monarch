@@ -1,0 +1,22 @@
+name: dropsource_storybook
+description: Dropsource Storybook server and dart package for writing and rendering widget stories.
+version: 0.0.1
+author: Dropsource Team
+homepage:
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  build: ^1.2.2
+  dart_style: ^1.3.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  pedantic: ^1.8.0
+
+flutter:
+

@@ -1,0 +1,19 @@
+builders:
+
+  stories_builder:
+    import: 'package:dropsource_storybook/stories_builder_factories.dart'
+    builder_factories: ['storiesBuilder']
+    build_extensions: {
+      '.stories.dart': ['.stories.g.dart'],
+    }
+    build_to: cache
+    auto_apply: root_package
+    runs_before: ['dropsource_storybook|main_storybook_builder']
+
+
+  main_storybook_builder:
+    import: 'package:dropsource_storybook/stories_builder_factories.dart'
+    builder_factories: ['mainStorybookBuilder']
+    build_extensions: { '$lib$' : ['main_storybook.g.dart']}
+    build_to: cache
+    auto_apply: root_package
