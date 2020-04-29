@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:dropsource_storybook_utils/log.dart';
 
 import '../device_definitions.dart';
-import '../log/dropsource_log.dart';
 import '../storybook_data.dart';
 import 'channel_methods_sender.dart';
 import 'channel_methods_receiver.dart';

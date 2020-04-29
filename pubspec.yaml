@@ -12,6 +12,8 @@ dependencies:
     sdk: flutter
   build: ^1.2.2
   dart_style: ^1.3.3
+  dropsource_storybook_utils:
+    path: ../dropsource_storybook_utils
 
 dev_dependencies:
   flutter_test:

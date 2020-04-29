@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../log/dropsource_log.dart';
+import 'package:dropsource_storybook_utils/log.dart';
 
 class StoryId {
   final String package;

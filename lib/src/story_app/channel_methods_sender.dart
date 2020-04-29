@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 
-import '../log/dropsource_log.dart';
+import 'package:dropsource_storybook_utils/log.dart';
 import 'channel_methods.dart';
 
 class ChannelMethodsSender with Log {

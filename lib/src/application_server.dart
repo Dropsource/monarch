@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'log/dropsource_log.dart' as ds_log;
+import 'package:dropsource_storybook_utils/log.dart' as ds_log;
 
 final _logger = ds_log.Logger('ApplicationServer');
 
