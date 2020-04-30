@@ -21,11 +21,13 @@ void startStorybook(String packageName, Map<String, StoriesData> storybookDataMa
   _sendInitialChannelMethodCalls(storybookData);
 }
 
+/// In release mode, the defaultLogLevel should be CONFIG.
+/// Use log.fine and log.finest for troubleshooting or diagnostics.
 void _setUpLog() {
-  defaultLogLevel = LogLevel.CONFIG;
+  defaultLogLevel = LogLevel.ALL;
   logToConsole(recordTime: true);
-  logEnvironmentInformation(logger);
-  logCurrentProcessInformation(logger);
+  logEnvironmentInformation(logger, LogLevel.FINE);
+  logCurrentProcessInformation(logger, LogLevel.FINE);
 }
 
 void _setUpFlutterErrors() {
