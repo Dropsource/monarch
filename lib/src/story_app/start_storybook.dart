@@ -25,7 +25,7 @@ void startStorybook(String packageName, Map<String, StoriesData> storybookDataMa
 /// Use log.fine and log.finest for troubleshooting or diagnostics.
 void _setUpLog() {
   defaultLogLevel = LogLevel.ALL;
-  logToConsole(recordTime: true);
+  logToConsole(printTimestamp: true, printLoggerName: true);
   logEnvironmentInformation(logger, LogLevel.FINE);
   logCurrentProcessInformation(logger, LogLevel.FINE);
 }
