@@ -24,5 +24,6 @@ class MethodNames {
   static const ping = 'dropsource.storybook.ping';
   static const storybookData = 'dropsource.storybook.storybookData';
   static const deviceDefinitions = 'dropsource.storybook.deviceDefinitions';
+  static const readySignal = 'dropsource.storybook.readySignal';
   static const loadStory = 'dropsource.storybook.loadStory';
 }

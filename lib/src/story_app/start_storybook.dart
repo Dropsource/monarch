@@ -40,4 +40,5 @@ void _sendInitialChannelMethodCalls(StorybookData storybookData) async {
   await channelMethodsSender.sendPing();
   await channelMethodsSender.sendDeviceDefinitions(DeviceDefinitions());
   await channelMethodsSender.sendStorybookData(storybookData);
+  await channelMethodsSender.sendReadySignal();
 }

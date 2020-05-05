@@ -23,6 +23,10 @@ class ChannelMethodsSender with Log {
   Future sendStorybookData(OutboundChannelArgument storybookData) {
     return _invokeStorybookChannelMethod(MethodNames.storybookData, storybookData.toStandardMap());
   }
+
+  Future sendReadySignal() {
+    return _invokeStorybookChannelMethod(MethodNames.readySignal);
+  }
 }
 
 final channelMethodsSender = ChannelMethodsSender();
