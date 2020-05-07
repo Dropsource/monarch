@@ -12,7 +12,7 @@ class MainStorybookBuilder implements Builder {
 
   @override
   FutureOr<void> build(BuildStep buildStep) async {
-    print('*** Processing ${buildStep.inputId}');
+    logFine('Processing ${buildStep.inputId}');
 
     final idMap = <String, AssetId>{};
 
@@ -69,5 +69,9 @@ void main() {
 }
 
 ''';
+  }
+
+  void logFine(String message) {
+    print('FINE [MainStorybookBuilder] $message');
   }
 }

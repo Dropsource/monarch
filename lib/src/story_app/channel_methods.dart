@@ -27,4 +27,5 @@ class MethodNames {
   static const deviceDefinitions = 'dropsource.storybook.deviceDefinitions';
   static const readySignal = 'dropsource.storybook.readySignal';
   static const loadStory = 'dropsource.storybook.loadStory';
+  static const setUpLog = 'dropsource.storybook.setUpLog';
 }

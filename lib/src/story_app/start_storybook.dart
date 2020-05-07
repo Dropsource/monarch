@@ -13,6 +13,8 @@ void startStorybook(String packageName, Map<String, StoriesData> storybookDataMa
   _setUpLog();
   _setUpFlutterErrors();
 
+  logger.finest('Starting storybook flutter app');
+
   final storybookData = StorybookData(packageName, storybookDataMap);
   runApp(StoryApp(storybookData: storybookData));
 
@@ -20,13 +22,10 @@ void startStorybook(String packageName, Map<String, StoriesData> storybookDataMa
   _sendInitialChannelMethodCalls(storybookData);
 }
 
-/// In release mode, the defaultLogLevel should be CONFIG.
-/// Use log.fine and log.finest for troubleshooting or diagnostics.
+/// The defaultLogLevel may be reset by the platform, see channel_methods_receiver.dart
 void _setUpLog() {
   defaultLogLevel = LogLevel.ALL;
-  logToConsole(printTimestamp: true, printLoggerName: true);
-  logEnvironmentInformation(logger, LogLevel.FINE);
-  logCurrentProcessInformation(logger, LogLevel.FINE);
+  logToConsole(printTimestamp: false, printLoggerName: true);
 }
 
 void _setUpFlutterErrors() {

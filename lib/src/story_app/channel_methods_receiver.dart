@@ -12,8 +12,9 @@ final logger = Logger('ChannelMethodsReceiver');
 
 void receiveChannelMethodCalls() {
   // logger.level = LogLevel.ALL;
-  Channels.dropsourceStorybookChannel.setMethodCallHandler((MethodCall call) async {
-    logger.info('channel method received: ${call.method}');
+  Channels.dropsourceStorybookChannel
+      .setMethodCallHandler((MethodCall call) async {
+    logger.finest('channel method received: ${call.method}');
 
     try {
       return await _handler(call);
@@ -29,8 +30,14 @@ Future<dynamic> _handler(MethodCall call) async {
   final Map args = call.arguments;
 
   switch (call.method) {
+    case MethodNames.setUpLog:
+      _setUpLog(args['defaultLogLevelValue']);
+      break;
+
     case MethodNames.requestDeviceDefinitions:
-      unawaited(channelMethodsSender.sendDeviceDefinitions(DeviceDefinitions()));
+      logEnvironmentInformation(logger, LogLevel.FINE);
+      unawaited(
+          channelMethodsSender.sendDeviceDefinitions(DeviceDefinitions()));
       break;
 
     case MethodNames.loadStory:
@@ -42,4 +49,18 @@ Future<dynamic> _handler(MethodCall call) async {
       // return exception to the platform side, do not throw
       return MissingPluginException('method ${call.method} not implemented');
   }
+}
+
+void _setUpLog(int defaultLogLevelValue) {
+  defaultLogLevel = _getLogLevelFromValue(defaultLogLevelValue);
+  logCurrentProcessInformation(logger, LogLevel.FINE);
+}
+
+LogLevel _getLogLevelFromValue(int logLevelValue) {
+  for (var logLevel in LogLevel.LEVELS) {
+    if (logLevel.value == logLevelValue) {
+      return logLevel;
+    }
+  }
+  return LogLevel.ALL;
 }
