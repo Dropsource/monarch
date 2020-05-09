@@ -4,7 +4,12 @@ import 'package:dropsource_storybook_utils/log.dart';
 
 class StoryId {
   final String package;
-  final String path; // this path is the generated stories path
+  
+  /// The generated stories path. As of 2020-05-08, this path is
+  /// relative to the stories directory. 
+  /// It looks like 'stories/foo.stories.g.dart'.
+  final String path;
+
   final String name;
 
   StoryId(this.package, this.path, this.name);

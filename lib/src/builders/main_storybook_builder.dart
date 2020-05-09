@@ -64,7 +64,7 @@ import 'package:dropsource_storybook/dropsource_storybook.dart';
 ${storiesImports.join('\n')}
 
 void main() {
-  ui.window.setIsolateDebugName("storybook-isolate");
+  ui.window.setIsolateDebugName('storybook-isolate');
   startStorybook('$packageName', $storybookDataMap);
 }
 

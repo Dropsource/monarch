@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:pedantic/pedantic.dart';
 
 import 'package:dropsource_storybook_utils/log.dart';
+import 'package:dropsource_storybook_utils/log_config.dart';
 
 import '../device_definitions.dart';
 import 'active_story.dart';

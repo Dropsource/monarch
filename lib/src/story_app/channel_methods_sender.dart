@@ -5,7 +5,7 @@ import 'channel_methods.dart';
 
 class ChannelMethodsSender with Log {
   
-  MethodChannel _dropsourceStorybookChannel = Channels.dropsourceStorybookChannel;
+  final MethodChannel _dropsourceStorybookChannel = Channels.dropsourceStorybookChannel;
 
   Future<T> _invokeStorybookChannelMethod<T>(String method, [ dynamic arguments ]) async {
     log.info('sending channel method: $method');

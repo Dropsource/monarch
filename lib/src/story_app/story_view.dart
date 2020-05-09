@@ -35,8 +35,8 @@ class _StoryViewState extends State<StoryView> {
     if (activeStoryId == null) {
       _storyFunction = null;
     } else {
-      final storybookData = widget.storybookData.storiesDataMap[activeStoryId.pathKey];
-      _storyFunction = storybookData.storiesMap[activeStoryId.name];
+      final storiesData = widget.storybookData.storiesDataMap[activeStoryId.pathKey];
+      _storyFunction = storiesData.storiesMap[activeStoryId.name];
     }
   }
 
