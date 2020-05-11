@@ -95,9 +95,11 @@ packages:
   dropsource_storybook_utils:
     dependency: "direct main"
     description:
-      path: "../dropsource_storybook_utils"
-      relative: true
-    source: path
+      path: "."
+      ref: "v0.0.1"
+      resolved-ref: "1fcab15bc2c0bb5c6a903b6df0eca6aba742ecad"
+      url: "git@github.com:Dropsource/dropsource_storybook_utils.git"
+    source: git
     version: "0.0.0"
   fake_async:
     dependency: transitive
