@@ -31,7 +31,7 @@ targets:
 Outside of your project directory, create a `storybook_tools` directory. Then, download the storybook tools to that directory.
 ```
 $ cd path/to/storybook_tools
-$ curl -O https://dropsource-storybook.s3.amazonaws.com/dist/alpha/storybook_tools_0.0.2.zip
+$ curl -O https://dropsource-storybook.s3.amazonaws.com/dist/alpha/storybook_tools_0.0.5.zip
 $ unzip storybook_tools_0.0.2.zip
 ```
 
