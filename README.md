@@ -14,7 +14,7 @@ dependencies:
   dropsource_storybook:
     git:
       url: git@github.com:Dropsource/dropsource_storybook.git
-      ref: v0.0.2
+      ref: v0.0.3
   build_runner: ^1.7.1
 ```
 It requires build_runner, make sure to add it.

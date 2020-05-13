@@ -1,6 +1,6 @@
 name: dropsource_storybook
 description: Dropsource Storybook server and dart package for writing and rendering widget stories.
-version: 0.0.1
+version: 0.0.3
 author: Dropsource Team
 homepage:
 
