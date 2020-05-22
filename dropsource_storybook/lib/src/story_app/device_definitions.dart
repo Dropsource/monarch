@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'story_app/channel_methods.dart';
+
+import 'channel_methods.dart';
 import 'logical_resolution.dart';
 
 const String _ios = 'ios';

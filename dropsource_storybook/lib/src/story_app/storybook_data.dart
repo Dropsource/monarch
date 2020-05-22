@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart' as p;
 
-import 'story_app/channel_methods.dart';
+import 'channel_methods.dart';
 
 typedef StoryFunction = Widget Function();
 

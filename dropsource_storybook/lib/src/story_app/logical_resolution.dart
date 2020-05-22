@@ -1,4 +1,4 @@
-import 'story_app/channel_methods.dart';
+import 'channel_methods.dart';
 
 /// Flutter uses logical pixels. Also called device-independent or
 /// resolution-independent pixels.

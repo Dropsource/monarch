@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
-import '../storybook_data.dart';
 import 'active_story.dart';
+import 'storybook_data.dart';
 
 class StoryView extends StatefulWidget {
   final StorybookData storybookData;

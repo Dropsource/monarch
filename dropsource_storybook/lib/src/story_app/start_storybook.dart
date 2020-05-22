@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:dropsource_storybook_utils/log.dart';
 import 'package:dropsource_storybook_utils/log_config.dart';
 
-import '../storybook_data.dart';
 import 'channel_methods_sender.dart';
 import 'channel_methods_receiver.dart';
 import 'stories_errors.dart';
 import 'story_app.dart';
+import 'storybook_data.dart';
 
 final logger = Logger('Start');
 

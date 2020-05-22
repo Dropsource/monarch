@@ -4,10 +4,10 @@ import 'package:pedantic/pedantic.dart';
 import 'package:dropsource_storybook_utils/log.dart';
 import 'package:dropsource_storybook_utils/log_config.dart';
 
-import '../device_definitions.dart';
 import 'active_story.dart';
 import 'channel_methods.dart';
 import 'channel_methods_sender.dart';
+import 'device_definitions.dart';
 
 final logger = Logger('ChannelMethodsReceiver');
 

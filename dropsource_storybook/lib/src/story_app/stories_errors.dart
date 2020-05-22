@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 
 import '../builders/stories_builder.dart';
-import '../storybook_data.dart';
 import 'active_story.dart';
+import 'storybook_data.dart';
 
 StorybookData _storybookData;
 
