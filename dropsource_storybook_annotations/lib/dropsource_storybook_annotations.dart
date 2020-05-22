@@ -1,8 +1,13 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
-library dropsource_storybook_annotations;
+class StorybookTheme {
+  final String name;
+  final bool isDefault;
 
-export 'src/dropsource_storybook_annotations_base.dart';
+  const StorybookTheme(this.name, {this.isDefault = false}) : assert(name != null);
+}
 
-// TODO: Export any libraries intended for clients of this package.
+class Story {
+  final String name;
+  final String theme;
+
+  const Story({this.name, this.theme});
+}

@@ -13,7 +13,7 @@ class StoriesBuilder implements Builder {
 
   @override
   FutureOr<void> build(BuildStep buildStep) async {
-    logFine('Processing: ${buildStep.inputId}');
+    log.fine('Processing: ${buildStep.inputId}');
 
     final entryLib = await buildStep.inputLibrary;
 
@@ -32,15 +32,15 @@ class StoriesBuilder implements Builder {
         if (topLevelElement.returnType.element.name == 'Widget') {
           final storyName = topLevelElement.name;
           final storyNameInSingleQuotes = "'$storyName'";
-          logFine('Found story: $storyName');
+          log.fine('Found story: $storyName');
           storiesNames.add(storyNameInSingleQuotes);
           storiesMap[storyNameInSingleQuotes] = storyName;
         } else {
-          logFine(
+          log.fine(
               'Top level function is not story, return type is not Widget: ${topLevelElement.name}');
         }
       } else {
-        logFine(
+        log.fine(
             'Top level element is not story, it is not FunctionElement: ${topLevelElement.name}');
       }
     }
@@ -69,9 +69,5 @@ $storiesSource
 const storiesData = StoriesData('${storiesAssetId.package}', '${storiesAssetId.path}', [${storiesNames.join(', ')}], $storiesMap);
 
 ''';
-  }
-
-  void logFine(String message) {
-    print('FINE [StoriesBuilder] $message');
   }
 }
