@@ -1,0 +1,2 @@
+include: package:pedantic/analysis_options.yaml
+# Enabled lints can be found: https://github.com/dart-lang/pedantic/tree/master/lib
