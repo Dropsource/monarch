@@ -1,5 +1,15 @@
 builders:
 
+  themes_builder:
+    import: 'package:dropsource_storybook/stories_builder_factories.dart'
+    builder_factories: ['themesBuilder']
+    build_extensions: {
+      '.dart': ['.storybook_themes.g.dart']
+    }
+    build_to: cache
+    auto_apply: root_package
+    runs_before: ['dropsource_storybook|stories_builder']
+
   stories_builder:
     import: 'package:dropsource_storybook/stories_builder_factories.dart'
     builder_factories: ['storiesBuilder']

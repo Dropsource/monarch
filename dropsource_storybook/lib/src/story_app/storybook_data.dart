@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart' as p;
 
@@ -33,6 +34,14 @@ class StoriesData implements OutboundChannelArgument {
   Map<String, dynamic> toStandardMap() {
     return {'package': package, 'path': path, 'storiesNames': storiesNames};
   }
+}
+
+class ThemeMetaData {
+  final String name;
+  final ThemeData theme;
+  final bool isDefault;
+  
+  ThemeMetaData(this.name, this.theme, this.isDefault);
 }
 
 class StorybookData implements OutboundChannelArgument {
