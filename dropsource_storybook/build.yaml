@@ -1,29 +1,28 @@
 builders:
 
-  themes_builder:
+  meta_themes_builder:
     import: 'package:dropsource_storybook/stories_builder_factories.dart'
-    builder_factories: ['themesBuilder']
+    builder_factories: ['metaThemesBuilder']
     build_extensions: {
-      '.dart': ['.storybook_themes.g.dart']
+      '.dart': ['.meta_themes.g.dart']
     }
     build_to: cache
     auto_apply: root_package
-    runs_before: ['dropsource_storybook|stories_builder']
+    runs_before: ['dropsource_storybook|meta_stories_builder']
 
-  stories_builder:
+  meta_stories_builder:
     import: 'package:dropsource_storybook/stories_builder_factories.dart'
-    builder_factories: ['storiesBuilder']
+    builder_factories: ['metaStoriesBuilder']
     build_extensions: {
-      '.stories.dart': ['.stories.g.dart'],
+      '.stories.dart': ['.meta_stories.g.dart'],
     }
     build_to: cache
     auto_apply: root_package
-    runs_before: ['dropsource_storybook|main_storybook_builder']
+    runs_before: ['dropsource_storybook|main_builder']
 
-
-  main_storybook_builder:
+  main_builder:
     import: 'package:dropsource_storybook/stories_builder_factories.dart'
-    builder_factories: ['mainStorybookBuilder']
+    builder_factories: ['mainBuilder']
     build_extensions: { '$lib$' : ['main_storybook.g.dart']}
     build_to: cache
     auto_apply: root_package

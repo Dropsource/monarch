@@ -11,12 +11,16 @@ import 'storybook_data.dart';
 
 final logger = Logger('Start');
 
-void startStorybook(String packageName, Map<String, StoriesData> storybookDataMap) {
+void startStorybook(String packageName, List<ThemeMetaData> themeMetaDataList,
+    Map<String, StoriesData> storybookDataMap) {
   _setUpLog();
 
   logger.finest('Starting storybook flutter app');
 
-  final storybookData = StorybookData(packageName, storybookDataMap);
+  logger.shout('Themes: ${themeMetaDataList.map((t) => t.name).toList()}');
+
+  final storybookData =
+      StorybookData(packageName, themeMetaDataList, storybookDataMap);
   setUpStoriesErrors(storybookData);
   runApp(StoryApp(storybookData: storybookData));
 

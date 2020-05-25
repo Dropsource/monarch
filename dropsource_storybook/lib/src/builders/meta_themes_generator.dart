@@ -7,7 +7,7 @@ import 'package:dropsource_storybook_annotations/dropsource_storybook_annotation
 const TypeChecker storybookThemeTypeChecker =
     TypeChecker.fromRuntime(StorybookTheme);
 
-class ThemesGenerator extends Generator {
+class MetaThemesGenerator extends Generator {
   @override
   String generate(LibraryReader library, BuildStep buildStep) {
     final annotations = library.annotatedWith(storybookThemeTypeChecker);
@@ -15,21 +15,21 @@ class ThemesGenerator extends Generator {
       return null;
     }
 
-    final themeDataExpressions = <String>[];
+    final expressions = <String>[];
 
     for (var annotatedElement in annotations) {
       final element = annotatedElement.element;
 
       if (element is TopLevelVariableElement) {
-        log.fine('Found StorybookTheme annotation on top-level element: ${element.name}');
+        log.fine(
+            'Found StorybookTheme annotation on top-level element: ${element.name}');
         final annotation = annotatedElement.annotation;
 
         final themeName = annotation.read('name').stringValue;
         final isDefault = annotation.read('isDefault').boolValue;
         final themeVariableName = element.name;
 
-        themeDataExpressions.add(_getThemeDataExpression(themeName, themeVariableName, isDefault));
-
+        expressions.add("ThemeMetaData('$themeName', $themeVariableName, $isDefault)");
       } else {
         final msg = '''
 Found StorybookTheme annotation on an element that is not a top-level variable.
@@ -40,21 +40,17 @@ Element name: ${element.name}
       }
     }
 
-    return _outputContents(buildStep.inputId, themeDataExpressions);
+    return _outputContents(buildStep.inputId, expressions);
   }
 
-  String _getThemeDataExpression(String themeName, String themeVariableName, bool isDefault) {
-    return "ThemeMetaData('$themeName', $themeVariableName, $isDefault)";
-  }
-
-  String _outputContents(AssetId libraryAssetId,
-      List<String> themeDataExpressions) {
+  String _outputContents(
+      AssetId libraryAssetId, List<String> themeMetaDataExpressions) {
     return '''
 import 'package:dropsource_storybook/dropsource_storybook.dart';
 import '${libraryAssetId.uri}';
 
-const themeMetaDataItems = [
-  ${themeDataExpressions.join(', ')}
+final themeMetaDataItems = [
+  ${themeMetaDataExpressions.join(', ')}
 ];
 
 ''';

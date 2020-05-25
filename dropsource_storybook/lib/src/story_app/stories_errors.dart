@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 
-import '../builders/stories_builder.dart';
 import 'active_story.dart';
 import 'storybook_data.dart';
 
@@ -38,7 +37,7 @@ String _replaceGeneratedFileExtensionAndLine(String message) {
       multiLine: true, caseSensitive: true);
   return message.replaceAllMapped(regex, (match) {
     final generatedLine = int.parse(match.group(1));
-    final sourceLine = generatedLine - StoriesBuilder.storiesSourceLineOffset;
+    final sourceLine = generatedLine - 0;
     return '.stories.dart:$sourceLine';
   });
 }

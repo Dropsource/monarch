@@ -40,23 +40,26 @@ class ThemeMetaData {
   final String name;
   final ThemeData theme;
   final bool isDefault;
-  
+
   ThemeMetaData(this.name, this.theme, this.isDefault);
 }
 
 class StorybookData implements OutboundChannelArgument {
   final String packageName;
 
+  final List<ThemeMetaData> themeMetaDataList;
+
   /// It maps generated stories path to its stories data.
   /// As of 2020-04-15, the key looks like `$packageName|$generatedStoriesFilePath`
   final Map<String, StoriesData> storiesDataMap;
 
-  StorybookData(this.packageName, this.storiesDataMap);
+  StorybookData(this.packageName, this.themeMetaDataList, this.storiesDataMap);
 
   @override
   Map<String, dynamic> toStandardMap() {
     return {
       'packageName': packageName,
+      'themeMetaDataList': themeMetaDataList.map((e) => e.name).toList(),
       'storiesDataMap': storiesDataMap
           .map((key, value) => MapEntry(key, value.toStandardMap()))
     };
