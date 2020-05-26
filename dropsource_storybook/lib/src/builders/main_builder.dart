@@ -27,8 +27,8 @@ class MainBuilder implements Builder {
         buildStep.inputId.package,
         _getImportStatements(metaThemesMap),
         _getImportStatements(metaStoriesMap),
-        _getThemeMetaDataStatements(metaThemesMap),
-        _getStorybookDataMap(metaStoriesMap));
+        _getMetaThemeStatements(metaThemesMap),
+        _getMetaStoriesMap(metaStoriesMap));
 
     var formatter = DartFormatter();
     var formattedOutput = formatter.format(output);
@@ -58,20 +58,20 @@ class MainBuilder implements Builder {
     });
   }
 
-  Iterable<String> _getThemeMetaDataStatements(Map<String, AssetId> map) {
+  Iterable<String> _getMetaThemeStatements(Map<String, AssetId> map) {
     return map.entries.map((item) {
       final libraryPrefix = item.key;
-      return '...$libraryPrefix.themeMetaDataItems';
+      return '...$libraryPrefix.metaThemeItems';
     });
   }
 
-  Map<String, String> _getStorybookDataMap(Map<String, AssetId> map) {
+  Map<String, String> _getMetaStoriesMap(Map<String, AssetId> map) {
     final _map = <String, String>{};
     for (var item in map.entries) {
       final libraryPrefix = item.key;
       final assetId = item.value;
       final key = "'${assetId.package}|${assetId.path}'";
-      _map[key] = '$libraryPrefix.storiesData';
+      _map[key] = '$libraryPrefix.metaStories';
     }
     return _map;
   }
@@ -80,8 +80,8 @@ class MainBuilder implements Builder {
       String packageName,
       Iterable<String> metaThemesImportStatements,
       Iterable<String> metaStoriesImportStatements,
-      Iterable<String> themeMetaDataList,
-      Map<String, String> storybookDataMap) {
+      Iterable<String> metaThemeList,
+      Map<String, String> metaStoriesMap) {
     return '''
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
@@ -99,7 +99,7 @@ ${metaStoriesImportStatements.join('\n')}
 
 void main() {
   ui.window.setIsolateDebugName('storybook-isolate');
-  startStorybook('$packageName', [${themeMetaDataList.join(', ')}] ,$storybookDataMap);
+  startStorybook('$packageName', [${metaThemeList.join(', ')}], $metaStoriesMap);
 }
 
 ''';

@@ -54,7 +54,7 @@ class MetaStoriesGenerator extends Generator {
 import 'package:dropsource_storybook/dropsource_storybook.dart';
 import '$pathToStories';
 
-const storiesData = StoriesData('${storiesAssetId.package}', '${storiesAssetId.path}', [${storiesNames.join(', ')}], $storiesMap);
+const metaStories = MetaStories('${storiesAssetId.package}', '${storiesAssetId.path}', [${storiesNames.join(', ')}], $storiesMap);
 
 ''';
   }

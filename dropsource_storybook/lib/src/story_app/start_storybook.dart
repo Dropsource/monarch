@@ -8,19 +8,20 @@ import 'channel_methods_receiver.dart';
 import 'stories_errors.dart';
 import 'story_app.dart';
 import 'storybook_data.dart';
+import 'user_message.dart';
 
 final logger = Logger('Start');
 
-void startStorybook(String packageName, List<ThemeMetaData> themeMetaDataList,
-    Map<String, StoriesData> storybookDataMap) {
+void startStorybook(String packageName, List<MetaTheme> metaThemeList,
+    Map<String, MetaStories> metaStoriesMap) {
   _setUpLog();
 
   logger.finest('Starting storybook flutter app');
 
-  logger.shout('Themes: ${themeMetaDataList.map((t) => t.name).toList()}');
+  metaThemeList = _validateAndFilterMetaThemes(metaThemeList);
 
   final storybookData =
-      StorybookData(packageName, themeMetaDataList, storybookDataMap);
+      StorybookData(packageName, metaThemeList, metaStoriesMap);
   setUpStoriesErrors(storybookData);
   runApp(StoryApp(storybookData: storybookData));
 
@@ -31,6 +32,20 @@ void startStorybook(String packageName, List<ThemeMetaData> themeMetaDataList,
 void _setUpLog() {
   defaultLogLevel = LogLevel.ALL;
   logToConsole(printTimestamp: false, printLoggerName: true);
+}
+
+List<MetaTheme> _validateAndFilterMetaThemes(List<MetaTheme> metaThemeList) {
+  final _list = <MetaTheme>[];
+  for (var item in metaThemeList) {
+    if (item.theme == null) {
+      printUserMessage('Theme "${item.name}" is not of type ThemeData. It will be ignored.');
+    }
+    else {
+      logger.fine('Valid theme found: ${item.name}');
+      _list.add(item);
+    }
+  }
+  return _list;
 }
 
 void _sendInitialChannelMethodCalls(StorybookData storybookData) async {

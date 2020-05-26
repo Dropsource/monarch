@@ -6,7 +6,7 @@ import 'channel_methods.dart';
 
 typedef StoryFunction = Widget Function();
 
-class StoriesData implements OutboundChannelArgument {
+class MetaStories implements OutboundChannelArgument {
   /// Name of the user project or package
   final String package;
 
@@ -21,7 +21,7 @@ class StoriesData implements OutboundChannelArgument {
   /// Maps story name to its function
   final Map<String, StoryFunction> storiesMap;
 
-  const StoriesData(
+  const MetaStories(
       this.package, this.path, this.storiesNames, this.storiesMap);
 
   String get pathFirstPartRemoved {
@@ -36,31 +36,32 @@ class StoriesData implements OutboundChannelArgument {
   }
 }
 
-class ThemeMetaData {
+class MetaTheme {
   final String name;
   final ThemeData theme;
   final bool isDefault;
 
-  ThemeMetaData(this.name, this.theme, this.isDefault);
+  MetaTheme(this.name, dynamic dynamicTheme, this.isDefault)
+      : theme = dynamicTheme is ThemeData ? dynamicTheme : null;
 }
 
 class StorybookData implements OutboundChannelArgument {
   final String packageName;
 
-  final List<ThemeMetaData> themeMetaDataList;
+  final List<MetaTheme> metaThemeList;
 
-  /// It maps generated stories path to its stories data.
+  /// It maps generated meta-stories path to its meta-stories object.
   /// As of 2020-04-15, the key looks like `$packageName|$generatedStoriesFilePath`
-  final Map<String, StoriesData> storiesDataMap;
+  final Map<String, MetaStories> metaStoriesMap;
 
-  StorybookData(this.packageName, this.themeMetaDataList, this.storiesDataMap);
+  StorybookData(this.packageName, this.metaThemeList, this.metaStoriesMap);
 
   @override
   Map<String, dynamic> toStandardMap() {
     return {
       'packageName': packageName,
-      'themeMetaDataList': themeMetaDataList.map((e) => e.name).toList(),
-      'storiesDataMap': storiesDataMap
+      'metaThemeList': metaThemeList.map((e) => e.name).toList(),
+      'metaStoriesMap': metaStoriesMap
           .map((key, value) => MapEntry(key, value.toStandardMap()))
     };
   }

@@ -7,22 +7,26 @@ StorybookData _storybookData;
 
 void setUpStoriesErrors(StorybookData storybookData) {
   _storybookData = storybookData;
+
+  // Replacing original implementation of `debugPrint` with our own.
+  // `dumpErrorToConsole` calls `debugPrint`.
   debugPrint = _debugPrintStorybook;
+
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.dumpErrorToConsole(details, forceReport: true);
   };
 }
 
 void _debugPrintStorybook(String message, {int wrapWidth}) {
-  var storyErrorMessage = _getActiveStoryErrorMessage();
-  var sourceMessage =
-      _replaceGeneratedFileExtensionAndLine(_replaceGeneratedPath(message));
+  var activeStoryErrorMessage = _getActiveStoryErrorMessage();
+  // var sourceMessage =
+  //     _replaceGeneratedFileExtensionAndLine(_replaceGeneratedPath(message));
   
   debugPrintSynchronously('''
 ###error-in-story###
-$storyErrorMessage
+$activeStoryErrorMessage
 
-$sourceMessage''',
+$message''',
       wrapWidth: wrapWidth);
 }
 
@@ -44,8 +48,8 @@ String _replaceGeneratedFileExtensionAndLine(String message) {
 
 String _getActiveStoryErrorMessage() {
   final activeStoryId = activeStory.activeStoryId;
-  final storiesData = _storybookData.storiesDataMap[activeStoryId.pathKey];
+  final metaStories = _storybookData.metaStoriesMap[activeStoryId.pathKey];
   return '''
 Error in story:
-  ${storiesData.pathFirstPartRemoved} > ${activeStoryId.name}''';
+  ${metaStories.pathFirstPartRemoved} > ${activeStoryId.name}''';
 }
