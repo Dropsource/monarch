@@ -5,8 +5,10 @@ import 'package:dropsource_storybook_utils/log.dart';
 import 'package:dropsource_storybook_utils/log_config.dart';
 
 import 'active_story.dart';
+import 'active_theme.dart';
 import 'channel_methods.dart';
 import 'channel_methods_sender.dart';
+import 'standard_themes.dart';
 import 'device_definitions.dart';
 
 final logger = Logger('ChannelMethodsReceiver');
@@ -37,13 +39,21 @@ Future<dynamic> _handler(MethodCall call) async {
 
     case MethodNames.requestDeviceDefinitions:
       logEnvironmentInformation(logger, LogLevel.FINE);
-      unawaited(
-          channelMethodsSender.sendDeviceDefinitions(DeviceDefinitions()));
+      await channelMethodsSender.sendDeviceDefinitions(DeviceDefinitions());
+      break;
+
+    case MethodNames.requestStandardThemes:
+      await channelMethodsSender.sendStandardThemes(StandardThemes());
       break;
 
     case MethodNames.loadStory:
       final String storyKey = args['storyKey'];
       activeStory.setActiveStory(storyKey);
+      break;
+
+    case MethodNames.setActiveTheme:
+      final String themeId = args['themeId'];
+      activeTheme.setActiveMetaTheme(themeId);
       break;
 
     default:

@@ -36,31 +36,41 @@ class MetaStories implements OutboundChannelArgument {
   }
 }
 
-class MetaTheme {
+class MetaTheme implements OutboundChannelArgument {
+  final String id;
   final String name;
   final ThemeData theme;
   final bool isDefault;
 
-  MetaTheme(this.name, dynamic dynamicTheme, this.isDefault)
-      : theme = dynamicTheme is ThemeData ? dynamicTheme : null;
+  MetaTheme(this.id, this.name, this.theme, this.isDefault);
+
+  MetaTheme.user(this.name, dynamic dynamicTheme, this.isDefault)
+      : id = name,
+        theme = dynamicTheme is ThemeData ? dynamicTheme : null;
+
+  @override
+  Map<String, dynamic> toStandardMap() {
+    return {'id': id, 'name': name, 'isDefault': isDefault};
+  }
 }
 
 class StorybookData implements OutboundChannelArgument {
   final String packageName;
 
-  final List<MetaTheme> metaThemeList;
+  /// List of user-annotated themes
+  final List<MetaTheme> metaThemes;
 
   /// It maps generated meta-stories path to its meta-stories object.
   /// As of 2020-04-15, the key looks like `$packageName|$generatedStoriesFilePath`
   final Map<String, MetaStories> metaStoriesMap;
 
-  StorybookData(this.packageName, this.metaThemeList, this.metaStoriesMap);
+  StorybookData(this.packageName, this.metaThemes, this.metaStoriesMap);
 
   @override
   Map<String, dynamic> toStandardMap() {
     return {
       'packageName': packageName,
-      'metaThemeList': metaThemeList.map((e) => e.name).toList(),
+      'metaThemes': metaThemes.map((e) => e.toStandardMap()).toList(),
       'metaStoriesMap': metaStoriesMap
           .map((key, value) => MapEntry(key, value.toStandardMap()))
     };

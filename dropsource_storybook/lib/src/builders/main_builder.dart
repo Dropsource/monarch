@@ -14,10 +14,10 @@ class MainBuilder implements Builder {
   FutureOr<void> build(BuildStep buildStep) async {
     log.fine('Processing ${buildStep.inputId}');
 
-    final metaThemesMap = await _getLibraryPrefixToAssetIdMap(
+    final metaThemesIdMap = await _getLibraryPrefixToAssetIdMap(
         buildStep, 't', '**/*.meta_themes.g.dart');
 
-    final metaStoriesMap = await _getLibraryPrefixToAssetIdMap(
+    final metaStoriesIdMap = await _getLibraryPrefixToAssetIdMap(
         buildStep, 's', '**/*.meta_stories.g.dart');
 
     final outputId =
@@ -25,10 +25,10 @@ class MainBuilder implements Builder {
 
     final output = _outputContents(
         buildStep.inputId.package,
-        _getImportStatements(metaThemesMap),
-        _getImportStatements(metaStoriesMap),
-        _getMetaThemeStatements(metaThemesMap),
-        _getMetaStoriesMap(metaStoriesMap));
+        _getImportStatements(metaThemesIdMap),
+        _getImportStatements(metaStoriesIdMap),
+        _getMetaThemeStatements(metaThemesIdMap),
+        _getMetaStoriesMap(metaStoriesIdMap));
 
     var formatter = DartFormatter();
     var formattedOutput = formatter.format(output);

@@ -29,7 +29,7 @@ class MetaThemesGenerator extends Generator {
         final isDefault = annotation.read('isDefault').boolValue;
         final themeVariableName = element.name;
 
-        expressions.add("MetaTheme('$themeName', $themeVariableName, $isDefault)");
+        expressions.add("MetaTheme.user('$themeName', $themeVariableName, $isDefault)");
       } else {
         final msg = '''
 Found StorybookTheme annotation on an element that is not a top-level variable.
@@ -44,13 +44,13 @@ Element name: ${element.name}
   }
 
   String _outputContents(
-      AssetId libraryAssetId, List<String> themeMetaDataExpressions) {
+      AssetId libraryAssetId, List<String> metaThemeExpressions) {
     return '''
 import 'package:dropsource_storybook/dropsource_storybook.dart';
 import '${libraryAssetId.uri}';
 
 final metaThemeItems = [
-  ${themeMetaDataExpressions.join(', ')}
+  ${metaThemeExpressions.join(', ')}
 ];
 
 ''';

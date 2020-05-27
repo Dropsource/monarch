@@ -1,13 +1,15 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'active_story.dart';
+import 'active_theme.dart';
 import 'storybook_data.dart';
 
 class StoryView extends StatefulWidget {
   final StorybookData storybookData;
-  
+
   StoryView({this.storybookData});
 
   @override
@@ -18,15 +20,27 @@ class StoryView extends StatefulWidget {
 
 class _StoryViewState extends State<StoryView> {
   StoryFunction _storyFunction;
+  ThemeData _themeData;
+
   StreamSubscription _activeStorySubscription;
+  StreamSubscription _activeThemeSubscription;
 
   _StoryViewState();
 
   @override
   void initState() {
     super.initState();
+
+    _setThemeData();
+    _activeThemeSubscription = activeTheme.activeMetaThemeStream
+        .listen((_) => setState(_setThemeData));
+
     _activeStorySubscription = activeStory.activeStoryChangeStream
         .listen((_) => setState(_setStoryFunction));
+  }
+
+  void _setThemeData() {
+    _themeData = activeTheme.activeMetaTheme.theme;
   }
 
   void _setStoryFunction() {
@@ -35,13 +49,15 @@ class _StoryViewState extends State<StoryView> {
     if (activeStoryId == null) {
       _storyFunction = null;
     } else {
-      final metaStories = widget.storybookData.metaStoriesMap[activeStoryId.pathKey];
+      final metaStories =
+          widget.storybookData.metaStoriesMap[activeStoryId.pathKey];
       _storyFunction = metaStories.storiesMap[activeStoryId.name];
     }
   }
 
   @override
   void dispose() {
+    _activeThemeSubscription?.cancel();
     _activeStorySubscription?.cancel();
     super.dispose();
   }
@@ -50,9 +66,8 @@ class _StoryViewState extends State<StoryView> {
   Widget build(BuildContext context) {
     if (_storyFunction == null) {
       return Center(child: Text('Please select a story'));
-    }
-    else {
-      return _storyFunction();
+    } else {
+      return Theme(child: _storyFunction(), data: _themeData);
     }
   }
 }

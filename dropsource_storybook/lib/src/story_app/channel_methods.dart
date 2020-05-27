@@ -25,7 +25,11 @@ class MethodNames {
   static const storybookData = 'dropsource.storybook.storybookData';
   static const requestDeviceDefinitions = 'dropsource.storybook.requestDeviceDefinitions';
   static const deviceDefinitions = 'dropsource.storybook.deviceDefinitions';
+  static const requestStandardThemes = 'dropsource.storybook.requestStandardThemes';
+  static const standardThemes = 'dropsource.storybook.standardThemes';
+  static const defaultTheme = 'dropsource.storybook.defaultTheme';
   static const readySignal = 'dropsource.storybook.readySignal';
   static const loadStory = 'dropsource.storybook.loadStory';
   static const setUpLog = 'dropsource.storybook.setUpLog';
+  static const setActiveTheme = 'dropsource.storybook.setActiveTheme';
 }

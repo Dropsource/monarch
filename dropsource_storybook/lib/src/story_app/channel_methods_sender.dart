@@ -20,6 +20,14 @@ class ChannelMethodsSender with Log {
     return _invokeStorybookChannelMethod(MethodNames.deviceDefinitions, definitions.toStandardMap());
   }
 
+  Future sendStandardThemes(OutboundChannelArgument definitions) {
+    return _invokeStorybookChannelMethod(MethodNames.standardThemes, definitions.toStandardMap());
+  }
+
+  Future sendDefaultTheme(String id) {
+    return _invokeStorybookChannelMethod(MethodNames.defaultTheme, { 'themeId' : id });
+  }
+
   Future sendStorybookData(OutboundChannelArgument storybookData) {
     return _invokeStorybookChannelMethod(MethodNames.storybookData, storybookData.toStandardMap());
   }
