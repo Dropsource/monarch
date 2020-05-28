@@ -12,7 +12,7 @@ class StoryId {
 
   final String name;
 
-  StoryId(this.package, this.path, this.name);
+  const StoryId(this.package, this.path, this.name);
 
   factory StoryId.fromNodeKey(String key) {
     ArgumentError.checkNotNull(key, 'key');
@@ -25,6 +25,7 @@ class StoryId {
   }
 
   String get pathKey => '$package|$path';
+  String get storyKey => '$package|$path|$name';
 }
 
 class ActiveStory with Log {

@@ -19,7 +19,10 @@ class StoryView extends StatefulWidget {
 }
 
 class _StoryViewState extends State<StoryView> {
+  String _storyKey;
   StoryFunction _storyFunction;
+
+  String _themeId;
   ThemeData _themeData;
 
   StreamSubscription _activeStorySubscription;
@@ -41,16 +44,19 @@ class _StoryViewState extends State<StoryView> {
 
   void _setThemeData() {
     _themeData = activeTheme.activeMetaTheme.theme;
+    _themeId = activeTheme.activeMetaTheme.id;
   }
 
   void _setStoryFunction() {
     final activeStoryId = activeStory.activeStoryId;
 
     if (activeStoryId == null) {
+      _storyKey = null;
       _storyFunction = null;
     } else {
       final metaStories =
           widget.storybookData.metaStoriesMap[activeStoryId.pathKey];
+      _storyKey = activeStory.activeStoryId.storyKey;
       _storyFunction = metaStories.storiesMap[activeStoryId.name];
     }
   }
@@ -62,12 +68,17 @@ class _StoryViewState extends State<StoryView> {
     super.dispose();
   }
 
+  String get keyValue => '$_storyKey|$_themeId';
+
   @override
   Widget build(BuildContext context) {
     if (_storyFunction == null) {
       return Center(child: Text('Please select a story'));
     } else {
-      return Theme(child: _storyFunction(), data: _themeData);
+      return Theme(
+          key: ObjectKey(keyValue),
+          child: _storyFunction(),
+          data: _themeData);
     }
   }
 }
