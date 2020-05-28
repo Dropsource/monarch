@@ -4,6 +4,8 @@ import 'package:analyzer/dart/element/element.dart';
 
 import 'package:dropsource_storybook_annotations/dropsource_storybook_annotations.dart';
 
+import 'builder_helper.dart';
+
 const TypeChecker storybookThemeTypeChecker =
     TypeChecker.fromRuntime(StorybookTheme);
 
@@ -40,14 +42,16 @@ Element name: ${element.name}
       }
     }
 
-    return _outputContents(buildStep.inputId, expressions);
+    final pathToThemeFile = getRelativePathFromOutputToInput(buildStep.inputId);
+
+    return _outputContents(pathToThemeFile, expressions);
   }
 
   String _outputContents(
-      AssetId libraryAssetId, List<String> metaThemeExpressions) {
+      String pathToThemeFile, List<String> metaThemeExpressions) {
     return '''
 import 'package:dropsource_storybook/dropsource_storybook.dart';
-import '${libraryAssetId.uri}';
+import '$pathToThemeFile';
 
 final metaThemeItems = [
   ${metaThemeExpressions.join(', ')}

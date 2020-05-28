@@ -1,7 +1,9 @@
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:analyzer/dart/element/element.dart';
-import 'package:path/path.dart' as p;
+
+import 'builder_helper.dart';
+
 
 const TypeChecker widgetTypeChecker =
     TypeChecker.fromUrl('package:flutter/src/widgets/framework.dart#Widget');
@@ -39,20 +41,18 @@ class MetaStoriesGenerator extends Generator {
       }
     }
 
-    // @TODO: is there a better way to the get the path of the output directory?
-    final outputDirectoryPath = '.dart_tool/build/generated/${inputId.package}/${p.dirname(inputId.path)}';
-    final pathToStories = p.relative(inputId.path, from: outputDirectoryPath);
+    final pathToStoriesFile = getRelativePathFromOutputToInput(inputId);
 
     final output =
-        _outputContents(pathToStories, inputId, storiesNames, storiesMap);
+        _outputContents(pathToStoriesFile, inputId, storiesNames, storiesMap);
     return output;
   }
 
-  String _outputContents(String pathToStories, AssetId storiesAssetId,
+  String _outputContents(String pathToStoriesFile, AssetId storiesAssetId,
       List<String> storiesNames, Map<String, String> storiesMap) {
     return '''
 import 'package:dropsource_storybook/dropsource_storybook.dart';
-import '$pathToStories';
+import '$pathToStoriesFile';
 
 const metaStories = MetaStories('${storiesAssetId.package}', '${storiesAssetId.path}', [${storiesNames.join(', ')}], $storiesMap);
 

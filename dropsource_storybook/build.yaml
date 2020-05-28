@@ -14,11 +14,15 @@ builders:
     import: 'package:dropsource_storybook/stories_builder_factories.dart'
     builder_factories: ['metaStoriesBuilder']
     build_extensions: {
-      '.stories.dart': ['.meta_stories.g.dart'],
+      '.dart': ['.meta_stories.g.dart'],
     }
     build_to: cache
     auto_apply: root_package
     runs_before: ['dropsource_storybook|main_builder']
+    defaults:
+      generate_for:
+        include: ['**_stories.dart']
+        exclude: ['**.meta_themes.g.dart']
 
   main_builder:
     import: 'package:dropsource_storybook/stories_builder_factories.dart'
