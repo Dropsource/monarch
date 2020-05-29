@@ -64,6 +64,11 @@ class LogLevel implements Comparable<LogLevel> {
     OFF
   ];
 
+  static LogLevel fromString(String logLevelString, LogLevel orElseLogLevel) {
+    return LEVELS.firstWhere((level) => level.name == logLevelString,
+        orElse: () => orElseLogLevel);
+  }
+
   @override
   bool operator ==(Object other) => other is LogLevel && value == other.value;
 
