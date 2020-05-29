@@ -22,7 +22,6 @@ builders:
     defaults:
       generate_for:
         include: ['**_stories.dart']
-        exclude: ['**.meta_themes.g.dart']
 
   main_builder:
     import: 'package:dropsource_storybook/stories_builder_factories.dart'
