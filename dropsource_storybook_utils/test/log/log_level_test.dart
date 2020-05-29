@@ -14,6 +14,9 @@ void main() {
 
       level = LogLevel.fromString('NOT_A_LEVEL', LogLevel.FINE);
       expect(level, LogLevel.FINE);
+
+      level = LogLevel.fromString(null, LogLevel.FINE);
+      expect(level, LogLevel.FINE);
     });
   });
 }
