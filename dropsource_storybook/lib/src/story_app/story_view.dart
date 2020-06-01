@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'active_device.dart';
 import 'active_story.dart';
 import 'active_theme.dart';
+import 'device_definitions.dart';
 import 'storybook_data.dart';
 
 class StoryView extends StatefulWidget {
@@ -19,14 +21,17 @@ class StoryView extends StatefulWidget {
 }
 
 class _StoryViewState extends State<StoryView> {
-  String _storyKey;
-  StoryFunction _storyFunction;
+  DeviceDefinition _device;
 
   String _themeId;
   ThemeData _themeData;
 
-  StreamSubscription _activeStorySubscription;
+  String _storyKey;
+  StoryFunction _storyFunction;
+
+  StreamSubscription _activeDeviceSubscription;
   StreamSubscription _activeThemeSubscription;
+  StreamSubscription _activeStorySubscription;
 
   _StoryViewState();
 
@@ -34,12 +39,20 @@ class _StoryViewState extends State<StoryView> {
   void initState() {
     super.initState();
 
+    _setDeviceDefinition();
+    _activeDeviceSubscription = activeDevice.activeDeviceStream
+        .listen((_) => setState(_setDeviceDefinition));
+
     _setThemeData();
     _activeThemeSubscription = activeTheme.activeMetaThemeStream
         .listen((_) => setState(_setThemeData));
 
     _activeStorySubscription = activeStory.activeStoryChangeStream
         .listen((_) => setState(_setStoryFunction));
+  }
+
+  void _setDeviceDefinition() {
+    _device = activeDevice.activeDevice;
   }
 
   void _setThemeData() {
@@ -68,7 +81,7 @@ class _StoryViewState extends State<StoryView> {
     super.dispose();
   }
 
-  String get keyValue => '$_storyKey|$_themeId';
+  String get keyValue => '$_storyKey|$_themeId|${_device.id}';
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +90,13 @@ class _StoryViewState extends State<StoryView> {
     } else {
       return Theme(
           key: ObjectKey(keyValue),
-          child: _storyFunction(),
-          data: _themeData);
+          child: MediaQuery(
+              data: MediaQueryData(
+                  size: Size(_device.logicalResolution.width,
+                      _device.logicalResolution.height),
+                  devicePixelRatio: _device.devicePixelRatio),
+              child: _storyFunction()),
+          data: _themeData.copyWith(platform: _device.targetPlatform));
     }
   }
 }

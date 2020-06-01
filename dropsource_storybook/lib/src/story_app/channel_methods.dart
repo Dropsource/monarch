@@ -32,4 +32,5 @@ class MethodNames {
   static const loadStory = 'dropsource.storybook.loadStory';
   static const setUpLog = 'dropsource.storybook.setUpLog';
   static const setActiveTheme = 'dropsource.storybook.setActiveTheme';
+  static const setActiveDevice = 'dropsource.storybook.setActiveDevice';
 }

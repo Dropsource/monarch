@@ -4,6 +4,7 @@ import 'package:pedantic/pedantic.dart';
 import 'package:dropsource_storybook_utils/log.dart';
 import 'package:dropsource_storybook_utils/log_config.dart';
 
+import 'active_device.dart';
 import 'active_story.dart';
 import 'active_theme.dart';
 import 'channel_methods.dart';
@@ -54,6 +55,11 @@ Future<dynamic> _handler(MethodCall call) async {
     case MethodNames.setActiveTheme:
       final String themeId = args['themeId'];
       activeTheme.setActiveMetaTheme(themeId);
+      break;
+
+    case MethodNames.setActiveDevice:
+      final String deviceId = args['deviceId'];
+      activeDevice.setActiveDevice(deviceId);
       break;
 
     default:

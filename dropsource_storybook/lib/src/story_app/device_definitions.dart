@@ -52,18 +52,22 @@ class DeviceDefinitions implements OutboundChannelArgument {
   }
 }
 
+const iPhoneXDeviceDefinition = DeviceDefinition(
+  id: 'ios-iphone-x',
+  name: 'iPhone X',
+  logicalResolution: LogicalResolution(
+    height: 812,
+    width: 375,
+  ),
+  devicePixelRatio: 3.0,
+  targetPlatform: TargetPlatform.iOS,
+);
+
+final defaultDeviceDefinition = iPhoneXDeviceDefinition;
+
 /// iOS logical resolutions can be found here: http://iosres.com/
 const deviceDefinitions = [
-  DeviceDefinition(
-    id: 'ios-iphone-x',
-    name: 'iPhone X',
-    logicalResolution: LogicalResolution(
-      height: 812,
-      width: 375,
-    ),
-    devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
-  ),
+  iPhoneXDeviceDefinition,
   DeviceDefinition(
     id: 'ios-iphone-8-plus',
     name: 'iPhone 8 Plus',
