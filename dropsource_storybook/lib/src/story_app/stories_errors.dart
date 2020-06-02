@@ -18,38 +18,37 @@ void setUpStoriesErrors(StorybookData storybookData) {
 }
 
 void _debugPrintStorybook(String message, {int wrapWidth}) {
-  var activeStoryErrorMessage = _getActiveStoryErrorMessage();
-  // var sourceMessage =
-  //     _replaceGeneratedFileExtensionAndLine(_replaceGeneratedPath(message));
-  
+  var activeStory = _getActiveStoryErrorMessage();
+
+  const stackPrompt = 'When the exception was thrown, this was the stack:';
+
+  final stackIndex = message.indexOf(stackPrompt);
+  String _message;
+
+  if (stackIndex > -1) {
+    final preStack = message.substring(0, stackIndex).trimRight();
+    final stack = message.substring(stackIndex);
+    _message = '''
+$preStack
+
+$activeStory
+
+$stack''';
+  } else {
+    _message = '''
+$message
+$activeStory''';
+  }
+
   debugPrintSynchronously('''
 ###error-in-story###
-$activeStoryErrorMessage
-
-$message''',
-      wrapWidth: wrapWidth);
-}
-
-String _replaceGeneratedPath(String message) {
-  final regex = RegExp(r'''.dart_tool/build/generated/.+?/''',
-      multiLine: true, caseSensitive: true);
-  return message.replaceAll(regex, '');
-}
-
-String _replaceGeneratedFileExtensionAndLine(String message) {
-  final regex = RegExp(r'''.stories.g.dart:(\d+)''',
-      multiLine: true, caseSensitive: true);
-  return message.replaceAllMapped(regex, (match) {
-    final generatedLine = int.parse(match.group(1));
-    final sourceLine = generatedLine - 0;
-    return '.stories.dart:$sourceLine';
-  });
+$_message''', wrapWidth: wrapWidth);
 }
 
 String _getActiveStoryErrorMessage() {
   final activeStoryId = activeStory.activeStoryId;
   final metaStories = _storybookData.metaStoriesMap[activeStoryId.pathKey];
   return '''
-Error in story:
-  ${metaStories.pathFirstPartRemoved} > ${activeStoryId.name}''';
+The relevant story is:
+  ${metaStories.path} > ${activeStoryId.name}''';
 }
