@@ -7,7 +7,7 @@ class StoryId {
   
   /// The generated stories path. As of 2020-05-08, this path is
   /// relative to the stories directory. 
-  /// It looks like 'stories/foo.stories.g.dart'.
+  /// It looks like 'stories/foo_stories.g.dart'.
   final String path;
 
   final String name;

@@ -10,12 +10,12 @@ class MetaStories implements OutboundChannelArgument {
   /// Name of the user project or package
   final String package;
 
-  /// Path to the .stories file the user authored.
+  /// Path to the `*_stories.dart` file the user authored.
   /// As of 2020-05-08, this path is relative to the stories directory.
-  /// It looks like 'stories/foo.stories.dart'.
+  /// It looks like 'stories/foo_stories.dart'.
   final String path;
 
-  /// List of story names in the .stories file
+  /// List of story names in the stories file
   final List<String> storiesNames;
 
   /// Maps story name to its function

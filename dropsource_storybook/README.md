@@ -38,12 +38,12 @@ $ unzip storybook_tools_0.0.2.zip
 ### Usage
 
 #### Write stories
-To write stories just create a `stories` directory at the top level of your project. Then start adding files that end in `*.stories.dart`.
+To write stories just create a `stories` directory at the top level of your project. Then start adding files that end in `*_stories.dart`.
 
-For example, assuming your project has a widget called `MyFancyCard` inside the file `lib/my_fancy_card.dart`. Then you can create stories for it inside the file `stories/my_fancy_card.stories.dart`.
+For example, assuming your project has a widget called `MyFancyCard` inside the file `lib/my_fancy_card.dart`. Then you can create stories for it inside the file `stories/my_fancy_card_stories.dart`.
 
 ```
-// stories/my_fancy_card.stories.dart
+// stories/my_fancy_card_stories.dart
 
 import 'package:flutter/material.dart';
 import 'package:my_package/my_fancy_card.dart';
@@ -61,7 +61,7 @@ Widget empties() => MyFancyCard(
     icon: null);
 
 ```
-Notice how you only need to import flutter and my_fancy_card.dart. Also, the `*.stories.dart` file can have any name, it just needs to end in `.stories.dart`.
+Notice how you only need to import flutter and my_fancy_card.dart. Also, the `*_stories.dart` file can have any name, it just needs to end in `_stories.dart`.
 
 Stories are just functions that return a `Widget`.
 
