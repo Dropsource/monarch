@@ -78,6 +78,7 @@ class _StoryViewState extends State<StoryView> {
   void dispose() {
     _activeThemeSubscription?.cancel();
     _activeStorySubscription?.cancel();
+    _activeDeviceSubscription?.cancel();
     super.dispose();
   }
 
@@ -85,6 +86,10 @@ class _StoryViewState extends State<StoryView> {
 
   @override
   Widget build(BuildContext context) {
+    ArgumentError.checkNotNull(_device, '_device');
+    ArgumentError.checkNotNull(_themeId, '_themeId');
+    ArgumentError.checkNotNull(_themeData, '_themeData');
+
     if (_storyFunction == null) {
       return Center(child: Text('Please select a story'));
     } else {

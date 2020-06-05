@@ -98,7 +98,7 @@ ${metaThemesImportStatements.join('\n')}
 ${metaStoriesImportStatements.join('\n')}
 
 void main() {
-  ui.window.setIsolateDebugName('storybook-isolate');
+  // ui.window.setIsolateDebugName('storybook-isolate');
   startStorybook('$packageName', [${metaThemeList.join(', ')}], $metaStoriesMap);
 }
 

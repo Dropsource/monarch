@@ -5,7 +5,7 @@ import 'package:dropsource_storybook_utils/log.dart';
 import 'device_definitions.dart';
 
 class ActiveDevice with Log {
-  DeviceDefinition _activeDevice;
+  DeviceDefinition _activeDevice = defaultDeviceDefinition;
   DeviceDefinition get activeDevice => _activeDevice;
 
   final _activeDeviceStreamController = StreamController<void>.broadcast();
