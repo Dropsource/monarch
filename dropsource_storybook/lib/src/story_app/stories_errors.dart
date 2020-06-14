@@ -47,8 +47,12 @@ $_message''', wrapWidth: wrapWidth);
 
 String _getActiveStoryErrorMessage() {
   final activeStoryId = activeStory.activeStoryId;
-  final metaStories = _storybookData.metaStoriesMap[activeStoryId.pathKey];
-  return '''
+  if (activeStoryId == null) {
+    return 'There was no active story selected.';
+  } else {
+    final metaStories = _storybookData.metaStoriesMap[activeStoryId.pathKey];
+    return '''
 The relevant story is:
   ${metaStories.path} > ${activeStoryId.name}''';
+  }
 }
