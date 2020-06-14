@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'active_device.dart';
-import 'active_story.dart';
 import 'active_theme.dart';
 import 'device_definitions.dart';
-import 'storybook_data.dart';
 
 class StoryView extends StatefulWidget {
-  final StorybookData storybookData;
+  final String storyKey;
+  final Widget child;
 
-  StoryView({this.storybookData});
+  StoryView({this.storyKey, this.child});
 
   @override
   State<StatefulWidget> createState() {
@@ -26,12 +25,8 @@ class _StoryViewState extends State<StoryView> {
   String _themeId;
   ThemeData _themeData;
 
-  String _storyKey;
-  StoryFunction _storyFunction;
-
   StreamSubscription _activeDeviceSubscription;
   StreamSubscription _activeThemeSubscription;
-  StreamSubscription _activeStorySubscription;
 
   _StoryViewState();
 
@@ -46,9 +41,6 @@ class _StoryViewState extends State<StoryView> {
     _setThemeData();
     _activeThemeSubscription = activeTheme.activeMetaThemeStream
         .listen((_) => setState(_setThemeData));
-
-    _activeStorySubscription = activeStory.activeStoryChangeStream
-        .listen((_) => setState(_setStoryFunction));
   }
 
   void _setDeviceDefinition() {
@@ -60,29 +52,14 @@ class _StoryViewState extends State<StoryView> {
     _themeId = activeTheme.activeMetaTheme.id;
   }
 
-  void _setStoryFunction() {
-    final activeStoryId = activeStory.activeStoryId;
-
-    if (activeStoryId == null) {
-      _storyKey = null;
-      _storyFunction = null;
-    } else {
-      final metaStories =
-          widget.storybookData.metaStoriesMap[activeStoryId.pathKey];
-      _storyKey = activeStory.activeStoryId.storyKey;
-      _storyFunction = metaStories.storiesMap[activeStoryId.name];
-    }
-  }
-
   @override
   void dispose() {
     _activeThemeSubscription?.cancel();
-    _activeStorySubscription?.cancel();
     _activeDeviceSubscription?.cancel();
     super.dispose();
   }
 
-  String get keyValue => '$_storyKey|$_themeId|${_device.id}';
+  String get keyValue => '${widget.storyKey}|$_themeId|${_device.id}';
 
   @override
   Widget build(BuildContext context) {
@@ -90,18 +67,14 @@ class _StoryViewState extends State<StoryView> {
     ArgumentError.checkNotNull(_themeId, '_themeId');
     ArgumentError.checkNotNull(_themeData, '_themeData');
 
-    if (_storyFunction == null) {
-      return Center(child: Text('Please select a story'));
-    } else {
-      return Theme(
-          key: ObjectKey(keyValue),
-          child: MediaQuery(
-              data: MediaQueryData(
-                  size: Size(_device.logicalResolution.width,
-                      _device.logicalResolution.height),
-                  devicePixelRatio: _device.devicePixelRatio),
-              child: _storyFunction()),
-          data: _themeData.copyWith(platform: _device.targetPlatform));
-    }
+    return Theme(
+        key: ObjectKey(keyValue),
+        data: _themeData.copyWith(platform: _device.targetPlatform),
+        child: MediaQuery(
+            data: MediaQueryData(
+                size: Size(_device.logicalResolution.width,
+                    _device.logicalResolution.height),
+                devicePixelRatio: _device.devicePixelRatio),
+            child: widget.child));
   }
 }
