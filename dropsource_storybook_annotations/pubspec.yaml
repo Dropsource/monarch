@@ -1,6 +1,6 @@
 name: dropsource_storybook_annotations
 description: Contains annotations for dropsource_storybook.
-version: 0.0.4
+version: 0.0.5
 
 environment:
   sdk: '>=2.5.0 <3.0.0'
