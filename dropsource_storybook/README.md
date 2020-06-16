@@ -16,7 +16,7 @@ Widget longTitle() => MyFancyCard(
 )
 ```
 
-Dropsource Storybook will let you see those two stories in a nice UI.
+Dropsource Storybook will let you see those two stories in our storybook UI.
 
 This is the alpha release of Dropsource Storybook. We only support flutter 
 development on macOS for now.
