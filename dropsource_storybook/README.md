@@ -56,7 +56,7 @@ $ unzip storybook_tools_0.0.26.zip
 
 ## Example
 There is an example project which shows how to write stories: 
-[Example project](../example).
+[Example project](https://github.com/Dropsource/dropsource_storybook/tree/master/example).
 
 ## Usage
 
