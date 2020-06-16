@@ -6,7 +6,7 @@ just functions that return a widget.
 For example, if you have a widget called `MyFancyCard` that takes in a `title`, 
 then you could write these two stories:
 
-```
+```dart
 Widget shortTitle() => MyFancyCard(
     title: 'A'
 );
@@ -23,7 +23,7 @@ development on macOS for now.
 
 ## Installation
 1. Add dropsource_storybook and build_runner to your project dev_dependencies:
-```
+```yaml
 dev_dependencies:
   dropsource_storybook:
     git:
@@ -37,7 +37,7 @@ dev_dependencies:
 
 3. Create a build.yaml file at the top level of your project and add the 
 following:
-```
+```yaml
 targets:
   $default:
     sources:
@@ -89,12 +89,19 @@ device resolutions and themes
 You can now add more stories. As you add more stories, the task runner will 
 automatically detect the changes and reload the stories in the app.
 
+The task runner will generate a `.storybook` directory in your project. You
+can gitignore that directory.
+```
+# in .gitignore
+.storybook/
+```
+
 
 ### Themes
 Your stories can render using your app's themes. If you want see themes in 
 storybook then you need to add the 
 `package:dropsource_storybook_annotations` to your dependencies:
-```
+```yaml
 dependencies:
   dropsource_storybook_annotations:
     git:
@@ -103,7 +110,7 @@ dependencies:
       ref: dropsource_storybook_annotations-0.0.5
 ``` 
 Then, you can annotate your themes:
-```
+```dart
 import 'package:dropsource_storybook_annotations/dropsource_storybook_annotations.dart';
 ...
 
