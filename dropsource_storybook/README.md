@@ -78,7 +78,7 @@ Storybook desktop app.
 To run the storybook_task_runner, enter this command from inside your project 
 directory.
 ```
-$ ~/development/storybook_tools_0.0.25/storybook_task_runner
+$ ~/development/storybook_tools_0.0.27/storybook_task_runner
 ```
 You should see the task runner working and eventually opening the Storybook app.
 
