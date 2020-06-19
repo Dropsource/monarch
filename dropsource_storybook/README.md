@@ -29,7 +29,7 @@ dev_dependencies:
     git:
       url: git@github.com:Dropsource/dropsource_storybook.git
       path: dropsource_storybook
-      ref: dropsource_storybook-0.0.17
+      ref: dropsource_storybook-0.0.18
   build_runner: ^1.7.1
 ```
 
