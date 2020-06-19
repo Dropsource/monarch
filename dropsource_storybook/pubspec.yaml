@@ -1,6 +1,6 @@
 name: dropsource_storybook
 description: Code generator for Dropsource Storybook.
-version: 0.0.17
+version: 0.0.18
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
@@ -14,7 +14,7 @@ dependencies:
   dropsource_storybook_annotations:
     git:
       url: git@github.com:Dropsource/dropsource_storybook.git
-      ref: dropsource_storybook_annotations-0.0.4
+      ref: dropsource_storybook_annotations-0.0.5
       path: dropsource_storybook_annotations
   dropsource_storybook_utils:
     git:

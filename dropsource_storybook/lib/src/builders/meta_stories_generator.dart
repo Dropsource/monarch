@@ -4,7 +4,6 @@ import 'package:analyzer/dart/element/element.dart';
 
 import 'builder_helper.dart';
 
-
 const TypeChecker widgetTypeChecker =
     TypeChecker.fromUrl('package:flutter/src/widgets/framework.dart#Widget');
 
@@ -24,16 +23,21 @@ class MetaStoriesGenerator extends Generator {
 
     for (var topLevelElement in library.allElements) {
       if (topLevelElement is FunctionElement) {
-        if (widgetTypeChecker.isExactly(topLevelElement.returnType.element)) {
-          // if (topLevelElement.returnType.element.name == 'Widget') {
-          final storyName = topLevelElement.name;
-          final storyNameInSingleQuotes = "'$storyName'";
-          log.fine('Found story: $storyName');
-          storiesNames.add(storyNameInSingleQuotes);
-          storiesMap[storyNameInSingleQuotes] = storyName;
+        if (topLevelElement.returnType != null &&
+            topLevelElement.returnType.element != null) {
+          if (widgetTypeChecker.isExactly(topLevelElement.returnType.element)) {
+            // if (topLevelElement.returnType.element.name == 'Widget') {
+            final storyName = topLevelElement.name;
+            final storyNameInSingleQuotes = "'$storyName'";
+            log.fine('Found story: $storyName');
+            storiesNames.add(storyNameInSingleQuotes);
+            storiesMap[storyNameInSingleQuotes] = storyName;
+          } else {
+            log.fine(
+                'Top level function is not story, return type is not Widget: ${topLevelElement.name}');
+          }
         } else {
-          log.fine(
-              'Top level function is not story, return type is not Widget: ${topLevelElement.name}');
+          log.fine('Could not get return type of top level function, skipping: ${topLevelElement.name}');
         }
       } else {
         log.fine(
