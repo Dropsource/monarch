@@ -50,8 +50,8 @@ your directory of choice using `curl`, for example:
 
 ```
 $ cd ~/development
-$ curl -O https://dropsource-storybook.s3.amazonaws.com/dist/alpha/storybook_tools_0.0.27.zip
-$ unzip storybook_tools_0.0.27.zip
+$ curl -O https://dropsource-storybook.s3.amazonaws.com/dist/alpha/storybook_tools_0.0.30.zip
+$ unzip storybook_tools_0.0.30.zip
 ```
 
 ## Example
