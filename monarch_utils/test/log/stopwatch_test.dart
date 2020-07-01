@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:dropsource_storybook_utils/log.dart';
+import 'package:monarch_utils/log.dart';
 
 void main() {
   group('Stopwatch', () {
