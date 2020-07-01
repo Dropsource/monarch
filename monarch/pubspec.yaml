@@ -1,6 +1,6 @@
 name: monarch
 description: Code generator for Monarch.
-version: 0.0.19
+version: 0.0.20
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
