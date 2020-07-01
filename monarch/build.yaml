@@ -1,31 +1,31 @@
 builders:
 
   meta_themes_builder:
-    import: 'package:dropsource_storybook/stories_builder_factories.dart'
+    import: 'package:monarch/stories_builder_factories.dart'
     builder_factories: ['metaThemesBuilder']
     build_extensions: {
       '.dart': ['.meta_themes.g.dart']
     }
     build_to: cache
     auto_apply: root_package
-    runs_before: ['dropsource_storybook|meta_stories_builder']
+    runs_before: ['monarch|meta_stories_builder']
 
   meta_stories_builder:
-    import: 'package:dropsource_storybook/stories_builder_factories.dart'
+    import: 'package:monarch/stories_builder_factories.dart'
     builder_factories: ['metaStoriesBuilder']
     build_extensions: {
       '.dart': ['.meta_stories.g.dart'],
     }
     build_to: cache
     auto_apply: root_package
-    runs_before: ['dropsource_storybook|main_builder']
+    runs_before: ['monarch|main_builder']
     defaults:
       generate_for:
         include: ['**_stories.dart']
 
   main_builder:
-    import: 'package:dropsource_storybook/stories_builder_factories.dart'
+    import: 'package:monarch/stories_builder_factories.dart'
     builder_factories: ['mainBuilder']
-    build_extensions: { '$lib$' : ['main_storybook.g.dart']}
+    build_extensions: { '$lib$' : ['main_monarch.g.dart']}
     build_to: cache
     auto_apply: root_package

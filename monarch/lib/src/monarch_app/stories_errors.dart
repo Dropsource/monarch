@@ -1,23 +1,23 @@
 import 'package:flutter/foundation.dart';
 
 import 'active_story.dart';
-import 'storybook_data.dart';
+import 'monarch_data.dart';
 
-StorybookData _storybookData;
+MonarchData _monarchData;
 
-void setUpStoriesErrors(StorybookData storybookData) {
-  _storybookData = storybookData;
+void setUpStoriesErrors(MonarchData monarchData) {
+  _monarchData = monarchData;
 
   // Replacing original implementation of `debugPrint` with our own.
   // `dumpErrorToConsole` calls `debugPrint`.
-  debugPrint = _debugPrintStorybook;
+  debugPrint = _debugPrintMonarch;
 
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.dumpErrorToConsole(details, forceReport: true);
   };
 }
 
-void _debugPrintStorybook(String message, {int wrapWidth}) {
+void _debugPrintMonarch(String message, {int wrapWidth}) {
   var activeStory = _getActiveStoryErrorMessage();
 
   const stackPrompt = 'When the exception was thrown, this was the stack:';
@@ -50,7 +50,7 @@ String _getActiveStoryErrorMessage() {
   if (activeStoryId == null) {
     return 'There was no active story selected.';
   } else {
-    final metaStories = _storybookData.metaStoriesMap[activeStoryId.pathKey];
+    final metaStories = _monarchData.metaStoriesMap[activeStoryId.pathKey];
     return '''
 The relevant story is:
   ${metaStories.path} > ${activeStoryId.name}''';

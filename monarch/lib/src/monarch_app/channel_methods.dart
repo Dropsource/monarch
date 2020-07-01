@@ -16,21 +16,21 @@ abstract class OutboundChannelArgument extends ChannelArgument {
 
 
 class Channels {
-  static const dropsourceStorybookChannel = MethodChannel('dropsource.storybook');
+  static const dropsourceMonarchChannel = MethodChannel('dropsource.monarch');
 }
 
 
 class MethodNames {
-  static const ping = 'dropsource.storybook.ping';
-  static const storybookData = 'dropsource.storybook.storybookData';
-  static const requestDeviceDefinitions = 'dropsource.storybook.requestDeviceDefinitions';
-  static const deviceDefinitions = 'dropsource.storybook.deviceDefinitions';
-  static const requestStandardThemes = 'dropsource.storybook.requestStandardThemes';
-  static const standardThemes = 'dropsource.storybook.standardThemes';
-  static const defaultTheme = 'dropsource.storybook.defaultTheme';
-  static const readySignal = 'dropsource.storybook.readySignal';
-  static const loadStory = 'dropsource.storybook.loadStory';
-  static const setUpLog = 'dropsource.storybook.setUpLog';
-  static const setActiveTheme = 'dropsource.storybook.setActiveTheme';
-  static const setActiveDevice = 'dropsource.storybook.setActiveDevice';
+  static const ping = 'dropsource.monarch.ping';
+  static const monarchData = 'dropsource.monarch.monarchData';
+  static const requestDeviceDefinitions = 'dropsource.monarch.requestDeviceDefinitions';
+  static const deviceDefinitions = 'dropsource.monarch.deviceDefinitions';
+  static const requestStandardThemes = 'dropsource.monarch.requestStandardThemes';
+  static const standardThemes = 'dropsource.monarch.standardThemes';
+  static const defaultTheme = 'dropsource.monarch.defaultTheme';
+  static const readySignal = 'dropsource.monarch.readySignal';
+  static const loadStory = 'dropsource.monarch.loadStory';
+  static const setUpLog = 'dropsource.monarch.setUpLog';
+  static const setActiveTheme = 'dropsource.monarch.setActiveTheme';
+  static const setActiveDevice = 'dropsource.monarch.setActiveDevice';
 }

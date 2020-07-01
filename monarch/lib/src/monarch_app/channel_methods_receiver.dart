@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:pedantic/pedantic.dart';
 
-import 'package:dropsource_storybook_utils/log.dart';
-import 'package:dropsource_storybook_utils/log_config.dart';
+import 'package:monarch_utils/log.dart';
+import 'package:monarch_utils/log_config.dart';
 
 import 'active_device.dart';
 import 'active_story.dart';

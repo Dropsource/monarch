@@ -2,17 +2,17 @@ import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:analyzer/dart/element/element.dart';
 
-import 'package:dropsource_storybook_annotations/dropsource_storybook_annotations.dart';
+import 'package:monarch_annotations/monarch_annotations.dart';
 
 import 'builder_helper.dart';
 
-const TypeChecker storybookThemeTypeChecker =
-    TypeChecker.fromRuntime(StorybookTheme);
+const TypeChecker monarchThemeTypeChecker =
+    TypeChecker.fromRuntime(MonarchTheme);
 
 class MetaThemesGenerator extends Generator {
   @override
   String generate(LibraryReader library, BuildStep buildStep) {
-    final annotations = library.annotatedWith(storybookThemeTypeChecker);
+    final annotations = library.annotatedWith(monarchThemeTypeChecker);
     if (annotations.isEmpty) {
       return null;
     }
@@ -24,7 +24,7 @@ class MetaThemesGenerator extends Generator {
 
       if (element is TopLevelVariableElement) {
         log.fine(
-            'Found StorybookTheme annotation on top-level element: ${element.name}');
+            'Found MonarchTheme annotation on top-level element: ${element.name}');
         final annotation = annotatedElement.annotation;
 
         final themeName = annotation.read('name').stringValue;
@@ -34,8 +34,8 @@ class MetaThemesGenerator extends Generator {
         expressions.add("MetaTheme.user('$themeName', $themeVariableName, $isDefault)");
       } else {
         final msg = '''
-Found StorybookTheme annotation on an element that is not a top-level variable.
-The StorybookTheme annotation must be placed on a top-level variable.
+Found MonarchTheme annotation on an element that is not a top-level variable.
+The MonarchTheme annotation must be placed on a top-level variable.
 Element name: ${element.name}
 ''';
         log.warning(msg);
@@ -50,7 +50,7 @@ Element name: ${element.name}
   String _outputContents(
       String pathToThemeFile, List<String> metaThemeExpressions) {
     return '''
-import 'package:dropsource_storybook/dropsource_storybook.dart';
+import 'package:monarch/monarch.dart';
 import '$pathToThemeFile';
 
 final metaThemeItems = [

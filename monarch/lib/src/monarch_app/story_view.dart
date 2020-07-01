@@ -7,10 +7,10 @@ import 'active_device.dart';
 import 'active_story.dart';
 import 'active_theme.dart';
 import 'device_definitions.dart';
-import 'storybook_data.dart';
+import 'monarch_data.dart';
 
 class StoryView extends StatefulWidget {
-  final StorybookData storybookData;
+  final MonarchData storybookData;
 
   StoryView({this.storybookData});
 

@@ -55,7 +55,7 @@ class MetaStoriesGenerator extends Generator {
   String _outputContents(String pathToStoriesFile, AssetId storiesAssetId,
       List<String> storiesNames, Map<String, String> storiesMap) {
     return '''
-import 'package:dropsource_storybook/dropsource_storybook.dart';
+import 'package:monarch/monarch.dart';
 import '$pathToStoriesFile';
 
 const metaStories = MetaStories('${storiesAssetId.package}', '${storiesAssetId.path}', [${storiesNames.join(', ')}], $storiesMap);

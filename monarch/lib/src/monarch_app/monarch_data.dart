@@ -54,7 +54,7 @@ class MetaTheme implements OutboundChannelArgument {
   }
 }
 
-class StorybookData implements OutboundChannelArgument {
+class MonarchData implements OutboundChannelArgument {
   final String packageName;
 
   /// List of user-annotated themes
@@ -64,7 +64,7 @@ class StorybookData implements OutboundChannelArgument {
   /// As of 2020-04-15, the key looks like `$packageName|$generatedStoriesFilePath`
   final Map<String, MetaStories> metaStoriesMap;
 
-  StorybookData(this.packageName, this.metaThemes, this.metaStoriesMap);
+  MonarchData(this.packageName, this.metaThemes, this.metaStoriesMap);
 
   @override
   Map<String, dynamic> toStandardMap() {

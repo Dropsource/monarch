@@ -7,7 +7,7 @@ import 'package:dart_style/dart_style.dart';
 class MainBuilder implements Builder {
   @override
   Map<String, List<String>> get buildExtensions => const {
-        r'$lib$': ['main_storybook.g.dart']
+        r'$lib$': ['main_monarch.g.dart']
       };
 
   @override
@@ -21,7 +21,7 @@ class MainBuilder implements Builder {
         buildStep, 's', '**/*.meta_stories.g.dart');
 
     final outputId =
-        AssetId(buildStep.inputId.package, 'lib/main_storybook.g.dart');
+        AssetId(buildStep.inputId.package, 'lib/main_monarch.g.dart');
 
     final output = _outputContents(
         buildStep.inputId.package,
@@ -86,20 +86,20 @@ class MainBuilder implements Builder {
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
-// MainBuilder - dropsource_storybook
+// MainBuilder - monarch
 // **************************************************************************
 
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:dropsource_storybook/dropsource_storybook.dart';
+import 'package:monarch/monarch.dart';
 
 ${metaThemesImportStatements.join('\n')}
 
 ${metaStoriesImportStatements.join('\n')}
 
 void main() {
-  // ui.window.setIsolateDebugName('storybook-isolate');
-  startStorybook('$packageName', [${metaThemeList.join(', ')}], $metaStoriesMap);
+  // ui.window.setIsolateDebugName('monarch-isolate');
+  startMonarch('$packageName', [${metaThemeList.join(', ')}], $metaStoriesMap);
 }
 
 ''';
