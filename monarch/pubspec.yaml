@@ -1,6 +1,6 @@
 name: monarch
 description: Code generator for Monarch.
-version: 0.0.21
+version: 0.0.22
 homepage: https://github.com/Dropsource/monarch
 
 environment:
