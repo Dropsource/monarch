@@ -26,11 +26,7 @@ development on macOS for now.
 1. Add `monarch` and `build_runner` to your project dev_dependencies:
 ```yaml
 dev_dependencies:
-  monarch:
-    git:
-      url: git@github.com:Dropsource/monarch.git
-      path: monarch
-      ref: monarch-0.0.19
+  monarch: ^0.0.22
   build_runner: ^1.7.1
 ```
 
@@ -104,11 +100,7 @@ Monarch then you need to add the
 `package:monarch_annotations` to your dependencies:
 ```yaml
 dependencies:
-  monarch_annotations:
-    git:
-      url: git@github.com:Dropsource/monarch.git
-      path: monarch_annotations
-      ref: monarch_annotations-0.0.6
+  monarch_annotations: ^0.0.8
 ``` 
 Then, you can annotate your themes:
 ```dart
