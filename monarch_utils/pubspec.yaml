@@ -1,7 +1,7 @@
 name: monarch_utils
 description: Utils for monarch.
-version: 0.0.7
-homepage: https://dropsource.com/
+version: 0.0.8
+homepage: https://github.com/Dropsource/monarch
 
 environment:
   sdk: '>=2.5.0 <3.0.0'

@@ -3,3 +3,7 @@ Alpha Release.
 
 ## 0.0.18 - 2020-07-01
 Monarch Alpha Release.
+
+## 0.0.21 - 2020-07-01
+- added homepage
+- update monarch_* dependencies to pub.dev
