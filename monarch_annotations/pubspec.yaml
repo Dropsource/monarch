@@ -1,6 +1,6 @@
-name: dropsource_storybook_annotations
-description: Contains annotations for dropsource_storybook.
-version: 0.0.5
+name: monarch_annotations
+description: Contains annotations for monarch.
+version: 0.0.6
 
 environment:
   sdk: '>=2.5.0 <3.0.0'

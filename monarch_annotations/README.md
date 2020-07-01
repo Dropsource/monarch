@@ -1,3 +1,3 @@
-Contains annotations for [`package:dropsource_storybook`](https://github.com/Dropsource/dropsource_storybook/tree/master/dropsource_storybook).
+Contains annotations for [`package:monarch`](https://github.com/Dropsource/monarch/tree/master/monarch).
 
 See that package for more information.
