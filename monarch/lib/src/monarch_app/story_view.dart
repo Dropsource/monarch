@@ -10,9 +10,9 @@ import 'device_definitions.dart';
 import 'monarch_data.dart';
 
 class StoryView extends StatefulWidget {
-  final MonarchData storybookData;
+  final MonarchData monarchData;
 
-  StoryView({this.storybookData});
+  StoryView({this.monarchData});
 
   @override
   State<StatefulWidget> createState() {
@@ -68,7 +68,7 @@ class _StoryViewState extends State<StoryView> {
       _storyFunction = null;
     } else {
       final metaStories =
-          widget.storybookData.metaStoriesMap[activeStoryId.pathKey];
+          widget.monarchData.metaStoriesMap[activeStoryId.pathKey];
       _storyKey = activeStory.activeStoryId.storyKey;
       _storyFunction = metaStories.storiesMap[activeStoryId.name];
     }

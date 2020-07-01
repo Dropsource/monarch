@@ -1,8 +1,8 @@
 # Monarch
 
 Monarch lets you generate stories for your widgets. Stories are 
-functions that return a widget in a specific state. You can then 
-see those stories in the Monarch UI.
+functions that return a widget in a specific state. Once your stories
+are ready, you can see them in the Monarch UI.
 
 For example, if you have a widget called `MyFancyCard` that takes in a `title`, 
 then you could write these two stories:

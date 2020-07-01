@@ -16,7 +16,7 @@ final logger = Logger('ChannelMethodsReceiver');
 
 void receiveChannelMethodCalls() {
   // logger.level = LogLevel.ALL;
-  Channels.dropsourceStorybookChannel
+  Channels.dropsourceMonarchChannel
       .setMethodCallHandler((MethodCall call) async {
     logger.finest('channel method received: ${call.method}');
 

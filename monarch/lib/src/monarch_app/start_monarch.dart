@@ -18,20 +18,20 @@ void startMonarch(String packageName, List<MetaTheme> userMetaThemes,
     Map<String, MetaStories> metaStoriesMap) {
   _setUpLog();
 
-  logger.finest('Starting storybook flutter app');
+  logger.finest('Starting Monarch flutter app');
 
   userMetaThemes = _validateAndFilterMetaThemes(userMetaThemes);
 
-  final storybookData =
+  final monarchData =
       MonarchData(packageName, userMetaThemes, metaStoriesMap);
 
-  setUpStoriesErrors(storybookData);
+  setUpStoriesErrors(monarchData);
   activeTheme.setMetaThemes([...userMetaThemes, ...standardMetaThemes]);
 
-  runApp(StoryApp(storybookData: storybookData));
+  runApp(StoryApp(monarchData: monarchData));
 
   receiveChannelMethodCalls();
-  _sendInitialChannelMethodCalls(storybookData);
+  _sendInitialChannelMethodCalls(monarchData);
 }
 
 void _setUpLog() {
@@ -53,9 +53,9 @@ List<MetaTheme> _validateAndFilterMetaThemes(List<MetaTheme> metaThemeList) {
   return _list;
 }
 
-void _sendInitialChannelMethodCalls(MonarchData storybookData) async {
+void _sendInitialChannelMethodCalls(MonarchData monarchData) async {
   await channelMethodsSender.sendPing();
   await channelMethodsSender.sendDefaultTheme(activeTheme.defaultMetaTheme.id);
-  await channelMethodsSender.sendStorybookData(storybookData);
+  await channelMethodsSender.sendMonarchData(monarchData);
   await channelMethodsSender.sendReadySignal();
 }

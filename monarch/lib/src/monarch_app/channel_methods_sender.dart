@@ -5,35 +5,35 @@ import 'channel_methods.dart';
 
 class ChannelMethodsSender with Log {
   
-  final MethodChannel _dropsourceStorybookChannel = Channels.dropsourceStorybookChannel;
+  final MethodChannel _dropsourceMonarchChannel = Channels.dropsourceMonarchChannel;
 
-  Future<T> _invokeStorybookChannelMethod<T>(String method, [ dynamic arguments ]) async {
+  Future<T> _invokeMonarchChannelMethod<T>(String method, [ dynamic arguments ]) async {
     log.info('sending channel method: $method');
-    return _dropsourceStorybookChannel.invokeMethod(method, arguments);
+    return _dropsourceMonarchChannel.invokeMethod(method, arguments);
   }
 
   Future sendPing() {
-    return _invokeStorybookChannelMethod(MethodNames.ping);
+    return _invokeMonarchChannelMethod(MethodNames.ping);
   }
 
   Future sendDeviceDefinitions(OutboundChannelArgument definitions) {
-    return _invokeStorybookChannelMethod(MethodNames.deviceDefinitions, definitions.toStandardMap());
+    return _invokeMonarchChannelMethod(MethodNames.deviceDefinitions, definitions.toStandardMap());
   }
 
   Future sendStandardThemes(OutboundChannelArgument definitions) {
-    return _invokeStorybookChannelMethod(MethodNames.standardThemes, definitions.toStandardMap());
+    return _invokeMonarchChannelMethod(MethodNames.standardThemes, definitions.toStandardMap());
   }
 
   Future sendDefaultTheme(String id) {
-    return _invokeStorybookChannelMethod(MethodNames.defaultTheme, { 'themeId' : id });
+    return _invokeMonarchChannelMethod(MethodNames.defaultTheme, { 'themeId' : id });
   }
 
-  Future sendStorybookData(OutboundChannelArgument storybookData) {
-    return _invokeStorybookChannelMethod(MethodNames.storybookData, storybookData.toStandardMap());
+  Future sendMonarchData(OutboundChannelArgument monarchData) {
+    return _invokeMonarchChannelMethod(MethodNames.monarchData, monarchData.toStandardMap());
   }
 
   Future sendReadySignal() {
-    return _invokeStorybookChannelMethod(MethodNames.readySignal);
+    return _invokeMonarchChannelMethod(MethodNames.readySignal);
   }
 }
 
