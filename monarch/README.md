@@ -26,7 +26,7 @@ development on macOS for now.
 1. Add `monarch` and `build_runner` to your project dev_dependencies:
 ```yaml
 dev_dependencies:
-  monarch: ^0.0.22
+  monarch: ^0.0.23
   build_runner: ^1.7.1
 ```
 
@@ -100,7 +100,7 @@ Monarch then you need to add the
 `package:monarch_annotations` to your dependencies:
 ```yaml
 dependencies:
-  monarch_annotations: ^0.0.8
+  monarch_annotations: ^0.0.9
 ``` 
 Then, you can annotate your themes:
 ```dart
