@@ -47,8 +47,8 @@ your directory of choice using `curl`, for example:
 
 ```
 $ cd ~/development
-$ curl -O https://dropsource-monarch.s3.amazonaws.com/dist/alpha/monarch_tools_0.0.31.zip
-$ unzip monarch_tools_0.0.31.zip
+$ curl -O https://dropsource-monarch.s3.amazonaws.com/dist/alpha/monarch_tools_0.0.36.zip
+$ unzip monarch_tools_0.0.36.zip
 ```
 
 ## Example
@@ -75,7 +75,7 @@ Monarch desktop app.
 To run the monarch_task_runner, enter this command from inside your project 
 directory.
 ```
-$ ~/development/monarch_tools_0.0.27/monarch_task_runner
+$ ~/development/monarch_tools_0.0.36/monarch_task_runner
 ```
 You should see the task runner working and eventually opening the Monarch app.
 
