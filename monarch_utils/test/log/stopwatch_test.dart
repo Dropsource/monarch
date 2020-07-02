@@ -9,9 +9,9 @@ void main() {
       manualNow = null;
     });
 
-    void verify({ Duration manualLapse, String expected }) {
+    void verify({Duration manualLapse, String expected}) {
       manualNow = DateTime(2019, 1, 1, 0, 0, 0, 0, 0);
-      
+
       s = Stopwatch()..start();
 
       manualNow = manualNow.add(manualLapse);
@@ -56,11 +56,21 @@ void main() {
       verify(manualLapse: Duration(seconds: 1), expected: '1.0sec');
       verify(manualLapse: Duration(seconds: 2), expected: '2.0sec');
       verify(manualLapse: Duration(seconds: 3), expected: '3.0sec');
-      verify(manualLapse: Duration(seconds: 1, milliseconds: 1), expected: '1.0sec');
-      verify(manualLapse: Duration(seconds: 1, milliseconds: 100), expected: '1.1sec');
-      verify(manualLapse: Duration(seconds: 1, milliseconds: 299), expected: '1.3sec');
-      verify(manualLapse: Duration(seconds: 9, milliseconds: 900), expected: '9.9sec');
-      verify(manualLapse: Duration(seconds: 59, milliseconds: 450), expected: '59.5sec');
+      verify(
+          manualLapse: Duration(seconds: 1, milliseconds: 1),
+          expected: '1.0sec');
+      verify(
+          manualLapse: Duration(seconds: 1, milliseconds: 100),
+          expected: '1.1sec');
+      verify(
+          manualLapse: Duration(seconds: 1, milliseconds: 299),
+          expected: '1.3sec');
+      verify(
+          manualLapse: Duration(seconds: 9, milliseconds: 900),
+          expected: '9.9sec');
+      verify(
+          manualLapse: Duration(seconds: 59, milliseconds: 450),
+          expected: '59.5sec');
       verify(manualLapse: Duration(seconds: 60), expected: '1.0min');
     });
 
@@ -71,29 +81,42 @@ void main() {
 
       verify(manualLapse: Duration(minutes: 1, seconds: 3), expected: '1.1min');
       verify(manualLapse: Duration(minutes: 1, seconds: 9), expected: '1.1min');
-      
-      verify(manualLapse: Duration(minutes: 1, seconds: 10), expected: '1.2min');
-      verify(manualLapse: Duration(minutes: 1, seconds: 14), expected: '1.2min');
 
-      verify(manualLapse: Duration(minutes: 1, seconds: 15), expected: '1.3min');
-      verify(manualLapse: Duration(minutes: 1, seconds: 20), expected: '1.3min');
+      verify(
+          manualLapse: Duration(minutes: 1, seconds: 10), expected: '1.2min');
+      verify(
+          manualLapse: Duration(minutes: 1, seconds: 14), expected: '1.2min');
 
-      verify(manualLapse: Duration(minutes: 1, seconds: 21), expected: '1.4min');
-      verify(manualLapse: Duration(minutes: 1, seconds: 27), expected: '1.4min');
-      
-      verify(manualLapse: Duration(minutes: 1, seconds: 28), expected: '1.5min');
-      verify(manualLapse: Duration(minutes: 1, seconds: 32), expected: '1.5min');
-      
-      verify(manualLapse: Duration(minutes: 1, seconds: 51), expected: '1.9min');
-      verify(manualLapse: Duration(minutes: 1, seconds: 57), expected: '1.9min');
+      verify(
+          manualLapse: Duration(minutes: 1, seconds: 15), expected: '1.3min');
+      verify(
+          manualLapse: Duration(minutes: 1, seconds: 20), expected: '1.3min');
 
-      verify(manualLapse: Duration(minutes: 1, seconds: 58), expected: '2.0min');
+      verify(
+          manualLapse: Duration(minutes: 1, seconds: 21), expected: '1.4min');
+      verify(
+          manualLapse: Duration(minutes: 1, seconds: 27), expected: '1.4min');
+
+      verify(
+          manualLapse: Duration(minutes: 1, seconds: 28), expected: '1.5min');
+      verify(
+          manualLapse: Duration(minutes: 1, seconds: 32), expected: '1.5min');
+
+      verify(
+          manualLapse: Duration(minutes: 1, seconds: 51), expected: '1.9min');
+      verify(
+          manualLapse: Duration(minutes: 1, seconds: 57), expected: '1.9min');
+
+      verify(
+          manualLapse: Duration(minutes: 1, seconds: 58), expected: '2.0min');
       verify(manualLapse: Duration(minutes: 2, seconds: 3), expected: '2.0min');
 
       verify(manualLapse: Duration(minutes: 2, seconds: 4), expected: '2.1min');
       verify(manualLapse: Duration(minutes: 2, seconds: 9), expected: '2.1min');
-      
-      verify(manualLapse: Duration(minutes: 10500, seconds: 0), expected: '10500.0min');
+
+      verify(
+          manualLapse: Duration(minutes: 10500, seconds: 0),
+          expected: '10500.0min');
     });
 
     test('not started', () {
