@@ -1,3 +1,7 @@
+## 0.0.10 - 2020-07-02
+- example.dart
+- formatting
+
 ## 0.0.9 - 2020-07-01
 - publish tweak
 
