@@ -1,3 +1,7 @@
+## 0.0.9 - 2020-07-02
+- formatting
+- example
+
 ## 0.0.8 - 2020-07-01
 - publish tweak
 
