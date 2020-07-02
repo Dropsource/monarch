@@ -22,8 +22,7 @@ void startMonarch(String packageName, List<MetaTheme> userMetaThemes,
 
   userMetaThemes = _validateAndFilterMetaThemes(userMetaThemes);
 
-  final monarchData =
-      MonarchData(packageName, userMetaThemes, metaStoriesMap);
+  final monarchData = MonarchData(packageName, userMetaThemes, metaStoriesMap);
 
   setUpStoriesErrors(monarchData);
   activeTheme.setMetaThemes([...userMetaThemes, ...standardMetaThemes]);
@@ -43,9 +42,9 @@ List<MetaTheme> _validateAndFilterMetaThemes(List<MetaTheme> metaThemeList) {
   final _list = <MetaTheme>[];
   for (var item in metaThemeList) {
     if (item.theme == null) {
-      printUserMessage('Theme "${item.name}" is not of type ThemeData. It will be ignored.');
-    }
-    else {
+      printUserMessage(
+          'Theme "${item.name}" is not of type ThemeData. It will be ignored.');
+    } else {
       logger.fine('Valid theme found: ${item.name}');
       _list.add(item);
     }

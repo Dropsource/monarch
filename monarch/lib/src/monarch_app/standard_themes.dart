@@ -14,7 +14,8 @@ class StandardThemes implements OutboundChannelArgument {
   @override
   Map<String, dynamic> toStandardMap() {
     return {
-      'standardThemes': standardMetaThemes.map((d) => d.toStandardMap()).toList(),
+      'standardThemes':
+          standardMetaThemes.map((d) => d.toStandardMap()).toList(),
     };
   }
 }

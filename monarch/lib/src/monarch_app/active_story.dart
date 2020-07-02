@@ -4,9 +4,9 @@ import 'package:monarch_utils/log.dart';
 
 class StoryId {
   final String package;
-  
+
   /// The generated stories path. As of 2020-05-08, this path is
-  /// relative to the stories directory. 
+  /// relative to the stories directory.
   /// It looks like 'stories/foo_stories.g.dart'.
   final String path;
 
@@ -33,8 +33,7 @@ class ActiveStory with Log {
 
   StoryId get activeStoryId => _activeStoryId;
 
-  final _activeStoryChangeStreamController =
-      StreamController<void>.broadcast();
+  final _activeStoryChangeStreamController = StreamController<void>.broadcast();
   Stream<void> get activeStoryChangeStream =>
       _activeStoryChangeStreamController.stream;
 

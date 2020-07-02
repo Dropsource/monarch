@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:pedantic/pedantic.dart';
 
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';

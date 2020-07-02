@@ -37,7 +37,8 @@ class MetaStoriesGenerator extends Generator {
                 'Top level function is not story, return type is not Widget: ${topLevelElement.name}');
           }
         } else {
-          log.fine('Could not get return type of top level function, skipping: ${topLevelElement.name}');
+          log.fine(
+              'Could not get return type of top level function, skipping: ${topLevelElement.name}');
         }
       } else {
         log.fine(

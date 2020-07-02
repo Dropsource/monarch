@@ -31,7 +31,8 @@ class MetaThemesGenerator extends Generator {
         final isDefault = annotation.read('isDefault').boolValue;
         final themeVariableName = element.name;
 
-        expressions.add("MetaTheme.user('$themeName', $themeVariableName, $isDefault)");
+        expressions.add(
+            "MetaTheme.user('$themeName', $themeVariableName, $isDefault)");
       } else {
         final msg = '''
 Found MonarchTheme annotation on an element that is not a top-level variable.
