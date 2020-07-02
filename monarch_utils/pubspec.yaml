@@ -1,5 +1,5 @@
 name: monarch_utils
-description: Utils for monarch.
+description: Utilities for the monarch package. Mostly utilities for logging.
 version: 0.0.9
 homepage: https://github.com/Dropsource/monarch
 
