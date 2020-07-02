@@ -9,11 +9,9 @@ class Stopwatch {
   String toString() {
     if (_start == null) {
       return 'stopwatch-not-started';
-    }
-    else if (_stop == null) {
+    } else if (_stop == null) {
       return 'stopwatch-not-stopped';
-    }
-    else {
+    } else {
       return prettyDuration(Duration(microseconds: _stop - _start));
     }
   }
@@ -31,14 +29,14 @@ int get nowMicrosecondsSinceEpoch => now.microsecondsSinceEpoch;
 /// 59.5sec
 /// 1.0min
 /// 5.7min
-/// ``` 
+/// ```
 /// If the duration is small enough it will only return microseonds (µs) or
 /// milliseconds (ms). If ms, then the µs will not be part of the returned
 /// string.
-/// 
+///
 /// If the duration is seconds (sec) or minutes (min), it will print a single
 /// decimal point digit.
-/// 
+///
 /// See stopwatch_test.dart for more details.
 String prettyDuration(Duration duration) {
   if (duration.inMicroseconds < 1000) {

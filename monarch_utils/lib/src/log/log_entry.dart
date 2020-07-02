@@ -9,16 +9,16 @@ class LogEntry {
   final String errorDetails;
   final String stackTrace;
 
-  LogEntry._(this.level, this.message, this.loggerName,
-      this.errorDetails, this.stackTrace)
+  LogEntry._(this.level, this.message, this.loggerName, this.errorDetails,
+      this.stackTrace)
       : timestamp = DateTime.now();
 
   factory LogEntry.standard(
           LogLevel level, String message, String loggerName) =>
       LogEntry._(level, message, loggerName, null, null);
 
-  factory LogEntry.withError(LogLevel level, String message,
-          String loggerName, String errorDetails, String stackTrace) =>
+  factory LogEntry.withError(LogLevel level, String message, String loggerName,
+          String errorDetails, String stackTrace) =>
       LogEntry._(level, message, loggerName, errorDetails, stackTrace);
 
   @override
@@ -26,7 +26,8 @@ class LogEntry {
     return '$level $loggerName: $message';
   }
 
-  String toStringOptions({bool includeTimestamp = false, bool includeLoggerName = false}) {
+  String toStringOptions(
+      {bool includeTimestamp = false, bool includeLoggerName = false}) {
     final tokens = <String>[];
     if (includeTimestamp) {
       tokens.add(timestamp.toString());

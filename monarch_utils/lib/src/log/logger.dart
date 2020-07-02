@@ -2,7 +2,6 @@ import '../log_config/log_config.dart';
 import 'log_level.dart';
 import 'log_entry.dart';
 
-
 /// Use a [Logger] to log debug messages.
 ///
 /// Copied, adapted and simplified from the [logging package]
