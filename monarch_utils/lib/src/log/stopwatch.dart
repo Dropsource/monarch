@@ -5,6 +5,16 @@ class Stopwatch {
   void start() => _start = nowMicrosecondsSinceEpoch;
   void stop() => _stop = nowMicrosecondsSinceEpoch;
 
+  Duration get duration {
+    if (_start == null) {
+      throw StateError('Stopwatch not started');
+    } else if (_stop == null) {
+      throw StateError('Stopwatch not stopped');
+    } else {
+      return Duration(microseconds: _stop - _start);
+    }
+  }
+
   @override
   String toString() {
     if (_start == null) {
@@ -12,7 +22,7 @@ class Stopwatch {
     } else if (_stop == null) {
       return 'stopwatch-not-stopped';
     } else {
-      return prettyDuration(Duration(microseconds: _stop - _start));
+      return prettyDuration(duration);
     }
   }
 }

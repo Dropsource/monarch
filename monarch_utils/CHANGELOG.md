@@ -1,3 +1,6 @@
+## 0.0.11 - 2020-07-03
+- stopwatch duration, tests
+
 ## 0.0.10 - 2020-07-02
 - example.dart
 - formatting
