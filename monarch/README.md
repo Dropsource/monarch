@@ -1,26 +1,32 @@
 # Monarch
+Build high-quality flutter widgets faster.
 
-Monarch lets you generate stories for your widgets. Stories are 
-functions that return a widget in a specific state. Once your stories
-are ready, you can see them in the Monarch UI.
+Monarch is a tool for developing widgets in isolation. It makes building 
+beautiful widgets a more pleasant and faster experience. It is inspired by 
+[Storybook](https://storybook.js.org/).
 
-For example, if you have a widget called `MyFancyCard` that takes in a `title`, 
-then you could write these two stories:
+Monarch allows you to browse a widget library, view the different states of 
+each widget, and interactively develop widgets.
 
-```dart
-Widget shortTitle() => MyFancyCard(
-    title: 'A'
-);
+## Workflow
+First, you write stories for the widgets you want to test. A story is a 
+function that returns a widget in a specific state. For example, if you have 
+a widget called `MyFancyCard` that takes in a `title`, then you could write 
+these two stories:
 
-Widget longTitle() => MyFancyCard(
-    title: 'Much longer title'
-)
+```
+Widget shortTitle() => MyFancyCard(title: 'A');
+
+Widget longTitle() => MyFancyCard(title: 'Much longer title');
 ```
 
-You can then see those two stories in the Monarch UI.
+Then, you will run the Monarch task runner which will generate the code needed 
+to display your stories in the Monarch desktop app. You can now see your 
+stories in isolation, without all of you app's dependencies.
 
-This is the alpha release of Monarch. We only support flutter 
-development on macOS for now.
+![](docs/images/monarch_long_title.png)
+
+_This is the alpha release of Monarch. We only support flutter development on macOS for now._
 
 ## Installation
 1. Add `monarch` and `build_runner` to your project dev_dependencies:
@@ -42,18 +48,14 @@ targets:
       - stories/**
 ```
 
-4. To see your stories you need to run our monarch tools. Download them into
-your directory of choice using `curl`, for example:
+4. Download the Monarch tools, which include the task runner and desktop app. 
+Download them into your directory of choice using `curl`, for example:
 
 ```
 $ cd ~/development
 $ curl -O https://dropsource-monarch.s3.amazonaws.com/dist/alpha/monarch_tools_0.0.42.zip
 $ unzip monarch_tools_0.0.42.zip
 ```
-
-## Example
-There is an example project which shows how to write stories: 
-[Example project](https://github.com/Dropsource/monarch/tree/master/example).
 
 ## Usage
 
@@ -64,9 +66,9 @@ project. Then start adding files that end in `*_stories.dart`.
 You could also add stories inside your `lib` directory. The only requirement 
 is that story files should end in `*_stories.dart`.
 
-Stories files don't need a dependency on monarch. Since stories 
-are just functions that return a widget they can re-used from tests.
-
+Stories are just functions that return a `Widget`. Therefore, your stories code
+doesn't require a dependency to Monarch. Also, since stories are plain functions,
+they can be re-used from your widget tests.
 
 ### Run the task runner to see your stories
 The monarch_task_runner will prepare your stories so you can use them in the 
