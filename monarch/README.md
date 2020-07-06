@@ -66,7 +66,7 @@ project. Then start adding files that end in `*_stories.dart`.
 You could also add stories inside your `lib` directory. The only requirement 
 is that story files should end in `*_stories.dart`.
 
-Stories are just functions that return a `Widget`. Therefore, your stories code
+Stories are functions that return a `Widget`. Therefore, your stories code
 doesn't require a dependency to Monarch. Also, since stories are plain functions,
 they can be re-used from your widget tests.
 
