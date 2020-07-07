@@ -21,6 +21,9 @@ void logCurrentProcessInformation(Logger logger, LogLevel logLevel) {
       logLevel,
       'Current process information: '
       ' pid=$pid'
-      ' currentRss=${ProcessInfo.currentRss / 1e+6}MB'
-      ' maxRss=${ProcessInfo.maxRss / 1e+6}MB');
+      ' currentRss=${processCurrentRssInMB}MB'
+      ' maxRss=${processMaxRssInMB}MB');
 }
+
+double get processCurrentRssInMB => ProcessInfo.currentRss / 1e+6;
+double get processMaxRssInMB => ProcessInfo.maxRss / 1e+6;

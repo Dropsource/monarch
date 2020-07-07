@@ -1,3 +1,6 @@
+## 0.0.12 - 2020-07-07
+- Utility functions for current process memory
+
 ## 0.0.11 - 2020-07-03
 - stopwatch duration, tests
 
