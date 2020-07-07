@@ -53,8 +53,8 @@ Download them into your directory of choice using `curl`, for example:
 
 ```
 $ cd ~/development
-$ curl -O https://dropsource-monarch.s3.amazonaws.com/dist/alpha/monarch_tools_0.0.40.zip
-$ unzip monarch_tools_0.0.40.zip
+$ curl -O https://dropsource-monarch.s3.amazonaws.com/dist/alpha/monarch_tools_0.0.44.zip
+$ unzip monarch_tools_0.0.44.zip
 ```
 
 ## Usage
