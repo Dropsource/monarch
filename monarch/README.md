@@ -24,7 +24,7 @@ Then, you will run the Monarch task runner which will generate the code needed
 to display your stories in the Monarch desktop app. You can now see your 
 stories in isolation, without all of you app's dependencies.
 
-![](docs/images/monarch_long_title.png)
+![](https://github.com/Dropsource/monarch/blob/master/monarch/docs/images/monarch_long_title.png)
 
 _This is the alpha release of Monarch. We only support flutter development on macOS for now._
 
