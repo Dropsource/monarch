@@ -1,3 +1,6 @@
+## 0.0.13 - 2020-07-14
+- Handling null error or stackTrace in log function
+
 ## 0.0.12 - 2020-07-07
 - Utility functions for current process memory
 
