@@ -67,7 +67,7 @@ class Logger {
 
       if (error != null || stackTrace != null) {
         logEntryStreamController.add(LogEntry.withError(
-            logLevel, msg, name, error.toString(), stackTrace.toString()));
+            logLevel, msg, name, error?.toString(), stackTrace?.toString()));
       } else {
         logEntryStreamController.add(LogEntry.standard(logLevel, msg, name));
       }
