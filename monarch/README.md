@@ -44,6 +44,7 @@ following:
 targets:
   $default:
     sources:
+      - $package$
       - lib/**
       - stories/**
 ```
