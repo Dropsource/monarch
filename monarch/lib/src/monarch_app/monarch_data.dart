@@ -54,8 +54,34 @@ class MetaTheme implements OutboundChannelArgument {
   }
 }
 
+class MetaLocalization implements OutboundChannelArgument {
+  final List<Locale> locales;
+  final LocalizationsDelegate delegate;
+
+  MetaLocalization(this.locales, this.delegate);
+
+  MetaLocalization.user(this.locales, dynamic dynamicLocalization)
+      : delegate = dynamicLocalization is LocalizationsDelegate
+            ? dynamicLocalization
+            : null;
+
+  @override
+  Map<String, dynamic> toStandardMap() {
+    return {
+      'locales': locales.map((e) => {
+            'languageCode': e.languageCode,
+            'countryCode': e.countryCode,
+            'scriptCode': e.scriptCode
+          })
+    };
+  }
+}
+
 class MonarchData implements OutboundChannelArgument {
   final String packageName;
+
+  /// List of user-annotated locales;
+  final List<MetaLocalization> metaLocalizations;
 
   /// List of user-annotated themes
   final List<MetaTheme> metaThemes;
@@ -64,12 +90,15 @@ class MonarchData implements OutboundChannelArgument {
   /// As of 2020-04-15, the key looks like `$packageName|$generatedStoriesFilePath`
   final Map<String, MetaStories> metaStoriesMap;
 
-  MonarchData(this.packageName, this.metaThemes, this.metaStoriesMap);
+  MonarchData(this.packageName, this.metaLocalizations, this.metaThemes,
+      this.metaStoriesMap);
 
   @override
   Map<String, dynamic> toStandardMap() {
     return {
       'packageName': packageName,
+      'metaLocalizations':
+          metaLocalizations.map((e) => e.toStandardMap()).toList(),
       'metaThemes': metaThemes.map((e) => e.toStandardMap()).toList(),
       'metaStoriesMap': metaStoriesMap
           .map((key, value) => MapEntry(key, value.toStandardMap()))

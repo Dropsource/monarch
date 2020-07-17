@@ -14,6 +14,9 @@ class MainBuilder implements Builder {
   FutureOr<void> build(BuildStep buildStep) async {
     log.fine('Processing ${buildStep.inputId}');
 
+    final metaLocalizationsIdMap = await _getLibraryPrefixToAssetIdMap(
+        buildStep, 'l', '***/*.meta_localizations.g.dart');
+
     final metaThemesIdMap = await _getLibraryPrefixToAssetIdMap(
         buildStep, 't', '**/*.meta_themes.g.dart');
 
@@ -25,9 +28,11 @@ class MainBuilder implements Builder {
 
     final output = _outputContents(
         buildStep.inputId.package,
+        _getImportStatements(metaLocalizationsIdMap),
         _getImportStatements(metaThemesIdMap),
         _getImportStatements(metaStoriesIdMap),
-        _getMetaThemeStatements(metaThemesIdMap),
+        _getMetaItemsStatements(metaLocalizationsIdMap, 'metaLocalizationItems'),
+        _getMetaItemsStatements(metaThemesIdMap, 'metaThemeItems'),
         _getMetaStoriesMap(metaStoriesIdMap));
 
     var formatter = DartFormatter();
@@ -58,10 +63,18 @@ class MainBuilder implements Builder {
     });
   }
 
-  Iterable<String> _getMetaThemeStatements(Map<String, AssetId> map) {
+  // Iterable<String> _getMetaThemeStatements(Map<String, AssetId> map) {
+  //   return map.entries.map((item) {
+  //     final libraryPrefix = item.key;
+  //     return '...$libraryPrefix.metaThemeItems';
+  //   });
+  // }
+
+  Iterable<String> _getMetaItemsStatements(
+      Map<String, AssetId> map, String metaItemsTopVariableName) {
     return map.entries.map((item) {
       final libraryPrefix = item.key;
-      return '...$libraryPrefix.metaThemeItems';
+      return '...$libraryPrefix.$metaItemsTopVariableName';
     });
   }
 
@@ -78,8 +91,10 @@ class MainBuilder implements Builder {
 
   String _outputContents(
       String packageName,
+      Iterable<String> metaLocalizationsImportStatements,
       Iterable<String> metaThemesImportStatements,
       Iterable<String> metaStoriesImportStatements,
+      Iterable<String> metaLocalizationList,
       Iterable<String> metaThemeList,
       Map<String, String> metaStoriesMap) {
     return '''
@@ -93,13 +108,15 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:monarch/monarch.dart';
 
+${metaLocalizationsImportStatements.join('\n')}
+
 ${metaThemesImportStatements.join('\n')}
 
 ${metaStoriesImportStatements.join('\n')}
 
 void main() {
   // ui.window.setIsolateDebugName('monarch-isolate');
-  startMonarch('$packageName', [${metaThemeList.join(', ')}], $metaStoriesMap);
+  startMonarch('$packageName', [${metaLocalizationList.join(', ')}], [${metaThemeList.join(', ')}], $metaStoriesMap);
 }
 
 ''';

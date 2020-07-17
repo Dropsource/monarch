@@ -14,7 +14,10 @@ import 'user_message.dart';
 
 final logger = Logger('Start');
 
-void startMonarch(String packageName, List<MetaTheme> userMetaThemes,
+void startMonarch(
+    String packageName,
+    List<MetaLocalization> userMetaLocalizations,
+    List<MetaTheme> userMetaThemes,
     Map<String, MetaStories> metaStoriesMap) {
   _setUpLog();
 
@@ -22,7 +25,8 @@ void startMonarch(String packageName, List<MetaTheme> userMetaThemes,
 
   userMetaThemes = _validateAndFilterMetaThemes(userMetaThemes);
 
-  final monarchData = MonarchData(packageName, userMetaThemes, metaStoriesMap);
+  final monarchData = MonarchData(
+      packageName, userMetaLocalizations, userMetaThemes, metaStoriesMap);
 
   setUpStoriesErrors(monarchData);
   activeTheme.setMetaThemes([...userMetaThemes, ...standardMetaThemes]);

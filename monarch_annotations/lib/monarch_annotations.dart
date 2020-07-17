@@ -19,6 +19,12 @@ class MonarchTheme {
       : assert(name != null);
 }
 
+class MonarchLocalization {
+  final List<String> locales;
+
+  const MonarchLocalization(this.locales) : assert(locales != null);
+}
+
 // class Story {
 //   final String name;
 //   final String theme;
