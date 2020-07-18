@@ -23,6 +23,7 @@ void startMonarch(
 
   logger.finest('Starting Monarch flutter app');
 
+  userMetaLocalizations = _validateAndFilterMetaLocalizations(userMetaLocalizations);
   userMetaThemes = _validateAndFilterMetaThemes(userMetaThemes);
 
   final monarchData = MonarchData(
@@ -40,6 +41,23 @@ void startMonarch(
 void _setUpLog() {
   defaultLogLevel = LogLevel.ALL;
   logToConsole(printTimestamp: false, printLoggerName: true);
+}
+
+List<MetaLocalization> _validateAndFilterMetaLocalizations(
+    List<MetaLocalization> metaLocalizationList) {
+  final _list = <MetaLocalization>[];
+  for (var item in metaLocalizationList) {
+    if (item.delegate == null) {
+      printUserMessage(
+          '${item.delegateClassName} doesn\'t extend LocalizationsDelegate<T>. It will be ignored.');
+    } else {
+      logger.fine(
+          'Valid localization found on class ${item.delegateClassName} with '
+          'annotated locales: ${item.locales.map((e) => e.languageCode).toList()}');
+      _list.add(item);
+    }
+  }
+  return _list;
 }
 
 List<MetaTheme> _validateAndFilterMetaThemes(List<MetaTheme> metaThemeList) {

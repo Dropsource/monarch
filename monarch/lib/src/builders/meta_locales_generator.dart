@@ -33,7 +33,7 @@ class MetaLocalizationsGenerator extends Generator {
         final localesExpression = "[${locales.join(', ')}]";
 
         expressions.add(
-            'MetaLocalization.user($localesExpression, const ${element.name}())');
+            "MetaLocalization.user($localesExpression, ${element.name}(), '${element.name}')");
       } else {
         final msg = '''
 Found MonarchLocalization annotation on an element that is not a class declaration.
@@ -53,6 +53,7 @@ Element name: ${element.name}
   String _outputContents(
       String pathToLocalizationFile, List<String> metaLocalizationExpressions) {
     return '''
+import 'dart:ui';
 import 'package:monarch/monarch.dart';
 import '$pathToLocalizationFile';
 

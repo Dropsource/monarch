@@ -57,10 +57,11 @@ class MetaTheme implements OutboundChannelArgument {
 class MetaLocalization implements OutboundChannelArgument {
   final List<Locale> locales;
   final LocalizationsDelegate delegate;
+  final String delegateClassName;
 
-  MetaLocalization(this.locales, this.delegate);
+  MetaLocalization(this.locales, this.delegate, this.delegateClassName);
 
-  MetaLocalization.user(this.locales, dynamic dynamicLocalization)
+  MetaLocalization.user(this.locales, dynamic dynamicLocalization, this.delegateClassName)
       : delegate = dynamicLocalization is LocalizationsDelegate
             ? dynamicLocalization
             : null;
@@ -68,11 +69,8 @@ class MetaLocalization implements OutboundChannelArgument {
   @override
   Map<String, dynamic> toStandardMap() {
     return {
-      'locales': locales.map((e) => {
-            'languageCode': e.languageCode,
-            'countryCode': e.countryCode,
-            'scriptCode': e.scriptCode
-          })
+      'locales': locales.map((e) => e.toLanguageTag()).toList(),
+      'delegateClassName': delegateClassName
     };
   }
 }
@@ -80,7 +78,7 @@ class MetaLocalization implements OutboundChannelArgument {
 class MonarchData implements OutboundChannelArgument {
   final String packageName;
 
-  /// List of user-annotated locales;
+  /// List of user-annotated localizations
   final List<MetaLocalization> metaLocalizations;
 
   /// List of user-annotated themes

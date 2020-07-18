@@ -6,6 +6,7 @@ import 'package:monarch_utils/log_config.dart';
 import 'active_device.dart';
 import 'active_story.dart';
 import 'active_theme.dart';
+import 'active_locale.dart';
 import 'channel_methods.dart';
 import 'channel_methods_sender.dart';
 import 'standard_themes.dart';
@@ -49,6 +50,11 @@ Future<dynamic> _handler(MethodCall call) async {
     case MethodNames.loadStory:
       final String storyKey = args['storyKey'];
       activeStory.setActiveStory(storyKey);
+      break;
+
+    case MethodNames.setActiveLocale:
+      final String locale = args['locale'];
+      activeLocale.setActiveLocale(locale);
       break;
 
     case MethodNames.setActiveTheme:

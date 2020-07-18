@@ -31,6 +31,7 @@ class MethodNames {
   static const readySignal = 'dropsource.monarch.readySignal';
   static const loadStory = 'dropsource.monarch.loadStory';
   static const setUpLog = 'dropsource.monarch.setUpLog';
+  static const setActiveLocale = 'dropsource.monarch.setActiveLocale';
   static const setActiveTheme = 'dropsource.monarch.setActiveTheme';
   static const setActiveDevice = 'dropsource.monarch.setActiveDevice';
 }

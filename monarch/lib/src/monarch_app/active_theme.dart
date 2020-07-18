@@ -46,6 +46,7 @@ class ActiveTheme with Log {
 
   void resetActiveMetaTheme() {
     _activeMetaTheme = defaultMetaTheme;
+    _activeMetaThemeStreamController.add(null);
   }
 
   void close() {
