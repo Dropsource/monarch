@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'user_message.dart';
 
 import 'active_locale.dart';
 import 'story_view.dart';
@@ -47,8 +48,8 @@ class _StoryAppState extends State<StoryApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
         localizationsDelegates: _getLocalizationsDelegates(),
-        supportedLocales: _getSupportedLocales(),
-        locale: _getLocale(),
+        supportedLocales: [Locale('en'), Locale('es')],//_getSupportedLocales(),
+        locale: Locale('es'),//_getLocale(),
         title: 'Story',
         home: Scaffold(body: StoryView(monarchData: widget.monarchData)));
   }
@@ -63,17 +64,26 @@ class _StoryAppState extends State<StoryApp> {
   }
 
   Iterable<LocalizationsDelegate<dynamic>> _getLocalizationsDelegates() {
-    if (widget.monarchData.metaLocalizations.isEmpty) {
-      return null;
+    final delegate = widget.monarchData.metaLocalizations[0].delegate;
+    if (delegate is LocalizationsDelegate<dynamic>) {
+      printUserMessage('IS LocalizationsDelegate<dynamic> [${delegate.runtimeType.toString()}] [${delegate.type.toString()}] [${delegate.isSupported(Locale("es"))}]');
     }
     else {
-      return [
-          ...widget.monarchData.metaLocalizations.map((x) => x.delegate),
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ];
+      printUserMessage('NOT LocalizationsDelegate<dynamic>');
     }
+    // if (widget.monarchData.metaLocalizations.isEmpty) {
+    //   return null;
+    // }
+    // else {
+      return [
+          // ...widget.monarchData.metaLocalizations.map((x) => x.delegate).toList(),
+          // widget.monarchData.metaLocalizations[0].delegate,
+          delegate,
+          ...GlobalMaterialLocalizations.delegates,
+          // GlobalWidgetsLocalizations.delegate,
+          // GlobalCupertinoLocalizations.delegate,
+        ];
+    // }
   }
 
   Iterable<Locale> _getSupportedLocales() {

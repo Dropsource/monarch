@@ -32,8 +32,12 @@ class MetaLocalizationsGenerator extends Generator {
         final locales = localeCodes.map((x) => "Locale('$x')");
         final localesExpression = "[${locales.join(', ')}]";
 
+      // final typeParameterName = element.supertype.getDisplayString();
+      final typeParameterName = element.supertype.typeArguments[0].element.name;
+      // log.fine('one=${element.typeParameters.length} two=${element.supertype.typeArguments.length} three=${element.supertype.typeArguments[0].element.name}');
+
         expressions.add(
-            "MetaLocalization.user($localesExpression, ${element.name}(), '${element.name}')");
+            "MetaLocalization<${typeParameterName}>.user($localesExpression, ${element.name}(), '${element.name}')");
       } else {
         final msg = '''
 Found MonarchLocalization annotation on an element that is not a class declaration.

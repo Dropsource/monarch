@@ -54,15 +54,15 @@ class MetaTheme implements OutboundChannelArgument {
   }
 }
 
-class MetaLocalization implements OutboundChannelArgument {
+class MetaLocalization<T> implements OutboundChannelArgument {
   final List<Locale> locales;
-  final LocalizationsDelegate delegate;
+  final LocalizationsDelegate<T> delegate;
   final String delegateClassName;
 
   MetaLocalization(this.locales, this.delegate, this.delegateClassName);
 
   MetaLocalization.user(this.locales, dynamic dynamicLocalization, this.delegateClassName)
-      : delegate = dynamicLocalization is LocalizationsDelegate
+      : delegate = dynamicLocalization is LocalizationsDelegate<T>
             ? dynamicLocalization
             : null;
 
