@@ -38,7 +38,7 @@ class MetaLocalizationsGenerator extends Generator {
               element.supertype.typeArguments[0].element.name;
 
           expressions.add(
-              "MetaLocalization<${typeParameterName}>.user($localesExpression, ${element.name}(), '${element.name}')");
+              "MetaLocalization<$typeParameterName>.user($localesExpression, ${element.name}(), '${element.name}')");
         }
       } else {
         final msg = '''
