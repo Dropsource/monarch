@@ -1,3 +1,6 @@
+## 0.0.11 - 2020-07-21
+- MonarchLocale class to pass Locale information in MonarchLocalizations annotation
+
 ## 0.0.10 - 2020-07-21
 - Localizations support via MonarchLocalizations annotation
 
