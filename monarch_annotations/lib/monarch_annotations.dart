@@ -19,10 +19,19 @@ class MonarchTheme {
       : assert(name != null);
 }
 
-class MonarchLocalization {
-  final List<String> locales;
+class MonarchLocalizations {
+  final List<MonarchLocale> locales;
 
-  const MonarchLocalization(this.locales) : assert(locales != null);
+  const MonarchLocalizations(this.locales) : assert(locales != null);
+}
+
+class MonarchLocale {
+  final String languageCode;
+  final String countryCode;
+
+  const MonarchLocale(this.languageCode, [this.countryCode])
+      : assert(languageCode != null),
+        assert(languageCode != '');
 }
 
 // class Story {
