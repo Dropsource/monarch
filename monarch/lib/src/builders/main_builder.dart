@@ -31,7 +31,8 @@ class MainBuilder implements Builder {
         _getImportStatements(metaLocalizationsIdMap),
         _getImportStatements(metaThemesIdMap),
         _getImportStatements(metaStoriesIdMap),
-        _getMetaItemsStatements(metaLocalizationsIdMap, 'metaLocalizationItems'),
+        _getMetaItemsStatements(
+            metaLocalizationsIdMap, 'metaLocalizationItems'),
         _getMetaItemsStatements(metaThemesIdMap, 'metaThemeItems'),
         _getMetaStoriesMap(metaStoriesIdMap));
 

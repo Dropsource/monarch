@@ -61,7 +61,8 @@ class MetaLocalization<T> implements OutboundChannelArgument {
 
   MetaLocalization(this.locales, this.delegate, this.delegateClassName);
 
-  MetaLocalization.user(this.locales, dynamic dynamicLocalization, this.delegateClassName)
+  MetaLocalization.user(
+      this.locales, dynamic dynamicLocalization, this.delegateClassName)
       : delegate = dynamicLocalization is LocalizationsDelegate<T>
             ? dynamicLocalization
             : null;

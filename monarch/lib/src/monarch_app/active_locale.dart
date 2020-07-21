@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:monarch_utils/log.dart';
 
 class ActiveLocale with Log {
-
   String _activeLocale;
   String get activeLocale => _activeLocale ?? defaultLocale;
 

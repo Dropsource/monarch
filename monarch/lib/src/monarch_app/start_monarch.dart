@@ -23,7 +23,8 @@ void startMonarch(
 
   logger.finest('Starting Monarch flutter app');
 
-  userMetaLocalizations = _validateAndFilterMetaLocalizations(userMetaLocalizations);
+  userMetaLocalizations =
+      _validateAndFilterMetaLocalizations(userMetaLocalizations);
   userMetaThemes = _validateAndFilterMetaThemes(userMetaThemes);
 
   final monarchData = MonarchData(
