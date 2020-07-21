@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'user_message.dart';
 
 import 'active_locale.dart';
 import 'story_view.dart';
@@ -48,8 +47,8 @@ class _StoryAppState extends State<StoryApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
         localizationsDelegates: _getLocalizationsDelegates(),
-        supportedLocales: [Locale('en'), Locale('es')],//_getSupportedLocales(),
-        locale: Locale('es'),//_getLocale(),
+        supportedLocales: _getSupportedLocales(),
+        locale: _getLocale(),
         title: 'Story',
         home: Scaffold(body: StoryView(monarchData: widget.monarchData)));
   }
@@ -57,40 +56,27 @@ class _StoryAppState extends State<StoryApp> {
   Locale _getLocale() {
     if (widget.monarchData.metaLocalizations.isEmpty) {
       return null;
-    }
-    else {
+    } else {
       return parseLocale(_locale);
     }
   }
 
   Iterable<LocalizationsDelegate<dynamic>> _getLocalizationsDelegates() {
-    final delegate = widget.monarchData.metaLocalizations[0].delegate;
-    if (delegate is LocalizationsDelegate<dynamic>) {
-      printUserMessage('IS LocalizationsDelegate<dynamic> [${delegate.runtimeType.toString()}] [${delegate.type.toString()}] [${delegate.isSupported(Locale("es"))}]');
-    }
-    else {
-      printUserMessage('NOT LocalizationsDelegate<dynamic>');
-    }
-    // if (widget.monarchData.metaLocalizations.isEmpty) {
-    //   return null;
-    // }
-    // else {
+    if (widget.monarchData.metaLocalizations.isEmpty) {
+      return null;
+    } else {
       return [
-          // ...widget.monarchData.metaLocalizations.map((x) => x.delegate).toList(),
-          // widget.monarchData.metaLocalizations[0].delegate,
-          delegate,
-          ...GlobalMaterialLocalizations.delegates,
-          // GlobalWidgetsLocalizations.delegate,
-          // GlobalCupertinoLocalizations.delegate,
-        ];
-    // }
+        ...widget.monarchData.metaLocalizations.map((x) => x.delegate).toList(),
+        ...GlobalMaterialLocalizations.delegates,
+      ];
+    }
   }
 
   Iterable<Locale> _getSupportedLocales() {
     if (widget.monarchData.metaLocalizations.isEmpty) {
-      return null;
-    }
-    else {
+      // suuportedLocales must not be null and the default is en-US
+      return <Locale>[parseLocale(defaultLocale)];
+    } else {
       final locales = <Locale>[];
       for (var metaLocalization in widget.monarchData.metaLocalizations) {
         locales.addAll(metaLocalization.locales);

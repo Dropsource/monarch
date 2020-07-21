@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:monarch_utils/log.dart';
 
 class ActiveLocale with Log {
-  static const defaultLocale = 'en-US';
 
   String _activeLocale;
   String get activeLocale => _activeLocale ?? defaultLocale;
@@ -28,7 +27,13 @@ class ActiveLocale with Log {
   }
 }
 
+const defaultLocale = 'en-US';
+
 Locale parseLocale(String locale) {
+  ArgumentError.checkNotNull(locale, 'locale');
+  if (locale.isEmpty) {
+    throw ArgumentError.value(locale, 'locale', 'Should not be empty');
+  }
   final tokens = locale.split('-');
   switch (tokens.length) {
     case 1:

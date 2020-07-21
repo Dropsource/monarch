@@ -22,7 +22,6 @@ class StoryView extends StatefulWidget {
 
 class _StoryViewState extends State<StoryView> {
   DeviceDefinition _device;
-
   String _themeId;
   ThemeData _themeData;
 

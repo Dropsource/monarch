@@ -4,8 +4,6 @@ import 'package:analyzer/dart/element/element.dart';
 
 import 'package:monarch_annotations/monarch_annotations.dart';
 
-import 'builder_helper.dart';
-
 const TypeChecker monarchLocalizationTypeChecker =
     TypeChecker.fromRuntime(MonarchLocalization);
 
@@ -32,12 +30,16 @@ class MetaLocalizationsGenerator extends Generator {
         final locales = localeCodes.map((x) => "Locale('$x')");
         final localesExpression = "[${locales.join(', ')}]";
 
-      // final typeParameterName = element.supertype.getDisplayString();
-      final typeParameterName = element.supertype.typeArguments[0].element.name;
-      // log.fine('one=${element.typeParameters.length} two=${element.supertype.typeArguments.length} three=${element.supertype.typeArguments[0].element.name}');
+        if (element.supertype.typeArguments.isEmpty) {
+          log.warning(
+              'Superclass of ${element.name} does not have parameter type T. Skipping.');
+        } else {
+          final typeParameterName =
+              element.supertype.typeArguments[0].element.name;
 
-        expressions.add(
-            "MetaLocalization<${typeParameterName}>.user($localesExpression, ${element.name}(), '${element.name}')");
+          expressions.add(
+              "MetaLocalization<${typeParameterName}>.user($localesExpression, ${element.name}(), '${element.name}')");
+        }
       } else {
         final msg = '''
 Found MonarchLocalization annotation on an element that is not a class declaration.
@@ -48,10 +50,14 @@ Element name: ${element.name}
       }
     }
 
-    final pathToLocalizationFile =
-        getRelativePathFromOutputToInput(buildStep.inputId);
-
-    return _outputContents(pathToLocalizationFile, expressions);
+    if (buildStep.inputId.uri.isScheme('package')) {
+      return _outputContents(buildStep.inputId.uri.toString(), expressions);
+    } else {
+      log.warning(
+          'Could not compute import URI to file with MonarchLocalization annotation. '
+          'Please make sure the file is inside the lib directory.');
+      return null;
+    }
   }
 
   String _outputContents(
