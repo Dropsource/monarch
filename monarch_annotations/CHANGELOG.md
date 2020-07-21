@@ -1,3 +1,6 @@
+## 0.0.10 - 2020-07-21
+- Localizations support via MonarchLocalizations annotation
+
 ## 0.0.9 - 2020-07-02
 - formatting
 - example

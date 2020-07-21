@@ -1,6 +1,6 @@
 name: monarch_annotations
 description: Contains annotations for monarch. Monarch lets you generate stories for your widgets.
-version: 0.0.9
+version: 0.0.10
 homepage: https://github.com/Dropsource/monarch
 
 environment:
