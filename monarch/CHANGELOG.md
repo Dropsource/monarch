@@ -1,3 +1,7 @@
+## 0.0.26 - 2020-07-21
+- MonarchLocale generates corresponding Locale objects
+- Using top-level element instead of class element for MonarchLocalizations annotation
+
 ## 0.0.25 - 2020-07-21
 - Localizations support via MonarchLocalizations annotation
 
