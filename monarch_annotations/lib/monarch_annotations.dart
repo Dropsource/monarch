@@ -1,6 +1,5 @@
 /// Class for the `@MonarchTheme` annotation.
 class MonarchTheme {
-  
   /// The name of the theme. Monarch will use this name on the UI.
   final String name;
 
@@ -22,16 +21,15 @@ class MonarchTheme {
 
 /// Class for the `@MonarchLocalizations` annotation.
 class MonarchLocalizations {
-
   /// A list of locales the annotated localizations delegate supports.
   final List<MonarchLocale> locales;
 
   /// Marks a variable as a localizations delegate that Monarch should use.
-  /// 
+  ///
   /// The variable's type should be a class that extends `LocalizationsDelegate<T>`.
   /// The variable should also be a top-level library variable (i.e. not a local
   /// variable or class field).
-  /// 
+  ///
   /// Example, given this class declaration:
   /// ```
   /// class MyLocalizationsDelegate extends LocalizationsDelegate<MyLocalizations> {...}
@@ -50,11 +48,10 @@ class MonarchLocale {
   final String languageCode;
   final String countryCode;
 
-  /// Creates a new MonarchLocale. The first parameter is the primary language 
-  /// subtag. The second parameter is optional and it is the region or country 
+  /// Creates a new MonarchLocale. The first parameter is the primary language
+  /// subtag. The second parameter is optional and it is the region or country
   /// subtag.
   const MonarchLocale(this.languageCode, [this.countryCode])
       : assert(languageCode != null),
         assert(languageCode != '');
 }
-
