@@ -32,7 +32,7 @@ _This is the alpha release of Monarch. We only support flutter development on ma
 1. Add `monarch` and `build_runner` to your project dev_dependencies:
 ```yaml
 dev_dependencies:
-  monarch: ^0.0.24
+  monarch: ^0.0.26
   build_runner: ^1.7.1
 ```
 
@@ -54,8 +54,8 @@ Download them into your directory of choice using `curl`, for example:
 
 ```
 $ cd ~/development
-$ curl -O https://dropsource-monarch.s3.amazonaws.com/dist/alpha/monarch_tools_0.0.46.zip
-$ unzip monarch_tools_0.0.46.zip
+$ curl -O https://dropsource-monarch.s3.amazonaws.com/dist/alpha/monarch_tools_0.0.48.zip
+$ unzip monarch_tools_0.0.48.zip
 ```
 
 ## Usage
@@ -84,7 +84,7 @@ You should see the task runner working and eventually opening the Monarch app.
 
 Once the app opens, you should see your stories listed on screen. You can 
 select each story to see how it would render. You can also select different 
-device resolutions and themes
+device resolutions, themes and locales.
 
 You can now add more stories. As you add more stories, the task runner will 
 automatically detect the changes and reload the stories in the app.
@@ -98,12 +98,12 @@ can gitignore that directory.
 
 
 ### Themes
-Your stories can render using your app's themes. If you want see themes in 
+Your stories can render using your app's themes. If you want to see themes in 
 Monarch then you need to add the 
 `package:monarch_annotations` to your dependencies:
 ```yaml
 dependencies:
-  monarch_annotations: ^0.0.9
+  monarch_annotations: ^0.0.12
 ``` 
 Then, you can annotate your themes:
 ```dart
@@ -113,8 +113,34 @@ import 'package:monarch_annotations/monarch_annotations.dart';
 @MonarchTheme('Fancy Theme')
 final fancyTheme = ThemeData(...);
 ```
-When you run the desktop app, you should be able to select your theme in the 
+When you run the Monarch app, you should be able to select your theme in the 
 Theme dropdown.
+
+
+### Internationalization (or Localizations)
+If your application is internationalized (or localized), you can render your stories using the locales 
+you have declared in code.
+
+First, make sure to add the `package:monarch_annotations` to your dependencies:
+```yaml
+dependencies:
+  monarch_annotations: ^0.0.12
+``` 
+Then, you can annotate your app-specific localizations delegate:
+```dart
+import 'package:monarch_annotations/monarch_annotations.dart';
+...
+
+class MyLocalizationsDelegate extends LocalizationsDelegate<MyLocalizations> {...}
+
+@MonarchLocalizations([MonarchLocale('en', 'US'), MonarchLocale('es')])
+const myLocalizationsDelegate = MyLocalizationsDelegate();
+```
+In the example above, the locales `en-US` and `es` will display in the Monarch app.
+
+When you run the Monarch app, you should be able to select the locales you want
+to use from the Locale dropdown.
+
 
 ## Troubleshooting
 If you experience any issues while running the task runner, you can run it in 
