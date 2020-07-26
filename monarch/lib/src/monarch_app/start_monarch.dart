@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';
 
+import 'localizations_delegate_loader.dart';
+import 'active_locale.dart';
 import 'active_theme.dart';
 import 'channel_methods_sender.dart';
 import 'channel_methods_receiver.dart';
@@ -18,7 +20,7 @@ void startMonarch(
     String packageName,
     List<MetaLocalization> userMetaLocalizations,
     List<MetaTheme> userMetaThemes,
-    Map<String, MetaStories> metaStoriesMap) {
+    Map<String, MetaStories> metaStoriesMap) async {
   _setUpLog();
 
   logger.finest('Starting Monarch flutter app');
@@ -32,8 +34,15 @@ void startMonarch(
 
   setUpStoriesErrors(monarchData);
   activeTheme.setMetaThemes([...userMetaThemes, ...standardMetaThemes]);
+  if (monarchData.metaLocalizations.isNotEmpty) {
+    activeLocale.setActiveLocale(monarchData.allLocales.first);
+  }
 
-  runApp(StoryApp(monarchData: monarchData));
+  runApp(StoryApp(
+    monarchData: monarchData,
+    localizationsDelegateLoader:
+        LocalizationsDelegateLoader(monarchData.metaLocalizations),
+  ));
 
   receiveChannelMethodCalls();
   _sendInitialChannelMethodCalls(monarchData);
@@ -50,7 +59,12 @@ List<MetaLocalization> _validateAndFilterMetaLocalizations(
   for (var item in metaLocalizationList) {
     if (item.delegate == null) {
       printUserMessage(
-          '${item.delegateClassName} doesn\'t extend LocalizationsDelegate<T>. It will be ignored.');
+          '${item.delegateClassName} doesn\'t extend LocalizationsDelegate<T>. '
+          'It will be ignored.');
+    } else if (item.locales.isEmpty) {
+      printUserMessage(
+          '@MonarchLocalizations annotation on ${item.delegateClassName} '
+          'doesn\'t declare any locales. It will be ignored.');
     } else {
       logger.fine(
           'Valid localization found on class ${item.delegateClassName} with '

@@ -92,6 +92,8 @@ class MonarchData implements OutboundChannelArgument {
   MonarchData(this.packageName, this.metaLocalizations, this.metaThemes,
       this.metaStoriesMap);
 
+  Iterable<Locale> get allLocales => metaLocalizations.expand((m) => m.locales);
+
   @override
   Map<String, dynamic> toStandardMap() {
     return {

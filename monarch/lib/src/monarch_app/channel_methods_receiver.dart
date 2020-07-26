@@ -54,7 +54,7 @@ Future<dynamic> _handler(MethodCall call) async {
 
     case MethodNames.setActiveLocale:
       final String locale = args['locale'];
-      activeLocale.setActiveLocale(locale);
+      activeLocale.setActiveLocaleTag(locale);
       break;
 
     case MethodNames.setActiveTheme:
