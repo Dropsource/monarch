@@ -34,14 +34,13 @@ void startMonarch(
 
   setUpStoriesErrors(monarchData);
   activeTheme.setMetaThemes([...userMetaThemes, ...standardMetaThemes]);
+  activeLocale = ActiveLocale(LocalizationsDelegateLoader(monarchData.metaLocalizations));
   if (monarchData.metaLocalizations.isNotEmpty) {
     activeLocale.setActiveLocale(monarchData.allLocales.first);
   }
 
   runApp(StoryApp(
     monarchData: monarchData,
-    localizationsDelegateLoader:
-        LocalizationsDelegateLoader(monarchData.metaLocalizations),
   ));
 
   receiveChannelMethodCalls();

@@ -3,30 +3,62 @@ import 'dart:ui';
 
 import 'package:monarch_utils/log.dart';
 
+import 'localizations_delegate_loader.dart';
+
+enum LoadingStatus { inProgress, done, error }
+
 class ActiveLocale with Log {
+  final LocalizationsDelegateLoader loader;
+
+  ActiveLocale(this.loader);
+
+  LoadingStatus loadingStatus;
+
   Locale _activeLocale;
-  Locale get activeLocale => _activeLocale;
+  Locale get locale => _activeLocale;
 
-  final _activeLocaleStreamController = StreamController<Locale>.broadcast();
-  Stream<Locale> get activeLocaleStream => _activeLocaleStreamController.stream;
+  bool _canLoad;
+  bool get canLoad => _canLoad;
 
-  void setActiveLocale(Locale locale) {
-    _activeLocale = locale;
-    _activeLocaleStreamController.add(activeLocale);
-    log.fine('active locale set: ${locale.toLanguageTag()}');
+  final _loadingStatusStreamController =
+      StreamController<LoadingStatus>.broadcast();
+  Stream<LoadingStatus> get loadingStatusStream =>
+      _loadingStatusStreamController.stream;
+
+  void setActiveLocale(Locale newLocale) async {
+    _setStatus(LoadingStatus.inProgress);
+    _activeLocale = newLocale;
+    try {
+      _canLoad = await loader.canLoad(_activeLocale);
+      _setStatus(LoadingStatus.done);
+      log.fine('active locale loaded: $_activeLocale');
+    } catch (e, s) {
+      _canLoad = false;
+      log.severe('Unexpected error while loading locale $_activeLocale', e, s);
+      _setStatus(LoadingStatus.error);
+    }
+  }
+
+  void assertIsLoaded() {
+    if (locale == null) {
+      throw StateError('Expected activeLocale to be set');
+    }
+    if (canLoad == null) {
+      throw StateError('Expected canLoad to be set');
+    }
+  }
+
+  void _setStatus(LoadingStatus status) {
+    loadingStatus = status;
+    _loadingStatusStreamController.add(loadingStatus);
   }
 
   void setActiveLocaleTag(String localeTag) {
     setActiveLocale(parseLocale(localeTag));
   }
 
-  void resetActiveLocale() {
-    _activeLocale = null;
-    _activeLocaleStreamController.add(activeLocale);
-  }
-
   void close() {
-    _activeLocaleStreamController.close();
+    _loadingStatusStreamController.close();
   }
 }
 
@@ -56,4 +88,4 @@ Locale parseLocale(String localeTag) {
   }
 }
 
-final activeLocale = ActiveLocale();
+ActiveLocale activeLocale;

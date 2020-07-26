@@ -16,7 +16,7 @@ class LocalizationsDelegateLoader with Log {
       final result = await _canLoadSingleDelegate(locale, item.delegate);
       if (!result.didLoadSuccessfully) {
         printUserMessage('''
-Error: LocalizationsDelegate ${item.delegate.type} could not load locale $locale
+Error: LocalizationsDelegate ${item.delegate.type} could not load locale ${locale.toLanguageTag()}
 ${result.error}
 ${result.stackTrace}
 ''');
@@ -29,7 +29,7 @@ ${result.stackTrace}
   Future<_LoadResult> _canLoadSingleDelegate(
       Locale locale, LocalizationsDelegate delegate) async {
     if (_hasLocaleKey(delegate.type, locale)) {
-      return _map[delegate.type][locale];
+      return Future.microtask(() => _map[delegate.type][locale]);
     } else {
       _map[delegate.type] = _map[delegate.type] ?? <Locale, _LoadResult>{};
       try {

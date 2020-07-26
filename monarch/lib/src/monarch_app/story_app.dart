@@ -4,81 +4,54 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'active_locale.dart';
-import 'active_device.dart';
-import 'active_story.dart';
-import 'active_theme.dart';
-import 'device_definitions.dart';
-import 'localizations_delegate_loader.dart';
 import 'monarch_data.dart';
+import 'story_view.dart';
 
-class StoryApp extends StatefulWidget {
+class StoryApp extends StatelessWidget {
   final MonarchData monarchData;
-  final LocalizationsDelegateLoader localizationsDelegateLoader;
 
-  StoryApp({this.monarchData, this.localizationsDelegateLoader});
+  StoryApp({this.monarchData});
 
   @override
-  State<StatefulWidget> createState() {
-    return _StoryAppState();
+  Widget build(BuildContext context) {
+    if (monarchData.metaLocalizations.isEmpty) {
+      return MaterialApp(
+          key: ObjectKey('no-localizations'),
+          home: Scaffold(
+              body: StoryView(
+            monarchData: monarchData,
+            localeKey: '__NA__',
+          )));
+    } else {
+      return LocalizedStoryApp(monarchData: monarchData);
+    }
   }
 }
 
-class _StoryAppState extends State<StoryApp> {
-  Locale _locale;
-  DeviceDefinition _device;
-  String _themeId;
-  ThemeData _themeData;
+class LocalizedStoryApp extends StatefulWidget {
+  final MonarchData monarchData;
 
-  String _storyKey;
-  StoryFunction _storyFunction;
+  LocalizedStoryApp({this.monarchData});
 
+  @override
+  State<StatefulWidget> createState() {
+    return _LocalizedStoryAppState();
+  }
+}
+
+class _LocalizedStoryAppState extends State<LocalizedStoryApp> {
+  LoadingStatus _loadingStatus;
   final _streamSubscriptions = <StreamSubscription>[];
 
-  _StoryAppState();
+  _LocalizedStoryAppState();
 
   @override
   void initState() {
     super.initState();
 
-    _setLocale();
-    _setDeviceDefinition();
-    _setThemeData();
-
-    _streamSubscriptions.addAll([
-      activeLocale.activeLocaleStream.listen((_) => setState(_setLocale)),
-      activeDevice.activeDeviceStream
-          .listen((_) => setState(_setDeviceDefinition)),
-      activeTheme.activeMetaThemeStream.listen((_) => setState(_setThemeData)),
-      activeStory.activeStoryChangeStream
-          .listen((_) => setState(_setStoryFunction))
-    ]);
-  }
-
-  void _setLocale() {
-    _locale = activeLocale.activeLocale;
-  }
-
-  void _setDeviceDefinition() {
-    _device = activeDevice.activeDevice;
-  }
-
-  void _setThemeData() {
-    _themeData = activeTheme.activeMetaTheme.theme;
-    _themeId = activeTheme.activeMetaTheme.id;
-  }
-
-  void _setStoryFunction() {
-    final activeStoryId = activeStory.activeStoryId;
-
-    if (activeStoryId == null) {
-      _storyKey = null;
-      _storyFunction = null;
-    } else {
-      final metaStories =
-          widget.monarchData.metaStoriesMap[activeStoryId.pathKey];
-      _storyKey = activeStory.activeStoryId.storyKey;
-      _storyFunction = metaStories.storiesMap[activeStoryId.name];
-    }
+    _loadingStatus = activeLocale.loadingStatus;
+    _streamSubscriptions.add(activeLocale.loadingStatusStream
+        .listen((status) => setState(() => _loadingStatus = status)));
   }
 
   @override
@@ -87,67 +60,50 @@ class _StoryAppState extends State<StoryApp> {
     super.dispose();
   }
 
-  String get keyValue => '$_storyKey|$_themeId|${_device.id}';
-
   @override
   Widget build(BuildContext context) {
-    if (widget.monarchData.metaLocalizations.isEmpty) {
-      return MaterialApp(home: Scaffold(body: _buildStoryView()));
-    } else {
-      return FutureBuilder<bool>(
-        future: widget.localizationsDelegateLoader.canLoad(_locale),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          if (snapshot.hasData) {
-            final canLoadLocale = snapshot.data;
-            if (canLoadLocale) {
-              return MaterialApp(
-                  localizationsDelegates: [
-                    ...widget.monarchData.metaLocalizations
-                        .map((x) => x.delegate)
-                        .toList(),
-                    ...GlobalMaterialLocalizations.delegates,
-                  ],
-                  supportedLocales: widget.monarchData.allLocales,
-                  locale: _locale,
-                  home: Scaffold(body: _buildStoryView()));
-            } else {
-              return MaterialApp(
-                  home: Scaffold(body: _buildLocaleErrorView()));
-            }
-          } else {
-            return MaterialApp(
-                home: Scaffold(body: _buildLocaleLoadingView()));
-          }
-        },
-      );
+    switch (_loadingStatus) {
+      case LoadingStatus.inProgress:
+        return _buildSimpleMaterialApp('Loading locale...');
+
+      case LoadingStatus.done:
+        return _buildOnLocaleLoaded();
+
+      case LoadingStatus.error:
+        return _buildSimpleMaterialApp(
+            'Unexpected error. Please see console for details.');
+
+      default:
+        throw 'Unexpected status, got $_loadingStatus';
     }
   }
 
-  Widget _buildStoryView() {
-    ArgumentError.checkNotNull(_device, '_device');
-    ArgumentError.checkNotNull(_themeId, '_themeId');
-    ArgumentError.checkNotNull(_themeData, '_themeData');
+  Widget _buildSimpleMaterialApp(String message) {
+    return MaterialApp(
+        key: ObjectKey(message), home: Scaffold(body: CenteredText(message)));
+  }
 
-    if (_storyFunction == null) {
-      return Center(child: Text('Please select a story'));
+  Widget _buildOnLocaleLoaded() {
+    activeLocale.assertIsLoaded();
+    if (activeLocale.canLoad) {
+      return MaterialApp(
+          key: ObjectKey(activeLocale.locale.toLanguageTag()),
+          localizationsDelegates: [
+            ...widget.monarchData.metaLocalizations
+                .map((x) => x.delegate)
+                .toList(),
+            ...GlobalMaterialLocalizations.delegates,
+          ],
+          supportedLocales: widget.monarchData.allLocales,
+          locale: activeLocale.locale,
+          home: Scaffold(
+              body: StoryView(
+                  monarchData: widget.monarchData,
+                  localeKey: activeLocale.locale.toLanguageTag())));
     } else {
-      return Theme(
-          key: ObjectKey(keyValue),
-          child: MediaQuery(
-              data: MediaQueryData(
-                  size: Size(_device.logicalResolution.width,
-                      _device.logicalResolution.height),
-                  devicePixelRatio: _device.devicePixelRatio),
-              child: _storyFunction()),
-          data: _themeData.copyWith(platform: _device.targetPlatform));
+      return _buildSimpleMaterialApp(
+          'Error loading locale ${activeLocale.locale.toLanguageTag()}. Please see '
+          'console for details.');
     }
-  }
-
-  Widget _buildLocaleLoadingView() {
-    return Center(child: Text('Loading locale...'));
-  }
-
-  Widget _buildLocaleErrorView() {
-    return Center(child: Text('Error loading the selected locale. Please see console for details.'));
   }
 }
