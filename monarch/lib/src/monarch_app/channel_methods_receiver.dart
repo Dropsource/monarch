@@ -9,6 +9,7 @@ import 'active_theme.dart';
 import 'active_locale.dart';
 import 'channel_methods.dart';
 import 'channel_methods_sender.dart';
+import 'ready_signal.dart';
 import 'standard_themes.dart';
 import 'device_definitions.dart';
 
@@ -38,13 +39,12 @@ Future<dynamic> _handler(MethodCall call) async {
       _setUpLog(args['defaultLogLevelValue']);
       break;
 
-    case MethodNames.requestDeviceDefinitions:
+    case MethodNames.firstLoadSignal:
       logEnvironmentInformation(logger, LogLevel.FINE);
-      await channelMethodsSender.sendDeviceDefinitions(DeviceDefinitions());
       break;
 
-    case MethodNames.requestStandardThemes:
-      await channelMethodsSender.sendStandardThemes(StandardThemes());
+    case MethodNames.readySignalAck:
+      readySignal.ready();
       break;
 
     case MethodNames.loadStory:

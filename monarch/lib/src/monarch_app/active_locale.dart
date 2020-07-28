@@ -5,14 +5,14 @@ import 'package:monarch_utils/log.dart';
 
 import 'localizations_delegate_loader.dart';
 
-enum LoadingStatus { inProgress, done, error }
+enum LocaleLoadingStatus { inProgress, done, error }
 
 class ActiveLocale with Log {
   final LocalizationsDelegateLoader loader;
 
   ActiveLocale(this.loader);
 
-  LoadingStatus loadingStatus;
+  LocaleLoadingStatus loadingStatus;
 
   Locale _activeLocale;
   Locale get locale => _activeLocale;
@@ -21,21 +21,21 @@ class ActiveLocale with Log {
   bool get canLoad => _canLoad;
 
   final _loadingStatusStreamController =
-      StreamController<LoadingStatus>.broadcast();
-  Stream<LoadingStatus> get loadingStatusStream =>
+      StreamController<LocaleLoadingStatus>.broadcast();
+  Stream<LocaleLoadingStatus> get loadingStatusStream =>
       _loadingStatusStreamController.stream;
 
   void setActiveLocale(Locale newLocale) async {
-    _setStatus(LoadingStatus.inProgress);
+    _setStatus(LocaleLoadingStatus.inProgress);
     _activeLocale = newLocale;
     try {
       _canLoad = await loader.canLoad(_activeLocale);
-      _setStatus(LoadingStatus.done);
+      _setStatus(LocaleLoadingStatus.done);
       log.fine('active locale loaded: $_activeLocale');
     } catch (e, s) {
       _canLoad = false;
       log.severe('Unexpected error while loading locale $_activeLocale', e, s);
-      _setStatus(LoadingStatus.error);
+      _setStatus(LocaleLoadingStatus.error);
     }
   }
 
@@ -48,7 +48,7 @@ class ActiveLocale with Log {
     }
   }
 
-  void _setStatus(LoadingStatus status) {
+  void _setStatus(LocaleLoadingStatus status) {
     loadingStatus = status;
     _loadingStatusStreamController.add(loadingStatus);
   }

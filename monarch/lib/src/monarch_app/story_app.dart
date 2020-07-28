@@ -3,27 +3,61 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'ready_signal.dart';
 import 'active_locale.dart';
 import 'monarch_data.dart';
 import 'story_view.dart';
 
-class StoryApp extends StatelessWidget {
+import 'package:flutter/widgets.dart';
+
+class StoryApp extends StatefulWidget {
   final MonarchData monarchData;
 
   StoryApp({this.monarchData});
 
   @override
+  State<StatefulWidget> createState() {
+    return _StoryAppState();
+  }
+}
+
+class _StoryAppState extends State<StoryApp> {
+  bool _isReady;
+  final _streamSubscriptions = <StreamSubscription>[];
+
+  _StoryAppState();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _isReady = readySignal.isReady;
+    _streamSubscriptions.add(readySignal.changeStream
+        .listen((isReady) => setState(() => _isReady = isReady)));
+  }
+
+  @override
+  void dispose() {
+    _streamSubscriptions.forEach((s) => s.cancel());
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (monarchData.metaLocalizations.isEmpty) {
-      return MaterialApp(
-          key: ObjectKey('no-localizations'),
-          home: Scaffold(
-              body: StoryView(
-            monarchData: monarchData,
-            localeKey: '__NA__',
-          )));
+    if (_isReady) {
+      if (widget.monarchData.metaLocalizations.isEmpty) {
+        return MaterialApp(
+            key: ObjectKey('no-localizations'),
+            home: Scaffold(
+                body: StoryView(
+              monarchData: widget.monarchData,
+              localeKey: '__NA__',
+            )));
+      } else {
+        return LocalizedStoryApp(monarchData: widget.monarchData);
+      }
     } else {
-      return LocalizedStoryApp(monarchData: monarchData);
+      return SimpleMaterialApp(message: 'Loading...');
     }
   }
 }
@@ -40,7 +74,7 @@ class LocalizedStoryApp extends StatefulWidget {
 }
 
 class _LocalizedStoryAppState extends State<LocalizedStoryApp> {
-  LoadingStatus _loadingStatus;
+  LocaleLoadingStatus _loadingStatus;
   final _streamSubscriptions = <StreamSubscription>[];
 
   _LocalizedStoryAppState();
@@ -63,24 +97,19 @@ class _LocalizedStoryAppState extends State<LocalizedStoryApp> {
   @override
   Widget build(BuildContext context) {
     switch (_loadingStatus) {
-      case LoadingStatus.inProgress:
-        return _buildSimpleMaterialApp('Loading locale...');
+      case LocaleLoadingStatus.inProgress:
+        return SimpleMaterialApp(message: 'Loading locale...');
 
-      case LoadingStatus.done:
+      case LocaleLoadingStatus.done:
         return _buildOnLocaleLoaded();
 
-      case LoadingStatus.error:
-        return _buildSimpleMaterialApp(
-            'Unexpected error. Please see console for details.');
+      case LocaleLoadingStatus.error:
+        return SimpleMaterialApp(
+            message: 'Unexpected error. Please see console for details.');
 
       default:
         throw 'Unexpected status, got $_loadingStatus';
     }
-  }
-
-  Widget _buildSimpleMaterialApp(String message) {
-    return MaterialApp(
-        key: ObjectKey(message), home: Scaffold(body: CenteredText(message)));
   }
 
   Widget _buildOnLocaleLoaded() {
@@ -101,9 +130,22 @@ class _LocalizedStoryAppState extends State<LocalizedStoryApp> {
                   monarchData: widget.monarchData,
                   localeKey: activeLocale.locale.toLanguageTag())));
     } else {
-      return _buildSimpleMaterialApp(
-          'Error loading locale ${activeLocale.locale.toLanguageTag()}. Please see '
-          'console for details.');
+      return SimpleMaterialApp(
+          message:
+              'Error loading locale ${activeLocale.locale.toLanguageTag()}. '
+              'Please see console for details.');
     }
+  }
+}
+
+class SimpleMaterialApp extends StatelessWidget {
+  SimpleMaterialApp({@required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        key: ObjectKey(message), home: Scaffold(body: CenteredText(message)));
   }
 }

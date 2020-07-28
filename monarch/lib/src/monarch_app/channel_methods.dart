@@ -20,12 +20,10 @@ class Channels {
 
 class MethodNames {
   static const ping = 'dropsource.monarch.ping';
+  static const firstLoadSignal = 'dropsource.monarch.firstLoadSignal';
+  static const readySignalAck = 'dropsource.monarch.readySignalAck';
   static const monarchData = 'dropsource.monarch.monarchData';
-  static const requestDeviceDefinitions =
-      'dropsource.monarch.requestDeviceDefinitions';
   static const deviceDefinitions = 'dropsource.monarch.deviceDefinitions';
-  static const requestStandardThemes =
-      'dropsource.monarch.requestStandardThemes';
   static const standardThemes = 'dropsource.monarch.standardThemes';
   static const defaultTheme = 'dropsource.monarch.defaultTheme';
   static const readySignal = 'dropsource.monarch.readySignal';
