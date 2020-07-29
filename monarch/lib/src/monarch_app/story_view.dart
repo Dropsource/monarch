@@ -21,7 +21,6 @@ class StoryView extends StatefulWidget {
 }
 
 class _StoryViewState extends State<StoryView> {
-
   DeviceDefinition _device;
   String _themeId;
   ThemeData _themeData;
@@ -79,7 +78,8 @@ class _StoryViewState extends State<StoryView> {
     }
   }
 
-  String get keyValue => '$_storyKey|$_themeId|${_device.id}|${widget.localeKey}';
+  String get keyValue =>
+      '$_storyKey|$_themeId|${_device.id}|${widget.localeKey}';
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +104,6 @@ class _StoryViewState extends State<StoryView> {
 }
 
 class CenteredText extends StatelessWidget {
-
   CenteredText(this.data);
 
   final String data;

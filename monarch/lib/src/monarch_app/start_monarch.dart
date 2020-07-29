@@ -37,7 +37,8 @@ void startMonarch(
 
   setUpStoriesErrors(monarchData);
   activeTheme.setMetaThemes([...userMetaThemes, ...standardMetaThemes]);
-  activeLocale = ActiveLocale(LocalizationsDelegateLoader(monarchData.metaLocalizations));
+  activeLocale =
+      ActiveLocale(LocalizationsDelegateLoader(monarchData.metaLocalizations));
 
   runApp(StoryApp(
     monarchData: monarchData,
