@@ -32,7 +32,7 @@ _This is the alpha release of Monarch. We only support flutter development on ma
 1. Add `monarch` and `build_runner` to your project dev_dependencies:
 ```yaml
 dev_dependencies:
-  monarch: ^0.0.26
+  monarch: ^0.0.27
   build_runner: ^1.7.1
 ```
 
@@ -54,8 +54,8 @@ Download them into your directory of choice using `curl`, for example:
 
 ```
 $ cd ~/development
-$ curl -O https://dropsource-monarch.s3.amazonaws.com/dist/alpha/monarch_tools_0.0.48.zip
-$ unzip monarch_tools_0.0.48.zip
+$ curl -O https://dropsource-monarch.s3.amazonaws.com/dist/alpha/monarch_tools_0.0.49.zip
+$ unzip monarch_tools_0.0.49.zip
 ```
 
 ## Usage
