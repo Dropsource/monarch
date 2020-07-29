@@ -1,3 +1,8 @@
+## 0.0.27 - 2020-07-28
+- Refactored locale loading code to improve progress reporting
+- Bug fixes
+- Ready signal improvement between mac app and flutter story app
+
 ## 0.0.26 - 2020-07-21
 - MonarchLocale generates corresponding Locale objects
 - Using top-level element instead of class element for MonarchLocalizations annotation

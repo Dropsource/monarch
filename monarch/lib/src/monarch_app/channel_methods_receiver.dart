@@ -8,10 +8,7 @@ import 'active_story.dart';
 import 'active_theme.dart';
 import 'active_locale.dart';
 import 'channel_methods.dart';
-import 'channel_methods_sender.dart';
 import 'ready_signal.dart';
-import 'standard_themes.dart';
-import 'device_definitions.dart';
 
 final logger = Logger('ChannelMethodsReceiver');
 
