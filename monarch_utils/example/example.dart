@@ -4,14 +4,17 @@ import 'package:monarch_utils/log_config.dart';
 final mainLogger = Logger('main');
 
 void main() {
-  // print log entries to console
-  logToConsole(printLoggerName: true, printTimestamp: true);
+  // write log entries using `print` function, which prints to the console
+  final subscription =
+      writeLogEntryStream(print, printLoggerName: true, printTimestamp: true);
 
   sum(3, 5);
   sum(7, 11);
 
   final calculation = Calculation(13, 17);
   calculation.multipy();
+
+  subscription.cancel();
 }
 
 int sum(int a, int b) {

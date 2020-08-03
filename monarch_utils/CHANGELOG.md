@@ -1,3 +1,7 @@
+## 0.0.14 - 2020-08-03
+- Added writeLogEntryStream function which takes a writer function as input
+- Removed logToConsole function
+
 ## 0.0.13 - 2020-07-14
 - Handling null error or stackTrace in log function
 
