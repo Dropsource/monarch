@@ -1,3 +1,6 @@
+## 0.0.28 - 2020-08-03
+- Updating to monarch_utils 0.0.14
+
 ## 0.0.27 - 2020-07-28
 - Refactored locale loading code to improve progress reporting
 - Bug fixes

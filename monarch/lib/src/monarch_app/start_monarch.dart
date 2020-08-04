@@ -50,7 +50,7 @@ void startMonarch(
 
 void _setUpLog() {
   defaultLogLevel = LogLevel.ALL;
-  logToConsole(printTimestamp: false, printLoggerName: true);
+  writeLogEntryStream(print, printTimestamp: false, printLoggerName: true);
 }
 
 List<MetaLocalization> _validateAndFilterMetaLocalizations(
