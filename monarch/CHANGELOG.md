@@ -1,3 +1,6 @@
+## 0.0.29 - 2020-08-05
+- Removing debug banner
+
 ## 0.0.28 - 2020-08-03
 - Updating to monarch_utils 0.0.14
 

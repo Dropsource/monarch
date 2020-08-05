@@ -32,7 +32,7 @@ _This is the alpha release of Monarch. We only support flutter development on ma
 1. Add `monarch` and `build_runner` to your project dev_dependencies:
 ```yaml
 dev_dependencies:
-  monarch: ^0.0.28
+  monarch: ^0.0.29
   build_runner: ^1.7.1
 ```
 
