@@ -15,6 +15,7 @@ import 'stories_errors.dart';
 import 'story_app.dart';
 import 'monarch_data.dart';
 import 'user_message.dart';
+import 'vm_service_client.dart';
 
 final logger = Logger('Start');
 
@@ -43,9 +44,18 @@ void startMonarch(
   runApp(StoryApp(
     monarchData: monarchData,
   ));
-
   receiveChannelMethodCalls();
+  await _connectToVmService();
   _sendInitialChannelMethodCalls(monarchData);
+}
+
+Future<void> _connectToVmService() async {
+  try {
+    await vmServiceClient.connect();
+  } catch (e, s) {
+    logger.warning('Error while connecting to VM Service. Features like Debug '
+        'Paint may not work.', e, s);
+  }
 }
 
 void _setUpLog() {
