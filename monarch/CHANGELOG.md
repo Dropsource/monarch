@@ -1,3 +1,6 @@
+## 0.0.30 - 2020-08-06
+- Debug Paint support
+
 ## 0.0.29 - 2020-08-05
 - Removing debug banner
 
