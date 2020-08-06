@@ -47,7 +47,7 @@ class VmServiceClient with Log {
   }
 
   /// Calls `callServiceExtension` on the VmService client.
-  /// 
+  ///
   /// The response from `VmService.callServiceExtension` looks like:
   /// type: "_extensionType"
   /// json:

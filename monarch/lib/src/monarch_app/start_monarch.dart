@@ -53,8 +53,11 @@ Future<void> _connectToVmService() async {
   try {
     await vmServiceClient.connect();
   } catch (e, s) {
-    logger.warning('Error while connecting to VM Service. Features like Debug '
-        'Paint may not work.', e, s);
+    logger.warning(
+        'Error while connecting to VM Service. Features like Debug '
+        'Paint may not work.',
+        e,
+        s);
   }
 }
 
