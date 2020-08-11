@@ -17,7 +17,9 @@ these two stories:
 ```
 Widget shortTitle() => MyFancyCard(title: 'A');
 
-Widget longTitle() => MyFancyCard(title: 'Much longer title');
+Widget standardTitle() => MyFancyCard(title: 'A standard title');
+
+Widget longTitle() => MyFancyCard(title: 'Some long title lorem ipsum dolor sit amet, consectetur adipiscing elit');
 ```
 
 Then, you will run the Monarch task runner which will generate the code needed 
