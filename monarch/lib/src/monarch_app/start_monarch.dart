@@ -17,7 +17,7 @@ import 'monarch_data.dart';
 import 'user_message.dart';
 import 'vm_service_client.dart';
 
-final logger = Logger('Start');
+final _logger = Logger('Start');
 
 void startMonarch(
     String packageName,
@@ -27,7 +27,7 @@ void startMonarch(
   _setUpLog();
 
   readySignal.starting();
-  logger.finest('Starting Monarch flutter app');
+  _logger.finest('Starting Monarch flutter app');
 
   userMetaLocalizations =
       _validateAndFilterMetaLocalizations(userMetaLocalizations);
@@ -53,7 +53,7 @@ Future<void> _connectToVmService() async {
   try {
     await vmServiceClient.connect();
   } catch (e, s) {
-    logger.warning(
+    _logger.warning(
         'Error while connecting to VM Service. Features like Debug '
         'Paint may not work.',
         e,
@@ -79,7 +79,7 @@ List<MetaLocalization> _validateAndFilterMetaLocalizations(
           '@MonarchLocalizations annotation on ${item.delegateClassName} '
           'doesn\'t declare any locales. It will be ignored.');
     } else {
-      logger.fine(
+      _logger.fine(
           'Valid localization found on class ${item.delegateClassName} with '
           'annotated locales: ${item.locales.map((e) => e.languageCode).toList()}');
       _list.add(item);
@@ -95,7 +95,7 @@ List<MetaTheme> _validateAndFilterMetaThemes(List<MetaTheme> metaThemeList) {
       printUserMessage(
           'Theme "${item.name}" is not of type ThemeData. It will be ignored.');
     } else {
-      logger.fine('Valid theme found: ${item.name}');
+      _logger.fine('Valid theme found: ${item.name}');
       _list.add(item);
     }
   }

@@ -22,7 +22,7 @@ Widget standardTitle() => MyFancyCard(title: 'A standard title');
 Widget longTitle() => MyFancyCard(title: 'Some long title lorem ipsum dolor sit amet, consectetur adipiscing elit');
 ```
 
-Then, you will run the Monarch task runner which will generate the code needed 
+Then, you will run Monarch which will generate the code needed 
 to display your stories in the Monarch desktop app. You can now see your 
 stories in isolation, without all of you app's dependencies.
 
@@ -31,6 +31,7 @@ stories in isolation, without all of you app's dependencies.
 _This is the alpha release of Monarch. We only support flutter development on macOS for now._
 
 ## Installation
+
 1. Add `monarch` and `build_runner` to your project dev_dependencies:
 ```yaml
 dev_dependencies:
@@ -52,13 +53,37 @@ targets:
       - stories/**
 ```
 
-4. Download the Monarch tools, which include the task runner and desktop app. 
+4. Download the Monarch binaries, which include the Monarch CLI and desktop app. 
 Download them into your directory of choice using `curl`, for example:
 
-```
+```shell
 $ cd ~/development
-$ curl -O https://dropsource-monarch.s3.amazonaws.com/dist/alpha/monarch_tools_0.0.53.zip
-$ unzip monarch_tools_0.0.53.zip
+$ curl -O https://s3.amazonaws.com/dropsource-monarch/dist/beta/macos/monarch_macos_0.1.9.zip
+$ unzip monarch_macos_0.1.9.zip
+```
+
+5. Add the monarch binaries to your path:
+```shell
+$ export PATH="$PATH:`pwd`/monarch/bin"
+```
+This command sets your PATH variable for the current terminal window only. To permanently add Monarch to your path, see [Update your path](#update-your-path).
+
+### Update your path
+Follow these instructions to update your path variable permanently, which will let you run `monarch` from any terminal window.
+
+1. Open your `rc` file, which may be ~/.bash_profile, ~/.bashrc or ~/.zshrc.
+2. Add the following line and change [PATH_TO_MONARCH] to be the path where you unzipped Monarch:
+```shell
+export PATH="$PATH:[PATH_TO_MONARCH]/monarch/bin"
+```
+3. Run `source ~/.<rc file>` to refresh the current window, or open a new terminal window to automatically source the file.
+4. Verify that the monarch/bin directory is now in your PATH by running:
+```shell
+$ echo $PATH
+```
+5. Verify that the monarch command is available by running:
+```
+$ monarch --version
 ```
 
 ## Usage
@@ -74,25 +99,22 @@ Stories are functions that return a `Widget`. Therefore, your stories code
 doesn't require a dependency to Monarch. Also, since stories are plain functions,
 they can be re-used from your widget tests.
 
-### Run the task runner to see your stories
-The monarch_task_runner will prepare your stories so you can use them in the 
-Monarch desktop app.
-
-To run the monarch_task_runner, enter this command from inside your project 
-directory.
+### Run `monarch run` to see your stories
+The `monarch run` command will prepare your stories so you can use them in the 
+Monarch desktop app. Make sure you run it from inside your project directory.
+```shell
+$ monarch run
 ```
-$ ~/development/monarch_tools/monarch_task_runner
-```
-You should see the task runner working and eventually opening the Monarch app.
+You should see Monarch working and eventually opening the Monarch app.
 
 Once the app opens, you should see your stories listed on screen. You can 
 select each story to see how it would render. You can also select different 
 device resolutions, themes and locales.
 
-You can now add more stories. As you add more stories, the task runner will 
+You can now add more stories. As you add more stories, Monarch will 
 automatically detect the changes and reload the stories in the app.
 
-The task runner will generate a `.monarch` directory in your project. You
+Monarch will generate a `.monarch` directory in your project. You
 can gitignore that directory.
 ```
 # in .gitignore
@@ -146,9 +168,18 @@ to use from the Locale dropdown.
 
 
 ## Troubleshooting
-If you experience any issues while running the task runner, you can run it in 
+If you experience any issues while running monarch, you can run it in 
 verbose mode.
+```shell
+$ monarch run -v
 ```
-$ ~/path/to/monarch_task_runner --verbose
+
+## Monarch CLI Commands
+You can run `monarch -h` to see usage information.
+
+### Update Monarch
+To update Monarch just run this command:
+```shell
+$ monarch upgrade
 ```
 
