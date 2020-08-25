@@ -58,8 +58,8 @@ Download them into your directory of choice using `curl`, for example:
 
 ```shell
 $ cd ~/development
-$ curl -O https://s3.amazonaws.com/dropsource-monarch/dist/beta/macos/monarch_macos_0.1.9.zip
-$ unzip monarch_macos_0.1.9.zip
+$ curl -O https://s3.amazonaws.com/dropsource-monarch/dist/beta/macos/monarch_macos_0.1.11.zip
+$ unzip monarch_macos_0.1.11.zip
 ```
 
 5. Add the monarch binaries to your path:
