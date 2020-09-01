@@ -48,6 +48,7 @@ class _StoryAppState extends State<StoryApp> {
       if (widget.monarchData.metaLocalizations.isEmpty) {
         return MaterialApp(
             key: ObjectKey('no-localizations'),
+            debugShowCheckedModeBanner: false,
             home: Scaffold(
                 body: StoryView(
               monarchData: widget.monarchData,
@@ -125,6 +126,7 @@ class _LocalizedStoryAppState extends State<LocalizedStoryApp> {
           ],
           supportedLocales: widget.monarchData.allLocales,
           locale: activeLocale.locale,
+          debugShowCheckedModeBanner: false,
           home: Scaffold(
               body: StoryView(
                   monarchData: widget.monarchData,
@@ -146,6 +148,8 @@ class SimpleMaterialApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        key: ObjectKey(message), home: Scaffold(body: CenteredText(message)));
+        key: ObjectKey(message),
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(body: CenteredText(message)));
   }
 }

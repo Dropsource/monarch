@@ -1,6 +1,6 @@
 name: monarch_utils
 description: Utilities for the monarch package. Mostly utilities for logging.
-version: 0.0.13
+version: 0.0.14
 homepage: https://github.com/Dropsource/monarch
 
 environment:

@@ -9,6 +9,7 @@ import 'active_theme.dart';
 import 'active_locale.dart';
 import 'channel_methods.dart';
 import 'ready_signal.dart';
+import 'vm_service_client.dart';
 
 final logger = Logger('ChannelMethodsReceiver');
 
@@ -62,6 +63,11 @@ Future<dynamic> _handler(MethodCall call) async {
     case MethodNames.setActiveDevice:
       final String deviceId = args['deviceId'];
       activeDevice.setActiveDevice(deviceId);
+      break;
+
+    case MethodNames.toggleDebugPaint:
+      final bool isEnabled = args['isEnabled'];
+      await vmServiceClient.toogleDebugPaint(isEnabled);
       break;
 
     default:
