@@ -22,7 +22,7 @@ Widget longTitle() => MyFancyCard(title: 'Much longer title');
 
 Then, you will run the Monarch task runner which will generate the code needed 
 to display your stories in the Monarch desktop app. You can now see your 
-stories in isolation, without all of you app's dependencies.
+stories in isolation, without all of your app's dependencies.
 
 ![](https://github.com/Dropsource/monarch/blob/master/monarch/docs/images/monarch_long_title.png)
 
