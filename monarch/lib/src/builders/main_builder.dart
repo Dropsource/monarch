@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:build/build.dart';
 import 'package:glob/glob.dart';
 import 'package:dart_style/dart_style.dart';
+import 'package:path/path.dart' as p;
+
+import 'builder_helper.dart';
 
 class MainBuilder implements Builder {
   @override
@@ -60,7 +63,11 @@ class MainBuilder implements Builder {
   Iterable<String> _getImportStatements(Map<String, AssetId> map) {
     return map.entries.map((item) {
       final libraryPrefix = item.key;
-      return "import '../${item.value.path}' as $libraryPrefix;";
+      final targetPath = item.value.path;
+
+      final relativePath =
+          normalizeAssetPath(p.relative(targetPath, from: 'lib'));
+      return "import r'$relativePath' as $libraryPrefix;";
     });
   }
 
