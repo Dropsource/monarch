@@ -1,3 +1,6 @@
+## 0.0.31 - 2020-10-06
+- Upgraded `build` and `analyzer` dependencies to `^1.5.0` and `^0.40.4` respectively
+
 ## 0.0.30 - 2020-08-06
 - Debug Paint support
 
