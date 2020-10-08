@@ -39,6 +39,11 @@ class ActiveLocale with Log {
     }
   }
 
+  void resetActiveLocale() {
+    _activeLocale = null;
+    log.fine('active locale reset');
+  }
+
   void assertIsLoaded() {
     if (locale == null) {
       throw StateError('Expected activeLocale to be set');
@@ -54,15 +59,22 @@ class ActiveLocale with Log {
   }
 
   void setActiveLocaleTag(String localeTag) {
-    setActiveLocale(parseLocale(localeTag));
+    if (localeTag == 'System Locale') {
+      // As of 2020-10-08, the platform apps send 'System Locale' when there aren't
+      // any user-defined locales, in which case the StoryApp will create a MaterialApp
+      // without any localization data. In this case, Flutter's default behavior is to
+      // use the only supported locale which is en-US.
+      resetActiveLocale();
+    }
+    else {
+      setActiveLocale(parseLocale(localeTag));
+    }
   }
 
   void close() {
     _loadingStatusStreamController.close();
   }
 }
-
-const defaultLocale = Locale('en', 'US');
 
 Locale parseLocale(String localeTag) {
   ArgumentError.checkNotNull(localeTag, 'localeTag');

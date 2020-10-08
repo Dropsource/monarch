@@ -51,6 +51,9 @@ String _getActiveStoryErrorMessage() {
     return 'There was no active story selected.';
   } else {
     final metaStories = _monarchData.metaStoriesMap[activeStoryId.pathKey];
+    if (metaStories == null) {
+      return 'Unexpected - Could not find meta stories for ${activeStoryId.pathKey}';
+    }
     return '''
 The relevant story is:
   ${metaStories.path} > ${activeStoryId.name}''';
