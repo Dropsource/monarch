@@ -52,7 +52,7 @@ Element name: ${element.name}
       String pathToThemeFile, List<String> metaThemeExpressions) {
     return '''
 import 'package:monarch/monarch.dart';
-import '$pathToThemeFile';
+import r'$pathToThemeFile';
 
 final metaThemeItems = [
   ${metaThemeExpressions.join(', ')}
