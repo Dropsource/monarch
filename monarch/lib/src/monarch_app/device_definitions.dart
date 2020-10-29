@@ -9,13 +9,17 @@ const String _android = 'android';
 String targetPlatformToString(TargetPlatform platform) {
   return platform == TargetPlatform.iOS
       ? _ios
-      : platform == TargetPlatform.android ? _android : null;
+      : platform == TargetPlatform.android
+          ? _android
+          : null;
 }
 
 TargetPlatform targetPlatformFromString(String platform) {
   return platform == _ios
       ? TargetPlatform.iOS
-      : platform == _android ? TargetPlatform.android : null;
+      : platform == _android
+          ? TargetPlatform.android
+          : null;
 }
 
 class DeviceDefinition implements OutboundChannelArgument {

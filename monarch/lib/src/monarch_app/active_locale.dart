@@ -65,8 +65,7 @@ class ActiveLocale with Log {
       // without any localization data. In this case, Flutter's default behavior is to
       // use the only supported locale which is en-US.
       resetActiveLocale();
-    }
-    else {
+    } else {
       setActiveLocale(parseLocale(localeTag));
     }
   }
