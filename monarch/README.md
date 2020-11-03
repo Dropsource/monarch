@@ -28,7 +28,7 @@ stories in isolation, without all of your app's dependencies.
 
 ![](https://github.com/Dropsource/monarch/blob/master/monarch/docs/images/monarch_long_title.png)
 
-_This is the alpha release of Monarch. We only support flutter development on macOS for now._
+_This is the beta release of Monarch. We support flutter development on macOS and Windows._
 
 ## Installation
 
