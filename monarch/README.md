@@ -57,16 +57,13 @@ targets:
 
 4. Download the Monarch binaries, which include the Monarch CLI and desktop app. 
 Download them into your directory of choice using `curl`, for example:
-
-In macOS:
 ```shell
+In macOS:
 $ cd ~/development
 $ curl -O https://s3.amazonaws.com/dropsource-monarch/dist/beta/macos/monarch_macos_0.2.0.zip
 $ unzip monarch_macos_0.2.0.zip
-```
 
 In Windows:
-```shell
 cd development
 curl -O https://s3.amazonaws.com/dropsource-monarch/dist/beta/windows/monarch_windows_0.2.1.zip
 tar -x -f monarch_windows_0.2.1.zip
@@ -74,13 +71,11 @@ tar -x -f monarch_windows_0.2.1.zip
 
 5. Add the monarch binaries to your path:
 
-In macOS:
 ```shell
+In macOS:
 $ export PATH="$PATH:`pwd`/monarch/bin"
-```
 
 In Windows:
-```shell
 set PATH=%PATH%;C:\path\to\monarch\bin
 ```
 
