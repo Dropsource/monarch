@@ -26,6 +26,8 @@ Then, you will run Monarch which will generate the code needed
 to display your stories in the Monarch desktop app. You can now see your 
 stories in isolation, without all of your app's dependencies.
 
+You can see your stories in the Monarch macOS or Windows desktop apps.
+
 ![](https://github.com/Dropsource/monarch/blob/master/monarch/docs/images/monarch_macos_long_title.png)
 ![](https://github.com/Dropsource/monarch/blob/master/monarch/docs/images/monarch_windows_long_title.png)
 
