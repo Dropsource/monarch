@@ -26,7 +26,8 @@ Then, you will run Monarch which will generate the code needed
 to display your stories in the Monarch desktop app. You can now see your 
 stories in isolation, without all of your app's dependencies.
 
-![](https://github.com/Dropsource/monarch/blob/master/monarch/docs/images/monarch_long_title.png)
+![](https://github.com/Dropsource/monarch/blob/master/monarch/docs/images/monarch_macos_long_title.png)
+![](https://github.com/Dropsource/monarch/blob/master/monarch/docs/images/monarch_windows_long_title.png)
 
 _This is the beta release of Monarch. We support flutter development on macOS and Windows._
 
@@ -55,21 +56,38 @@ targets:
 4. Download the Monarch binaries, which include the Monarch CLI and desktop app. 
 Download them into your directory of choice using `curl`, for example:
 
+In macOS:
 ```shell
 $ cd ~/development
-$ curl -O https://s3.amazonaws.com/dropsource-monarch/dist/beta/macos/monarch_macos_0.1.14.zip
-$ unzip monarch_macos_0.1.14.zip
+$ curl -O https://s3.amazonaws.com/dropsource-monarch/dist/beta/macos/monarch_macos_0.2.0.zip
+$ unzip monarch_macos_0.2.0.zip
+```
+
+In Windows:
+```shell
+cd development
+curl -O https://s3.amazonaws.com/dropsource-monarch/dist/beta/windows/monarch_windows_0.2.1.zip
+tar -x -f monarch_windows_0.2.1.zip
 ```
 
 5. Add the monarch binaries to your path:
+
+In macOS:
 ```shell
 $ export PATH="$PATH:`pwd`/monarch/bin"
 ```
+
+In Windows:
+```shell
+set PATH=%PATH%;C:\path\to\monarch\bin
+```
+
 This command sets your PATH variable for the current terminal window only. To permanently add Monarch to your path, see [Update your path](#update-your-path).
 
 ### Update your path
 Follow these instructions to update your path variable permanently, which will let you run `monarch` from any terminal window.
 
+In macOS:
 1. Open your `rc` file, which may be ~/.bash_profile, ~/.bashrc or ~/.zshrc.
 2. Add the following line and change [PATH_TO_MONARCH] to be the path where you unzipped Monarch:
 ```shell
@@ -84,6 +102,10 @@ $ echo $PATH
 ```
 $ monarch --version
 ```
+
+In Windows:
+1. From the Start search bar, enter ‘env’ and select Edit environment variables for your account.
+2. Under User variables, look for an entry called Path, then append the full path of monarch\bin using ; as a separator from existing values.
 
 ## Usage
 
@@ -172,6 +194,9 @@ verbose mode.
 ```shell
 $ monarch run -v
 ```
+
+If you are running Monarch on Windows, you may experience some stability issues. 
+Flutter desktop on Windows is still in alpha.
 
 ## Monarch CLI Commands
 You can run `monarch -h` to see usage information.
