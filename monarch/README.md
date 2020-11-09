@@ -198,8 +198,8 @@ Flutter desktop on Windows is still in alpha.
 ## Monarch CLI Commands
 You can run `monarch -h` to see usage information.
 
-### Update Monarch
-To update Monarch just run this command:
+### Upgrade Monarch
+To upgrade to the latest version of Monarch just run this command:
 ```shell
 $ monarch upgrade
 ```
