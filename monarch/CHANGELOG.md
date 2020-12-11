@@ -1,3 +1,6 @@
+## 0.0.33 - 2020-12-11
+- Update list of devices.
+
 ## 0.0.32 - 2020-10-29
 - Upgrade `source_gen` dependency to `^0.9.8` to allow syntax errors in builders.
 
