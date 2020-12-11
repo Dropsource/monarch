@@ -69,17 +69,17 @@ const iPhone12DeviceDefinition = DeviceDefinition(
   targetPlatform: TargetPlatform.iOS,
 );
 
-/// @GOTCHA: if you change the [defaultDeviceDefinition] here, make sure to 
+/// @GOTCHA: if you change the [defaultDeviceDefinition] here, make sure to
 /// also change it in:
 /// - monarch_mac_app/monarch/monarch/DeviceDefinition.swift
 /// - monarch_windows_app/device_definition.cpp
 /// Then, release mac and windows builds.
 final defaultDeviceDefinition = iPhone12DeviceDefinition;
 
-/// iOS logical resolutions can be found here: 
+/// iOS logical resolutions can be found here:
 /// - https://www.dimensions.com/collection/apple-ipad
 /// - https://ios-resolution.com/
-/// 
+///
 /// Android: Use this calculator to get logical resolutions and device pixel ratios:
 /// - https://docs.google.com/spreadsheets/d/1b_Or8OKIorU3G1CfQJZrGBOX4l-H4VBDKQrUY5uoW3I/edit?usp=sharing
 const deviceDefinitions = [
