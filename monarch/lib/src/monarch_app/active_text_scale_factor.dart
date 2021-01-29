@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:monarch_utils/log.dart';
 
-
 class ActiveTextScaleFactor with Log {
-
   double _activeTextScaleFactor = 1.0;
   double get activeTextScaleFactor => _activeTextScaleFactor;
 
-  final _activeTextScaleFactorStreamController = StreamController<void>.broadcast();
-  Stream<void> get activeTextScaleFactorStream => _activeTextScaleFactorStreamController.stream;
+  final _activeTextScaleFactorStreamController =
+      StreamController<void>.broadcast();
+  Stream<void> get activeTextScaleFactorStream =>
+      _activeTextScaleFactorStreamController.stream;
 
   void setActiveTextScaleFactor(double factor) {
     _activeTextScaleFactor = factor;
