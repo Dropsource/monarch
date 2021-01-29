@@ -1,4 +1,4 @@
-## 0.0.34 - 2020
+## 0.0.34 - 2021-01-28
 - Support text factor scale selection
 
 ## 0.0.33 - 2020-12-11
