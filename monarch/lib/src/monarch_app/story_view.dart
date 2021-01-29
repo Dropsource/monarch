@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'active_device.dart';
 import 'active_story.dart';
 import 'active_theme.dart';
+import 'active_text_scale_factor.dart';
 import 'device_definitions.dart';
 import 'monarch_data.dart';
 
@@ -24,6 +25,7 @@ class _StoryViewState extends State<StoryView> {
   DeviceDefinition _device;
   String _themeId;
   ThemeData _themeData;
+  double _textScaleFactor;
 
   String _storyKey;
   StoryFunction _storyFunction;
@@ -39,13 +41,16 @@ class _StoryViewState extends State<StoryView> {
     _setDeviceDefinition();
     _setThemeData();
     _setStoryFunction();
+    _setTextScaleFactor();
 
     _streamSubscriptions.addAll([
       activeDevice.activeDeviceStream
           .listen((_) => setState(_setDeviceDefinition)),
       activeTheme.activeMetaThemeStream.listen((_) => setState(_setThemeData)),
       activeStory.activeStoryChangeStream
-          .listen((_) => setState(_setStoryFunction))
+          .listen((_) => setState(_setStoryFunction)),
+      activeTextScaleFactor.activeTextScaleFactorStream
+          .listen((_) => setState(_setTextScaleFactor))
     ]);
   }
 
@@ -78,6 +83,10 @@ class _StoryViewState extends State<StoryView> {
     }
   }
 
+  void _setTextScaleFactor() {
+    _textScaleFactor = activeTextScaleFactor.activeTextScaleFactor;
+  }
+
   String get keyValue =>
       '$_storyKey|$_themeId|${_device.id}|${widget.localeKey}';
 
@@ -94,10 +103,13 @@ class _StoryViewState extends State<StoryView> {
           key: ObjectKey(keyValue),
           child: MediaQuery(
               data: MediaQueryData(
+                  textScaleFactor: _textScaleFactor,
                   size: Size(_device.logicalResolution.width,
                       _device.logicalResolution.height),
                   devicePixelRatio: _device.devicePixelRatio),
-              child: _storyFunction()),
+              child: Container(
+                  color: _themeData.scaffoldBackgroundColor,
+                  child: _storyFunction())),
           data: _themeData.copyWith(platform: _device.targetPlatform));
     }
   }

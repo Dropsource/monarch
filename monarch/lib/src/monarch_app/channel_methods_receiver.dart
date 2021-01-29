@@ -7,6 +7,7 @@ import 'active_device.dart';
 import 'active_story.dart';
 import 'active_theme.dart';
 import 'active_locale.dart';
+import 'active_text_scale_factor.dart';
 import 'channel_methods.dart';
 import 'ready_signal.dart';
 import 'vm_service_client.dart';
@@ -63,6 +64,11 @@ Future<dynamic> _handler(MethodCall call) async {
     case MethodNames.setActiveDevice:
       final String deviceId = args['deviceId'];
       activeDevice.setActiveDevice(deviceId);
+      break;
+
+    case MethodNames.setTextScaleFactor:
+      final double deviceId = args['factor'];
+      activeTextScaleFactor.setActiveTextScaleFactor(deviceId);
       break;
 
     case MethodNames.toggleDebugPaint:

@@ -32,5 +32,6 @@ class MethodNames {
   static const setActiveLocale = 'dropsource.monarch.setActiveLocale';
   static const setActiveTheme = 'dropsource.monarch.setActiveTheme';
   static const setActiveDevice = 'dropsource.monarch.setActiveDevice';
+  static const setTextScaleFactor = 'dropsource.monarch.setTextScaleFactor';
   static const toggleDebugPaint = 'dropsource.monarch.toggleDebugPaint';
 }

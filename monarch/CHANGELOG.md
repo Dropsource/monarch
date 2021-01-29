@@ -1,3 +1,6 @@
+## 0.0.34 - 2020
+- Support text factor scale selection
+
 ## 0.0.33 - 2020-12-11
 - Update list of devices.
 
