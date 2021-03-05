@@ -13,8 +13,9 @@ class VmServiceClient with Log {
     final info = await developer.Service.getInfo();
     final port = info.serverUri.port;
     final host = info.serverUri.host;
+    final path = info.serverUri.path;
 
-    final webSocketUri = 'ws://$host:$port/ws';
+    final webSocketUri = 'ws://$host:$port${path}ws';
 
     _client = await vmServiceConnectUri(webSocketUri, log: VmServiceLog());
     log.fine('Connected to vm service socket $webSocketUri');
@@ -58,7 +59,7 @@ class VmServiceClient with Log {
   /// }
   Future<vm_service.Response> _callServiceExtensionMethod(
           String method, Map args) =>
-      _client.callServiceExtension('ext.flutter.debugPaint',
+      _client.callServiceExtension(method,
           isolateId: _isolateId, args: args);
 }
 
