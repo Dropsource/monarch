@@ -1,3 +1,6 @@
+## 0.0.35 - 2021-03-05
+- Using Service URI path to connect to Dart VM.
+
 ## 0.0.34 - 2021-01-28
 - Support text factor scale selection
 

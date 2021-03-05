@@ -1,6 +1,6 @@
 name: monarch
 description: Code generator for Monarch. Monarch lets you generate stories for your widgets.
-version: 0.0.34
+version: 0.0.35
 homepage: https://github.com/Dropsource/monarch
 
 environment:
