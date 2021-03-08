@@ -32,12 +32,13 @@ class VmServiceClient with Log {
   void _onClientDone() {
     _client.onDone.then((_) async {
       if (reconnectCount < maxReconnectTries) {
-        log.warning('Connection to VmService terminated unexpectedly. Reconnecting. Reconnection try $reconnectCount.');
+        log.warning(
+            'Connection to VmService terminated unexpectedly. Reconnecting. Reconnection try $reconnectCount.');
         reconnectCount++;
         await connect();
-      }
-      else {
-        log.warning('Connection to VmService terminated unexpectedly. Max reconnection tries reached.');
+      } else {
+        log.warning(
+            'Connection to VmService terminated unexpectedly. Max reconnection tries reached.');
       }
     });
   }
@@ -69,8 +70,7 @@ class VmServiceClient with Log {
   /// }
   Future<vm_service.Response> _callServiceExtensionMethod(
           String method, Map<String, dynamic> args) =>
-      _client.callMethod(method,
-          isolateId: _isolateId, args: args);
+      _client.callMethod(method, isolateId: _isolateId, args: args);
 }
 
 class VmServiceLog extends vm_service.Log with Log {
