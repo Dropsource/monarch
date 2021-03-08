@@ -1,3 +1,6 @@
+## 0.1.0 - 2021-03-08
+- Dependencies updates using Flutter 2.x.
+
 ## 0.0.35 - 2021-03-05
 - Using Service URI path to connect to Dart VM.
 
