@@ -3,6 +3,9 @@ import 'package:vm_service/vm_service.dart' as vm_service;
 import 'package:vm_service/vm_service_io.dart';
 import 'package:monarch_utils/log.dart';
 
+const maxReconnectTries = 5;
+int reconnectCount = 0;
+
 class VmServiceClient with Log {
   VmServiceClient();
 
@@ -27,8 +30,15 @@ class VmServiceClient with Log {
   }
 
   void _onClientDone() {
-    _client.onDone.then((_) {
-      log.warning('VmService terminated unexpectedly');
+    _client.onDone.then((_) async {
+      if (reconnectCount < maxReconnectTries) {
+        log.warning('VmService terminated unexpectedly. Reconnecting. Reconnection try $reconnectCount.');
+        reconnectCount++;
+        await connect();
+      }
+      else {
+        log.warning('VmService terminated unexpectedly. Max reconnection tries reached.');
+      }
     });
   }
 
@@ -58,8 +68,8 @@ class VmServiceClient with Log {
   ///     "method": "ext.flutter.debugPaint"
   /// }
   Future<vm_service.Response> _callServiceExtensionMethod(
-          String method, Map args) =>
-      _client.callServiceExtension(method,
+          String method, Map<String, dynamic> args) =>
+      _client.callMethod(method,
           isolateId: _isolateId, args: args);
 }
 
