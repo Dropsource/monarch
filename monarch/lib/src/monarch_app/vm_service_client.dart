@@ -32,12 +32,12 @@ class VmServiceClient with Log {
   void _onClientDone() {
     _client.onDone.then((_) async {
       if (reconnectCount < maxReconnectTries) {
-        log.warning('VmService terminated unexpectedly. Reconnecting. Reconnection try $reconnectCount.');
+        log.warning('Connection to VmService terminated unexpectedly. Reconnecting. Reconnection try $reconnectCount.');
         reconnectCount++;
         await connect();
       }
       else {
-        log.warning('VmService terminated unexpectedly. Max reconnection tries reached.');
+        log.warning('Connection to VmService terminated unexpectedly. Max reconnection tries reached.');
       }
     });
   }
