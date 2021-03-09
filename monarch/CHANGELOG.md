@@ -1,3 +1,12 @@
+## 0.1.2 - 2021-03-09
+- Override theme's visualDependency to VisualDensity.standard.
+
+## 0.1.1 - 2021-03-09
+- Rolled back latest dependency updates. There were issues in users' projects due to 
+  the dart null-safety transition. The current monarch dependencies should not cause 
+  conflicts in users's projects.
+- Flutter dependency conflicts documented [here](https://github.com/flutter/flutter/issues/77681).
+
 ## 0.1.0 - 2021-03-08
 - Dependencies updates using Flutter 2.x.
 

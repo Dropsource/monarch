@@ -1,6 +1,6 @@
 name: monarch
 description: Code generator for Monarch. Monarch lets you generate stories for your widgets.
-version: 0.1.0
+version: 0.1.2
 homepage: https://github.com/Dropsource/monarch
 
 environment:
@@ -17,10 +17,10 @@ dependencies:
   monarch_annotations: ^0.0.12
   monarch_utils: ^0.0.14
   pedantic: ^1.8.0
-  glob: ^2.0.0
-  analyzer: ^1.1.0
+  glob: ^1.2.0
+  analyzer: ^0.41.0
   path: ^1.6.4
-  vm_service: ^6.1.0+1
+  vm_service: ^5.2.0
 
 dev_dependencies:
   flutter_test:

@@ -101,6 +101,13 @@ class _StoryViewState extends State<StoryView> {
     } else {
       return Theme(
           key: ObjectKey(keyValue),
+          data: _themeData.copyWith(
+              platform: _device.targetPlatform,
+              // Override visualDensity to use the one set for mobile platform:
+              // - https://github.com/flutter/flutter/pull/66370
+              // - https://github.com/flutter/flutter/issues/63788
+              // Otherwise, flutter desktop uses VisualDensity.compact.
+              visualDensity: VisualDensity.standard),
           child: MediaQuery(
               data: MediaQueryData(
                   textScaleFactor: _textScaleFactor,
@@ -109,8 +116,7 @@ class _StoryViewState extends State<StoryView> {
                   devicePixelRatio: _device.devicePixelRatio),
               child: Container(
                   color: _themeData.scaffoldBackgroundColor,
-                  child: _storyFunction())),
-          data: _themeData.copyWith(platform: _device.targetPlatform));
+                  child: _storyFunction())));
     }
   }
 }
