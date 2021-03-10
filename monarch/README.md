@@ -1,4 +1,4 @@
-# [![Monarch logo][]][https://monarchapp.io/]
+# [![][Monarch logo]](https://monarchapp.io)
 
 Build high-quality UIs with ease. Monarch is a tool for Flutter developers. It makes building beautiful widgets a more pleasant and faster experience.
 
@@ -12,3 +12,4 @@ Find out more at https://monarchapp.io
 * [Learn more](https://monarchapp.io/docs/learn-more)
 
 [Monarch logo]: https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch_logo_readme.png
+[Flutter logo]: https://raw.githubusercontent.com/flutter/website/master/src/_assets/image/flutter-lockup-bg.jpg
