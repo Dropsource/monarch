@@ -1,1 +1,0 @@
-Example project will go in this directory.

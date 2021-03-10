@@ -1,1 +1,1 @@
-// For an example see: https://github.com/Dropsource/monarch#usage
+// For an example see: https://monarchapp.io/docs/write-first-story
