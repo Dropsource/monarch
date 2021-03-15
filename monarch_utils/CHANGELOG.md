@@ -1,3 +1,6 @@
+## 0.0.16 - 2021-03-15
+- Add BasicAuth to utils.
+
 ## 0.0.15 - 2021-02-23
 - Add utils library with request_utils functions
 
