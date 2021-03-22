@@ -1,3 +1,12 @@
+## 0.1.3 - 2021-03-22
+- Upgrading several dependencies to latest versions:
+  +  build: ^2.0.0
+  +  source_gen: ^1.0.0
+  +  dart_style: ^2.0.0
+  +  glob: ^2.0.0
+  +  analyzer: ^1.1.0
+- Getting ready for null safety.
+
 ## 0.1.2 - 2021-03-09
 - Override theme's visualDependency to VisualDensity.standard.
 
