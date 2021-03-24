@@ -56,7 +56,8 @@ class Logger {
   /// etc).
   ///
   /// `toString()` will be called on the [message] object.
-  void log(LogLevel logLevel, message, [Object? error, StackTrace? stackTrace]) {
+  void log(LogLevel logLevel, message,
+      [Object? error, StackTrace? stackTrace]) {
     if (isLoggable(logLevel)) {
       final msg = message.toString();
 
