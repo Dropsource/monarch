@@ -1,3 +1,6 @@
+## 0.1.0 - 2020-03-24
+- Migrate to null safety.
+
 ## 0.0.12 - 2020-07-22
 - Code documentation of MonarchLocalizations annotation.
 

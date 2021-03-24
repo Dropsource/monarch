@@ -15,8 +15,7 @@ class MonarchTheme {
   /// @MonarchTheme('My Theme', isDefault: true)
   /// final myTheme = ThemeData(...);
   /// ```
-  const MonarchTheme(this.name, {this.isDefault = false})
-      : assert(name != null);
+  const MonarchTheme(this.name, {this.isDefault = false});
 }
 
 /// Class for the `@MonarchLocalizations` annotation.
@@ -40,18 +39,17 @@ class MonarchLocalizations {
   /// @MonarchLocalizations([MonarchLocale('en', 'US'), MonarchLocale('es')])
   /// const myLocalizationsDelegate = MyLocalizationsDelegate();
   /// ```
-  const MonarchLocalizations(this.locales) : assert(locales != null);
+  const MonarchLocalizations(this.locales);
 }
 
 /// Represents a dart.ui.Locale. Used by [MonarchLocalizations] annotation.
 class MonarchLocale {
   final String languageCode;
-  final String countryCode;
+  final String? countryCode;
 
   /// Creates a new MonarchLocale. The first parameter is the primary language
   /// subtag. The second parameter is optional and it is the region or country
   /// subtag.
   const MonarchLocale(this.languageCode, [this.countryCode])
-      : assert(languageCode != null),
-        assert(languageCode != '');
+      : assert(languageCode != '');
 }

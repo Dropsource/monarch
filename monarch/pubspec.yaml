@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  # intl: ^0.17.0-nullsafety.2
+  # intl: ^0.16.0
   build: ^2.0.0
   source_gen: ^1.0.0
   dart_style: ^2.0.0
