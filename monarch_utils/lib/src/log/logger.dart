@@ -11,7 +11,7 @@ class Logger {
   final String name;
 
   /// Logging [LogLevel] used for entries generated on this logger.
-  LogLevel _level;
+  LogLevel? _level;
 
   /// Singleton constructor. Calling `new Logger(name)` will return the same
   /// actual instance whenever it is called with the same string name.
@@ -56,7 +56,7 @@ class Logger {
   /// etc).
   ///
   /// `toString()` will be called on the [message] object.
-  void log(LogLevel logLevel, message, [Object error, StackTrace stackTrace]) {
+  void log(LogLevel logLevel, message, [Object? error, StackTrace? stackTrace]) {
     if (isLoggable(logLevel)) {
       final msg = message.toString();
 
@@ -75,35 +75,35 @@ class Logger {
   }
 
   /// Log message at level [LogLevel.FINEST].
-  void finest(message, [Object error, StackTrace stackTrace]) =>
+  void finest(message, [Object? error, StackTrace? stackTrace]) =>
       log(LogLevel.FINEST, message, error, stackTrace);
 
   /// Log message at level [LogLevel.FINER].
-  void finer(message, [Object error, StackTrace stackTrace]) =>
+  void finer(message, [Object? error, StackTrace? stackTrace]) =>
       log(LogLevel.FINER, message, error, stackTrace);
 
   /// Log message at level [LogLevel.FINE].
-  void fine(message, [Object error, StackTrace stackTrace]) =>
+  void fine(message, [Object? error, StackTrace? stackTrace]) =>
       log(LogLevel.FINE, message, error, stackTrace);
 
   /// Log message at level [LogLevel.CONFIG].
-  void config(message, [Object error, StackTrace stackTrace]) =>
+  void config(message, [Object? error, StackTrace? stackTrace]) =>
       log(LogLevel.CONFIG, message, error, stackTrace);
 
   /// Log message at level [LogLevel.INFO].
-  void info(message, [Object error, StackTrace stackTrace]) =>
+  void info(message, [Object? error, StackTrace? stackTrace]) =>
       log(LogLevel.INFO, message, error, stackTrace);
 
   /// Log message at level [LogLevel.WARNING].
-  void warning(message, [Object error, StackTrace stackTrace]) =>
+  void warning(message, [Object? error, StackTrace? stackTrace]) =>
       log(LogLevel.WARNING, message, error, stackTrace);
 
   /// Log message at level [LogLevel.SEVERE].
-  void severe(message, [Object error, StackTrace stackTrace]) =>
+  void severe(message, [Object? error, StackTrace? stackTrace]) =>
       log(LogLevel.SEVERE, message, error, stackTrace);
 
   /// Log message at level [LogLevel.SHOUT].
-  void shout(message, [Object error, StackTrace stackTrace]) =>
+  void shout(message, [Object? error, StackTrace? stackTrace]) =>
       log(LogLevel.SHOUT, message, error, stackTrace);
 
   /// All [Logger]s in the system.

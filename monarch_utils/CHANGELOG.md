@@ -1,3 +1,6 @@
+## 0.1.0 - 2020-03-24
+- Migrate to null safety.
+
 ## 0.0.16 - 2021-03-15
 - Add BasicAuth to utils.
 

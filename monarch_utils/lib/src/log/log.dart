@@ -1,7 +1,7 @@
 import 'logger.dart';
 
 mixin Log {
-  Logger _log;
+  Logger? _log;
 
   Logger get log {
     return _log ??= Logger(prefix);

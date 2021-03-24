@@ -6,8 +6,8 @@ class LogEntry {
   final String message;
   final DateTime timestamp;
 
-  final String errorDetails;
-  final String stackTrace;
+  final String? errorDetails;
+  final String? stackTrace;
 
   LogEntry._(this.level, this.message, this.loggerName, this.errorDetails,
       this.stackTrace)
@@ -18,7 +18,7 @@ class LogEntry {
       LogEntry._(level, message, loggerName, null, null);
 
   factory LogEntry.withError(LogLevel level, String message, String loggerName,
-          String errorDetails, String stackTrace) =>
+          String? errorDetails, String? stackTrace) =>
       LogEntry._(level, message, loggerName, errorDetails, stackTrace);
 
   @override

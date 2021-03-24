@@ -1,11 +1,10 @@
 import 'dart:convert' as convert;
 
 class BasicAuth {
-  BasicAuth(String username, String password) {
-    final up = convert.utf8.encode('$username:$password');
-    _authorizationHeaderValue = 'Basic ${convert.base64Encode(up)}';
-  }
+  BasicAuth(String username, String password)
+      : _authorizationHeaderToken =
+            convert.base64Encode(convert.utf8.encode('$username:$password'));
 
-  String _authorizationHeaderValue;
-  String get authorizationHeaderValue => _authorizationHeaderValue;
+  final String _authorizationHeaderToken;
+  String get authorizationHeaderValue => 'Basic $_authorizationHeaderToken';
 }

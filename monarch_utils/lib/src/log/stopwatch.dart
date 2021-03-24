@@ -1,6 +1,6 @@
 class Stopwatch {
-  int _start;
-  int _stop;
+  int? _start;
+  int? _stop;
 
   void start() => _start = nowMicrosecondsSinceEpoch;
   void stop() => _stop = nowMicrosecondsSinceEpoch;
@@ -11,7 +11,7 @@ class Stopwatch {
     } else if (_stop == null) {
       throw StateError('Stopwatch not stopped');
     } else {
-      return Duration(microseconds: _stop - _start);
+      return Duration(microseconds: _stop! - _start!);
     }
   }
 
@@ -63,6 +63,6 @@ String prettyDuration(Duration duration) {
 }
 
 /// Used for testing.
-DateTime manualNow;
+DateTime? manualNow;
 
 DateTime get now => manualNow ?? DateTime.now();

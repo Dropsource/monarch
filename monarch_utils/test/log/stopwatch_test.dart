@@ -10,12 +10,12 @@ void main() {
         manualNow = null;
       });
 
-      void verify({Duration manualLapse, String expected}) {
+      void verify({required Duration manualLapse, required String expected}) {
         manualNow = DateTime(2019, 1, 1, 0, 0, 0, 0, 0);
 
         s = Stopwatch()..start();
 
-        manualNow = manualNow.add(manualLapse);
+        manualNow = manualNow!.add(manualLapse);
 
         s.stop();
 
