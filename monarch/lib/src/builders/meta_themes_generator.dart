@@ -11,7 +11,7 @@ const TypeChecker monarchThemeTypeChecker =
 
 class MetaThemesGenerator extends Generator {
   @override
-  String generate(LibraryReader library, BuildStep buildStep) {
+  String? generate(LibraryReader library, BuildStep buildStep) {
     final annotations = library.annotatedWith(monarchThemeTypeChecker);
     if (annotations.isEmpty) {
       return null;

@@ -13,7 +13,7 @@ class StoryView extends StatefulWidget {
   final MonarchData monarchData;
   final String localeKey;
 
-  StoryView({@required this.monarchData, @required this.localeKey});
+  StoryView({required this.monarchData, required this.localeKey});
 
   @override
   State<StatefulWidget> createState() {
@@ -22,13 +22,13 @@ class StoryView extends StatefulWidget {
 }
 
 class _StoryViewState extends State<StoryView> {
-  DeviceDefinition _device;
-  String _themeId;
-  ThemeData _themeData;
-  double _textScaleFactor;
+  late DeviceDefinition _device;
+  late String _themeId;
+  late ThemeData _themeData;
+  late double _textScaleFactor;
 
-  String _storyKey;
-  StoryFunction _storyFunction;
+  String? _storyKey;
+  StoryFunction? _storyFunction;
 
   final _streamSubscriptions = <StreamSubscription>[];
 
@@ -65,7 +65,7 @@ class _StoryViewState extends State<StoryView> {
   }
 
   void _setThemeData() {
-    _themeData = activeTheme.activeMetaTheme.theme;
+    _themeData = activeTheme.activeMetaTheme.theme!;
     _themeId = activeTheme.activeMetaTheme.id;
   }
 
@@ -77,8 +77,8 @@ class _StoryViewState extends State<StoryView> {
       _storyFunction = null;
     } else {
       final metaStories =
-          widget.monarchData.metaStoriesMap[activeStoryId.pathKey];
-      _storyKey = activeStory.activeStoryId.storyKey;
+          widget.monarchData.metaStoriesMap[activeStoryId.pathKey]!;
+      _storyKey = activeStory.activeStoryId!.storyKey;
       _storyFunction = metaStories.storiesMap[activeStoryId.name];
     }
   }
@@ -116,7 +116,7 @@ class _StoryViewState extends State<StoryView> {
                   devicePixelRatio: _device.devicePixelRatio),
               child: Container(
                   color: _themeData.scaffoldBackgroundColor,
-                  child: _storyFunction())));
+                  child: _storyFunction!())));
     }
   }
 }

@@ -22,7 +22,6 @@ void main() {
     });
 
     test('errors', () {
-      expect(() => parseLocale(null), throwsArgumentError);
       expect(() => parseLocale(''), throwsArgumentError);
       expect(() => parseLocale('a-b-c-d'), throwsArgumentError);
       expect(() => parseLocale('a-b-c-'), throwsArgumentError);

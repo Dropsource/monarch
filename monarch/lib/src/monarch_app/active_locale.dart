@@ -12,13 +12,13 @@ class ActiveLocale with Log {
 
   ActiveLocale(this.loader);
 
-  LocaleLoadingStatus loadingStatus;
+  late LocaleLoadingStatus loadingStatus;
 
-  Locale _activeLocale;
-  Locale get locale => _activeLocale;
+  Locale? _activeLocale;
+  Locale? get locale => _activeLocale;
 
-  bool _canLoad;
-  bool get canLoad => _canLoad;
+  bool? _canLoad;
+  bool? get canLoad => _canLoad;
 
   final _loadingStatusStreamController =
       StreamController<LocaleLoadingStatus>.broadcast();
@@ -29,7 +29,7 @@ class ActiveLocale with Log {
     _setStatus(LocaleLoadingStatus.inProgress);
     _activeLocale = newLocale;
     try {
-      _canLoad = await loader.canLoad(_activeLocale);
+      _canLoad = await loader.canLoad(_activeLocale!);
       _setStatus(LocaleLoadingStatus.done);
       log.fine('active locale loaded: $_activeLocale');
     } catch (e, s) {
@@ -99,4 +99,4 @@ Locale parseLocale(String localeTag) {
   }
 }
 
-ActiveLocale activeLocale;
+late ActiveLocale activeLocale;

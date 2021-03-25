@@ -12,7 +12,7 @@ class LogicalResolution implements OutboundChannelArgument {
   final double width;
   final double height;
 
-  const LogicalResolution({this.width, this.height});
+  const LogicalResolution({required this.width, required this.height});
 
   @override
   Map<String, double> toStandardMap() {

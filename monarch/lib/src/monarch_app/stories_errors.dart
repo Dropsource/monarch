@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'active_story.dart';
 import 'monarch_data.dart';
 
-MonarchData _monarchData;
+late MonarchData _monarchData;
 
 void setUpStoriesErrors(MonarchData monarchData) {
   _monarchData = monarchData;
@@ -17,16 +17,16 @@ void setUpStoriesErrors(MonarchData monarchData) {
   };
 }
 
-void _debugPrintMonarch(String message, {int wrapWidth}) {
+void _debugPrintMonarch(String? message, {int? wrapWidth}) {
   var activeStory = _getActiveStoryErrorMessage();
 
   const stackPrompt = 'When the exception was thrown, this was the stack:';
 
-  final stackIndex = message.indexOf(stackPrompt);
+  final stackIndex = message?.indexOf(stackPrompt) ?? -1;
   String _message;
 
   if (stackIndex > -1) {
-    final preStack = message.substring(0, stackIndex).trimRight();
+    final preStack = message!.substring(0, stackIndex).trimRight();
     final stack = message.substring(stackIndex);
     _message = '''
 $preStack

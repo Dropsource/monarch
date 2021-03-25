@@ -9,7 +9,7 @@ const TypeChecker monarchLocalizationsTypeChecker =
 
 class MetaLocalizationsGenerator extends Generator {
   @override
-  String generate(LibraryReader library, BuildStep buildStep) {
+  String? generate(LibraryReader library, BuildStep buildStep) {
     final annotations = library.annotatedWith(monarchLocalizationsTypeChecker);
     if (annotations.isEmpty) {
       return null;
@@ -27,8 +27,8 @@ class MetaLocalizationsGenerator extends Generator {
 
         final localesDartObjects = annotation.read('locales').listValue;
         final locales = localesDartObjects.map((x) {
-          final languageCode = x.getField('languageCode').toStringValue();
-          final countryCode = x.getField('countryCode').toStringValue();
+          final languageCode = x.getField('languageCode')!.toStringValue();
+          final countryCode = x.getField('countryCode')!.toStringValue();
           if (countryCode == null) {
             return "Locale('$languageCode')";
           } else {

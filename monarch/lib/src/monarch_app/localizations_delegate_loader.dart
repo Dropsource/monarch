@@ -13,10 +13,10 @@ class LocalizationsDelegateLoader with Log {
 
   Future<bool> canLoad(Locale locale) async {
     for (var item in metaLocalizations) {
-      final result = await _canLoadSingleDelegate(locale, item.delegate);
+      final result = await _canLoadSingleDelegate(locale, item.delegate!);
       if (!result.didLoadSuccessfully) {
         printUserMessage('''
-Error: LocalizationsDelegate ${item.delegate.type} could not load locale ${locale.toLanguageTag()}
+Error: LocalizationsDelegate ${item.delegate!.type} could not load locale ${locale.toLanguageTag()}
 ${result.error}
 ${result.stackTrace}
 ''');
@@ -29,32 +29,32 @@ ${result.stackTrace}
   Future<_LoadResult> _canLoadSingleDelegate(
       Locale locale, LocalizationsDelegate delegate) async {
     if (_hasLocaleKey(delegate.type, locale)) {
-      return Future.microtask(() => _map[delegate.type][locale]);
+      return Future.microtask(() => _map[delegate.type]![locale]!);
     } else {
       _map[delegate.type] = _map[delegate.type] ?? <Locale, _LoadResult>{};
       try {
         await delegate.load(locale);
-        _map[delegate.type][locale] = _LoadResult.success();
+        _map[delegate.type]![locale] = _LoadResult.success();
         log.fine('Successfully loaded LocalizationsDelegate ${delegate.type} '
             'with locale $locale');
       } catch (e, s) {
-        _map[delegate.type][locale] = _LoadResult.failure(e, s);
+        _map[delegate.type]![locale] = _LoadResult.failure(e, s);
         log.fine('Failed to load LocalizationsDelegate ${delegate.type} '
             'with locale $locale');
       }
-      return _map[delegate.type][locale];
+      return _map[delegate.type]![locale]!;
     }
   }
 
   bool _hasLocaleKey(Type type, Locale locale) {
-    return _map.containsKey(type) && _map[type].containsKey(locale);
+    return _map.containsKey(type) && _map[type]!.containsKey(locale);
   }
 }
 
 class _LoadResult {
   final bool didLoadSuccessfully;
   final dynamic error;
-  final StackTrace stackTrace;
+  final StackTrace? stackTrace;
 
   _LoadResult._(this.didLoadSuccessfully, this.error, this.stackTrace);
 

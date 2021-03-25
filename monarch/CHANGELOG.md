@@ -1,3 +1,6 @@
+## 0.2.0 - 2021-03-24
+- Migrate to null safety.
+
 ## 0.1.3 - 2021-03-22
 - Upgrading several dependencies to latest versions:
   +  build: ^2.0.0

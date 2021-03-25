@@ -9,21 +9,21 @@ int reconnectCount = 0;
 class VmServiceClient with Log {
   VmServiceClient();
 
-  vm_service.VmService _client;
-  String _isolateId;
+  late vm_service.VmService _client;
+  late String? _isolateId;
 
   Future<void> connect() async {
     final info = await developer.Service.getInfo();
-    final port = info.serverUri.port;
-    final host = info.serverUri.host;
-    final path = info.serverUri.path;
+    final port = info.serverUri!.port;
+    final host = info.serverUri!.host;
+    final path = info.serverUri!.path;
 
     final webSocketUri = 'ws://$host:$port${path}ws';
 
     _client = await vmServiceConnectUri(webSocketUri, log: VmServiceLog());
     log.fine('Connected to vm service socket $webSocketUri');
     final vm = await _client.getVM();
-    _isolateId = vm.isolates.first.id;
+    _isolateId = vm.isolates!.first.id;
     log.fine('Got isolateId=$_isolateId');
 
     _onClientDone();
@@ -44,9 +44,6 @@ class VmServiceClient with Log {
   }
 
   Future<void> toogleDebugPaint(bool isEnabled) async {
-    if (_client == null) {
-      throw StateError('method connect must be called first');
-    }
     ArgumentError.checkNotNull(isEnabled, 'isEnabled');
 
     try {

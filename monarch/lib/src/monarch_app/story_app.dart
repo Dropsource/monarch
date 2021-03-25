@@ -13,7 +13,7 @@ import 'package:flutter/widgets.dart';
 class StoryApp extends StatefulWidget {
   final MonarchData monarchData;
 
-  StoryApp({this.monarchData});
+  StoryApp({required this.monarchData});
 
   @override
   State<StatefulWidget> createState() {
@@ -22,7 +22,7 @@ class StoryApp extends StatefulWidget {
 }
 
 class _StoryAppState extends State<StoryApp> {
-  bool _isReady;
+  late bool _isReady;
   final _streamSubscriptions = <StreamSubscription>[];
 
   _StoryAppState();
@@ -66,7 +66,7 @@ class _StoryAppState extends State<StoryApp> {
 class LocalizedStoryApp extends StatefulWidget {
   final MonarchData monarchData;
 
-  LocalizedStoryApp({this.monarchData});
+  LocalizedStoryApp({required this.monarchData});
 
   @override
   State<StatefulWidget> createState() {
@@ -75,7 +75,7 @@ class LocalizedStoryApp extends StatefulWidget {
 }
 
 class _LocalizedStoryAppState extends State<LocalizedStoryApp> {
-  LocaleLoadingStatus _loadingStatus;
+  late LocaleLoadingStatus _loadingStatus;
   final _streamSubscriptions = <StreamSubscription>[];
 
   _LocalizedStoryAppState();
@@ -115,13 +115,12 @@ class _LocalizedStoryAppState extends State<LocalizedStoryApp> {
 
   Widget _buildOnLocaleLoaded() {
     activeLocale.assertIsLoaded();
-    if (activeLocale.canLoad) {
+    if (activeLocale.canLoad!) {
       return MaterialApp(
-          key: ObjectKey(activeLocale.locale.toLanguageTag()),
+          key: ObjectKey(activeLocale.locale!.toLanguageTag()),
           localizationsDelegates: [
             ...widget.monarchData.metaLocalizations
-                .map((x) => x.delegate)
-                .toList(),
+                .map((x) => x.delegate!),
             ...GlobalMaterialLocalizations.delegates,
           ],
           supportedLocales: widget.monarchData.allLocales,
@@ -130,18 +129,18 @@ class _LocalizedStoryAppState extends State<LocalizedStoryApp> {
           home: Scaffold(
               body: StoryView(
                   monarchData: widget.monarchData,
-                  localeKey: activeLocale.locale.toLanguageTag())));
+                  localeKey: activeLocale.locale!.toLanguageTag())));
     } else {
       return SimpleMaterialApp(
           message:
-              'Error loading locale ${activeLocale.locale.toLanguageTag()}. '
+              'Error loading locale ${activeLocale.locale!.toLanguageTag()}. '
               'Please see console for details.');
     }
   }
 }
 
 class SimpleMaterialApp extends StatelessWidget {
-  SimpleMaterialApp({@required this.message});
+  SimpleMaterialApp({required this.message});
 
   final String message;
 

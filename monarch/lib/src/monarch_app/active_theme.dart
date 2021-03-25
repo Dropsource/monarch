@@ -8,10 +8,10 @@ class ActiveTheme with Log {
   final List<MetaTheme> _metaThemes = [];
   List<MetaTheme> get metaThemes => _metaThemes;
 
-  MetaTheme _defaultMetaTheme;
+  late MetaTheme _defaultMetaTheme;
   MetaTheme get defaultMetaTheme => _defaultMetaTheme;
 
-  MetaTheme _activeMetaTheme;
+  MetaTheme? _activeMetaTheme;
   MetaTheme get activeMetaTheme => _activeMetaTheme ?? _defaultMetaTheme;
 
   final _activeMetaThemeStreamController = StreamController<void>.broadcast();
@@ -37,11 +37,11 @@ class ActiveTheme with Log {
     }
 
     _activeMetaTheme = metaThemes.firstWhere((metaTheme) => metaTheme.id == id,
-        orElse: () =>
-            throw ArgumentError('expected to find meta theme with id $id'));
+        orElse: (() =>
+            throw ArgumentError('expected to find meta theme with id $id')));
 
     _activeMetaThemeStreamController.add(null);
-    log.fine('active theme id set: ${_activeMetaTheme.id}');
+    log.fine('active theme id set: ${_activeMetaTheme!.id}');
   }
 
   void resetActiveMetaTheme() {

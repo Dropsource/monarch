@@ -6,7 +6,7 @@ import 'logical_resolution.dart';
 const String _ios = 'ios';
 const String _android = 'android';
 
-String targetPlatformToString(TargetPlatform platform) {
+String? targetPlatformToString(TargetPlatform platform) {
   return platform == TargetPlatform.iOS
       ? _ios
       : platform == TargetPlatform.android
@@ -14,7 +14,7 @@ String targetPlatformToString(TargetPlatform platform) {
           : null;
 }
 
-TargetPlatform targetPlatformFromString(String platform) {
+TargetPlatform? targetPlatformFromString(String platform) {
   return platform == _ios
       ? TargetPlatform.iOS
       : platform == _android
@@ -24,11 +24,11 @@ TargetPlatform targetPlatformFromString(String platform) {
 
 class DeviceDefinition implements OutboundChannelArgument {
   const DeviceDefinition({
-    this.id,
-    this.name,
-    this.logicalResolution,
-    this.devicePixelRatio,
-    this.targetPlatform,
+    required this.id,
+    required this.name,
+    required this.logicalResolution,
+    required this.devicePixelRatio,
+    required this.targetPlatform,
   });
   final String id, name;
   final TargetPlatform targetPlatform;

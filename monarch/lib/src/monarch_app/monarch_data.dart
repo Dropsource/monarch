@@ -26,7 +26,7 @@ class MetaStories implements OutboundChannelArgument {
 
   String get pathFirstPartRemoved {
     final parts = p.split(path);
-    parts..removeAt(0);
+    parts.removeAt(0);
     return p.joinAll(parts);
   }
 
@@ -39,7 +39,7 @@ class MetaStories implements OutboundChannelArgument {
 class MetaTheme implements OutboundChannelArgument {
   final String id;
   final String name;
-  final ThemeData theme;
+  final ThemeData? theme;
   final bool isDefault;
 
   MetaTheme(this.id, this.name, this.theme, this.isDefault);
@@ -56,7 +56,7 @@ class MetaTheme implements OutboundChannelArgument {
 
 class MetaLocalization implements OutboundChannelArgument {
   final List<Locale> locales;
-  final LocalizationsDelegate delegate;
+  final LocalizationsDelegate? delegate;
   final String delegateClassName;
 
   MetaLocalization(this.locales, this.delegate, this.delegateClassName);

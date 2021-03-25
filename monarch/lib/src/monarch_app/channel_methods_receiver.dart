@@ -31,11 +31,11 @@ void receiveChannelMethodCalls() {
 }
 
 Future<dynamic> _handler(MethodCall call) async {
-  final Map args = call.arguments;
+  final Map? args = call.arguments;
 
   switch (call.method) {
     case MethodNames.setUpLog:
-      _setUpLog(args['defaultLogLevelValue']);
+      _setUpLog(args!['defaultLogLevelValue']);
       break;
 
     case MethodNames.firstLoadSignal:
@@ -47,32 +47,32 @@ Future<dynamic> _handler(MethodCall call) async {
       break;
 
     case MethodNames.loadStory:
-      final String storyKey = args['storyKey'];
+      final String storyKey = args!['storyKey'];
       activeStory.setActiveStory(storyKey);
       break;
 
     case MethodNames.setActiveLocale:
-      final String locale = args['locale'];
+      final String locale = args!['locale'];
       activeLocale.setActiveLocaleTag(locale);
       break;
 
     case MethodNames.setActiveTheme:
-      final String themeId = args['themeId'];
+      final String themeId = args!['themeId'];
       activeTheme.setActiveMetaTheme(themeId);
       break;
 
     case MethodNames.setActiveDevice:
-      final String deviceId = args['deviceId'];
+      final String deviceId = args!['deviceId'];
       activeDevice.setActiveDevice(deviceId);
       break;
 
     case MethodNames.setTextScaleFactor:
-      final double deviceId = args['factor'];
+      final double deviceId = args!['factor'];
       activeTextScaleFactor.setActiveTextScaleFactor(deviceId);
       break;
 
     case MethodNames.toggleDebugPaint:
-      final bool isEnabled = args['isEnabled'];
+      final bool isEnabled = args!['isEnabled'];
       await vmServiceClient.toogleDebugPaint(isEnabled);
       break;
 

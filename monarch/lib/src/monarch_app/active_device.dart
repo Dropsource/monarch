@@ -14,8 +14,8 @@ class ActiveDevice with Log {
   void setActiveDevice(String id) {
     _activeDevice = deviceDefinitions.firstWhere(
         (definition) => definition.id == id,
-        orElse: () => throw ArgumentError(
-            'expected to find device definition with id $id'));
+        orElse: (() => throw ArgumentError(
+            'expected to find device definition with id $id')));
 
     _activeDeviceStreamController.add(null);
     log.fine('active device id set: ${_activeDevice.id}');

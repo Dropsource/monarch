@@ -29,9 +29,9 @@ class StoryId {
 }
 
 class ActiveStory with Log {
-  StoryId _activeStoryId;
+  StoryId? _activeStoryId;
 
-  StoryId get activeStoryId => _activeStoryId;
+  StoryId? get activeStoryId => _activeStoryId;
 
   final _activeStoryChangeStreamController = StreamController<void>.broadcast();
   Stream<void> get activeStoryChangeStream =>

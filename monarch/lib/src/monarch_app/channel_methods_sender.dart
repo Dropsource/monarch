@@ -7,7 +7,7 @@ class ChannelMethodsSender with Log {
   final MethodChannel _dropsourceMonarchChannel =
       Channels.dropsourceMonarchChannel;
 
-  Future<T> _invokeMonarchChannelMethod<T>(String method,
+  Future<T?> _invokeMonarchChannelMethod<T>(String method,
       [dynamic arguments]) async {
     log.info('sending channel method: $method');
     return _dropsourceMonarchChannel.invokeMethod(method, arguments);

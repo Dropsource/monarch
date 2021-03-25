@@ -9,7 +9,7 @@ const TypeChecker widgetTypeChecker =
 
 class MetaStoriesGenerator extends Generator {
   @override
-  String generate(LibraryReader library, BuildStep buildStep) {
+  String? generate(LibraryReader library, BuildStep buildStep) {
     final inputId = buildStep.inputId;
 
     if (!inputId.path.endsWith('_stories.dart')) {
@@ -23,9 +23,9 @@ class MetaStoriesGenerator extends Generator {
 
     for (var topLevelElement in library.allElements) {
       if (topLevelElement is FunctionElement) {
-        if (topLevelElement.returnType != null &&
-            topLevelElement.returnType.element != null) {
-          if (widgetTypeChecker.isExactly(topLevelElement.returnType.element)) {
+        if (topLevelElement.returnType.element != null) {
+          if (widgetTypeChecker
+              .isExactly(topLevelElement.returnType.element!)) {
             // if (topLevelElement.returnType.element.name == 'Widget') {
             final storyName = topLevelElement.name;
             final storyNameInSingleQuotes = "'$storyName'";
