@@ -119,8 +119,7 @@ class _LocalizedStoryAppState extends State<LocalizedStoryApp> {
       return MaterialApp(
           key: ObjectKey(activeLocale.locale!.toLanguageTag()),
           localizationsDelegates: [
-            ...widget.monarchData.metaLocalizations
-                .map((x) => x.delegate!),
+            ...widget.monarchData.metaLocalizations.map((x) => x.delegate!),
             ...GlobalMaterialLocalizations.delegates,
           ],
           supportedLocales: widget.monarchData.allLocales,

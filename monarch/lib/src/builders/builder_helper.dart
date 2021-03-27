@@ -10,7 +10,7 @@ String getOuputPathInGeneratedOutputDirectory(AssetId inputId) {
 }
 
 /// Returns true if the given asset id is in the lib directory of its package.
-/// 
+///
 /// Logic taken from `package:build`:
 /// file: build-2.0.0/lib/src/asset/id.dart
 /// function: _constructUri
@@ -19,8 +19,7 @@ bool isInLib(AssetId id) => id.pathSegments.first == 'lib';
 String getImportUriOrRelativePath(AssetId inputId) {
   if (isInLib(inputId)) {
     return inputId.uri.toString();
-  }
-  else {
+  } else {
     return getRelativePathFromOutputToInput(inputId);
   }
 }
