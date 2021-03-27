@@ -4,6 +4,8 @@ import 'package:analyzer/dart/element/element.dart';
 
 import 'package:monarch_annotations/monarch_annotations.dart';
 
+import 'builder_helper.dart';
+
 const TypeChecker monarchLocalizationsTypeChecker =
     TypeChecker.fromRuntime(MonarchLocalizations);
 
@@ -49,7 +51,7 @@ Element name: ${element.name}
       }
     }
 
-    if (buildStep.inputId.uri.isScheme('package')) {
+    if (isInLib(buildStep.inputId)) {
       return _outputContents(buildStep.inputId.uri.toString(), expressions);
     } else {
       log.warning(

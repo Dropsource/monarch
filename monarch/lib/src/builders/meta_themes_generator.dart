@@ -43,7 +43,7 @@ Element name: ${element.name}
       }
     }
 
-    final pathToThemeFile = getRelativePathFromOutputToInput(buildStep.inputId);
+    final pathToThemeFile = getImportUriOrRelativePath(buildStep.inputId);
 
     return _outputContents(pathToThemeFile, expressions);
   }
@@ -52,7 +52,7 @@ Element name: ${element.name}
       String pathToThemeFile, List<String> metaThemeExpressions) {
     return '''
 import 'package:monarch/monarch.dart';
-import r'$pathToThemeFile';
+import '$pathToThemeFile';
 
 final metaThemeItems = [
   ${metaThemeExpressions.join(', ')}

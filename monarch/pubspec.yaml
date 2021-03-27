@@ -1,7 +1,7 @@
 name: monarch
-description: Code generator for Monarch. Monarch lets you generate stories for your widgets.
-version: 0.2.0
-homepage: https://github.com/Dropsource/monarch
+description: Code generator for Monarch. Monarch is a tool for Flutter developers. It makes building beautiful apps a simpler and faster experience.
+version: 0.2.1
+homepage: https://monarchapp.io
 
 environment:
   sdk: '>=2.12.0 <3.0.0'

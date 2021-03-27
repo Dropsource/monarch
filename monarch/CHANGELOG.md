@@ -1,3 +1,7 @@
+## 0.2.1 - 2021-03-26
+- When generating import paths, if input file is in lib directory, use its URI, otherwise
+  use its relative path.
+
 ## 0.2.0 - 2021-03-24
 - Migrate to null safety.
 

@@ -46,7 +46,7 @@ class MetaStoriesGenerator extends Generator {
       }
     }
 
-    final pathToStoriesFile = getRelativePathFromOutputToInput(inputId);
+    final pathToStoriesFile = getImportUriOrRelativePath(inputId);
 
     final output =
         _outputContents(pathToStoriesFile, inputId, storiesNames, storiesMap);
@@ -57,7 +57,7 @@ class MetaStoriesGenerator extends Generator {
       List<String> storiesNames, Map<String, String> storiesMap) {
     return '''
 import 'package:monarch/monarch.dart';
-import r'$pathToStoriesFile';
+import '$pathToStoriesFile';
 
 const metaStories = MetaStories('${storiesAssetId.package}', '${storiesAssetId.path}', [${storiesNames.join(', ')}], $storiesMap);
 
