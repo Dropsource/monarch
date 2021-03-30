@@ -1,1 +1,2 @@
-// For an example see: https://monarchapp.io/docs/write-first-story
+// For an example see the monarch_samples project: 
+// https://github.com/Dropsource/monarch_samples
