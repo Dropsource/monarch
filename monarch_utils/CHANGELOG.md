@@ -1,3 +1,8 @@
+## 0.1.1 - 2020-03-31
+- Remove http utils. It wasn't used by monarch package.
+- Remove `http` dependency.
+- Update pubspec.yaml with more information.
+
 ## 0.1.0 - 2020-03-24
 - Migrate to null safety.
 
