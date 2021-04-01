@@ -1,3 +1,7 @@
+## 0.2.2 - 2020-03-31
+- Update pubspec.yaml with more information.
+- Upgrade monarch_utils to ^0.1.1.
+
 ## 0.2.1 - 2021-03-26
 - When generating import paths, if input file is in lib directory, use its URI, otherwise
   use its relative path.
