@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -7,8 +8,6 @@ import 'ready_signal.dart';
 import 'active_locale.dart';
 import 'monarch_data.dart';
 import 'story_view.dart';
-
-import 'package:flutter/widgets.dart';
 
 class StoryApp extends StatefulWidget {
   final MonarchData monarchData;

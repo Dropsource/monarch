@@ -1,11 +1,10 @@
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 
-// import 'src/builders/stories_builder.dart';
-import 'src/builders/main_builder.dart';
-import 'src/builders/meta_stories_generator.dart';
-import 'src/builders/meta_themes_generator.dart';
-import 'src/builders/meta_locales_generator.dart';
+import 'main_builder.dart';
+import 'meta_stories_generator.dart';
+import 'meta_themes_generator.dart';
+import 'meta_locales_generator.dart';
 
 Builder metaLocalizationsBuilder(BuilderOptions options) =>
     LibraryBuilder(MetaLocalizationsGenerator(),

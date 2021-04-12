@@ -1,5 +1,4 @@
 import 'package:build/build.dart';
-// import 'package:build_runner_core/build_runner_core.dart';
 import 'package:path/path.dart' as p;
 
 String generatedOutputDirectory = p.join('.dart_tool', 'build', 'generated');

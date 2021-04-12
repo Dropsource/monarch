@@ -1,3 +1,8 @@
+## 0.2.3 - 2020-04-12
+- Move builder dart file inside src directory so pana recognizes package as null safe
+- Tweaks
+- Bump vm_service to ^6.2.0
+
 ## 0.2.2 - 2020-03-31
 - Update pubspec.yaml with more information.
 - Upgrade monarch_utils to ^0.1.1.

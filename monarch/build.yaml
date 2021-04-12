@@ -1,7 +1,7 @@
 builders:
 
   meta_localizations_builder:
-    import: 'package:monarch/stories_builder_factories.dart'
+    import: 'package:monarch/src/builders/builders.dart'
     builder_factories: ['metaLocalizationsBuilder']
     build_extensions: {
       '.dart': ['.meta_localizations.g.dart']
@@ -11,7 +11,7 @@ builders:
     runs_before: ['monarch|meta_themes_builder']
 
   meta_themes_builder:
-    import: 'package:monarch/stories_builder_factories.dart'
+    import: 'package:monarch/src/builders/builders.dart'
     builder_factories: ['metaThemesBuilder']
     build_extensions: {
       '.dart': ['.meta_themes.g.dart']
@@ -24,7 +24,7 @@ builders:
         exclude: ['**.meta_localizations.g.dart']
 
   meta_stories_builder:
-    import: 'package:monarch/stories_builder_factories.dart'
+    import: 'package:monarch/src/builders/builders.dart'
     builder_factories: ['metaStoriesBuilder']
     build_extensions: {
       '.dart': ['.meta_stories.g.dart'],
@@ -37,7 +37,7 @@ builders:
         include: ['**_stories.dart']
 
   main_builder:
-    import: 'package:monarch/stories_builder_factories.dart'
+    import: 'package:monarch/src/builders/builders.dart'
     builder_factories: ['mainBuilder']
     build_extensions: { '$lib$' : ['main_monarch.g.dart']}
     build_to: cache
