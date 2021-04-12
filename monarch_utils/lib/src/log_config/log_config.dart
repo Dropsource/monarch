@@ -2,6 +2,7 @@ import 'dart:async';
 
 import '../log/log_level.dart';
 import '../log/log_entry.dart';
+import '../log/write_line_function.dart';
 
 /// Automatically record stack traces for any message of this level or above.
 ///
@@ -15,8 +16,6 @@ set defaultLogLevel(LogLevel value) => _defaultLogLevel = value;
 
 Stream<LogEntry> get logEntryStream => logEntryStreamController.stream;
 final logEntryStreamController = StreamController<LogEntry>.broadcast();
-
-typedef WriteLineFunction = void Function(String);
 
 /// Listens on [logEntryStream] and writes a standard string representation
 /// of each log entry using [writeln].

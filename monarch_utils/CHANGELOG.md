@@ -1,3 +1,6 @@
+## 0.1.2 - 
+- Add Heartbeat type to utils.
+
 ## 0.1.1 - 2020-03-31
 - Remove http utils. It wasn't used by monarch package.
 - Remove `http` dependency.
