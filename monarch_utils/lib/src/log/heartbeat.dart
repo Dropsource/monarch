@@ -10,6 +10,7 @@ class Heartbeat {
 
   Timer? _heartbeatTimer;
   Stopwatch? _stopwatch;
+  Stopwatch? get stopwatch => _stopwatch;
 
   Heartbeat(this.message, this.writeln,
       {this.checkInterval = const Duration(seconds: 3, milliseconds: 100)});
@@ -22,10 +23,10 @@ class Heartbeat {
 
   bool get _isTimerActive => _heartbeatTimer?.isActive ?? false;
 
-  bool get isActive => _isTimerActive && _stopwatch != null;
+  bool get isActive => _isTimerActive && stopwatch != null;
 
   void checkProgress(_) {
-    writeln('${_stopwatch!..stop()} elapsed');
+    writeln('${stopwatch!..stop()} elapsed');
   }
 
   void complete() {
@@ -34,6 +35,6 @@ class Heartbeat {
     }
 
     _heartbeatTimer!.cancel();
-    writeln('$message completed, took ${_stopwatch!..stop()}');
+    writeln('$message completed, took ${stopwatch!..stop()}');
   }
 }
