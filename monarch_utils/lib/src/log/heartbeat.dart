@@ -30,11 +30,20 @@ class Heartbeat {
   }
 
   void complete() {
+    _complete();
+    writeln('$message completed, took ${stopwatch!..stop()}');
+  }
+
+  void _complete() {
     if (!isActive) {
       throw StateError('cannot complete an inactive hearbeat');
     }
 
     _heartbeatTimer!.cancel();
-    writeln('$message completed, took ${stopwatch!..stop()}');
+  }
+
+  void completeError() {
+    _complete();
+    writeln('$message completed with error, took ${stopwatch!..stop()}');
   }
 }

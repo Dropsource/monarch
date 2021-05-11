@@ -1,3 +1,6 @@
+## 0.1.4 - 2021-05-11
+- Add completeError to Heartbeat.
+
 ## 0.1.3 - 2021-04-29
 - Expose Heartbeat's stopwatch via getter.
 
