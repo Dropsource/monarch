@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:path/path.dart' as p;
 
 import 'channel_methods.dart';
 
@@ -23,12 +22,6 @@ class MetaStories implements OutboundChannelArgument {
 
   const MetaStories(
       this.package, this.path, this.storiesNames, this.storiesMap);
-
-  String get pathFirstPartRemoved {
-    final parts = p.split(path);
-    parts.removeAt(0);
-    return p.joinAll(parts);
-  }
 
   @override
   Map<String, dynamic> toStandardMap() {

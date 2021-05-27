@@ -8,6 +8,13 @@ import 'package:path/path.dart' as p;
 import 'builder_helper.dart';
 
 class MainBuilder implements Builder {
+  final BuilderOptions options;
+
+  MainBuilder(this.options);
+
+  bool get noSoundNullSafety =>
+      options.config.containsKey('no-sound-null-safety');
+
   @override
   Map<String, List<String>> get buildExtensions => const {
         r'$lib$': ['main_monarch.g.dart']
@@ -111,6 +118,8 @@ class MainBuilder implements Builder {
 // **************************************************************************
 // MainBuilder - monarch
 // **************************************************************************
+
+${noSoundNullSafety ? '// @dart=2.9' : ''}
 
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';

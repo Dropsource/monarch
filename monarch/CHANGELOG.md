@@ -1,3 +1,6 @@
+## 0.2.4 - 2020-05-27
+- Builder option to support code generation with null safety disabled.
+
 ## 0.2.3 - 2020-04-12
 - Move builder dart file inside src directory so pana recognizes package as null safe
 - Tweaks
