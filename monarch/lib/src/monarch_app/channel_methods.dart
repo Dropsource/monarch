@@ -21,6 +21,7 @@ class MethodNames {
   static const readySignalAck = 'dropsource.monarch.readySignalAck';
   static const monarchData = 'dropsource.monarch.monarchData';
   static const deviceDefinitions = 'dropsource.monarch.deviceDefinitions';
+  static const storyScaleDefinitions = 'dropsource.monarch.storyScaleDefinitions';
   static const standardThemes = 'dropsource.monarch.standardThemes';
   static const defaultTheme = 'dropsource.monarch.defaultTheme';
   static const readySignal = 'dropsource.monarch.readySignal';
@@ -31,4 +32,5 @@ class MethodNames {
   static const setActiveDevice = 'dropsource.monarch.setActiveDevice';
   static const setTextScaleFactor = 'dropsource.monarch.setTextScaleFactor';
   static const toggleDebugPaint = 'dropsource.monarch.toggleDebugPaint';
+  static const setStoryScale = 'dropsource.monarch.setStoryScale';
 }

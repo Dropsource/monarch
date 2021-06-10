@@ -6,6 +6,7 @@ import 'active_device.dart';
 import 'active_story.dart';
 import 'active_theme.dart';
 import 'active_text_scale_factor.dart';
+import 'active_story_scale.dart';
 import 'device_definitions.dart';
 import 'monarch_data.dart';
 
@@ -26,6 +27,7 @@ class _StoryViewState extends State<StoryView> {
   late String _themeId;
   late ThemeData _themeData;
   late double _textScaleFactor;
+  late double _storyScale;
 
   String? _storyKey;
   StoryFunction? _storyFunction;
@@ -42,15 +44,14 @@ class _StoryViewState extends State<StoryView> {
     _setThemeData();
     _setStoryFunction();
     _setTextScaleFactor();
+    _setStoryScale();
 
     _streamSubscriptions.addAll([
-      activeDevice.activeDeviceStream
-          .listen((_) => setState(_setDeviceDefinition)),
-      activeTheme.activeMetaThemeStream.listen((_) => setState(_setThemeData)),
-      activeStory.activeStoryChangeStream
-          .listen((_) => setState(_setStoryFunction)),
-      activeTextScaleFactor.activeTextScaleFactorStream
-          .listen((_) => setState(_setTextScaleFactor))
+      activeDevice.stream.listen((_) => setState(_setDeviceDefinition)),
+      activeTheme.stream.listen((_) => setState(_setThemeData)),
+      activeStory.stream.listen((_) => setState(_setStoryFunction)),
+      activeTextScaleFactor.stream.listen((_) => setState(_setTextScaleFactor)),
+      activeStoryScale.stream.listen((_) => setState(_setStoryScale)),
     ]);
   }
 
@@ -60,17 +61,15 @@ class _StoryViewState extends State<StoryView> {
     super.dispose();
   }
 
-  void _setDeviceDefinition() {
-    _device = activeDevice.activeDevice;
-  }
+  void _setDeviceDefinition() => _device = activeDevice.value;
 
   void _setThemeData() {
-    _themeData = activeTheme.activeMetaTheme.theme!;
-    _themeId = activeTheme.activeMetaTheme.id;
+    _themeData = activeTheme.value.theme!;
+    _themeId = activeTheme.value.id;
   }
 
   void _setStoryFunction() {
-    final activeStoryId = activeStory.activeStoryId;
+    final activeStoryId = activeStory.value;
 
     if (activeStoryId == null) {
       _storyKey = null;
@@ -78,14 +77,14 @@ class _StoryViewState extends State<StoryView> {
     } else {
       final metaStories =
           widget.monarchData.metaStoriesMap[activeStoryId.pathKey]!;
-      _storyKey = activeStory.activeStoryId!.storyKey;
+      _storyKey = activeStoryId.storyKey;
       _storyFunction = metaStories.storiesMap[activeStoryId.name];
     }
   }
 
-  void _setTextScaleFactor() {
-    _textScaleFactor = activeTextScaleFactor.activeTextScaleFactor;
-  }
+  void _setTextScaleFactor() => _textScaleFactor = activeTextScaleFactor.value;
+
+  void _setStoryScale() => _storyScale = activeStoryScale.value;
 
   String get keyValue =>
       '$_storyKey|$_themeId|${_device.id}|${widget.localeKey}';
@@ -108,15 +107,18 @@ class _StoryViewState extends State<StoryView> {
               // - https://github.com/flutter/flutter/issues/63788
               // Otherwise, flutter desktop uses VisualDensity.compact.
               visualDensity: VisualDensity.standard),
-          child: MediaQuery(
-              data: MediaQueryData(
-                  textScaleFactor: _textScaleFactor,
-                  size: Size(_device.logicalResolution.width,
-                      _device.logicalResolution.height),
-                  devicePixelRatio: _device.devicePixelRatio),
-              child: Container(
-                  color: _themeData.scaffoldBackgroundColor,
-                  child: _storyFunction!())));
+          child: Transform.scale(
+              scale: _storyScale,
+              alignment: Alignment.topLeft,
+              child: MediaQuery(
+                  data: MediaQueryData(
+                      textScaleFactor: _textScaleFactor,
+                      size: Size(_device.logicalResolution.width,
+                          _device.logicalResolution.height),
+                      devicePixelRatio: _device.devicePixelRatio),
+                  child: Container(
+                      color: _themeData.scaffoldBackgroundColor,
+                      child: _storyFunction!()))));
     }
   }
 }

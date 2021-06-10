@@ -8,6 +8,7 @@ import 'active_story.dart';
 import 'active_theme.dart';
 import 'active_locale.dart';
 import 'active_text_scale_factor.dart';
+import 'active_story_scale.dart';
 import 'channel_methods.dart';
 import 'ready_signal.dart';
 import 'vm_service_client.dart';
@@ -48,7 +49,7 @@ Future<dynamic> _handler(MethodCall call) async {
 
     case MethodNames.loadStory:
       final String storyKey = args!['storyKey'];
-      activeStory.setActiveStory(storyKey);
+      activeStory.value = StoryId.fromNodeKey(storyKey);
       break;
 
     case MethodNames.setActiveLocale:
@@ -58,22 +59,27 @@ Future<dynamic> _handler(MethodCall call) async {
 
     case MethodNames.setActiveTheme:
       final String themeId = args!['themeId'];
-      activeTheme.setActiveMetaTheme(themeId);
+      activeTheme.value = activeTheme.getMetaTheme(themeId);
       break;
 
     case MethodNames.setActiveDevice:
       final String deviceId = args!['deviceId'];
-      activeDevice.setActiveDevice(deviceId);
+      activeDevice.value = activeDevice.getDeviceDefinition(deviceId);
       break;
 
     case MethodNames.setTextScaleFactor:
-      final double deviceId = args!['factor'];
-      activeTextScaleFactor.setActiveTextScaleFactor(deviceId);
+      final double factor = args!['factor'];
+      activeTextScaleFactor.value = factor;
       break;
 
     case MethodNames.toggleDebugPaint:
       final bool isEnabled = args!['isEnabled'];
       await vmServiceClient.toogleDebugPaint(isEnabled);
+      break;
+
+    case MethodNames.setStoryScale:
+      final double scale = args!['scale'];
+      activeStoryScale.value = scale;
       break;
 
     default:

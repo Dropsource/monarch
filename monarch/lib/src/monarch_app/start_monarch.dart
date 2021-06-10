@@ -5,6 +5,7 @@ import 'package:monarch_utils/log_config.dart';
 
 import 'ready_signal.dart';
 import 'device_definitions.dart';
+import 'story_scale_definitions.dart';
 import 'localizations_delegate_loader.dart';
 import 'active_locale.dart';
 import 'active_theme.dart';
@@ -106,6 +107,7 @@ void _sendInitialChannelMethodCalls(MonarchData monarchData) async {
   await channelMethodsSender.sendPing();
   await channelMethodsSender.sendDefaultTheme(activeTheme.defaultMetaTheme.id);
   await channelMethodsSender.sendDeviceDefinitions(DeviceDefinitions());
+  await channelMethodsSender.sendStoryScaleDefinitions(StoryScaleDefinitions());
   await channelMethodsSender.sendStandardThemes(StandardThemes());
   await channelMethodsSender.sendMonarchData(monarchData);
   await channelMethodsSender.sendReadySignal();
