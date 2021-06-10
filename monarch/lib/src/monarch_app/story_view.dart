@@ -118,6 +118,12 @@ class _StoryViewState extends State<StoryView> {
                   alignment: Alignment.topLeft,
                   child: Container(
                       color: _themeData.scaffoldBackgroundColor,
+                      constraints: BoxConstraints(
+                        maxWidth: _device.logicalResolution.width,
+                        // minWidth: _device.logicalResolution.width,
+                        maxHeight: _device.logicalResolution.height,
+                        // minHeight: _device.logicalResolution.height,
+                      ),
                       child: _storyFunction!()))));
     }
   }
