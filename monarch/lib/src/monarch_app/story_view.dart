@@ -107,23 +107,20 @@ class _StoryViewState extends State<StoryView> {
               // - https://github.com/flutter/flutter/issues/63788
               // Otherwise, flutter desktop uses VisualDensity.compact.
               visualDensity: VisualDensity.standard),
-          child: MediaQuery(
-              data: MediaQueryData(
-                  textScaleFactor: _textScaleFactor,
-                  size: Size(_device.logicalResolution.width,
-                      _device.logicalResolution.height),
-                  devicePixelRatio: _device.devicePixelRatio),
-              child: Transform.scale(
-                  scale: _storyScale,
-                  alignment: Alignment.topLeft,
+          child: Transform.scale(
+              scale: _storyScale,
+              alignment: Alignment.topLeft,
+              child: MediaQuery(
+                  data: MediaQueryData(
+                      textScaleFactor: _textScaleFactor,
+                      size: Size(_device.logicalResolution.width,
+                          _device.logicalResolution.height),
+                      devicePixelRatio: _device.devicePixelRatio),
                   child: Container(
                       color: _themeData.scaffoldBackgroundColor,
                       constraints: BoxConstraints(
-                        maxWidth: _device.logicalResolution.width,
-                        // minWidth: _device.logicalResolution.width,
-                        maxHeight: _device.logicalResolution.height,
-                        // minHeight: _device.logicalResolution.height,
-                      ),
+                          maxWidth: _device.logicalResolution.width,
+                          maxHeight: _device.logicalResolution.height),
                       child: _storyFunction!()))));
     }
   }
