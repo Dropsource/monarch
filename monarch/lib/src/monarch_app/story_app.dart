@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'ready_signal.dart';
 import 'active_locale.dart';
+import 'active_story_scale.dart';
 import 'monarch_data.dart';
 import 'story_view.dart';
 
@@ -22,6 +23,7 @@ class StoryApp extends StatefulWidget {
 
 class _StoryAppState extends State<StoryApp> {
   late bool _isReady;
+  late double _storyScale;
   final _streamSubscriptions = <StreamSubscription>[];
 
   _StoryAppState();
@@ -31,9 +33,17 @@ class _StoryAppState extends State<StoryApp> {
     super.initState();
 
     _isReady = readySignal.isReady;
-    _streamSubscriptions.add(readySignal.changeStream
-        .listen((isReady) => setState(() => _isReady = isReady)));
+    _setStoryScale();
+
+    _streamSubscriptions.addAll([
+      readySignal.changeStream
+          .listen((isReady) => setState(() => _isReady = isReady)),
+      activeStoryScale.stream
+          .listen((_) => setState(_setStoryScale))
+    ]);
   }
+
+  void _setStoryScale() => _storyScale = activeStoryScale.value;
 
   @override
   void dispose() {
@@ -48,11 +58,14 @@ class _StoryAppState extends State<StoryApp> {
         return MaterialApp(
             key: ObjectKey('no-localizations'),
             debugShowCheckedModeBanner: false,
-            home: Scaffold(
-                body: StoryView(
-              monarchData: widget.monarchData,
-              localeKey: '__NA__',
-            )));
+            home: Transform.scale(
+                scale: _storyScale,
+                alignment: Alignment.topLeft,
+                child: Scaffold(
+                    body: StoryView(
+                  monarchData: widget.monarchData,
+                  localeKey: '__NA__',
+                ))));
       } else {
         return LocalizedStoryApp(monarchData: widget.monarchData);
       }

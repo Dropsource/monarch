@@ -26,8 +26,8 @@ void startMonarch(
     List<MetaLocalization> userMetaLocalizations,
     List<MetaTheme> userMetaThemes,
     Map<String, MetaStories> metaStoriesMap) async {
-  final binding = MonarchBinding();
-  
+  final monarchBinding = MonarchBinding.ensureInitialized() as MonarchBinding;
+
   _setUpLog();
 
   readySignal.starting();
@@ -45,15 +45,11 @@ void startMonarch(
   activeLocale =
       ActiveLocale(LocalizationsDelegateLoader(monarchData.metaLocalizations));
 
-  binding.window.physicalSizeTestValue = Size(defaultDeviceDefinition.logicalResolution.width, defaultDeviceDefinition.logicalResolution.height);
-  binding.attachRootWidget(StoryApp(
+  monarchBinding.attachRootWidget(StoryApp(
     monarchData: monarchData,
   ));
-  binding.scheduleFrame();
+  monarchBinding.scheduleFrame();
 
-  // runApp(StoryApp(
-  //   monarchData: monarchData,
-  // ));
   receiveChannelMethodCalls();
   await _connectToVmService();
   _sendInitialChannelMethodCalls(monarchData);
