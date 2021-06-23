@@ -17,6 +17,7 @@ import 'story_app.dart';
 import 'monarch_data.dart';
 import 'user_message.dart';
 import 'vm_service_client.dart';
+import 'monarch_binding.dart';
 
 final _logger = Logger('Start');
 
@@ -25,6 +26,8 @@ void startMonarch(
     List<MetaLocalization> userMetaLocalizations,
     List<MetaTheme> userMetaThemes,
     Map<String, MetaStories> metaStoriesMap) async {
+  final binding = MonarchBinding();
+  
   _setUpLog();
 
   readySignal.starting();
@@ -42,9 +45,15 @@ void startMonarch(
   activeLocale =
       ActiveLocale(LocalizationsDelegateLoader(monarchData.metaLocalizations));
 
-  runApp(StoryApp(
+  binding.window.physicalSizeTestValue = Size(defaultDeviceDefinition.logicalResolution.width, defaultDeviceDefinition.logicalResolution.height);
+  binding.attachRootWidget(StoryApp(
     monarchData: monarchData,
   ));
+  binding.scheduleFrame();
+
+  // runApp(StoryApp(
+  //   monarchData: monarchData,
+  // ));
   receiveChannelMethodCalls();
   await _connectToVmService();
   _sendInitialChannelMethodCalls(monarchData);

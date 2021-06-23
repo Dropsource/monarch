@@ -118,9 +118,6 @@ class _StoryViewState extends State<StoryView> {
                       devicePixelRatio: _device.devicePixelRatio),
                   child: Container(
                       color: _themeData.scaffoldBackgroundColor,
-                      constraints: BoxConstraints(
-                          maxWidth: _device.logicalResolution.width,
-                          maxHeight: _device.logicalResolution.height),
                       child: _storyFunction!()))));
     }
   }
