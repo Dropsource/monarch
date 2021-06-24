@@ -6,7 +6,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'ready_signal.dart';
 import 'active_locale.dart';
-import 'active_story_scale.dart';
 import 'monarch_data.dart';
 import 'story_view.dart';
 
@@ -50,11 +49,10 @@ class _StoryAppState extends State<StoryApp> {
         return MaterialApp(
             key: ObjectKey('no-localizations'),
             debugShowCheckedModeBanner: false,
-            home: ScaleScaffold(
-                body: StoryView(
+            home: StoryView(
               monarchData: widget.monarchData,
               localeKey: '__NA__',
-            )));
+            ));
       } else {
         return LocalizedStoryApp(monarchData: widget.monarchData);
       }
@@ -126,10 +124,9 @@ class _LocalizedStoryAppState extends State<LocalizedStoryApp> {
           supportedLocales: widget.monarchData.allLocales,
           locale: activeLocale.locale,
           debugShowCheckedModeBanner: false,
-          home: ScaleScaffold(
-              body: StoryView(
-                  monarchData: widget.monarchData,
-                  localeKey: activeLocale.locale!.toLanguageTag())));
+          home: StoryView(
+              monarchData: widget.monarchData,
+              localeKey: activeLocale.locale!.toLanguageTag()));
     } else {
       return SimpleMaterialApp(
           message:
@@ -149,50 +146,6 @@ class SimpleMaterialApp extends StatelessWidget {
     return MaterialApp(
         key: ObjectKey(message),
         debugShowCheckedModeBanner: false,
-        home: ScaleScaffold(body: CenteredText(message)));
-  }
-}
-
-class ScaleScaffold extends StatefulWidget {
-  final Widget? body;
-
-  ScaleScaffold({this.body});
-
-  @override
-  State<StatefulWidget> createState() {
-    return _ScaleScaffoldState();
-  }
-}
-
-class _ScaleScaffoldState extends State<ScaleScaffold> {
-  late double _storyScale;
-  final _streamSubscriptions = <StreamSubscription>[];
-
-  _ScaleScaffoldState();
-
-  @override
-  void initState() {
-    super.initState();
-
-    _setStoryScale();
-
-    _streamSubscriptions
-        .add(activeStoryScale.stream.listen((_) => setState(_setStoryScale)));
-  }
-
-  void _setStoryScale() => _storyScale = activeStoryScale.value;
-
-  @override
-  void dispose() {
-    _streamSubscriptions.forEach((s) => s.cancel());
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform.scale(
-        scale: _storyScale,
-        alignment: Alignment.topLeft,
-        child: Scaffold(body: widget.body));
+        home: SimpleMessageView(message: message));
   }
 }

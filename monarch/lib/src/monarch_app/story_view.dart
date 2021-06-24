@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'active_device.dart';
 import 'active_story.dart';
 import 'active_theme.dart';
+import 'active_story_scale.dart';
 import 'device_definitions.dart';
 import 'monarch_data.dart';
 
@@ -21,6 +22,7 @@ class StoryView extends StatefulWidget {
 }
 
 class _StoryViewState extends State<StoryView> {
+  late double _storyScale;
   late DeviceDefinition _device;
   late String _themeId;
   late ThemeData _themeData;
@@ -36,11 +38,13 @@ class _StoryViewState extends State<StoryView> {
   void initState() {
     super.initState();
 
+    _setStoryScale();
     _setDeviceDefinition();
     _setThemeData();
     _setStoryFunction();
 
     _streamSubscriptions.addAll([
+      activeStoryScale.stream.listen((_) => setState(_setStoryScale)),
       activeDevice.stream.listen((_) => setState(_setDeviceDefinition)),
       activeTheme.stream.listen((_) => setState(_setThemeData)),
       activeStory.stream.listen((_) => setState(_setStoryFunction)),
@@ -52,6 +56,8 @@ class _StoryViewState extends State<StoryView> {
     _streamSubscriptions.forEach((s) => s.cancel());
     super.dispose();
   }
+
+  void _setStoryScale() => _storyScale = activeStoryScale.value;
 
   void _setDeviceDefinition() => _device = activeDevice.value;
 
@@ -75,29 +81,29 @@ class _StoryViewState extends State<StoryView> {
   }
 
   String get keyValue =>
-      '$_storyKey|$_themeId|${_device.id}|${widget.localeKey}';
+      '$_storyKey|$_themeId|${_device.id}|${widget.localeKey}|$_storyScale';
 
   @override
   Widget build(BuildContext context) {
-    ArgumentError.checkNotNull(_device, '_device');
-    ArgumentError.checkNotNull(_themeId, '_themeId');
-    ArgumentError.checkNotNull(_themeData, '_themeData');
-
     if (_storyFunction == null) {
-      return CenteredText('Please select a story');
+      return ScaleScaffold(
+          scale: _storyScale, body: CenteredText('Please select a story'));
     } else {
-      return Theme(
-          key: ObjectKey(keyValue),
-          data: _themeData.copyWith(
-              platform: _device.targetPlatform,
-              // Override visualDensity to use the one set for mobile platform:
-              // - https://github.com/flutter/flutter/pull/66370
-              // - https://github.com/flutter/flutter/issues/63788
-              // Otherwise, flutter desktop uses VisualDensity.compact.
-              visualDensity: VisualDensity.standard),
-          child: Container(
-              color: _themeData.scaffoldBackgroundColor,
-              child: _storyFunction!()));
+      return ScaleScaffold(
+        scale: _storyScale,
+        body: Theme(
+            key: ObjectKey(keyValue),
+            data: _themeData.copyWith(
+                platform: _device.targetPlatform,
+                // Override visualDensity to use the one set for mobile platform:
+                // - https://github.com/flutter/flutter/pull/66370
+                // - https://github.com/flutter/flutter/issues/63788
+                // Otherwise, flutter desktop uses VisualDensity.compact.
+                visualDensity: VisualDensity.standard),
+            child: Container(
+                color: _themeData.scaffoldBackgroundColor,
+                child: _storyFunction!())),
+      );
 
       // If we need to pass the selected device's `devicePixelRatio`, then we
       // can wrap the Container above with a MediaQuery like:
@@ -116,6 +122,21 @@ class _StoryViewState extends State<StoryView> {
   }
 }
 
+class ScaleScaffold extends StatelessWidget {
+  final double scale;
+  final Widget? body;
+
+  ScaleScaffold({required this.scale, this.body});
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.scale(
+        scale: scale,
+        alignment: Alignment.topLeft,
+        child: Scaffold(body: body));
+  }
+}
+
 class CenteredText extends StatelessWidget {
   CenteredText(this.data);
 
@@ -125,5 +146,47 @@ class CenteredText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Padding(padding: EdgeInsets.all(10), child: Text(data)));
+  }
+}
+
+class SimpleMessageView extends StatefulWidget {
+  final String message;
+
+  SimpleMessageView({required this.message});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _SimpleMessageViewState();
+  }
+}
+
+class _SimpleMessageViewState extends State<SimpleMessageView> {
+  late double _storyScale;
+  final _streamSubscriptions = <StreamSubscription>[];
+
+  _SimpleMessageViewState();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _setStoryScale();
+
+    _streamSubscriptions
+        .add(activeStoryScale.stream.listen((_) => setState(_setStoryScale)));
+  }
+
+  void _setStoryScale() => _storyScale = activeStoryScale.value;
+
+  @override
+  void dispose() {
+    _streamSubscriptions.forEach((s) => s.cancel());
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleScaffold(
+        scale: _storyScale, body: CenteredText(widget.message));
   }
 }
