@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'active_device.dart';
 import 'active_story.dart';
 import 'active_theme.dart';
-import 'active_story_scale.dart';
 import 'device_definitions.dart';
 import 'monarch_data.dart';
 
@@ -25,7 +24,6 @@ class _StoryViewState extends State<StoryView> {
   late DeviceDefinition _device;
   late String _themeId;
   late ThemeData _themeData;
-  late double _storyScale;
 
   String? _storyKey;
   StoryFunction? _storyFunction;
@@ -41,13 +39,11 @@ class _StoryViewState extends State<StoryView> {
     _setDeviceDefinition();
     _setThemeData();
     _setStoryFunction();
-    _setStoryScale();
 
     _streamSubscriptions.addAll([
       activeDevice.stream.listen((_) => setState(_setDeviceDefinition)),
       activeTheme.stream.listen((_) => setState(_setThemeData)),
       activeStory.stream.listen((_) => setState(_setStoryFunction)),
-      activeStoryScale.stream.listen((_) => setState(_setStoryScale)),
     ]);
   }
 
@@ -78,7 +74,6 @@ class _StoryViewState extends State<StoryView> {
     }
   }
 
-  void _setStoryScale() => _storyScale = activeStoryScale.value;
 
   String get keyValue =>
       '$_storyKey|$_themeId|${_device.id}|${widget.localeKey}';

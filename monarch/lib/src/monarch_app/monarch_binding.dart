@@ -53,6 +53,7 @@ class MonarchBinding extends BindingBase
   }
 
   void _onTextScaleFactorChanged(double factor) {
+    _logger.shout(factor);
     window.textScaleFactorTestValue = factor;
   }
 }
