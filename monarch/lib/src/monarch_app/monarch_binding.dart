@@ -28,10 +28,10 @@ class MonarchBinding extends BindingBase
         RendererBinding,
         WidgetsBinding {
   MonarchBinding() {
-    _onDeviceDefinitionChanged(activeDevice.value);
+    _onDeviceChanged(activeDevice.value);
     _onTextScaleFactorChanged(activeTextScaleFactor.value);
 
-    activeDevice.stream.listen(_onDeviceDefinitionChanged);
+    activeDevice.stream.listen(_onDeviceChanged);
     activeTextScaleFactor.stream.listen(_onTextScaleFactorChanged);
   }
 
@@ -47,7 +47,7 @@ class MonarchBinding extends BindingBase
   TestWindow get window => _window;
   final _window = TestWindow(window: ui.window);
 
-  void _onDeviceDefinitionChanged(DeviceDefinition device) {
+  void _onDeviceChanged(DeviceDefinition device) {
     window.physicalSizeTestValue = Size(
         device.logicalResolution.width * window.devicePixelRatio,
         device.logicalResolution.height * window.devicePixelRatio);
