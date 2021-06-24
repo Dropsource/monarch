@@ -48,8 +48,9 @@ class MonarchBinding extends BindingBase
   final _window = TestWindow(window: ui.window);
 
   void _onDeviceDefinitionChanged(DeviceDefinition device) {
-    window.physicalSizeTestValue =
-        Size(device.logicalResolution.width, device.logicalResolution.height);
+    window.physicalSizeTestValue = Size(
+        device.logicalResolution.width * window.devicePixelRatio,
+        device.logicalResolution.height * window.devicePixelRatio);
   }
 
   void _onTextScaleFactorChanged(double factor) {
