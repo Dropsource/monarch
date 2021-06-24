@@ -74,7 +74,6 @@ class _StoryViewState extends State<StoryView> {
     }
   }
 
-
   String get keyValue =>
       '$_storyKey|$_themeId|${_device.id}|${widget.localeKey}';
 
@@ -96,11 +95,23 @@ class _StoryViewState extends State<StoryView> {
               // - https://github.com/flutter/flutter/issues/63788
               // Otherwise, flutter desktop uses VisualDensity.compact.
               visualDensity: VisualDensity.standard),
-          child: MediaQuery(
-              data: MediaQueryData(devicePixelRatio: _device.devicePixelRatio),
-              child: Container(
-                  color: _themeData.scaffoldBackgroundColor,
-                  child: _storyFunction!())));
+          child: Container(
+              color: _themeData.scaffoldBackgroundColor,
+              child: _storyFunction!()));
+
+      // If we need to pass the selected device's `devicePixelRatio`, then we
+      // can wrap the Container above with a MediaQuery like:
+      // ```
+      // MediaQuery(
+      //   data: MediaQuery.of(context).copyWith(devicePixelRatio: _device.devicePixelRatio),
+      //   child: Container(...)
+      // ```
+      // Which should copy the MediaQuery from the MaterialApp widget and any changes
+      // we make to [MonarchBinding.window].
+      // However, if we are rendering the story on a desktop window, then using
+      // the device pixel ratio of a different device may render unexpected results
+      // for the user. The device pixel ratio of a desktop window and a mobile device
+      // may be different.
     }
   }
 }
