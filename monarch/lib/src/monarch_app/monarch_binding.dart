@@ -7,16 +7,11 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:monarch_utils/log.dart';
-
 import 'dart:ui' as ui;
 
 import 'active_device.dart';
 import 'device_definitions.dart';
 import 'active_text_scale_factor.dart';
-
-final _logger = Logger('MonarchBinding');
 
 class MonarchBinding extends BindingBase
     with
