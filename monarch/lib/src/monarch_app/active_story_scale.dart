@@ -4,10 +4,10 @@ const defaultStoryScale = 1.0;
 
 class ActiveStoryScale extends ActiveValue<double> {
   double _value = defaultStoryScale;
-  
+
   @override
   double get value => _value;
-  
+
   @override
   void setValue(double newValue) {
     _value = newValue;

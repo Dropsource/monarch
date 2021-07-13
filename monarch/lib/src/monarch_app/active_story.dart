@@ -40,7 +40,6 @@ class ActiveStory extends ActiveValue<StoryId?> {
     _activeStoryId = newValue;
   }
 
-
   @override
   String get valueSetMessage => 'active story id set: ${value ?? 'null'}';
 }

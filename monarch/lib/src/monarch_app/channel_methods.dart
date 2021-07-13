@@ -21,7 +21,8 @@ class MethodNames {
   static const readySignalAck = 'dropsource.monarch.readySignalAck';
   static const monarchData = 'dropsource.monarch.monarchData';
   static const deviceDefinitions = 'dropsource.monarch.deviceDefinitions';
-  static const storyScaleDefinitions = 'dropsource.monarch.storyScaleDefinitions';
+  static const storyScaleDefinitions =
+      'dropsource.monarch.storyScaleDefinitions';
   static const standardThemes = 'dropsource.monarch.standardThemes';
   static const defaultTheme = 'dropsource.monarch.defaultTheme';
   static const readySignal = 'dropsource.monarch.readySignal';
