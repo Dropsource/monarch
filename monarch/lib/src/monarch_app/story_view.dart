@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'active_device.dart';
 import 'active_story.dart';
 import 'active_theme.dart';
-import 'active_text_scale_factor.dart';
+import 'active_story_scale.dart';
 import 'device_definitions.dart';
 import 'monarch_data.dart';
 
@@ -22,10 +22,10 @@ class StoryView extends StatefulWidget {
 }
 
 class _StoryViewState extends State<StoryView> {
+  late double _storyScale;
   late DeviceDefinition _device;
   late String _themeId;
   late ThemeData _themeData;
-  late double _textScaleFactor;
 
   String? _storyKey;
   StoryFunction? _storyFunction;
@@ -38,19 +38,16 @@ class _StoryViewState extends State<StoryView> {
   void initState() {
     super.initState();
 
+    _setStoryScale();
     _setDeviceDefinition();
     _setThemeData();
     _setStoryFunction();
-    _setTextScaleFactor();
 
     _streamSubscriptions.addAll([
-      activeDevice.activeDeviceStream
-          .listen((_) => setState(_setDeviceDefinition)),
-      activeTheme.activeMetaThemeStream.listen((_) => setState(_setThemeData)),
-      activeStory.activeStoryChangeStream
-          .listen((_) => setState(_setStoryFunction)),
-      activeTextScaleFactor.activeTextScaleFactorStream
-          .listen((_) => setState(_setTextScaleFactor))
+      activeStoryScale.stream.listen((_) => setState(_setStoryScale)),
+      activeDevice.stream.listen((_) => setState(_setDeviceDefinition)),
+      activeTheme.stream.listen((_) => setState(_setThemeData)),
+      activeStory.stream.listen((_) => setState(_setStoryFunction)),
     ]);
   }
 
@@ -60,17 +57,17 @@ class _StoryViewState extends State<StoryView> {
     super.dispose();
   }
 
-  void _setDeviceDefinition() {
-    _device = activeDevice.activeDevice;
-  }
+  void _setStoryScale() => _storyScale = activeStoryScale.value;
+
+  void _setDeviceDefinition() => _device = activeDevice.value;
 
   void _setThemeData() {
-    _themeData = activeTheme.activeMetaTheme.theme!;
-    _themeId = activeTheme.activeMetaTheme.id;
+    _themeData = activeTheme.value.theme!;
+    _themeId = activeTheme.value.id;
   }
 
   void _setStoryFunction() {
-    final activeStoryId = activeStory.activeStoryId;
+    final activeStoryId = activeStory.value;
 
     if (activeStoryId == null) {
       _storyKey = null;
@@ -78,46 +75,65 @@ class _StoryViewState extends State<StoryView> {
     } else {
       final metaStories =
           widget.monarchData.metaStoriesMap[activeStoryId.pathKey]!;
-      _storyKey = activeStory.activeStoryId!.storyKey;
+      _storyKey = activeStoryId.storyKey;
       _storyFunction = metaStories.storiesMap[activeStoryId.name];
     }
   }
 
-  void _setTextScaleFactor() {
-    _textScaleFactor = activeTextScaleFactor.activeTextScaleFactor;
-  }
-
   String get keyValue =>
-      '$_storyKey|$_themeId|${_device.id}|${widget.localeKey}';
+      '$_storyKey|$_themeId|${_device.id}|${widget.localeKey}|$_storyScale';
 
   @override
   Widget build(BuildContext context) {
-    ArgumentError.checkNotNull(_device, '_device');
-    ArgumentError.checkNotNull(_themeId, '_themeId');
-    ArgumentError.checkNotNull(_themeData, '_themeData');
-
     if (_storyFunction == null) {
-      return CenteredText('Please select a story');
+      return ScaleScaffold(
+          scale: _storyScale, body: CenteredText('Please select a story'));
     } else {
-      return Theme(
-          key: ObjectKey(keyValue),
-          data: _themeData.copyWith(
-              platform: _device.targetPlatform,
-              // Override visualDensity to use the one set for mobile platform:
-              // - https://github.com/flutter/flutter/pull/66370
-              // - https://github.com/flutter/flutter/issues/63788
-              // Otherwise, flutter desktop uses VisualDensity.compact.
-              visualDensity: VisualDensity.standard),
-          child: MediaQuery(
-              data: MediaQueryData(
-                  textScaleFactor: _textScaleFactor,
-                  size: Size(_device.logicalResolution.width,
-                      _device.logicalResolution.height),
-                  devicePixelRatio: _device.devicePixelRatio),
-              child: Container(
-                  color: _themeData.scaffoldBackgroundColor,
-                  child: _storyFunction!())));
+      return ScaleScaffold(
+        scale: _storyScale,
+        body: Theme(
+            key: ObjectKey(keyValue),
+            data: _themeData.copyWith(
+                platform: _device.targetPlatform,
+                // Override visualDensity to use the one set for mobile platform:
+                // - https://github.com/flutter/flutter/pull/66370
+                // - https://github.com/flutter/flutter/issues/63788
+                // Otherwise, flutter desktop uses VisualDensity.compact.
+                visualDensity: VisualDensity.standard),
+            child: Container(
+                color: _themeData.scaffoldBackgroundColor,
+                child: _storyFunction!())),
+      );
+
+      // If we need to pass the selected device's `devicePixelRatio`, then we
+      // can wrap the Container above with a MediaQuery like:
+      // ```
+      // MediaQuery(
+      //   data: MediaQuery.of(context).copyWith(devicePixelRatio: _device.devicePixelRatio),
+      //   child: Container(...)
+      // ```
+      // Which should copy the MediaQuery from the MaterialApp widget and any changes
+      // we make to [MonarchBinding.window].
+      // However, if we are rendering the story on a desktop window, then using
+      // the device pixel ratio of a different device may render unexpected results
+      // for the user. The device pixel ratio of a desktop window and a mobile device
+      // may be different.
     }
+  }
+}
+
+class ScaleScaffold extends StatelessWidget {
+  final double scale;
+  final Widget? body;
+
+  ScaleScaffold({required this.scale, this.body});
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.scale(
+        scale: scale,
+        alignment: Alignment.topLeft,
+        child: Scaffold(body: body));
   }
 }
 
@@ -130,5 +146,47 @@ class CenteredText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Padding(padding: EdgeInsets.all(10), child: Text(data)));
+  }
+}
+
+class SimpleMessageView extends StatefulWidget {
+  final String message;
+
+  SimpleMessageView({required this.message});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _SimpleMessageViewState();
+  }
+}
+
+class _SimpleMessageViewState extends State<SimpleMessageView> {
+  late double _storyScale;
+  final _streamSubscriptions = <StreamSubscription>[];
+
+  _SimpleMessageViewState();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _setStoryScale();
+
+    _streamSubscriptions
+        .add(activeStoryScale.stream.listen((_) => setState(_setStoryScale)));
+  }
+
+  void _setStoryScale() => _storyScale = activeStoryScale.value;
+
+  @override
+  void dispose() {
+    _streamSubscriptions.forEach((s) => s.cancel());
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleScaffold(
+        scale: _storyScale, body: CenteredText(widget.message));
   }
 }

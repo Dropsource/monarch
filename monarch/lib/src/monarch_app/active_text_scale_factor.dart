@@ -1,29 +1,20 @@
-import 'dart:async';
+import 'active_value.dart';
 
-import 'package:monarch_utils/log.dart';
+const defaultTextScaleFactor = 1.0;
 
-class ActiveTextScaleFactor with Log {
-  double _activeTextScaleFactor = 1.0;
-  double get activeTextScaleFactor => _activeTextScaleFactor;
+class ActiveTextScaleFactor extends ActiveValue<double> {
+  double _activeTextScaleFactor = defaultTextScaleFactor;
 
-  final _activeTextScaleFactorStreamController =
-      StreamController<void>.broadcast();
-  Stream<void> get activeTextScaleFactorStream =>
-      _activeTextScaleFactorStreamController.stream;
+  @override
+  double get value => _activeTextScaleFactor;
 
-  void setActiveTextScaleFactor(double factor) {
-    _activeTextScaleFactor = factor;
-    _activeTextScaleFactorStreamController.add(null);
-    log.fine('active text scale factor set: $factor');
+  @override
+  void setValue(double newValue) {
+    _activeTextScaleFactor = newValue;
   }
 
-  void resetActiveTextScaleFactor() {
-    _activeTextScaleFactor = 1.0;
-  }
-
-  void close() {
-    _activeTextScaleFactorStreamController.close();
-  }
+  @override
+  String get valueSetMessage => 'active text scale factor set: $value';
 }
 
 final activeTextScaleFactor = ActiveTextScaleFactor();

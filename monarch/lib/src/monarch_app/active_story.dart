@@ -1,6 +1,4 @@
-import 'dart:async';
-
-import 'package:monarch_utils/log.dart';
+import 'active_value.dart';
 
 class StoryId {
   final String package;
@@ -26,32 +24,25 @@ class StoryId {
 
   String get pathKey => '$package|$path';
   String get storyKey => '$package|$path|$name';
+
+  @override
+  String toString() => storyKey;
 }
 
-class ActiveStory with Log {
+class ActiveStory extends ActiveValue<StoryId?> {
   StoryId? _activeStoryId;
 
-  StoryId? get activeStoryId => _activeStoryId;
+  @override
+  StoryId? get value => _activeStoryId;
 
-  final _activeStoryChangeStreamController = StreamController<void>.broadcast();
-  Stream<void> get activeStoryChangeStream =>
-      _activeStoryChangeStreamController.stream;
-
-  void setActiveStory(String key) {
-    _activeStoryId = StoryId.fromNodeKey(key);
-    _activeStoryChangeStreamController.add(null);
-    log.info('active story id set: $key');
+  @override
+  void setValue(StoryId? newValue) {
+    _activeStoryId = newValue;
   }
 
-  void resetActiveStory() {
-    _activeStoryId = null;
-    _activeStoryChangeStreamController.add(null);
-    log.info('active story id reset');
-  }
 
-  void close() {
-    _activeStoryChangeStreamController.close();
-  }
+  @override
+  String get valueSetMessage => 'active story id set: ${value ?? 'null'}';
 }
 
 final activeStory = ActiveStory();

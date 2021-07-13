@@ -1,33 +1,23 @@
-import 'dart:async';
-
-import 'package:monarch_utils/log.dart';
-
+import 'active_value.dart';
 import 'device_definitions.dart';
 
-class ActiveDevice with Log {
+class ActiveDevice extends ActiveValue<DeviceDefinition> {
   DeviceDefinition _activeDevice = defaultDeviceDefinition;
-  DeviceDefinition get activeDevice => _activeDevice;
+  @override
+  DeviceDefinition get value => _activeDevice;
 
-  final _activeDeviceStreamController = StreamController<void>.broadcast();
-  Stream<void> get activeDeviceStream => _activeDeviceStreamController.stream;
+  DeviceDefinition getDeviceDefinition(String id) =>
+      deviceDefinitions.firstWhere((definition) => definition.id == id,
+          orElse: (() => throw ArgumentError(
+              'expected to find device definition with id $id')));
 
-  void setActiveDevice(String id) {
-    _activeDevice = deviceDefinitions.firstWhere(
-        (definition) => definition.id == id,
-        orElse: (() => throw ArgumentError(
-            'expected to find device definition with id $id')));
-
-    _activeDeviceStreamController.add(null);
-    log.fine('active device id set: ${_activeDevice.id}');
+  @override
+  void setValue(DeviceDefinition newValue) {
+    _activeDevice = newValue;
   }
 
-  void resetActiveDevice() {
-    _activeDevice = defaultDeviceDefinition;
-  }
-
-  void close() {
-    _activeDeviceStreamController.close();
-  }
+  @override
+  String get valueSetMessage => 'active device id set: ${_activeDevice.id}';
 }
 
 final activeDevice = ActiveDevice();

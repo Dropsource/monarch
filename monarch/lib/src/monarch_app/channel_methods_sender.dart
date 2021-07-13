@@ -22,6 +22,11 @@ class ChannelMethodsSender with Log {
         MethodNames.deviceDefinitions, definitions.toStandardMap());
   }
 
+  Future sendStoryScaleDefinitions(OutboundChannelArgument definitions) {
+    return _invokeMonarchChannelMethod(
+        MethodNames.storyScaleDefinitions, definitions.toStandardMap());
+  }
+
   Future sendStandardThemes(OutboundChannelArgument definitions) {
     return _invokeMonarchChannelMethod(
         MethodNames.standardThemes, definitions.toStandardMap());

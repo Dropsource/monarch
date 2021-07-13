@@ -1,10 +1,7 @@
-import 'dart:async';
-
-import 'package:monarch_utils/log.dart';
-
+import 'active_value.dart';
 import 'monarch_data.dart';
 
-class ActiveTheme with Log {
+class ActiveTheme extends ActiveValue<MetaTheme> {
   final List<MetaTheme> _metaThemes = [];
   List<MetaTheme> get metaThemes => _metaThemes;
 
@@ -12,11 +9,8 @@ class ActiveTheme with Log {
   MetaTheme get defaultMetaTheme => _defaultMetaTheme;
 
   MetaTheme? _activeMetaTheme;
-  MetaTheme get activeMetaTheme => _activeMetaTheme ?? _defaultMetaTheme;
-
-  final _activeMetaThemeStreamController = StreamController<void>.broadcast();
-  Stream<void> get activeMetaThemeStream =>
-      _activeMetaThemeStreamController.stream;
+  @override
+  MetaTheme get value => _activeMetaTheme ?? _defaultMetaTheme;
 
   void setMetaThemes(List<MetaTheme> list) {
     if (list.isEmpty) {
@@ -31,27 +25,18 @@ class ActiveTheme with Log {
         orElse: () => _metaThemes.first);
   }
 
-  void setActiveMetaTheme(String id) {
-    if (metaThemes.isEmpty) {
-      throw StateError('setMetaThemes must be called first');
-    }
+  MetaTheme getMetaTheme(String id) =>
+      metaThemes.firstWhere((metaTheme) => metaTheme.id == id,
+          orElse: (() =>
+              throw ArgumentError('expected to find meta theme with id $id')));
 
-    _activeMetaTheme = metaThemes.firstWhere((metaTheme) => metaTheme.id == id,
-        orElse: (() =>
-            throw ArgumentError('expected to find meta theme with id $id')));
-
-    _activeMetaThemeStreamController.add(null);
-    log.fine('active theme id set: ${_activeMetaTheme!.id}');
+  @override
+  void setValue(MetaTheme newValue) {
+    _activeMetaTheme = newValue;
   }
 
-  void resetActiveMetaTheme() {
-    _activeMetaTheme = defaultMetaTheme;
-    _activeMetaThemeStreamController.add(null);
-  }
-
-  void close() {
-    _activeMetaThemeStreamController.close();
-  }
+  @override
+  String get valueSetMessage => 'active theme id set: ${_activeMetaTheme!.id}';
 }
 
 final activeTheme = ActiveTheme();

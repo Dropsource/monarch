@@ -31,6 +31,7 @@ class _StoryAppState extends State<StoryApp> {
     super.initState();
 
     _isReady = readySignal.isReady;
+
     _streamSubscriptions.add(readySignal.changeStream
         .listen((isReady) => setState(() => _isReady = isReady)));
   }
@@ -48,11 +49,10 @@ class _StoryAppState extends State<StoryApp> {
         return MaterialApp(
             key: ObjectKey('no-localizations'),
             debugShowCheckedModeBanner: false,
-            home: Scaffold(
-                body: StoryView(
+            home: StoryView(
               monarchData: widget.monarchData,
               localeKey: '__NA__',
-            )));
+            ));
       } else {
         return LocalizedStoryApp(monarchData: widget.monarchData);
       }
@@ -124,10 +124,9 @@ class _LocalizedStoryAppState extends State<LocalizedStoryApp> {
           supportedLocales: widget.monarchData.allLocales,
           locale: activeLocale.locale,
           debugShowCheckedModeBanner: false,
-          home: Scaffold(
-              body: StoryView(
-                  monarchData: widget.monarchData,
-                  localeKey: activeLocale.locale!.toLanguageTag())));
+          home: StoryView(
+              monarchData: widget.monarchData,
+              localeKey: activeLocale.locale!.toLanguageTag()));
     } else {
       return SimpleMaterialApp(
           message:
@@ -147,6 +146,6 @@ class SimpleMaterialApp extends StatelessWidget {
     return MaterialApp(
         key: ObjectKey(message),
         debugShowCheckedModeBanner: false,
-        home: Scaffold(body: CenteredText(message)));
+        home: SimpleMessageView(message: message));
   }
 }

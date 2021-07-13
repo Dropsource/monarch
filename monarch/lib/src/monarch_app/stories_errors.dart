@@ -46,7 +46,7 @@ $_message''', wrapWidth: wrapWidth);
 }
 
 String _getActiveStoryErrorMessage() {
-  final activeStoryId = activeStory.activeStoryId;
+  final activeStoryId = activeStory.value;
   if (activeStoryId == null) {
     return 'There was no active story selected.';
   } else {

@@ -132,8 +132,6 @@ ${metaThemesImportStatements.join('\n')}
 ${metaStoriesImportStatements.join('\n')}
 
 void main() {
-  // ui.window.setIsolateDebugName('monarch-isolate');
-  WidgetsFlutterBinding.ensureInitialized();
   startMonarch('$packageName', [${metaLocalizationList.join(', ')}], [${metaThemeList.join(', ')}], $metaStoriesMap);
 }
 
