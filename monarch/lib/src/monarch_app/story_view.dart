@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -44,11 +45,17 @@ class _StoryViewState extends State<StoryView> {
     _setStoryFunction();
 
     _streamSubscriptions.addAll([
-      activeStoryScale.stream.listen((_) => setState(_setStoryScale)),
-      activeDevice.stream.listen((_) => setState(_setDeviceDefinition)),
-      activeTheme.stream.listen((_) => setState(_setThemeData)),
-      activeStory.stream.listen((_) => setState(_setStoryFunction)),
+      activeStoryScale.stream.listen((_) => _popAndSetState(_setStoryScale)),
+      activeDevice.stream.listen((_) => _popAndSetState(_setDeviceDefinition)),
+      activeTheme.stream.listen((_) => _popAndSetState(_setThemeData)),
+      activeStory.stream.listen((_) => _popAndSetState(_setStoryFunction)),
     ]);
+  }
+
+  void _popAndSetState(void Function() fn) {
+    Navigator.popUntil(context,
+        ModalRoute.withName(PlatformDispatcher.instance.defaultRouteName));
+    setState(fn);
   }
 
   @override
@@ -90,9 +97,9 @@ class _StoryViewState extends State<StoryView> {
           scale: _storyScale, body: CenteredText('Please select a story'));
     } else {
       return ScaleScaffold(
+        key: ValueKey(keyValue),
         scale: _storyScale,
         body: Theme(
-            key: ObjectKey(keyValue),
             data: _themeData.copyWith(
                 platform: _device.targetPlatform,
                 // Override visualDensity to use the one set for mobile platform:
@@ -126,7 +133,7 @@ class ScaleScaffold extends StatelessWidget {
   final double scale;
   final Widget? body;
 
-  ScaleScaffold({required this.scale, this.body});
+  ScaleScaffold({Key? key, required this.scale, this.body}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
