@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'active_device.dart';
 import 'active_story.dart';
 import 'active_theme.dart';
-import 'active_story_scale.dart';
 import 'device_definitions.dart';
 import 'monarch_data.dart';
 
@@ -23,7 +22,6 @@ class StoryView extends StatefulWidget {
 }
 
 class _StoryViewState extends State<StoryView> {
-  late double _storyScale;
   late DeviceDefinition _device;
   late String _themeId;
   late ThemeData _themeData;
@@ -39,13 +37,11 @@ class _StoryViewState extends State<StoryView> {
   void initState() {
     super.initState();
 
-    _setStoryScale();
     _setDeviceDefinition();
     _setThemeData();
     _setStoryFunction();
 
     _streamSubscriptions.addAll([
-      activeStoryScale.stream.listen((_) => _popAndSetState(_setStoryScale)),
       activeDevice.stream.listen((_) => _popAndSetState(_setDeviceDefinition)),
       activeTheme.stream.listen((_) => _popAndSetState(_setThemeData)),
       activeStory.stream.listen((_) => _popAndSetState(_setStoryFunction)),
@@ -63,8 +59,6 @@ class _StoryViewState extends State<StoryView> {
     _streamSubscriptions.forEach((s) => s.cancel());
     super.dispose();
   }
-
-  void _setStoryScale() => _storyScale = activeStoryScale.value;
 
   void _setDeviceDefinition() => _device = activeDevice.value;
 
@@ -88,17 +82,15 @@ class _StoryViewState extends State<StoryView> {
   }
 
   String get keyValue =>
-      '$_storyKey|$_themeId|${_device.id}|${widget.localeKey}|$_storyScale';
+      '$_storyKey|$_themeId|${_device.id}|${widget.localeKey}';
 
   @override
   Widget build(BuildContext context) {
     if (_storyFunction == null) {
-      return ScaleScaffold(
-          scale: _storyScale, body: CenteredText('Please select a story'));
+      return SimpleMessageView(message: 'Please select a story');
     } else {
-      return ScaleScaffold(
+      return Scaffold(
         key: ValueKey(keyValue),
-        scale: _storyScale,
         body: Theme(
             data: _themeData.copyWith(
                 platform: _device.targetPlatform,
@@ -129,18 +121,14 @@ class _StoryViewState extends State<StoryView> {
   }
 }
 
-class ScaleScaffold extends StatelessWidget {
-  final double scale;
-  final Widget? body;
+class SimpleMessageView extends StatelessWidget {
+  final String message;
 
-  ScaleScaffold({Key? key, required this.scale, this.body}) : super(key: key);
+  SimpleMessageView({required this.message});
 
   @override
   Widget build(BuildContext context) {
-    return Transform.scale(
-        scale: scale,
-        alignment: Alignment.topLeft,
-        child: Scaffold(body: body));
+    return Scaffold(body: CenteredText(message));
   }
 }
 
@@ -153,47 +141,5 @@ class CenteredText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Padding(padding: EdgeInsets.all(10), child: Text(data)));
-  }
-}
-
-class SimpleMessageView extends StatefulWidget {
-  final String message;
-
-  SimpleMessageView({required this.message});
-
-  @override
-  State<StatefulWidget> createState() {
-    return _SimpleMessageViewState();
-  }
-}
-
-class _SimpleMessageViewState extends State<SimpleMessageView> {
-  late double _storyScale;
-  final _streamSubscriptions = <StreamSubscription>[];
-
-  _SimpleMessageViewState();
-
-  @override
-  void initState() {
-    super.initState();
-
-    _setStoryScale();
-
-    _streamSubscriptions
-        .add(activeStoryScale.stream.listen((_) => setState(_setStoryScale)));
-  }
-
-  void _setStoryScale() => _storyScale = activeStoryScale.value;
-
-  @override
-  void dispose() {
-    _streamSubscriptions.forEach((s) => s.cancel());
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScaleScaffold(
-        scale: _storyScale, body: CenteredText(widget.message));
   }
 }
