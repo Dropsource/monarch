@@ -1,3 +1,9 @@
+## 1.0.0 - 2021-08-25
+- Pop navigator routes when StoryView state changes to close any modals, 
+  alerts or pages that were pushed after the story was rendered.
+- Scale the top-level MaterialApp widget to support scaling of modals and alerts
+- Bumping version to 1.0.0 since API is stable and users depend on it already.
+
 ## 0.2.5 - 2021-07-13
 - Scale story, i.e. zoom story.
 
