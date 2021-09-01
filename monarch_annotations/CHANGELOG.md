@@ -1,3 +1,6 @@
+## 1.0.0 - 2021-09-01
+- Bumping version to 1.0.0 since API is stable and users depend on it already.
+
 ## 0.1.1 - 2020-03-31
 - Update pubspec.yaml with more information.
 
