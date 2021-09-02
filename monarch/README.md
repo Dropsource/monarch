@@ -11,8 +11,13 @@ Find out more at https://monarchapp.io
 * [Write your first story](https://monarchapp.io/docs/write-first-story)
 * [Learn more](https://monarchapp.io/docs/learn-more)
 
-[Monarch logo]: https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch_logo_readme.png
-[Flutter logo]: https://raw.githubusercontent.com/flutter/website/master/src/_assets/image/flutter-lockup-bg.jpg
-
 ## Sample project
 * [Monarch sample project repo](https://github.com/Dropsource/monarch_samples)
+
+## Community
+* Subscribe to our [newsletter](https://docs.google.com/forms/d/e/1FAIpQLSfD9L92rymZnf-z18hWj0gyqrnBFNcc7U3YB3QyiI0_3PMxhQ/viewform?usp=sf_link)
+* Follow us on Twitter [@monarch_app](https://twitter.com/monarch_app)
+* Watch Monarch videos in our [YouTube channel](https://www.youtube.com/channel/UCuG4P4KTQ2HbikL57HIc1OQ)
+
+[Monarch logo]: https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch_logo_readme.png
+[Flutter logo]: https://raw.githubusercontent.com/flutter/website/master/src/_assets/image/flutter-lockup-bg.jpg
