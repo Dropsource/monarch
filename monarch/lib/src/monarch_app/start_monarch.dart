@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:stack_trace/stack_trace.dart';
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';
 
@@ -43,10 +46,12 @@ void startMonarch(
   activeLocale =
       ActiveLocale(LocalizationsDelegateLoader(monarchData.metaLocalizations));
 
-  monarchBinding.attachRootWidget(StoryApp(
-    monarchData: monarchData,
-  ));
-  monarchBinding.scheduleFrame();
+  Chain.capture(() {
+    monarchBinding.attachRootWidget(StoryApp(
+      monarchData: monarchData,
+    ));
+    monarchBinding.scheduleFrame();
+  }, onError: handleBindingError);
 
   receiveChannelMethodCalls();
   await _connectToVmService();

@@ -1,9 +1,27 @@
 import 'package:flutter/foundation.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 import 'active_story.dart';
 import 'monarch_data.dart';
 
 late MonarchData _monarchData;
+
+const error_in_story_marker = '###error-in-story###';
+
+void handleBindingError(Object e, Chain chain) {
+  var activeStory = _getActiveStoryErrorMessage();
+  var folded =
+      chain.foldFrames((frame) => frame.package == 'flutter', terse: true);
+  debugPrintSynchronously('''
+$error_in_story_marker
+════════════════════════════════════════════════════════════════════════════════════════════════════
+$e
+
+$activeStory
+
+$folded
+════════════════════════════════════════════════════════════════════════════════════════════════════''');
+}
 
 void setUpStoriesErrors(MonarchData monarchData) {
   _monarchData = monarchData;
@@ -41,7 +59,7 @@ $activeStory''';
   }
 
   debugPrintSynchronously('''
-###error-in-story###
+$error_in_story_marker
 $_message''', wrapWidth: wrapWidth);
 }
 
@@ -50,12 +68,16 @@ String _getActiveStoryErrorMessage() {
   if (activeStoryId == null) {
     return 'There was no active story selected.';
   } else {
-    final metaStories = _monarchData.metaStoriesMap[activeStoryId.pathKey];
-    if (metaStories == null) {
-      return 'Unexpected - Could not find meta stories for ${activeStoryId.pathKey}';
-    }
-    return '''
+    return _getRelevantStoryMessage(activeStoryId);
+  }
+}
+
+String _getRelevantStoryMessage(StoryId activeStoryId) {
+  final metaStories = _monarchData.metaStoriesMap[activeStoryId.pathKey];
+  if (metaStories == null) {
+    return 'Unexpected - Could not find meta stories for ${activeStoryId.pathKey}';
+  }
+  return '''
 The relevant story is:
   ${metaStories.path} > ${activeStoryId.name}''';
-  }
 }
