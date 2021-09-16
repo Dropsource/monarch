@@ -41,7 +41,7 @@ void startMonarch(
   final monarchData = MonarchData(
       packageName, userMetaLocalizations, userMetaThemes, metaStoriesMap);
 
-  setUpStoriesErrors(monarchData);
+  handleFlutterFrameworkErrors(monarchData);
   activeTheme.setMetaThemes([...userMetaThemes, ...standardMetaThemes]);
   activeLocale =
       ActiveLocale(LocalizationsDelegateLoader(monarchData.metaLocalizations));
@@ -51,7 +51,7 @@ void startMonarch(
       monarchData: monarchData,
     ));
     monarchBinding.scheduleFrame();
-  }, onError: handleBindingError);
+  }, onError: handleStoryRunError);
 
   receiveChannelMethodCalls();
   await _connectToVmService();
