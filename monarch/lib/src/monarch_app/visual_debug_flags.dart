@@ -1,7 +1,11 @@
+import 'package:monarch_utils/log.dart';
+
 import 'channel_methods.dart';
 import 'vm_service_client.dart';
 import 'package:vm_service/vm_service.dart' as vm_service;
 import 'channel_methods_sender.dart';
+
+final _logger = Logger('VisualDebugFlags');
 
 class VisualDebugFlag implements OutboundChannelArgument {
   final String name;
@@ -78,30 +82,36 @@ void handleVmServiceExtensionEvent(vm_service.Event event) {
       data.data.containsKey('extension') &&
       data.data.containsKey('value')) {
 
+    // https://github.com/flutter/devtools/blob/master/packages/devtools_app/lib/src/service_manager.dart
+    // final name = event.json['extensionData']['extension'].toString();
+    // final encodedValue = event.json['extensionData']['value'].toString();
+
     String extension = data.data['extension'];
-    dynamic value = data.data['value'];
+    String value = data.data['value'];
+    var $true = 'true';
 
     switch (extension) {
       case _ExtensionMethods.timeDilation:
+        var time = double.parse(value);
         channelMethodsSender.sendToggleVisualDebugFlag(
-            VisualDebugFlag(_Flags.slowAnimations, value > _timeDilationDisabledValue));
+            VisualDebugFlag(_Flags.slowAnimations, time > _timeDilationDisabledValue));
         break;
 
       case _ExtensionMethods.debugPaint:
         channelMethodsSender.sendToggleVisualDebugFlag(
-            VisualDebugFlag(_Flags.showGuidelines, value));
+            VisualDebugFlag(_Flags.showGuidelines, value == $true));
         break;
       case _ExtensionMethods.debugPaintBaselinesEnabled:
         channelMethodsSender.sendToggleVisualDebugFlag(
-            VisualDebugFlag(_Flags.showBaselines, value));
+            VisualDebugFlag(_Flags.showBaselines, value == $true));
         break;
       case _ExtensionMethods.repaintRainbow:
         channelMethodsSender.sendToggleVisualDebugFlag(
-            VisualDebugFlag(_Flags.highlightRepaints, value));
+            VisualDebugFlag(_Flags.highlightRepaints, value == $true));
         break;
       case _ExtensionMethods.invertOversizedImages:
         channelMethodsSender.sendToggleVisualDebugFlag(
-            VisualDebugFlag(_Flags.highlightOversizedImages, value));
+            VisualDebugFlag(_Flags.highlightOversizedImages, value == $true));
         break;
 
       default:

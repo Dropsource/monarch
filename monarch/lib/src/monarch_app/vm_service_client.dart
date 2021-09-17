@@ -14,8 +14,6 @@ class VmServiceClient with Log {
   late vm_service.VmService _client;
   late String? _isolateId;
 
-  late StreamSubscription _onExtensionEventSubscription;
-
   Future<void> connect() async {
     final info = await developer.Service.getInfo();
     final port = info.serverUri!.port;
@@ -30,19 +28,14 @@ class VmServiceClient with Log {
     _isolateId = vm.isolates!.first.id;
     log.fine('Got isolateId=$_isolateId');
 
-    await _client.streamListen(vm_service.EventStreams.kExtension);
-    _onExtensionEventSubscription = _client.onExtensionEvent
-        .listen(visual_debug.handleVmServiceExtensionEvent);
-
     _onClientDone();
+
+    await _client.streamListen(vm_service.EventStreams.kExtension);
+    _client.onExtensionEvent.listen(visual_debug.handleVmServiceExtensionEvent);
   }
 
   void _onClientDone() async {
     await _client.onDone;
-
-    await _client.streamCancel(vm_service.EventStreams.kExtension);
-    await _onExtensionEventSubscription.cancel();
-
     if (reconnectCount < maxReconnectTries) {
       log.warning(
           'Connection to VmService terminated unexpectedly. Reconnecting. Reconnection try $reconnectCount.');
