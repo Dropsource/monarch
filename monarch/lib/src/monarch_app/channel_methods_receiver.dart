@@ -11,7 +11,7 @@ import 'active_text_scale_factor.dart';
 import 'active_story_scale.dart';
 import 'channel_methods.dart';
 import 'ready_signal.dart';
-import 'vm_service_client.dart';
+import 'visual_debug_flags.dart' as visual_debug;
 
 final logger = Logger('ChannelMethodsReceiver');
 
@@ -48,38 +48,39 @@ Future<dynamic> _handler(MethodCall call) async {
       break;
 
     case MethodNames.loadStory:
-      final String storyKey = args!['storyKey'];
+      String storyKey = args!['storyKey'];
       activeStory.value = StoryId.fromNodeKey(storyKey);
       break;
 
     case MethodNames.setActiveLocale:
-      final String locale = args!['locale'];
+      String locale = args!['locale'];
       activeLocale.setActiveLocaleTag(locale);
       break;
 
     case MethodNames.setActiveTheme:
-      final String themeId = args!['themeId'];
+      String themeId = args!['themeId'];
       activeTheme.value = activeTheme.getMetaTheme(themeId);
       break;
 
     case MethodNames.setActiveDevice:
-      final String deviceId = args!['deviceId'];
+      String deviceId = args!['deviceId'];
       activeDevice.value = activeDevice.getDeviceDefinition(deviceId);
       break;
 
     case MethodNames.setTextScaleFactor:
-      final double factor = args!['factor'];
+      double factor = args!['factor'];
       activeTextScaleFactor.value = factor;
       break;
 
-    case MethodNames.toggleDebugPaint:
-      final bool isEnabled = args!['isEnabled'];
-      await vmServiceClient.toogleDebugPaint(isEnabled);
+    case MethodNames.setStoryScale:
+      double scale = args!['scale'];
+      activeStoryScale.value = scale;
       break;
 
-    case MethodNames.setStoryScale:
-      final double scale = args!['scale'];
-      activeStoryScale.value = scale;
+    case MethodNames.toggleVisualDebugFlag:
+      String name = args!['name'];
+      bool isEnabled = args['isEnabled'];
+      await visual_debug.toggleFlagViaVmServiceExtension(name, isEnabled);
       break;
 
     default:

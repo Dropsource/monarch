@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:vm_service/vm_service.dart' as vm_service;
 import 'package:vm_service/vm_service_io.dart';
 import 'package:monarch_utils/log.dart';
+import 'visual_debug_flags.dart' as visual_debug;
 
 const maxReconnectTries = 5;
 int reconnectCount = 0;
@@ -11,6 +13,8 @@ class VmServiceClient with Log {
 
   late vm_service.VmService _client;
   late String? _isolateId;
+
+  late StreamSubscription _onExtensionEventSubscription;
 
   Future<void> connect() async {
     final info = await developer.Service.getInfo();
@@ -26,32 +30,36 @@ class VmServiceClient with Log {
     _isolateId = vm.isolates!.first.id;
     log.fine('Got isolateId=$_isolateId');
 
+    await _client.streamListen(vm_service.EventStreams.kExtension);
+    _onExtensionEventSubscription = _client.onExtensionEvent
+        .listen(visual_debug.handleVmServiceExtensionEvent);
+
     _onClientDone();
   }
 
-  void _onClientDone() {
-    _client.onDone.then((_) async {
-      if (reconnectCount < maxReconnectTries) {
-        log.warning(
-            'Connection to VmService terminated unexpectedly. Reconnecting. Reconnection try $reconnectCount.');
-        reconnectCount++;
-        await connect();
-      } else {
-        log.warning(
-            'Connection to VmService terminated unexpectedly. Max reconnection tries reached.');
-      }
-    });
+  void _onClientDone() async {
+    await _client.onDone;
+
+    await _client.streamCancel(vm_service.EventStreams.kExtension);
+    await _onExtensionEventSubscription.cancel();
+
+    if (reconnectCount < maxReconnectTries) {
+      log.warning(
+          'Connection to VmService terminated unexpectedly. Reconnecting. Reconnection try $reconnectCount.');
+      reconnectCount++;
+      await connect();
+    } else {
+      log.warning(
+          'Connection to VmService terminated unexpectedly. Max reconnection tries reached.');
+    }
   }
 
-  Future<void> toogleDebugPaint(bool isEnabled) async {
-    ArgumentError.checkNotNull(isEnabled, 'isEnabled');
-
+  Future<void> callServiceExtension(
+      String method, Map<String, dynamic> args) async {
     try {
-      await _callServiceExtensionMethod(
-          'ext.flutter.debugPaint', {'enabled': isEnabled});
+      await _callServiceExtensionMethod(method, args);
     } catch (e, s) {
-      log.severe(
-          'Error while calling debug paint method, isEnabled=$isEnabled', e, s);
+      log.severe('Error calling vm service extension method $method', e, s);
     }
   }
 
@@ -67,7 +75,7 @@ class VmServiceClient with Log {
   /// }
   Future<vm_service.Response> _callServiceExtensionMethod(
           String method, Map<String, dynamic> args) =>
-      _client.callMethod(method, isolateId: _isolateId, args: args);
+      _client.callServiceExtension(method, isolateId: _isolateId, args: args);
 }
 
 class VmServiceLog extends vm_service.Log with Log {

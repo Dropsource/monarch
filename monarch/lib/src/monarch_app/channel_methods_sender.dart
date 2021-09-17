@@ -45,6 +45,11 @@ class ChannelMethodsSender with Log {
   Future sendReadySignal() {
     return _invokeMonarchChannelMethod(MethodNames.readySignal);
   }
+
+  Future sendToggleVisualDebugFlag(OutboundChannelArgument visualDebugFlag) {
+    return _invokeMonarchChannelMethod(
+        MethodNames.toggleVisualDebugFlag, visualDebugFlag.toStandardMap());
+  }
 }
 
 final channelMethodsSender = ChannelMethodsSender();
