@@ -47,7 +47,7 @@ void startMonarch(
       ActiveLocale(LocalizationsDelegateLoader(monarchData.metaLocalizations));
 
   Chain.capture(() {
-    monarchBinding.attachRootWidget(StoryApp(
+    monarchBinding.attachRootWidget(MonarchStoryApp(
       monarchData: monarchData,
     ));
     monarchBinding.scheduleFrame();

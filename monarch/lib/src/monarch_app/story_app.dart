@@ -10,23 +10,23 @@ import 'monarch_data.dart';
 import 'ready_signal.dart';
 import 'story_view.dart';
 
-class StoryApp extends StatefulWidget {
+class MonarchStoryApp extends StatefulWidget {
   final MonarchData monarchData;
 
-  StoryApp({required this.monarchData});
+  MonarchStoryApp({required this.monarchData});
 
   @override
   State<StatefulWidget> createState() {
-    return _StoryAppState();
+    return _MonarchStoryAppState();
   }
 }
 
-class _StoryAppState extends State<StoryApp> {
+class _MonarchStoryAppState extends State<MonarchStoryApp> {
   late bool _isReady;
   late double _storyScale;
   final _streamSubscriptions = <StreamSubscription>[];
 
-  _StoryAppState();
+  _MonarchStoryAppState();
 
   @override
   void initState() {
@@ -52,47 +52,47 @@ class _StoryAppState extends State<StoryApp> {
 
   @override
   Widget build(BuildContext context) {
-    return StoryAppHelper(
+    return MonarchStoryAppHelper(
         isReady: _isReady, monarchData: widget.monarchData, scale: _storyScale);
   }
 }
 
-class StoryAppHelper extends StatelessWidget {
+class MonarchStoryAppHelper extends StatelessWidget {
   final MonarchData monarchData;
   final bool isReady;
   final double scale;
 
-  StoryAppHelper(
+  MonarchStoryAppHelper(
       {required this.monarchData, required this.isReady, required this.scale});
 
   @override
   Widget build(BuildContext context) {
     if (isReady) {
       if (monarchData.metaLocalizations.isEmpty) {
-        return ScaleMaterialApp(
+        return MonarchScaleMaterialApp(
             key: ValueKey('no-localizations'),
             scale: scale,
-            home: StoryView(
+            home: MonarchStoryView(
               monarchData: monarchData,
               localeKey: '__NA__',
             ));
       } else {
-        return LocalizedStoryApp(monarchData: monarchData, scale: scale);
+        return MonarchLocalizedStoryApp(monarchData: monarchData, scale: scale);
       }
     } else {
-      return ScaleMaterialApp(
+      return MonarchScaleMaterialApp(
           key: ValueKey('loading'),
           scale: scale,
-          home: SimpleMessageView(message: 'Loading...'));
+          home: MonarchSimpleMessageView(message: 'Loading...'));
     }
   }
 }
 
-class ScaleMaterialApp extends StatelessWidget {
+class MonarchScaleMaterialApp extends StatelessWidget {
   final double scale;
   final Widget? home;
 
-  ScaleMaterialApp({Key? key, required this.scale, this.home})
+  MonarchScaleMaterialApp({Key? key, required this.scale, this.home})
       : super(key: key);
 
   @override
@@ -104,7 +104,7 @@ class ScaleMaterialApp extends StatelessWidget {
   }
 }
 
-class LocalizedScaleMaterialApp extends StatelessWidget {
+class MonarchLocalizedScaleMaterialApp extends StatelessWidget {
   final double scale;
   final Widget? home;
 
@@ -112,7 +112,7 @@ class LocalizedScaleMaterialApp extends StatelessWidget {
   final Iterable<Locale> supportedLocales;
   final Locale? locale;
 
-  LocalizedScaleMaterialApp(
+  MonarchLocalizedScaleMaterialApp(
       {Key? key,
       required this.scale,
       this.home,
@@ -135,23 +135,23 @@ class LocalizedScaleMaterialApp extends StatelessWidget {
   }
 }
 
-class LocalizedStoryApp extends StatefulWidget {
+class MonarchLocalizedStoryApp extends StatefulWidget {
   final MonarchData monarchData;
   final double scale;
 
-  LocalizedStoryApp({required this.monarchData, required this.scale});
+  MonarchLocalizedStoryApp({required this.monarchData, required this.scale});
 
   @override
   State<StatefulWidget> createState() {
-    return _LocalizedStoryAppState();
+    return _MonarchLocalizedStoryAppState();
   }
 }
 
-class _LocalizedStoryAppState extends State<LocalizedStoryApp> {
+class _MonarchLocalizedStoryAppState extends State<MonarchLocalizedStoryApp> {
   late LocaleLoadingStatus _loadingStatus;
   final _streamSubscriptions = <StreamSubscription>[];
 
-  _LocalizedStoryAppState();
+  _MonarchLocalizedStoryAppState();
 
   @override
   void initState() {
@@ -172,19 +172,19 @@ class _LocalizedStoryAppState extends State<LocalizedStoryApp> {
   Widget build(BuildContext context) {
     switch (_loadingStatus) {
       case LocaleLoadingStatus.inProgress:
-        return ScaleMaterialApp(
+        return MonarchScaleMaterialApp(
             key: ValueKey('loading-locale'),
             scale: widget.scale,
-            home: SimpleMessageView(message: 'Loading locale...'));
+            home: MonarchSimpleMessageView(message: 'Loading locale...'));
 
       case LocaleLoadingStatus.done:
         return _buildOnLocaleLoaded();
 
       case LocaleLoadingStatus.error:
-        return ScaleMaterialApp(
+        return MonarchScaleMaterialApp(
             key: ValueKey('unexpected-error'),
             scale: widget.scale,
-            home: SimpleMessageView(
+            home: MonarchSimpleMessageView(
                 message: 'Unexpected error. Please see console for details.'));
 
       default:
@@ -195,7 +195,7 @@ class _LocalizedStoryAppState extends State<LocalizedStoryApp> {
   Widget _buildOnLocaleLoaded() {
     activeLocale.assertIsLoaded();
     if (activeLocale.canLoad!) {
-      return LocalizedScaleMaterialApp(
+      return MonarchLocalizedScaleMaterialApp(
           key: ObjectKey(activeLocale.locale!.toLanguageTag()),
           scale: widget.scale,
           localizationsDelegates: [
@@ -204,15 +204,15 @@ class _LocalizedStoryAppState extends State<LocalizedStoryApp> {
           ],
           supportedLocales: widget.monarchData.allLocales,
           locale: activeLocale.locale,
-          home: StoryView(
+          home: MonarchStoryView(
               monarchData: widget.monarchData,
               localeKey: activeLocale.locale!.toLanguageTag()));
     } else {
-      return ScaleMaterialApp(
+      return MonarchScaleMaterialApp(
           key: ValueKey(
               'error-loading-locale-${activeLocale.locale!.toLanguageTag()}'),
           scale: widget.scale,
-          home: SimpleMessageView(
+          home: MonarchSimpleMessageView(
               message:
                   'Error loading locale ${activeLocale.locale!.toLanguageTag()}. '
                   'Please see console for details.'));
