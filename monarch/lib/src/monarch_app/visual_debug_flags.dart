@@ -48,8 +48,11 @@ Future<void> toggleFlagViaVmServiceExtension(
       // > of the extension name (ext.flutter.extensionName => extensionName).
       // File: https://github.com/flutter/devtools/blob/master/packages/devtools_app/lib/src/service_manager.dart
       // Method: _callServiceExtension
-      await vmServiceClient.callServiceExtension(_ExtensionMethods.timeDilation,
-          {'timeDilation': isEnabled ? _timeDilationEnabledValue : _timeDilationDisabledValue});
+      await vmServiceClient
+          .callServiceExtension(_ExtensionMethods.timeDilation, {
+        'timeDilation':
+            isEnabled ? _timeDilationEnabledValue : _timeDilationDisabledValue
+      });
       break;
 
     case _Flags.showGuidelines:
@@ -74,55 +77,56 @@ Future<void> toggleFlagViaVmServiceExtension(
   }
 }
 
+/// Handles VmService Extension Events which may be triggered by devtools.
+/// We only care about visual debugging events.
+///
+/// Sample event.json!['extensionData']:
+/// {extension: ext.flutter.debugPaint, value: false} --show guidelines
+/// {extension: ext.flutter.timeDilation, value: 5.0}  --slow animations ON
+/// {extension: ext.flutter.timeDilation, value: 1.0}  --slow animations OFF
+/// {extension: ext.flutter.debugPaintBaselinesEnabled, value: true} -- show baselines
+/// {extension: ext.flutter.repaintRainbow, value: true} --highlight repaints
+/// {extension: ext.flutter.invertOversizedImages, value: true} --highlight oversized images
+///
+/// You can find similar code in the devtools_app source code, ServiceManager._handleExtensionEvent:
+/// https://github.com/flutter/devtools/blob/master/packages/devtools_app/lib/src/service_manager.dart
 void handleVmServiceExtensionEvent(vm_service.Event event) {
-  var kind = event.extensionKind;
-  var data = event.extensionData;
-  if (kind == 'Flutter.ServiceExtensionStateChanged' &&
-      data != null &&
-      data.data.containsKey('extension') &&
-      data.data.containsKey('value')) {
+  try {
+    if (event.extensionKind == 'Flutter.ServiceExtensionStateChanged') {
+      var extension = event.json!['extensionData']['extension'].toString();
+      var value = event.json!['extensionData']['value'].toString();
 
-    // https://github.com/flutter/devtools/blob/master/packages/devtools_app/lib/src/service_manager.dart
-    // final name = event.json['extensionData']['extension'].toString();
-    // final encodedValue = event.json['extensionData']['value'].toString();
+      var $true = 'true';
 
-    String extension = data.data['extension'];
-    String value = data.data['value'];
-    var $true = 'true';
+      switch (extension) {
+        case _ExtensionMethods.timeDilation:
+          var time = double.parse(value);
+          channelMethodsSender.sendToggleVisualDebugFlag(VisualDebugFlag(
+              _Flags.slowAnimations, time > _timeDilationDisabledValue));
+          break;
 
-    switch (extension) {
-      case _ExtensionMethods.timeDilation:
-        var time = double.parse(value);
-        channelMethodsSender.sendToggleVisualDebugFlag(
-            VisualDebugFlag(_Flags.slowAnimations, time > _timeDilationDisabledValue));
-        break;
+        case _ExtensionMethods.debugPaint:
+          channelMethodsSender.sendToggleVisualDebugFlag(
+              VisualDebugFlag(_Flags.showGuidelines, value == $true));
+          break;
+        case _ExtensionMethods.debugPaintBaselinesEnabled:
+          channelMethodsSender.sendToggleVisualDebugFlag(
+              VisualDebugFlag(_Flags.showBaselines, value == $true));
+          break;
+        case _ExtensionMethods.repaintRainbow:
+          channelMethodsSender.sendToggleVisualDebugFlag(
+              VisualDebugFlag(_Flags.highlightRepaints, value == $true));
+          break;
+        case _ExtensionMethods.invertOversizedImages:
+          channelMethodsSender.sendToggleVisualDebugFlag(
+              VisualDebugFlag(_Flags.highlightOversizedImages, value == $true));
+          break;
 
-      case _ExtensionMethods.debugPaint:
-        channelMethodsSender.sendToggleVisualDebugFlag(
-            VisualDebugFlag(_Flags.showGuidelines, value == $true));
-        break;
-      case _ExtensionMethods.debugPaintBaselinesEnabled:
-        channelMethodsSender.sendToggleVisualDebugFlag(
-            VisualDebugFlag(_Flags.showBaselines, value == $true));
-        break;
-      case _ExtensionMethods.repaintRainbow:
-        channelMethodsSender.sendToggleVisualDebugFlag(
-            VisualDebugFlag(_Flags.highlightRepaints, value == $true));
-        break;
-      case _ExtensionMethods.invertOversizedImages:
-        channelMethodsSender.sendToggleVisualDebugFlag(
-            VisualDebugFlag(_Flags.highlightOversizedImages, value == $true));
-        break;
-
-      default:
-      // no-op
+        default:
+        // no-op
+      }
     }
-
-    /// {extension: ext.flutter.debugPaint, value: false} --show guidelines
-    /// {extension: ext.flutter.timeDilation, value: 5.0}  --slow animations ON
-    /// {extension: ext.flutter.timeDilation, value: 1.0}  --slow animations OFF
-    /// {extension: ext.flutter.debugPaintBaselinesEnabled, value: true} -- show baselines
-    /// {extension: ext.flutter.repaintRainbow, value: true} --highlight repaints
-    /// {extension: ext.flutter.invertOversizedImages, value: true} --highlight oversized images
+  } catch (e, s) {
+    _logger.warning('Error while handling VmService extension event', e, s);
   }
 }
