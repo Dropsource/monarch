@@ -9,7 +9,7 @@ class ChannelMethodsSender with Log {
 
   Future<T?> _invokeMonarchChannelMethod<T>(String method,
       [dynamic arguments]) async {
-    // log.fine('sending channel method: $method');
+    log.finest('sending channel method: $method');
     return _dropsourceMonarchChannel.invokeMethod(method, arguments);
   }
 

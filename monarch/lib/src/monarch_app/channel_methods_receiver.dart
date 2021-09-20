@@ -19,7 +19,7 @@ void receiveChannelMethodCalls() {
   // logger.level = LogLevel.ALL;
   Channels.dropsourceMonarchChannel
       .setMethodCallHandler((MethodCall call) async {
-    // logger.finest('channel method received: ${call.method}');
+    logger.finest('channel method received: ${call.method}');
 
     try {
       return await _handler(call);
