@@ -5,14 +5,14 @@ import 'package:monarch_utils/log.dart';
 
 import 'localizations_delegate_loader.dart';
 
-enum LocaleLoadingStatus { inProgress, done, error }
+enum LocaleLoadingStatus { initial, inProgress, done, error }
 
 class ActiveLocale with Log {
   final LocalizationsDelegateLoader loader;
 
   ActiveLocale(this.loader);
 
-  late LocaleLoadingStatus loadingStatus;
+  LocaleLoadingStatus loadingStatus = LocaleLoadingStatus.initial;
 
   Locale? _activeLocale;
   Locale? get locale => _activeLocale;

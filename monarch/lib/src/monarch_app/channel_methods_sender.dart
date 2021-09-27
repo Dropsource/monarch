@@ -9,7 +9,7 @@ class ChannelMethodsSender with Log {
 
   Future<T?> _invokeMonarchChannelMethod<T>(String method,
       [dynamic arguments]) async {
-    log.info('sending channel method: $method');
+    log.finest('sending channel method: $method');
     return _dropsourceMonarchChannel.invokeMethod(method, arguments);
   }
 
@@ -44,6 +44,11 @@ class ChannelMethodsSender with Log {
 
   Future sendReadySignal() {
     return _invokeMonarchChannelMethod(MethodNames.readySignal);
+  }
+
+  Future sendToggleVisualDebugFlag(OutboundChannelArgument visualDebugFlag) {
+    return _invokeMonarchChannelMethod(
+        MethodNames.toggleVisualDebugFlag, visualDebugFlag.toStandardMap());
   }
 }
 

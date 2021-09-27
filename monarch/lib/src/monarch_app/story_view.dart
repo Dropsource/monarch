@@ -9,19 +9,19 @@ import 'active_theme.dart';
 import 'device_definitions.dart';
 import 'monarch_data.dart';
 
-class StoryView extends StatefulWidget {
+class MonarchStoryView extends StatefulWidget {
   final MonarchData monarchData;
   final String localeKey;
 
-  StoryView({required this.monarchData, required this.localeKey});
+  MonarchStoryView({required this.monarchData, required this.localeKey});
 
   @override
   State<StatefulWidget> createState() {
-    return _StoryViewState();
+    return _MonarchStoryViewState();
   }
 }
 
-class _StoryViewState extends State<StoryView> {
+class _MonarchStoryViewState extends State<MonarchStoryView> {
   late DeviceDefinition _device;
   late String _themeId;
   late ThemeData _themeData;
@@ -31,7 +31,7 @@ class _StoryViewState extends State<StoryView> {
 
   final _streamSubscriptions = <StreamSubscription>[];
 
-  _StoryViewState();
+  _MonarchStoryViewState();
 
   @override
   void initState() {
@@ -87,7 +87,7 @@ class _StoryViewState extends State<StoryView> {
   @override
   Widget build(BuildContext context) {
     if (_storyFunction == null) {
-      return SimpleMessageView(message: 'Please select a story');
+      return MonarchSimpleMessageView(message: 'Please select a story');
     } else {
       return Scaffold(
         key: ValueKey(keyValue),
@@ -121,19 +121,19 @@ class _StoryViewState extends State<StoryView> {
   }
 }
 
-class SimpleMessageView extends StatelessWidget {
+class MonarchSimpleMessageView extends StatelessWidget {
   final String message;
 
-  SimpleMessageView({required this.message});
+  MonarchSimpleMessageView({required this.message});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: CenteredText(message));
+    return Scaffold(body: MonarchCenteredText(message));
   }
 }
 
-class CenteredText extends StatelessWidget {
-  CenteredText(this.data);
+class MonarchCenteredText extends StatelessWidget {
+  MonarchCenteredText(this.data);
 
   final String data;
 

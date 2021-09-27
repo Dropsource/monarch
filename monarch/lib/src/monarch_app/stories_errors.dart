@@ -1,18 +1,42 @@
 import 'package:flutter/foundation.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 import 'active_story.dart';
 import 'monarch_data.dart';
 
 late MonarchData _monarchData;
 
-void setUpStoriesErrors(MonarchData monarchData) {
+const error_in_story_marker = '###error-in-story###';
+
+/// Handles errors caught while running a story. These errors are caught by
+/// Monarch, they are *not* caught by the Flutter Framework.
+void handleStoryRunError(Object e, Chain chain) {
+  var activeStory = _getActiveStoryErrorMessage();
+  var folded =
+      chain.foldFrames((frame) => frame.package == 'flutter', terse: true);
+  debugPrintSynchronously('''
+$error_in_story_marker
+══╡ EXCEPTION CAUGHT BY MONARCH ╞═══════════════════════════════════════════════════════════════════
+The following message was thrown running a story:
+$e
+
+$activeStory
+
+When the exception was thrown, this was the stack:
+$folded
+════════════════════════════════════════════════════════════════════════════════════════════════════''');
+}
+
+/// Handles errors caught by the Flutter Framework. It replaces the original
+/// implementation of `debugPrint` with our own.
+void handleFlutterFrameworkErrors(MonarchData monarchData) {
   _monarchData = monarchData;
 
   // Replacing original implementation of `debugPrint` with our own.
-  // `dumpErrorToConsole` calls `debugPrint`.
   debugPrint = _debugPrintMonarch;
 
   FlutterError.onError = (FlutterErrorDetails details) {
+    // `dumpErrorToConsole` calls `debugPrint`.
     FlutterError.dumpErrorToConsole(details, forceReport: true);
   };
 }
@@ -22,12 +46,12 @@ void _debugPrintMonarch(String? message, {int? wrapWidth}) {
 
   const stackPrompt = 'When the exception was thrown, this was the stack:';
 
-  final stackIndex = message?.indexOf(stackPrompt) ?? -1;
+  var stackIndex = message?.indexOf(stackPrompt) ?? -1;
   String _message;
 
   if (stackIndex > -1) {
-    final preStack = message!.substring(0, stackIndex).trimRight();
-    final stack = message.substring(stackIndex);
+    var preStack = message!.substring(0, stackIndex).trimRight();
+    var stack = message.substring(stackIndex);
     _message = '''
 $preStack
 
@@ -41,21 +65,25 @@ $activeStory''';
   }
 
   debugPrintSynchronously('''
-###error-in-story###
+$error_in_story_marker
 $_message''', wrapWidth: wrapWidth);
 }
 
 String _getActiveStoryErrorMessage() {
-  final activeStoryId = activeStory.value;
+  var activeStoryId = activeStory.value;
   if (activeStoryId == null) {
     return 'There was no active story selected.';
   } else {
-    final metaStories = _monarchData.metaStoriesMap[activeStoryId.pathKey];
-    if (metaStories == null) {
-      return 'Unexpected - Could not find meta stories for ${activeStoryId.pathKey}';
-    }
-    return '''
+    return _getRelevantStoryMessage(activeStoryId);
+  }
+}
+
+String _getRelevantStoryMessage(StoryId activeStoryId) {
+  var metaStories = _monarchData.metaStoriesMap[activeStoryId.pathKey];
+  if (metaStories == null) {
+    return 'Unexpected - Could not find meta stories for ${activeStoryId.pathKey}';
+  }
+  return '''
 The relevant story is:
   ${metaStories.path} > ${activeStoryId.name}''';
-  }
 }

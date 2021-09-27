@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:stack_trace/stack_trace.dart';
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';
 
@@ -38,15 +41,17 @@ void startMonarch(
   final monarchData = MonarchData(
       packageName, userMetaLocalizations, userMetaThemes, metaStoriesMap);
 
-  setUpStoriesErrors(monarchData);
+  handleFlutterFrameworkErrors(monarchData);
   activeTheme.setMetaThemes([...userMetaThemes, ...standardMetaThemes]);
   activeLocale =
       ActiveLocale(LocalizationsDelegateLoader(monarchData.metaLocalizations));
 
-  monarchBinding.attachRootWidget(StoryApp(
-    monarchData: monarchData,
-  ));
-  monarchBinding.scheduleFrame();
+  Chain.capture(() {
+    monarchBinding.attachRootWidget(MonarchStoryApp(
+      monarchData: monarchData,
+    ));
+    monarchBinding.scheduleFrame();
+  }, onError: handleStoryRunError);
 
   receiveChannelMethodCalls();
   await _connectToVmService();
