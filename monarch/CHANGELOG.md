@@ -1,3 +1,10 @@
+## 1.1.0-pre.1 - 2021-09-27
+- Improve error capture and error output
+- Visual debug flags
+- Update major versions of packages vm_service and analyzer
+- Prefix Monarch widgets
+- Simplify Monarch widget tree
+
 ## 1.0.1 - 2021-09-01
 - Upgrade monarch_annotations and monarch_utils to ^1.0.0.
 
