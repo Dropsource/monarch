@@ -32,6 +32,7 @@ class MethodNames {
   static const setActiveTheme = 'dropsource.monarch.setActiveTheme';
   static const setActiveDevice = 'dropsource.monarch.setActiveDevice';
   static const setTextScaleFactor = 'dropsource.monarch.setTextScaleFactor';
-  static const toggleVisualDebugFlag = 'dropsource.monarch.toggleVisualDebugFlag';
+  static const toggleVisualDebugFlag =
+      'dropsource.monarch.toggleVisualDebugFlag';
   static const setStoryScale = 'dropsource.monarch.setStoryScale';
 }
