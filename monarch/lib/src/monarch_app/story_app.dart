@@ -40,7 +40,8 @@ class _MonarchStoryAppState extends State<MonarchStoryApp> {
     _streamSubscriptions.addAll([
       readySignal.changeStream
           .listen((isReady) => setState(() => _isReady = isReady)),
-      activeStoryScale.stream.listen((value) => _storyScale = value),
+      activeStoryScale.stream
+          .listen((value) => setState(() => _storyScale = value)),
       activeLocale.loadingStatusStream
           .listen((status) => setState(() => _localeLoadingStatus = status))
     ]);

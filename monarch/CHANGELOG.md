@@ -1,3 +1,6 @@
+## 1.1.0-pre.2 - 2021-09-29
+- Fix scaling issue
+
 ## 1.1.0-pre.1 - 2021-09-27
 - Improve error capture and error output
 - Visual debug flags
