@@ -49,7 +49,9 @@ class _MonarchStoryAppState extends State<MonarchStoryApp> {
 
   @override
   void dispose() {
-    _streamSubscriptions.forEach((s) => s.cancel());
+    for (var s in _streamSubscriptions) {
+      s.cancel();
+    }
     super.dispose();
   }
 

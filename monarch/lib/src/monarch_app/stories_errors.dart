@@ -6,7 +6,7 @@ import 'monarch_data.dart';
 
 late MonarchData _monarchData;
 
-const error_in_story_marker = '###error-in-story###';
+const errorInStoryMarker = '###error-in-story###';
 
 /// Handles errors caught while running a story. These errors are caught by
 /// Monarch, they are *not* caught by the Flutter Framework.
@@ -15,7 +15,7 @@ void handleStoryRunError(Object e, Chain chain) {
   var folded =
       chain.foldFrames((frame) => frame.package == 'flutter', terse: true);
   debugPrintSynchronously('''
-$error_in_story_marker
+$errorInStoryMarker
 ══╡ EXCEPTION CAUGHT BY MONARCH ╞═══════════════════════════════════════════════════════════════════
 The following message was thrown running a story:
 $e
@@ -65,7 +65,7 @@ $activeStory''';
   }
 
   debugPrintSynchronously('''
-$error_in_story_marker
+$errorInStoryMarker
 $_message''', wrapWidth: wrapWidth);
 }
 

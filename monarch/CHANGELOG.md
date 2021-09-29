@@ -1,3 +1,6 @@
+## 1.1.0-pre.3 - 2021-09-29
+- Use lints instead of pedantic
+
 ## 1.1.0-pre.2 - 2021-09-29
 - Fix scaling issue
 

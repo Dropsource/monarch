@@ -56,7 +56,9 @@ class _MonarchStoryViewState extends State<MonarchStoryView> {
 
   @override
   void dispose() {
-    _streamSubscriptions.forEach((s) => s.cancel());
+    for (var s in _streamSubscriptions) {
+      s.cancel();
+    }
     super.dispose();
   }
 
