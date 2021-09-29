@@ -1,3 +1,6 @@
+## 1.0.1 - 2021-09-29
+- Replace pedantic with lints.
+
 ## 1.0.0 - 2021-09-01
 - Bumping version to 1.0.0 since API is stable and users depend on it already.
 
