@@ -1,3 +1,7 @@
+## 1.1.0-pre.4 - 2021-10-01
+- Downgrade major versions of analyzer and vm_service 
+- Compatible with Flutter SDK versions less than 2.4.0-4.0.pre
+
 ## 1.1.0-pre.3 - 2021-09-29
 - Use lints instead of pedantic
 
