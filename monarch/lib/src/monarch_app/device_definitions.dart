@@ -58,23 +58,27 @@ class DeviceDefinitions implements OutboundChannelArgument {
   }
 }
 
-const iPhone12DeviceDefinition = DeviceDefinition(
-  id: 'ios-iphone-12',
-  name: 'iPhone 12',
-  logicalResolution: LogicalResolution(
-    height: 844,
-    width: 390,
-  ),
-  devicePixelRatio: 3.0,
-  targetPlatform: TargetPlatform.iOS,
-);
+const iPhone13DeviceDefinition = DeviceDefinition(
+    id: 'ios-iphone-13',
+    name: 'iPhone 13',
+    logicalResolution: LogicalResolution(
+      height: 844,
+      width: 390,
+    ),
+    devicePixelRatio: 3.0,
+    targetPlatform: TargetPlatform.iOS,
+  );
 
 /// @GOTCHA: if you change the [defaultDeviceDefinition] here, make sure to
 /// also change it in:
 /// - monarch_mac_app/monarch/monarch/DeviceDefinition.swift
 /// - monarch_windows_app/device_definition.cpp
 /// Then, release mac and windows builds.
-final defaultDeviceDefinition = iPhone12DeviceDefinition;
+///
+/// Make sure to not delete a default device that is used in previous versions
+/// of the desktop apps. Otherwise, users running different versions may see
+/// unexpected errors.
+final defaultDeviceDefinition = iPhone13DeviceDefinition;
 
 /// iOS logical resolutions can be found here:
 /// - https://www.dimensions.com/collection/apple-ipad
@@ -83,7 +87,47 @@ final defaultDeviceDefinition = iPhone12DeviceDefinition;
 /// Android: Use this calculator to get logical resolutions and device pixel ratios:
 /// - https://docs.google.com/spreadsheets/d/1b_Or8OKIorU3G1CfQJZrGBOX4l-H4VBDKQrUY5uoW3I/edit?usp=sharing
 const deviceDefinitions = [
-  iPhone12DeviceDefinition,
+  iPhone13DeviceDefinition,
+  DeviceDefinition(
+    id: 'ios-iphone-13-mini',
+    name: 'iPhone 13 Mini',
+    logicalResolution: LogicalResolution(
+      height: 812,
+      width: 375,
+    ),
+    devicePixelRatio: 3.0,
+    targetPlatform: TargetPlatform.iOS,
+  ),
+  DeviceDefinition(
+    id: 'ios-iphone-13-pro',
+    name: 'iPhone 13 Pro',
+    logicalResolution: LogicalResolution(
+      height: 844,
+      width: 390,
+    ),
+    devicePixelRatio: 3.0,
+    targetPlatform: TargetPlatform.iOS,
+  ),
+  DeviceDefinition(
+    id: 'ios-iphone-13-pro-max',
+    name: 'iPhone 13 Pro Max',
+    logicalResolution: LogicalResolution(
+      height: 926,
+      width: 428,
+    ),
+    devicePixelRatio: 3.0,
+    targetPlatform: TargetPlatform.iOS,
+  ),
+  DeviceDefinition(
+    id: 'ios-iphone-12',
+    name: 'iPhone 12',
+    logicalResolution: LogicalResolution(
+      height: 844,
+      width: 390,
+    ),
+    devicePixelRatio: 3.0,
+    targetPlatform: TargetPlatform.iOS,
+  ),
   DeviceDefinition(
     id: 'ios-iphone-12-mini',
     name: 'iPhone 12 Mini',
@@ -195,6 +239,36 @@ const deviceDefinitions = [
     targetPlatform: TargetPlatform.iOS,
   ),
   DeviceDefinition(
+    id: 'ios-ipad-9th-gen',
+    name: 'iPad (9th generation)',
+    logicalResolution: LogicalResolution(
+      height: 1080,
+      width: 810,
+    ),
+    devicePixelRatio: 2.0,
+    targetPlatform: TargetPlatform.iOS,
+  ),
+  DeviceDefinition(
+    id: 'ios-ipad-pro-5th-gen-12.9in',
+    name: 'iPad Pro (5th generation, 12.9")',
+    logicalResolution: LogicalResolution(
+      height: 1366,
+      width: 1024,
+    ),
+    devicePixelRatio: 2.0,
+    targetPlatform: TargetPlatform.iOS,
+  ),
+  DeviceDefinition(
+    id: 'ios-ipad-pro-5th-gen-11in',
+    name: 'iPad Pro (5th generation, 11")',
+    logicalResolution: LogicalResolution(
+      height: 1194,
+      width: 834,
+    ),
+    devicePixelRatio: 2.0,
+    targetPlatform: TargetPlatform.iOS,
+  ),
+  DeviceDefinition(
     id: 'ios-ipad-air-4th-gen',
     name: 'iPad Air (4th generation)',
     logicalResolution: LogicalResolution(
@@ -245,6 +319,16 @@ const deviceDefinitions = [
     targetPlatform: TargetPlatform.iOS,
   ),
   DeviceDefinition(
+    id: 'android-pixel-5a',
+    name: 'Pixel 5a',
+    logicalResolution: LogicalResolution(
+      height: 925,
+      width: 416,
+    ),
+    devicePixelRatio: 2.5,
+    targetPlatform: TargetPlatform.android,
+  ),
+  DeviceDefinition(
     id: 'android-pixel-5',
     name: 'Pixel 5',
     logicalResolution: LogicalResolution(
@@ -285,6 +369,16 @@ const deviceDefinitions = [
     targetPlatform: TargetPlatform.android,
   ),
   DeviceDefinition(
+    id: 'android-oneplus-9-pro',
+    name: 'OnePlus 9 Pro',
+    logicalResolution: LogicalResolution(
+      height: 980,
+      width: 439,
+    ),
+    devicePixelRatio: 3.28,
+    targetPlatform: TargetPlatform.android,
+  ),
+  DeviceDefinition(
     id: 'android-oneplus-8-pro',
     name: 'OnePlus 8 Pro',
     logicalResolution: LogicalResolution(
@@ -292,6 +386,26 @@ const deviceDefinitions = [
       width: 449,
     ),
     devicePixelRatio: 3.2,
+    targetPlatform: TargetPlatform.android,
+  ),
+  DeviceDefinition(
+    id: 'android-samsung-galaxy-s21-ultra',
+    name: 'Samsung Galaxy S21 Ultra',
+    logicalResolution: LogicalResolution(
+      height: 994,
+      width: 447,
+    ),
+    devicePixelRatio: 3.2,
+    targetPlatform: TargetPlatform.android,
+  ),
+  DeviceDefinition(
+    id: 'android-samsung-galaxy-s21',
+    name: 'Samsung Galaxy S21',
+    logicalResolution: LogicalResolution(
+      height: 912,
+      width: 410,
+    ),
+    devicePixelRatio: 2.6,
     targetPlatform: TargetPlatform.android,
   ),
   DeviceDefinition(
@@ -305,8 +419,18 @@ const deviceDefinitions = [
     targetPlatform: TargetPlatform.android,
   ),
   DeviceDefinition(
+    id: 'android-moto-g-power-2021',
+    name: 'Moto G Power (2021)',
+    logicalResolution: LogicalResolution(
+      height: 962,
+      width: 433,
+    ),
+    devicePixelRatio: 1.66,
+    targetPlatform: TargetPlatform.android,
+  ),
+  DeviceDefinition(
     id: 'android-moto-g-power',
-    name: 'Moto G Powewr',
+    name: 'Moto G Power (2020)',
     logicalResolution: LogicalResolution(
       height: 922,
       width: 433,
