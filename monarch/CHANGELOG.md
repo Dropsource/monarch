@@ -1,3 +1,6 @@
+## 1.1.0-pre.5 - 2021-10-01
+- Add new device definitions: iPhone 13, new iPads, new Android devices.
+
 ## 1.1.0-pre.4 - 2021-10-01
 - Downgrade major versions of analyzer and vm_service 
 - Compatible with Flutter SDK versions less than 2.4.0-4.0.pre
