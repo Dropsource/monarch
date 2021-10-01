@@ -1,3 +1,6 @@
+## 2.0.0-pre.2 - 2021-10-01
+- Add new device definitions: iPhone 13, new iPads, new Android devices.
+
 ## 2.0.0-pre.1 - 2021-10-01
 - Improve error capture and error output
 - Visual debug flags
