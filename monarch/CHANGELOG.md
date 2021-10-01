@@ -1,15 +1,13 @@
-## 1.1.0-pre.3 - 2021-09-29
-- Use lints instead of pedantic
-
-## 1.1.0-pre.2 - 2021-09-29
-- Fix scaling issue
-
-## 1.1.0-pre.1 - 2021-09-27
+## 2.0.0-pre.1 - 2021-10-01
 - Improve error capture and error output
 - Visual debug flags
 - Update major versions of packages vm_service and analyzer
 - Prefix Monarch widgets
 - Simplify Monarch widget tree
+- Use lints instead of pedantic
+
+## 1.1.0-pre.4 - 2021-10-01
+- All changes from version 2.0.0 but compatible with older Flutter SDK versions (prior to Flutter 2.4.0-4.0.pre)
 
 ## 1.0.1 - 2021-09-01
 - Upgrade monarch_annotations and monarch_utils to ^1.0.0.
