@@ -1,3 +1,6 @@
+## 2.0.0-pre.3 - 2021-10-04
+- Reset Flutter Errors count when a new story is selected.
+
 ## 2.0.0-pre.2 - 2021-10-01
 - Add new device definitions: iPhone 13, new iPads, new Android devices.
 

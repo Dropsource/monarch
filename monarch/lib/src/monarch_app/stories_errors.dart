@@ -37,7 +37,7 @@ void handleFlutterFrameworkErrors(MonarchData monarchData) {
 
   FlutterError.onError = (FlutterErrorDetails details) {
     // `dumpErrorToConsole` calls `debugPrint`.
-    FlutterError.dumpErrorToConsole(details, forceReport: true);
+    FlutterError.dumpErrorToConsole(details, forceReport: false);
   };
 }
 
