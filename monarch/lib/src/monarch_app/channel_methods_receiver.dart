@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';
@@ -49,6 +50,7 @@ Future<dynamic> _handler(MethodCall call) async {
 
     case MethodNames.loadStory:
       String storyKey = args!['storyKey'];
+      FlutterError.resetErrorCount();
       activeStory.value = StoryId.fromNodeKey(storyKey);
       break;
 
