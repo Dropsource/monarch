@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -51,4 +53,33 @@ class MonarchBinding extends BindingBase
   void _onTextScaleFactorChanged(double factor) {
     window.textScaleFactorTestValue = factor;
   }
+
+  /// Locks platform events (like mouse pointer or keyboard events) until the 
+  /// post-frame callbacks, which are called after the persistent callbacks,
+  /// which is when the main rendering pipeline has been flushed.
+  /// 
+  /// This function is meant to be called from a Widget's build function.
+  /// 
+  /// We lock the platform events to make sure the
+  /// stories are fully rendered before the user can interact with them.
+  /// Otherwise, under some scenarios, widgets with inputs could throw
+  /// "RenderBox was not laid out" if the platform sent events during
+  /// initial layout and render.
+  /// 
+  /// See also:
+  ///
+  ///  * [addPostFrameCallback]
+  ///  * [SchedulerPhase], for the phases that SchedulerBinding can have.
+  void lockEventsWhileRendering() {
+    var completer = Completer();
+    lockEvents(() => completer.future);
+    addPostFrameCallback((_) {
+      if (!completer.isCompleted) {
+        completer.complete();
+      }
+    });
+  }
 }
+
+MonarchBinding get monarchBindingInstance =>
+    WidgetsBinding.instance! as MonarchBinding;
