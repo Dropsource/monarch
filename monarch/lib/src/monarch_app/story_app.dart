@@ -7,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'active_locale.dart';
 import 'active_story_scale.dart';
 import 'monarch_data.dart';
+import 'monarch_binding.dart';
 import 'ready_signal.dart';
 import 'story_view.dart';
 
@@ -57,6 +58,7 @@ class _MonarchStoryAppState extends State<MonarchStoryApp> {
 
   @override
   Widget build(BuildContext context) {
+    monarchBindingInstance.lockEventsWhileRendering();
     if (_isReady) {
       if (widget.monarchData.metaLocalizations.isEmpty) {
         return MonarchScaleMaterialApp(
