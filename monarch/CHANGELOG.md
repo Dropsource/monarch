@@ -1,3 +1,7 @@
+## 1.1.0-pre.7 - 2021-10-08
+- Lock platform events until after MonarchStoryApp has been rendered. Fixes 
+  errors when interacting with the story window during a reload.
+
 ## 1.1.0-pre.6 - 2021-10-04
 - Reset Flutter Errors count when a new story is selected.
 
