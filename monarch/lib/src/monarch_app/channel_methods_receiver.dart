@@ -1,8 +1,6 @@
 import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart';
 
 import 'package:monarch_utils/log.dart';
-import 'package:monarch_utils/log_config.dart';
 
 import 'active_device.dart';
 import 'active_story.dart';
@@ -11,7 +9,9 @@ import 'active_locale.dart';
 import 'active_text_scale_factor.dart';
 import 'active_story_scale.dart';
 import 'channel_methods.dart';
+import 'log_level.dart';
 import 'ready_signal.dart';
+import 'stories_errors.dart';
 import 'visual_debug_flags.dart' as visual_debug;
 
 final logger = Logger('ChannelMethodsReceiver');
@@ -37,7 +37,8 @@ Future<dynamic> _handler(MethodCall call) async {
 
   switch (call.method) {
     case MethodNames.setUpLog:
-      _setUpLog(args!['defaultLogLevelValue']);
+      setDefaultLogLevel(args!['defaultLogLevelValue']);
+      logCurrentProcessInformation(logger, LogLevel.FINE);
       break;
 
     case MethodNames.firstLoadSignal:
@@ -50,7 +51,7 @@ Future<dynamic> _handler(MethodCall call) async {
 
     case MethodNames.loadStory:
       String storyKey = args!['storyKey'];
-      FlutterError.resetErrorCount();
+      resetErrorCount();
       activeStory.value = StoryId.fromNodeKey(storyKey);
       break;
 
@@ -89,18 +90,4 @@ Future<dynamic> _handler(MethodCall call) async {
       // return exception to the platform side, do not throw
       return MissingPluginException('method ${call.method} not implemented');
   }
-}
-
-void _setUpLog(int defaultLogLevelValue) {
-  defaultLogLevel = _getLogLevelFromValue(defaultLogLevelValue);
-  logCurrentProcessInformation(logger, LogLevel.FINE);
-}
-
-LogLevel _getLogLevelFromValue(int logLevelValue) {
-  for (var logLevel in LogLevel.LEVELS) {
-    if (logLevel.value == logLevelValue) {
-      return logLevel;
-    }
-  }
-  return LogLevel.ALL;
 }

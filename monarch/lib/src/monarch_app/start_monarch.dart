@@ -26,6 +26,17 @@ void startMonarch(
     String packageName,
     List<MetaLocalization> userMetaLocalizations,
     List<MetaTheme> userMetaThemes,
+    Map<String, MetaStories> metaStoriesMap) {
+  Chain.capture(() {
+    _startMonarch(
+        packageName, userMetaLocalizations, userMetaThemes, metaStoriesMap);
+  }, onError: handleUncaughtError);
+}
+
+void _startMonarch(
+    String packageName,
+    List<MetaLocalization> userMetaLocalizations,
+    List<MetaTheme> userMetaThemes,
     Map<String, MetaStories> metaStoriesMap) async {
   final monarchBinding = MonarchBinding.ensureInitialized() as MonarchBinding;
 
@@ -46,12 +57,10 @@ void startMonarch(
   activeLocale =
       ActiveLocale(LocalizationsDelegateLoader(monarchData.metaLocalizations));
 
-  Chain.capture(() {
-    monarchBinding.attachRootWidget(MonarchStoryApp(
-      monarchData: monarchData,
-    ));
-    monarchBinding.scheduleFrame();
-  }, onError: handleStoryRunError);
+  monarchBinding.attachRootWidget(MonarchStoryApp(
+    monarchData: monarchData,
+  ));
+  monarchBinding.scheduleFrame();
 
   receiveChannelMethodCalls();
   await _connectToVmService();
@@ -71,7 +80,6 @@ Future<void> _connectToVmService() async {
 }
 
 void _setUpLog() {
-  defaultLogLevel = LogLevel.ALL;
   writeLogEntryStream(print, printTimestamp: false, printLoggerName: true);
 }
 
@@ -81,11 +89,11 @@ List<MetaLocalization> _validateAndFilterMetaLocalizations(
   for (var item in metaLocalizationList) {
     if (item.delegate == null) {
       printUserMessage(
-          '${item.delegateClassName} doesn\'t extend LocalizationsDelegate<T>. '
+          'Info: ${item.delegateClassName} doesn\'t extend LocalizationsDelegate<T>. '
           'It will be ignored.');
     } else if (item.locales.isEmpty) {
       printUserMessage(
-          '@MonarchLocalizations annotation on ${item.delegateClassName} '
+          'Info: @MonarchLocalizations annotation on ${item.delegateClassName} '
           'doesn\'t declare any locales. It will be ignored.');
     } else {
       _logger.fine(
@@ -102,7 +110,7 @@ List<MetaTheme> _validateAndFilterMetaThemes(List<MetaTheme> metaThemeList) {
   for (var item in metaThemeList) {
     if (item.theme == null) {
       printUserMessage(
-          'Theme "${item.name}" is not of type ThemeData. It will be ignored.');
+          'Info: Theme "${item.name}" is not of type ThemeData. It will be ignored.');
     } else {
       _logger.fine('Valid theme found: ${item.name}');
       _list.add(item);

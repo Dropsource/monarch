@@ -59,15 +59,15 @@ class DeviceDefinitions implements OutboundChannelArgument {
 }
 
 const iPhone13DeviceDefinition = DeviceDefinition(
-    id: 'ios-iphone-13',
-    name: 'iPhone 13',
-    logicalResolution: LogicalResolution(
-      height: 844,
-      width: 390,
-    ),
-    devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
-  );
+  id: 'ios-iphone-13',
+  name: 'iPhone 13',
+  logicalResolution: LogicalResolution(
+    height: 844,
+    width: 390,
+  ),
+  devicePixelRatio: 3.0,
+  targetPlatform: TargetPlatform.iOS,
+);
 
 /// @GOTCHA: if you change the [defaultDeviceDefinition] here, make sure to
 /// also change it in:

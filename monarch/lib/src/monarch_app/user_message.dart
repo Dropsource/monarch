@@ -1,5 +1,11 @@
-const userMessageMarker = '###user-message###';
+const userLineMarker = '##usr-line##';
 
-void printUserMessage(String message, {String marker = userMessageMarker}) {
-  print('$marker$message');
+/// Prints a user message. It first splits it by new lines. Each line is then
+/// prefixed with the [marker] so the CLI can display the message to the user.
+void printUserMessage(String message, {String marker = userLineMarker}) {
+  var lines = message.trimRight().split('\n');
+  for (var line in lines) {
+    print('$marker$line');
+  }
+  print(marker);
 }
