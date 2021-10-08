@@ -1,3 +1,7 @@
+# 2.0.0-pre.5
+- Capture unhandled errors. Throttle error messages.
+- Reduce noise by only printing the first error of a story in full.
+
 ## 2.0.0-pre.4
 - Lock platform events until after MonarchStoryApp has been rendered. Fixes 
   errors when interacting with the story window during a reload.
