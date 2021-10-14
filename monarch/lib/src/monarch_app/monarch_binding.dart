@@ -79,6 +79,11 @@ class MonarchBinding extends BindingBase
       }
     });
   }
+
+  void resetMouseTracker() {
+    // ignore: invalid_use_of_visible_for_testing_member
+    RendererBinding.instance!.initMouseTracker();
+  }
 }
 
 MonarchBinding get monarchBindingInstance =>

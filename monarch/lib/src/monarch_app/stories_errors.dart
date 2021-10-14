@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
+import 'package:monarch/src/monarch_app/monarch_binding.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import 'active_story.dart';
+import 'active_story_error.dart';
 import 'log_level.dart';
 import 'monarch_data.dart';
 
 late MonarchData _monarchData;
 int _uncaughtErrorCount = 0;
+int _flutterErrorCount = 0;
 const errorLineMarker = '##err-line##';
 
 /// Handles errors not caught by the Flutter Framework. These are uncaught
@@ -17,7 +20,7 @@ const errorLineMarker = '##err-line##';
 /// Subsequent calls only print the [error] object, which is usually a single
 /// line, unless we are running in verbose mode.
 ///
-/// Call [resetErrorCount] to cause this function to print the next error
+/// Call [resetErrors] to cause this function to print the next error
 /// as if it was the first time.
 void handleUncaughtError(Object error, Chain chain) {
   if (_uncaughtErrorCount == 0 || isVerbose) {
@@ -41,6 +44,11 @@ $folded
   } else {
     _debugPrintThrottledError('Another exception was thrown: $error');
   }
+
+  if (_isSecondaryError(_uncaughtErrorCount)) {
+    _handleMouseTrackerDebugErrorIfNeeded(error);
+  }
+
   _uncaughtErrorCount += 1;
 }
 
@@ -53,9 +61,45 @@ void handleFlutterFrameworkErrors(MonarchData monarchData) {
   debugPrint = _debugPrintMonarch;
 
   FlutterError.onError = (FlutterErrorDetails details) {
-    // `dumpErrorToConsole` calls `debugPrint`.
-    FlutterError.dumpErrorToConsole(details, forceReport: false);
+    if (_isSecondaryError(_flutterErrorCount)) {
+      _handleRenderBoxNotLaidOutIfNeeded(details.exception);
+    }
+
+    // `dumpErrorToConsole` calls `debugPrint`, which is really `_debugPrintMonarch`
+    FlutterError.dumpErrorToConsole(details, forceReport: isVerbose);
+    _flutterErrorCount += 1;
   };
+}
+
+/// We consider an error secondary if it occurs after the first error and
+/// before some limit. The limit avoids an infinite loop in case this error handling is
+/// causing the errors.
+bool _isSecondaryError(int count) => count > 0 && count < 100;
+
+void _handleMouseTrackerDebugErrorIfNeeded(Object error) {
+  if (error is AssertionError) {
+    var err = error.toString();
+    if (err.contains('rendering/mouse_tracker.dart') &&
+        err.contains("'!_debugDuringDeviceUpdate': is not true")) {
+      monarchBindingInstance.resetMouseTracker();
+    }
+  }
+}
+
+void _handleRenderBoxNotLaidOutIfNeeded(Object exception) {
+  if (exception is AssertionError) {
+    if (activeStoryError.value == null &&
+        exception.message.toString().startsWith('RenderBox was not laid out')) {
+      // Since the "RenderBox was not laid out" error can be thrown multiple times,
+      // the story error view should only display the first one. Therefore, only
+      // set activeStoryError if `activeStoryError.value == null`.
+      const helperText =
+          'This error is pretty common. It’s often a side effect of a primary '
+          'error occurring earlier in the rendering pipeline. Please see the '
+          'Monarch CLI for more details.';
+      activeStoryError.value = '${exception.message}\n\n$helperText';
+    }
+  }
 }
 
 void _debugPrintMonarch(String? message, {int? wrapWidth}) {
@@ -123,7 +167,9 @@ The relevant story is:
   ${metaStories.path} > ${activeStoryId.name}''';
 }
 
-void resetErrorCount() {
+void resetErrors() {
   _uncaughtErrorCount = 0;
+  _flutterErrorCount = 0;
   FlutterError.resetErrorCount();
+  activeStoryError.value = null;
 }

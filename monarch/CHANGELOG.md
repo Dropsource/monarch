@@ -1,6 +1,12 @@
+# 2.0.0-pre.6
+- Handle common Flutter error "RenderBox was not laid out" by showing a placeholder
+  error view (MonarchStoryErrorView), which prevents secondary errors from 
+  polluting the experience.
+- Handle gesture mouse tracker secondary errors.
+
 # 2.0.0-pre.5
 - Capture unhandled errors. Throttle error messages.
-- Reduce noise by only printing the first error of a story in full.
+- Reduce noise by only printing the first error of a story in full, unless verbose is set.
 
 ## 2.0.0-pre.4
 - Lock platform events until after MonarchStoryApp has been rendered. Fixes 

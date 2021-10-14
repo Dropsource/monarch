@@ -51,32 +51,37 @@ Future<dynamic> _handler(MethodCall call) async {
 
     case MethodNames.loadStory:
       String storyKey = args!['storyKey'];
-      resetErrorCount();
+      resetErrors();
       activeStory.value = StoryId.fromNodeKey(storyKey);
       break;
 
     case MethodNames.setActiveLocale:
       String locale = args!['locale'];
+      resetErrors();
       activeLocale.setActiveLocaleTag(locale);
       break;
 
     case MethodNames.setActiveTheme:
       String themeId = args!['themeId'];
+      resetErrors();
       activeTheme.value = activeTheme.getMetaTheme(themeId);
       break;
 
     case MethodNames.setActiveDevice:
       String deviceId = args!['deviceId'];
+      resetErrors();
       activeDevice.value = activeDevice.getDeviceDefinition(deviceId);
       break;
 
     case MethodNames.setTextScaleFactor:
       double factor = args!['factor'];
+      resetErrors();
       activeTextScaleFactor.value = factor;
       break;
 
     case MethodNames.setStoryScale:
       double scale = args!['scale'];
+      resetErrors();
       activeStoryScale.value = scale;
       break;
 
