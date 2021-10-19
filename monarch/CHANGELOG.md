@@ -1,24 +1,14 @@
-# 2.0.0-pre.6
+## 2.0.0
 - Handle common Flutter error "RenderBox was not laid out" by showing a placeholder
   error view (MonarchStoryErrorView), which prevents secondary errors from 
   polluting the experience.
 - Handle gesture mouse tracker secondary errors.
-
-# 2.0.0-pre.5
 - Capture unhandled errors. Throttle error messages.
 - Reduce noise by only printing the first error of a story in full, unless verbose is set.
-
-## 2.0.0-pre.4
 - Lock platform events until after MonarchStoryApp has been rendered. Fixes 
   errors when interacting with the story window during a reload.
-
-## 2.0.0-pre.3 - 2021-10-04
 - Reset Flutter Errors count when a new story is selected.
-
-## 2.0.0-pre.2 - 2021-10-01
 - Add new device definitions: iPhone 13, new iPads, new Android devices.
-
-## 2.0.0-pre.1 - 2021-10-01
 - Improve error capture and error output
 - Visual debug flags
 - Update major versions of packages vm_service and analyzer
@@ -26,8 +16,9 @@
 - Simplify Monarch widget tree
 - Use lints instead of pedantic
 
-## 1.1.0-pre.4 - 2021-10-01
-- All changes from version 2.0.0 but compatible with older Flutter SDK versions (prior to Flutter 2.4.0-4.0.pre)
+## 1.1.0
+- All changes from version 2.0.0 but compatible with older Flutter SDK versions 
+  (prior to Flutter 2.4.0-4.0.pre)
 
 ## 1.0.1 - 2021-09-01
 - Upgrade monarch_annotations and monarch_utils to ^1.0.0.
