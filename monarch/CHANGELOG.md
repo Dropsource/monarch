@@ -1,24 +1,14 @@
-## 1.1.0-pre.7 - 2021-10-08
+## 1.1.0 - 2021-10-19
+- **This version is compatible with older Flutter SDK versions (prior to Flutter 2.4.0-4.0.pre).
+  If you are using a newer Flutter SDK then use monarch package version 2.0.0.**
 - Lock platform events until after MonarchStoryApp has been rendered. Fixes 
   errors when interacting with the story window during a reload.
-
-## 1.1.0-pre.6 - 2021-10-04
 - Reset Flutter Errors count when a new story is selected.
-
-## 1.1.0-pre.5 - 2021-10-01
 - Add new device definitions: iPhone 13, new iPads, new Android devices.
-
-## 1.1.0-pre.4 - 2021-10-01
 - Downgrade major versions of analyzer and vm_service 
 - Compatible with Flutter SDK versions less than 2.4.0-4.0.pre
-
-## 1.1.0-pre.3 - 2021-09-29
 - Use lints instead of pedantic
-
-## 1.1.0-pre.2 - 2021-09-29
 - Fix scaling issue
-
-## 1.1.0-pre.1 - 2021-09-27
 - Improve error capture and error output
 - Visual debug flags
 - Update major versions of packages vm_service and analyzer
