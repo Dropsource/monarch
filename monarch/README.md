@@ -1,4 +1,8 @@
-# [![][Monarch logo]](https://monarchapp.io)
+<p>
+  <a href="https://monarchapp.io">
+    <img src="https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch_m_readme.png" alt="Monarch" width="100" />
+  </a>
+</p>
 
 # Monarch
 
