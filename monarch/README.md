@@ -1,5 +1,7 @@
 # [![][Monarch logo]](https://monarchapp.io)
 
+# Monarch
+
 Build high-quality UIs with ease. Monarch is a tool for Flutter developers. It makes building beautiful widgets a more pleasant and faster experience.
 
 Monarch provides a sandbox to build Flutter widgets in isolation. When you work in isolation you only have to focus on the UI. You can create widgets without worrying about data, emulators, backends or business logic. Build widgets in isolation to avoid the pain and frustration of developing widgets in the context of an entire app.
@@ -19,5 +21,5 @@ Find out more at https://monarchapp.io
 * Follow us on Twitter [@monarch_app](https://twitter.com/monarch_app)
 * Watch Monarch videos in our [YouTube channel](https://www.youtube.com/channel/UCuG4P4KTQ2HbikL57HIc1OQ)
 
-[Monarch logo]: https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch_logo_readme.png
+[Monarch logo]: https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch_m_readme.png
 [Flutter logo]: https://raw.githubusercontent.com/flutter/website/master/src/_assets/image/flutter-lockup-bg.jpg
