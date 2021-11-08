@@ -54,7 +54,7 @@ Element name: ${element.name}
 import 'package:monarch/monarch.dart';
 import '$pathToThemeFile';
 
-final metaThemeItems = [
+List<MetaTheme> get metaThemeItems => [
   ${metaThemeExpressions.join(', ')}
 ];
 

@@ -2,23 +2,23 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:monarch/src/monarch_app/active_story_error.dart';
-import 'package:monarch/src/monarch_app/story_error_view.dart';
 import 'package:monarch_utils/log.dart';
 
 import 'active_device.dart';
 import 'active_story.dart';
 import 'active_theme.dart';
+import 'active_story_error.dart';
 import 'device_definitions.dart';
+import 'monarch_data_instance.dart';
 import 'monarch_data.dart';
+import 'story_error_view.dart';
 
 final _logger = Logger('MonarchStoryView');
 
 class MonarchStoryView extends StatefulWidget {
-  final MonarchData monarchData;
   final String localeKey;
 
-  MonarchStoryView({required this.monarchData, required this.localeKey});
+  MonarchStoryView({required this.localeKey});
 
   @override
   State<StatefulWidget> createState() {
@@ -95,7 +95,7 @@ class _MonarchStoryViewState extends State<MonarchStoryView> {
       _storyFunction = null;
     } else {
       final metaStories =
-          widget.monarchData.metaStoriesMap[activeStoryId.pathKey]!;
+          monarchDataInstance.metaStoriesMap[activeStoryId.pathKey]!;
       _storyKey = activeStoryId.storyKey;
       _storyFunction = metaStories.storiesMap[activeStoryId.name];
     }

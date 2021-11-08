@@ -68,7 +68,7 @@ import 'dart:ui';
 import 'package:monarch/monarch.dart';
 import '$pathToLocalizationsFile';
 
-final metaLocalizationItems = [
+List<MetaLocalization> get metaLocalizationItems => [
   ${metaLocalizationExpressions.join(', ')}
 ];
 

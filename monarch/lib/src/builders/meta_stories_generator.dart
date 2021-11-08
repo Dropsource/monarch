@@ -59,7 +59,7 @@ class MetaStoriesGenerator extends Generator {
 import 'package:monarch/monarch.dart';
 import '$pathToStoriesFile';
 
-const metaStories = MetaStories('${storiesAssetId.package}', '${storiesAssetId.path}', [${storiesNames.join(', ')}], $storiesMap);
+MetaStories get metaStories => MetaStories('${storiesAssetId.package}', '${storiesAssetId.path}', [${storiesNames.join(', ')}], $storiesMap);
 
 ''';
   }

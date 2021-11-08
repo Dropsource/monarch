@@ -6,15 +6,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'active_locale.dart';
 import 'active_story_scale.dart';
-import 'monarch_data.dart';
 import 'monarch_binding.dart';
+import 'monarch_data_instance.dart';
 import 'ready_signal.dart';
 import 'story_view.dart';
 
 class MonarchStoryApp extends StatefulWidget {
-  final MonarchData monarchData;
-
-  MonarchStoryApp({required this.monarchData});
+  MonarchStoryApp();
 
   @override
   State<StatefulWidget> createState() {
@@ -60,18 +58,15 @@ class _MonarchStoryAppState extends State<MonarchStoryApp> {
   Widget build(BuildContext context) {
     monarchBindingInstance.lockEventsWhileRendering();
     if (_isReady) {
-      if (widget.monarchData.metaLocalizations.isEmpty) {
+      if (monarchDataInstance.metaLocalizations.isEmpty) {
         return MonarchScaleMaterialApp(
             scale: _storyScale,
             home: MonarchStoryView(
-              monarchData: widget.monarchData,
               localeKey: '__NA__',
             ));
       } else {
         return MonarchLocalizedStoryApp(
-            monarchData: widget.monarchData,
-            scale: _storyScale,
-            loadingStatus: _localeLoadingStatus);
+            scale: _storyScale, loadingStatus: _localeLoadingStatus);
       }
     } else {
       return MonarchScaleMaterialApp(
@@ -98,15 +93,11 @@ class MonarchScaleMaterialApp extends StatelessWidget {
 }
 
 class MonarchLocalizedStoryApp extends StatelessWidget {
-  final MonarchData monarchData;
   final double scale;
   final LocaleLoadingStatus loadingStatus;
 
   MonarchLocalizedStoryApp(
-      {Key? key,
-      required this.monarchData,
-      required this.scale,
-      required this.loadingStatus})
+      {Key? key, required this.scale, required this.loadingStatus})
       : super(key: key);
 
   @override
@@ -138,13 +129,12 @@ class MonarchLocalizedStoryApp extends StatelessWidget {
       return MonarchLocalizedScaleMaterialApp(
           scale: scale,
           localizationsDelegates: [
-            ...monarchData.metaLocalizations.map((x) => x.delegate!),
+            ...monarchDataInstance.metaLocalizations.map((x) => x.delegate!),
             ...GlobalMaterialLocalizations.delegates,
           ],
-          supportedLocales: monarchData.allLocales,
+          supportedLocales: monarchDataInstance.allLocales,
           locale: activeLocale.locale,
           home: MonarchStoryView(
-              monarchData: monarchData,
               localeKey: activeLocale.locale!.toLanguageTag()));
     } else {
       return MonarchScaleMaterialApp(
