@@ -4,10 +4,10 @@ import 'package:monarch_utils/log.dart';
 
 import 'user_message.dart';
 
-class LocalizationsDelegateLoader with Log {
+class LocaleValidator with Log {
   final List<MetaLocalization> metaLocalizations;
 
-  LocalizationsDelegateLoader(this.metaLocalizations);
+  LocaleValidator(this.metaLocalizations);
 
   final _map = <Type, Map<Locale, _LoadResult>>{};
 
@@ -34,6 +34,7 @@ ${result.stackTrace}
       _map[delegate.type] = _map[delegate.type] ?? <Locale, _LoadResult>{};
       try {
         await delegate.load(locale);
+
         _map[delegate.type]![locale] = _LoadResult.success();
         log.fine('Successfully loaded LocalizationsDelegate ${delegate.type} '
             'with locale $locale');

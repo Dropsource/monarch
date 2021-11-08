@@ -5,7 +5,8 @@ import 'user_message.dart';
 
 final _logger = Logger('MonarchDataInstance');
 
-late MonarchData monarchDataInstance;
+late MonarchData _monarchDataInstance;
+MonarchData get monarchDataInstance => _monarchDataInstance;
 
 void loadMonarchDataInstance(MonarchData Function() getData) {
   var data = getData();
@@ -14,7 +15,7 @@ void loadMonarchDataInstance(MonarchData Function() getData) {
       _validateAndFilterMetaLocalizations(data.metaLocalizations);
   var validatedMetaThemes = _validateAndFilterMetaThemes(data.metaThemes);
 
-  monarchDataInstance = MonarchData(data.packageName,
+  _monarchDataInstance = MonarchData(data.packageName,
       validatedMetaLocalizations, validatedMetaThemes, data.metaStoriesMap);
 }
 

@@ -21,10 +21,9 @@ class MetaLocalizationsGenerator extends Generator {
 
     for (var annotatedElement in annotations) {
       final element = annotatedElement.element;
-
-      if (element is TopLevelVariableElement) {
+      if (element is TopLevelVariableElement || element is PropertyAccessorElement) {
         log.fine(
-            'Found MonarchLocalizations annotation on top-level element: ${element.name}');
+            'Found MonarchLocalizations annotation on top-level variable or getter: ${element.name}');
         final annotation = annotatedElement.annotation;
 
         final localesDartObjects = annotation.read('locales').listValue;
@@ -43,7 +42,7 @@ class MetaLocalizationsGenerator extends Generator {
             "MetaLocalization.user($localesExpression, ${element.name}, '${element.name}')");
       } else {
         final msg = '''
-Found MonarchLocalizations annotation on an element that is not a top-level variable.
+Found MonarchLocalizations annotation on an element that is not a top-level variable or getter.
 The MonarchLocalizations annotation must be placed on a top-level variable.
 Element name: ${element.name}
 ''';

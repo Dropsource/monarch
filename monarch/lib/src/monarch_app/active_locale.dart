@@ -3,14 +3,14 @@ import 'dart:ui';
 
 import 'package:monarch_utils/log.dart';
 
-import 'localizations_delegate_loader.dart';
+import 'locale_validator.dart';
 
 enum LocaleLoadingStatus { initial, inProgress, done, error }
 
 class ActiveLocale with Log {
-  final LocalizationsDelegateLoader loader;
+  LocaleValidator localeValidator = LocaleValidator([]);
 
-  ActiveLocale(this.loader);
+  ActiveLocale();
 
   LocaleLoadingStatus loadingStatus = LocaleLoadingStatus.initial;
 
@@ -22,24 +22,37 @@ class ActiveLocale with Log {
 
   final _loadingStatusStreamController =
       StreamController<LocaleLoadingStatus>.broadcast();
+
   Stream<LocaleLoadingStatus> get loadingStatusStream =>
       _loadingStatusStreamController.stream;
 
-  void setActiveLocale(Locale newLocale) async {
+  void setActiveLocaleTag(String localeTag) {
+    if (localeTag == 'System Locale') {
+      // As of 2020-10-08, the Monarch platform apps send 'System Locale' when there aren't
+      // any user-defined locales, in which case the StoryApp will create a MaterialApp
+      // without any localization data. In this case, Flutter's default behavior is to
+      // use the only supported locale which is en-US.
+      _resetActiveLocale();
+    } else {
+      _setActiveLocale(parseLocale(localeTag));
+    }
+  }
+
+  void _setActiveLocale(Locale newLocale) async {
     _setStatus(LocaleLoadingStatus.inProgress);
     _activeLocale = newLocale;
     try {
-      _canLoad = await loader.canLoad(_activeLocale!);
+      _canLoad = await localeValidator.canLoad(_activeLocale!);
       _setStatus(LocaleLoadingStatus.done);
-      log.fine('active locale loaded: $_activeLocale');
+      log.fine('active locale $_activeLocale validation (can load) is $_canLoad');
     } catch (e, s) {
       _canLoad = false;
-      log.severe('Unexpected error while loading locale $_activeLocale', e, s);
+      log.severe('Unexpected error while validating locale $_activeLocale', e, s);
       _setStatus(LocaleLoadingStatus.error);
     }
   }
 
-  void resetActiveLocale() {
+  void _resetActiveLocale() {
     _activeLocale = null;
     log.fine('active locale reset');
   }
@@ -56,18 +69,6 @@ class ActiveLocale with Log {
   void _setStatus(LocaleLoadingStatus status) {
     loadingStatus = status;
     _loadingStatusStreamController.add(loadingStatus);
-  }
-
-  void setActiveLocaleTag(String localeTag) {
-    if (localeTag == 'System Locale') {
-      // As of 2020-10-08, the platform apps send 'System Locale' when there aren't
-      // any user-defined locales, in which case the StoryApp will create a MaterialApp
-      // without any localization data. In this case, Flutter's default behavior is to
-      // use the only supported locale which is en-US.
-      resetActiveLocale();
-    } else {
-      setActiveLocale(parseLocale(localeTag));
-    }
   }
 
   void close() {
@@ -99,4 +100,4 @@ Locale parseLocale(String localeTag) {
   }
 }
 
-late ActiveLocale activeLocale;
+final ActiveLocale activeLocale = ActiveLocale();
