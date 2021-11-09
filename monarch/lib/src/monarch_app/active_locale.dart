@@ -1,30 +1,12 @@
-import 'dart:async';
 import 'dart:ui';
 
-import 'package:monarch_utils/log.dart';
+import 'active_value.dart';
 
-import 'locale_validator.dart';
-
-enum LocaleLoadingStatus { initial, inProgress, done, error }
-
-class ActiveLocale with Log {
-  LocaleValidator localeValidator = LocaleValidator([]);
-
-  ActiveLocale();
-
-  LocaleLoadingStatus loadingStatus = LocaleLoadingStatus.initial;
-
+class ActiveLocale extends ActiveValue<Locale?> {
   Locale? _activeLocale;
-  Locale? get locale => _activeLocale;
 
-  bool? _canLoad;
-  bool? get canLoad => _canLoad;
-
-  final _loadingStatusStreamController =
-      StreamController<LocaleLoadingStatus>.broadcast();
-
-  Stream<LocaleLoadingStatus> get loadingStatusStream =>
-      _loadingStatusStreamController.stream;
+  @override
+  Locale? get value => _activeLocale;
 
   void setActiveLocaleTag(String localeTag) {
     if (localeTag == 'System Locale') {
@@ -32,48 +14,20 @@ class ActiveLocale with Log {
       // any user-defined locales, in which case the StoryApp will create a MaterialApp
       // without any localization data. In this case, Flutter's default behavior is to
       // use the only supported locale which is en-US.
-      _resetActiveLocale();
+      value = null;
     } else {
-      _setActiveLocale(parseLocale(localeTag));
+      value = parseLocale(localeTag);
     }
   }
 
-  void _setActiveLocale(Locale newLocale) async {
-    _setStatus(LocaleLoadingStatus.inProgress);
-    _activeLocale = newLocale;
-    try {
-      _canLoad = await localeValidator.canLoad(_activeLocale!);
-      _setStatus(LocaleLoadingStatus.done);
-      log.fine('active locale $_activeLocale validation (can load) is $_canLoad');
-    } catch (e, s) {
-      _canLoad = false;
-      log.severe('Unexpected error while validating locale $_activeLocale', e, s);
-      _setStatus(LocaleLoadingStatus.error);
-    }
+  @override
+  void setValue(Locale? newValue) {
+    _activeLocale = newValue;
   }
 
-  void _resetActiveLocale() {
-    _activeLocale = null;
-    log.fine('active locale reset');
-  }
-
-  void assertIsLoaded() {
-    if (locale == null) {
-      throw StateError('Expected activeLocale to be set');
-    }
-    if (canLoad == null) {
-      throw StateError('Expected canLoad to be set');
-    }
-  }
-
-  void _setStatus(LocaleLoadingStatus status) {
-    loadingStatus = status;
-    _loadingStatusStreamController.add(loadingStatus);
-  }
-
-  void close() {
-    _loadingStatusStreamController.close();
-  }
+  @override
+  String get valueSetMessage =>
+      value == null ? 'active locale reset' : 'active locale set: ${value!}';
 }
 
 Locale parseLocale(String localeTag) {

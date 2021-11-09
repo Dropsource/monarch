@@ -41,7 +41,9 @@ class ActiveStory extends ActiveValue<StoryId?> {
   }
 
   @override
-  String get valueSetMessage => 'active story id set: ${value ?? 'null'}';
+  String get valueSetMessage => value == null
+      ? 'active story id reset'
+      : 'active story id set: ${value!}';
 }
 
 final activeStory = ActiveStory();

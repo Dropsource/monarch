@@ -23,7 +23,7 @@ class MonarchStoryApp extends StatefulWidget {
 class _MonarchStoryAppState extends State<MonarchStoryApp> {
   late bool _isReady;
   late double _storyScale;
-  late LocaleLoadingStatus _localeLoadingStatus;
+  late Locale? _locale;
   final _streamSubscriptions = <StreamSubscription>[];
 
   _MonarchStoryAppState();
@@ -34,15 +34,14 @@ class _MonarchStoryAppState extends State<MonarchStoryApp> {
 
     _isReady = readySignal.isReady;
     _storyScale = activeStoryScale.value;
-    _localeLoadingStatus = activeLocale.loadingStatus;
+    _locale = activeLocale.value;
 
     _streamSubscriptions.addAll([
       readySignal.changeStream
           .listen((isReady) => setState(() => _isReady = isReady)),
       activeStoryScale.stream
           .listen((value) => setState(() => _storyScale = value)),
-      activeLocale.loadingStatusStream
-          .listen((status) => setState(() => _localeLoadingStatus = status))
+      activeLocale.stream.listen((value) => setState(() => _locale = value))
     ]);
   }
 
@@ -58,15 +57,15 @@ class _MonarchStoryAppState extends State<MonarchStoryApp> {
   Widget build(BuildContext context) {
     monarchBindingInstance.lockEventsWhileRendering();
     if (_isReady) {
-      if (monarchDataInstance.metaLocalizations.isEmpty) {
+      if (_locale == null) {
         return MonarchScaleMaterialApp(
             scale: _storyScale,
             home: MonarchStoryView(
               localeKey: '__NA__',
             ));
       } else {
-        return MonarchLocalizedStoryApp(
-            scale: _storyScale, loadingStatus: _localeLoadingStatus);
+        return MonarchLocalizedScaleMaterialApp(
+            scale: _storyScale, locale: _locale!);
       }
     } else {
       return MonarchScaleMaterialApp(
@@ -92,76 +91,12 @@ class MonarchScaleMaterialApp extends StatelessWidget {
   }
 }
 
-class MonarchLocalizedStoryApp extends StatelessWidget {
-  final double scale;
-  final LocaleLoadingStatus loadingStatus;
-
-  MonarchLocalizedStoryApp(
-      {Key? key, required this.scale, required this.loadingStatus})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    switch (loadingStatus) {
-      case LocaleLoadingStatus.initial:
-      case LocaleLoadingStatus.inProgress:
-        return MonarchScaleMaterialApp(
-            scale: scale,
-            home: MonarchSimpleMessageView(message: 'Loading locale...'));
-
-      case LocaleLoadingStatus.done:
-        return _buildOnLocaleLoaded();
-
-      case LocaleLoadingStatus.error:
-        return MonarchScaleMaterialApp(
-            scale: scale,
-            home: MonarchSimpleMessageView(
-                message: 'Unexpected error. Please see console for details.'));
-
-      default:
-        throw 'Unexpected status, got $loadingStatus';
-    }
-  }
-
-  Widget _buildOnLocaleLoaded() {
-    activeLocale.assertIsLoaded();
-    if (activeLocale.canLoad!) {
-      return MonarchLocalizedScaleMaterialApp(
-          scale: scale,
-          localizationsDelegates: [
-            ...monarchDataInstance.metaLocalizations.map((x) => x.delegate!),
-            ...GlobalMaterialLocalizations.delegates,
-          ],
-          supportedLocales: monarchDataInstance.allLocales,
-          locale: activeLocale.locale,
-          home: MonarchStoryView(
-              localeKey: activeLocale.locale!.toLanguageTag()));
-    } else {
-      return MonarchScaleMaterialApp(
-          scale: scale,
-          home: MonarchSimpleMessageView(
-              message:
-                  'Error loading locale ${activeLocale.locale!.toLanguageTag()}. '
-                  'Please see console for details.'));
-    }
-  }
-}
-
 class MonarchLocalizedScaleMaterialApp extends StatelessWidget {
   final double scale;
-  final Widget? home;
-
-  final Iterable<LocalizationsDelegate<dynamic>>? localizationsDelegates;
-  final Iterable<Locale> supportedLocales;
-  final Locale? locale;
+  final Locale locale;
 
   MonarchLocalizedScaleMaterialApp(
-      {Key? key,
-      required this.scale,
-      this.home,
-      this.localizationsDelegates,
-      required this.supportedLocales,
-      this.locale})
+      {Key? key, required this.scale, required this.locale})
       : super(key: key);
 
   @override
@@ -171,9 +106,12 @@ class MonarchLocalizedScaleMaterialApp extends StatelessWidget {
         alignment: Alignment.topLeft,
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: home,
-            localizationsDelegates: localizationsDelegates,
-            supportedLocales: supportedLocales,
-            locale: locale));
+            localizationsDelegates: [
+              ...monarchDataInstance.metaLocalizations.map((x) => x.delegate!),
+              ...GlobalMaterialLocalizations.delegates,
+            ],
+            supportedLocales: monarchDataInstance.allLocales,
+            locale: locale,
+            home: MonarchStoryView(localeKey: locale.toLanguageTag())));
   }
 }

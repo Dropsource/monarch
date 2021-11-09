@@ -40,12 +40,12 @@ void _startMonarch(MonarchData Function() getMonarchData) async {
   loadMonarchDataInstance(getMonarchData);
 
   handleFlutterFrameworkErrors();
-  _setMetaThemesAndLocalizations();
+  _setMetaThemes();
 
   monarchBinding.attachRootWidget(ReassembleListener(
       onReassemble: () {
         loadMonarchDataInstance(getMonarchData);
-        _setMetaThemesAndLocalizations();
+        _setMetaThemes();
         channelMethodsSender.sendMonarchData(monarchDataInstance);
       },
       child: MonarchStoryApp()));
@@ -56,14 +56,9 @@ void _startMonarch(MonarchData Function() getMonarchData) async {
   _sendInitialChannelMethodCalls();
 }
 
-void _setMetaThemesAndLocalizations() {
+void _setMetaThemes() {
   activeTheme.setMetaThemes(
       [...monarchDataInstance.metaThemes, ...standardMetaThemes]);
-  activeLocale.localeValidator = 
-      LocaleValidator(monarchDataInstance.metaLocalizations);
-  // for (var item in monarchDataInstance.metaLocalizations) {
-  //   _logger.shout(item.locales.join(','));
-  // }
 }
 
 Future<void> _connectToVmService() async {
