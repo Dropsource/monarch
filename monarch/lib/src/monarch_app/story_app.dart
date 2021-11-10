@@ -57,46 +57,27 @@ class _MonarchStoryAppState extends State<MonarchStoryApp> {
   Widget build(BuildContext context) {
     monarchBindingInstance.lockEventsWhileRendering();
     if (_isReady) {
-      if (_locale == null) {
-        return MonarchScaleMaterialApp(
-            scale: _storyScale,
-            home: MonarchStoryView(
-              localeKey: '__NA__',
-            ));
-      } else {
-        return MonarchLocalizedScaleMaterialApp(
-            scale: _storyScale, locale: _locale!);
-      }
-    } else {
-      return MonarchScaleMaterialApp(
+      return MonarchMaterialApp(
           scale: _storyScale,
+          locale: _locale,
+          home: MonarchStoryView(
+              localeKey: _locale?.toLanguageTag() ?? '__NA__'));
+    } else {
+      return MonarchMaterialApp(
+          scale: _storyScale,
+          locale: null,
           home: MonarchSimpleMessageView(message: 'Loading...'));
     }
   }
 }
 
-class MonarchScaleMaterialApp extends StatelessWidget {
+class MonarchMaterialApp extends StatelessWidget {
   final double scale;
-  final Widget? home;
+  final Locale? locale;
+  final Widget home;
 
-  MonarchScaleMaterialApp({Key? key, required this.scale, this.home})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform.scale(
-        scale: scale,
-        alignment: Alignment.topLeft,
-        child: MaterialApp(debugShowCheckedModeBanner: false, home: home));
-  }
-}
-
-class MonarchLocalizedScaleMaterialApp extends StatelessWidget {
-  final double scale;
-  final Locale locale;
-
-  MonarchLocalizedScaleMaterialApp(
-      {Key? key, required this.scale, required this.locale})
+  MonarchMaterialApp(
+      {Key? key, required this.scale, required this.locale, required this.home})
       : super(key: key);
 
   @override
@@ -106,12 +87,19 @@ class MonarchLocalizedScaleMaterialApp extends StatelessWidget {
         alignment: Alignment.topLeft,
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            localizationsDelegates: [
-              ...monarchDataInstance.metaLocalizations.map((x) => x.delegate!),
-              ...GlobalMaterialLocalizations.delegates,
-            ],
-            supportedLocales: monarchDataInstance.allLocales,
+            localizationsDelegates:
+                locale == null || monarchDataInstance.metaLocalizations.isEmpty
+                    ? null
+                    : [
+                        ...monarchDataInstance.metaLocalizations
+                            .map((x) => x.delegate!),
+                        ...GlobalMaterialLocalizations.delegates,
+                      ],
+            supportedLocales:
+                locale == null || monarchDataInstance.allLocales.isEmpty
+                    ? const <Locale>[Locale('en', 'US')]
+                    : monarchDataInstance.allLocales,
             locale: locale,
-            home: MonarchStoryView(localeKey: locale.toLanguageTag())));
+            home: home));
   }
 }
