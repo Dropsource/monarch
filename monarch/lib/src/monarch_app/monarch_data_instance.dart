@@ -1,5 +1,6 @@
 import 'package:monarch_utils/log.dart';
 
+import '../builders/builder_helper.dart';
 import 'monarch_data.dart';
 import 'user_message.dart';
 
@@ -24,13 +25,18 @@ List<MetaLocalization> _validateAndFilterMetaLocalizations(
   final _list = <MetaLocalization>[];
   for (var item in metaLocalizationList) {
     if (item.delegate == null) {
-      printUserMessage(
-          'Info: ${item.delegateClassName} doesn\'t extend LocalizationsDelegate<T>. '
-          'It will be ignored.');
+      printUserMessage('''
+$monarchWarningBegin
+Type of `${item.delegateClassName}` doesn't extend `LocalizationsDelegate<T>`. It will be ignored.
+$monarchWarningEnd
+''');
     } else if (item.locales.isEmpty) {
-      printUserMessage(
-          'Info: @MonarchLocalizations annotation on ${item.delegateClassName} '
-          'doesn\'t declare any locales. It will be ignored.');
+      printUserMessage('''
+$monarchWarningBegin
+`@MonarchLocalizations` annotation on `${item.delegateClassName}` doesn't declare any locales. It will 
+be ignored.
+$monarchWarningEnd
+''');
     } else {
       _logger.fine(
           'Valid localization found on class ${item.delegateClassName} with '
@@ -45,8 +51,11 @@ List<MetaTheme> _validateAndFilterMetaThemes(List<MetaTheme> metaThemeList) {
   final _list = <MetaTheme>[];
   for (var item in metaThemeList) {
     if (item.theme == null) {
-      printUserMessage(
-          'Info: Theme "${item.name}" is not of type ThemeData. It will be ignored.');
+      printUserMessage('''
+$monarchWarningBegin
+Theme `${item.name}` is not of type `ThemeData`. It will be ignored.
+$monarchWarningEnd
+''');
     } else {
       _logger.fine('Valid theme found: ${item.name}');
       _list.add(item);
