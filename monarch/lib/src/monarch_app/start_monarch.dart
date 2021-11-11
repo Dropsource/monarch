@@ -31,20 +31,20 @@ void _startMonarch(MonarchData Function() getMonarchData) async {
   final monarchBinding = MonarchBinding.ensureInitialized() as MonarchBinding;
 
   _setUpLog();
-
-  readySignal.starting();
-  _logger.finest('Starting Monarch flutter app');
-
+  
+  readySignal.loading();
   loadMonarchDataInstance(getMonarchData);
 
   handleFlutterFrameworkErrors();
   _setMetaThemes();
 
   monarchBinding.attachRootWidget(ReassembleListener(
-      onReassemble: () {
+      onReassemble: () async {
+        readySignal.loading();
         loadMonarchDataInstance(getMonarchData);
         _setMetaThemes();
-        channelMethodsSender.sendMonarchData(monarchDataInstance);
+        await channelMethodsSender.sendMonarchData(monarchDataInstance);
+        await channelMethodsSender.sendReadySignal();
       },
       child: MonarchStoryApp()));
   monarchBinding.scheduleFrame();

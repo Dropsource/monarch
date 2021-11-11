@@ -23,7 +23,6 @@ class ReassembleListener extends StatefulWidget {
 class _ReassembleListenerState extends State<ReassembleListener> {
   @override
   void reassemble() {
-    _logger.shout('REASSEMBLING');
     super.reassemble();
     widget.onReassemble();
   }

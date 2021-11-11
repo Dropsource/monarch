@@ -27,6 +27,7 @@ class MethodNames {
   static const defaultTheme = 'dropsource.monarch.defaultTheme';
   static const readySignal = 'dropsource.monarch.readySignal';
   static const loadStory = 'dropsource.monarch.loadStory';
+  static const resetStory = 'dropsource.monarch.resetStory';
   static const setUpLog = 'dropsource.monarch.setUpLog';
   static const setActiveLocale = 'dropsource.monarch.setActiveLocale';
   static const setActiveTheme = 'dropsource.monarch.setActiveTheme';
