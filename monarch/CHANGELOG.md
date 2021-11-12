@@ -1,3 +1,16 @@
+## 2.1.0
+- Reassemble (i.e. hot reload) using MonarchBinding.
+- Reset story channel method. 
+- Generate MonarchData code using getters instead of final static variables.
+- Support getters or const for code elements annotated with 
+  @MonarchLocalizations and @MonarchTheme.
+- Print warnings during code generation and monarch data validation.
+- Remove localizations validation and loader status, any localizations 
+  errors are handled as expected by error handling code.
+- Simplify MaterialApp composition to avoid changing widget tree as 
+  localizations are added or removed.
+- Simplify StoryApp.
+
 ## 2.0.0
 - Handle common Flutter error "RenderBox was not laid out" by showing a placeholder
   error view (MonarchStoryErrorView), which prevents secondary errors from 
