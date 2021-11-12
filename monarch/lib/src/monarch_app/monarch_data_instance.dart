@@ -1,7 +1,9 @@
 import 'package:monarch_utils/log.dart';
 
 import '../builders/builder_helper.dart';
+import 'active_theme.dart';
 import 'monarch_data.dart';
+import 'standard_themes.dart';
 import 'user_message.dart';
 
 final _logger = Logger('MonarchDataInstance');
@@ -18,6 +20,9 @@ void loadMonarchDataInstance(MonarchData Function() getData) {
 
   _monarchDataInstance = MonarchData(data.packageName,
       validatedMetaLocalizations, validatedMetaThemes, data.metaStoriesMap);
+
+  activeTheme.setMetaThemes(
+      [...monarchDataInstance.metaThemes, ...standardMetaThemes]);
 }
 
 List<MetaLocalization> _validateAndFilterMetaLocalizations(

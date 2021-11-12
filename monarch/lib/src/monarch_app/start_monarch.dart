@@ -11,7 +11,6 @@ import 'story_scale_definitions.dart';
 import 'active_theme.dart';
 import 'channel_methods_sender.dart';
 import 'channel_methods_receiver.dart';
-import 'reassemble_listener.dart';
 import 'standard_themes.dart';
 import 'stories_errors.dart';
 import 'story_app.dart';
@@ -31,32 +30,27 @@ void _startMonarch(MonarchData Function() getMonarchData) async {
   final monarchBinding = MonarchBinding.ensureInitialized() as MonarchBinding;
 
   _setUpLog();
-  
   readySignal.loading();
   loadMonarchDataInstance(getMonarchData);
-
   handleFlutterFrameworkErrors();
-  _setMetaThemes();
 
-  monarchBinding.attachRootWidget(ReassembleListener(
-      onReassemble: () async {
-        readySignal.loading();
-        loadMonarchDataInstance(getMonarchData);
-        _setMetaThemes();
-        await channelMethodsSender.sendMonarchData(monarchDataInstance);
-        await channelMethodsSender.sendReadySignal();
-      },
-      child: MonarchStoryApp()));
+  monarchBinding.reassembleCallback = () async {
+    loadMonarchDataInstance(getMonarchData);
+    await channelMethodsSender.sendMonarchData(monarchDataInstance);
+  };
+
+  monarchBinding.attachRootWidget(MonarchStoryApp());
   monarchBinding.scheduleFrame();
 
   receiveChannelMethodCalls();
   await _connectToVmService();
-  _sendInitialChannelMethodCalls();
+  await _sendDefinitions();
+  await channelMethodsSender.sendMonarchData(monarchDataInstance);
+  await channelMethodsSender.sendReadySignal();
 }
 
-void _setMetaThemes() {
-  activeTheme.setMetaThemes(
-      [...monarchDataInstance.metaThemes, ...standardMetaThemes]);
+void _setUpLog() {
+  writeLogEntryStream(print, printTimestamp: false, printLoggerName: true);
 }
 
 Future<void> _connectToVmService() async {
@@ -71,16 +65,10 @@ Future<void> _connectToVmService() async {
   }
 }
 
-void _setUpLog() {
-  writeLogEntryStream(print, printTimestamp: false, printLoggerName: true);
-}
-
-void _sendInitialChannelMethodCalls() async {
+Future<void> _sendDefinitions() async {
   await channelMethodsSender.sendPing();
   await channelMethodsSender.sendDefaultTheme(activeTheme.defaultMetaTheme.id);
   await channelMethodsSender.sendDeviceDefinitions(DeviceDefinitions());
   await channelMethodsSender.sendStoryScaleDefinitions(StoryScaleDefinitions());
   await channelMethodsSender.sendStandardThemes(StandardThemes());
-  await channelMethodsSender.sendMonarchData(monarchDataInstance);
-  await channelMethodsSender.sendReadySignal();
 }

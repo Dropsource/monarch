@@ -110,16 +110,21 @@ class _MonarchStoryViewState extends State<MonarchStoryView> {
   Widget build(BuildContext context) {
     if (_storyFunction == null) {
       return MonarchSimpleMessageView(message: 'Please select a story');
-    } else {
-      if (_storyErrorMessage == null) {
-        return _buildStory();
-      } else {
-        return MonarchStoryErrorView(message: _storyErrorMessage!);
-      }
     }
+    if (_storyErrorMessage != null) {
+      return MonarchStoryErrorView(message: _storyErrorMessage!);
+    }
+
+    try {
+      var story = _storyFunction!();
+      return _buildStory(story);
+    } on NoSuchMethodError {
+      return MonarchSimpleMessageView(message: 'Please select a story');
+    }
+
   }
 
-  Widget _buildStory() {
+  Widget _buildStory(Widget story) {
     return Scaffold(
       key: ValueKey(keyValue),
       body: Theme(
@@ -132,7 +137,7 @@ class _MonarchStoryViewState extends State<MonarchStoryView> {
               visualDensity: VisualDensity.standard),
           child: Container(
               color: _themeData.scaffoldBackgroundColor,
-              child: _storyFunction!())),
+              child: story)),
     );
 
     // If we need to pass the selected device's `devicePixelRatio`, then we
