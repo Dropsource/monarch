@@ -16,9 +16,8 @@ import 'story_error_view.dart';
 final _logger = Logger('MonarchStoryView');
 
 class MonarchStoryView extends StatefulWidget {
-  final String localeKey;
 
-  MonarchStoryView({required this.localeKey});
+  MonarchStoryView();
 
   @override
   State<StatefulWidget> createState() {
@@ -28,10 +27,8 @@ class MonarchStoryView extends StatefulWidget {
 
 class _MonarchStoryViewState extends State<MonarchStoryView> {
   late DeviceDefinition _device;
-  late String _themeId;
   late ThemeData _themeData;
 
-  String? _storyKey;
   StoryFunction? _storyFunction;
 
   String? _storyErrorMessage;
@@ -84,27 +81,21 @@ class _MonarchStoryViewState extends State<MonarchStoryView> {
 
   void _setThemeData() {
     _themeData = activeTheme.value.theme!;
-    _themeId = activeTheme.value.id;
   }
 
   void _setStoryFunction() {
     final activeStoryId = activeStory.value;
 
     if (activeStoryId == null) {
-      _storyKey = null;
       _storyFunction = null;
     } else {
       final metaStories =
           monarchDataInstance.metaStoriesMap[activeStoryId.pathKey]!;
-      _storyKey = activeStoryId.storyKey;
       _storyFunction = metaStories.storiesMap[activeStoryId.name];
     }
   }
 
   void _setStoryErrorMessage() => _storyErrorMessage = activeStoryError.value;
-
-  String get keyValue =>
-      '$_storyKey|$_themeId|${_device.id}|${widget.localeKey}';
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +117,7 @@ class _MonarchStoryViewState extends State<MonarchStoryView> {
 
   Widget _buildStory(Widget story) {
     return Scaffold(
-      key: ValueKey(keyValue),
+      key: UniqueKey(),
       body: Theme(
           data: _themeData.copyWith(
               platform: _device.targetPlatform,

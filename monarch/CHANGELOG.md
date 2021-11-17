@@ -1,4 +1,4 @@
-## 2.1.0
+## 2.1.1
 - Reassemble (i.e. hot reload) using MonarchBinding.
 - Reset story channel method. 
 - Generate MonarchData code using getters instead of final static variables.
@@ -10,6 +10,8 @@
 - Simplify MaterialApp composition to avoid changing widget tree as 
   localizations are added or removed.
 - Simplify StoryApp.
+- Simplify MonarchStoryView: use UniqueKey instead of ValueKey. It also makes 
+  sure the framework always renders a fresh story.
 
 ## 2.0.0
 - Handle common Flutter error "RenderBox was not laid out" by showing a placeholder

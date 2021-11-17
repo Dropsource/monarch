@@ -58,10 +58,7 @@ class _MonarchStoryAppState extends State<MonarchStoryApp> {
     monarchBindingInstance.lockEventsWhileRendering();
     if (_isReady) {
       return MonarchMaterialApp(
-          scale: _storyScale,
-          locale: _locale,
-          home: MonarchStoryView(
-              localeKey: _locale?.toLanguageTag() ?? '__NA__'));
+          scale: _storyScale, locale: _locale, home: MonarchStoryView());
     } else {
       return MonarchMaterialApp(
           scale: _storyScale,
