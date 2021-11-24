@@ -1,6 +1,6 @@
 name: monarch_utils
 description: Utilities for the monarch package. Mostly utilities for logging.
-version: 1.0.1
+version: 1.0.2
 homepage: https://monarchapp.io
 repository: https://github.com/Dropsource/monarch
 issue_tracker: https://github.com/Dropsource/monarch/issues

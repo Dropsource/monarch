@@ -31,7 +31,7 @@ class Heartbeat {
 
   void complete() {
     _complete();
-    writeln('$message completed, took ${stopwatch!..stop()}');
+    writeln('$message completed, took ${stopwatch!..stop()}.');
   }
 
   void _complete() {
@@ -44,6 +44,6 @@ class Heartbeat {
 
   void completeError() {
     _complete();
-    writeln('$message completed with error, took ${stopwatch!..stop()}');
+    writeln('$message completed with error, took ${stopwatch!..stop()}.');
   }
 }

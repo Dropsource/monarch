@@ -1,3 +1,6 @@
+## 1.0.2 - 2021-11-23
+- Heartbeat: end sentences with period.
+
 ## 1.0.1 - 2021-09-29
 - Replace pedantic with lints.
 
