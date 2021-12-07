@@ -16,7 +16,6 @@ import 'story_error_view.dart';
 final _logger = Logger('MonarchStoryView');
 
 class MonarchStoryView extends StatefulWidget {
-
   MonarchStoryView();
 
   @override
@@ -112,7 +111,6 @@ class _MonarchStoryViewState extends State<MonarchStoryView> {
     } on NoSuchMethodError {
       return MonarchSimpleMessageView(message: 'Please select a story');
     }
-
   }
 
   Widget _buildStory(Widget story) {
@@ -127,8 +125,7 @@ class _MonarchStoryViewState extends State<MonarchStoryView> {
               // Otherwise, flutter desktop uses VisualDensity.compact.
               visualDensity: VisualDensity.standard),
           child: Container(
-              color: _themeData.scaffoldBackgroundColor,
-              child: story)),
+              color: _themeData.scaffoldBackgroundColor, child: story)),
     );
 
     // If we need to pass the selected device's `devicePixelRatio`, then we

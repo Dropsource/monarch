@@ -54,7 +54,6 @@ $folded
 /// Handles errors caught by the Flutter Framework. It replaces the original
 /// implementation of `debugPrint` with our own.
 void handleFlutterFrameworkErrors() {
-
   // Replacing original implementation of `debugPrint` with our own.
   debugPrint = _debugPrintMonarch;
 

@@ -34,5 +34,5 @@ String normalizeAssetPath(String path) => path.replaceAll(r'\', '/');
 const monarchWarningBegin =
     '══╡ MONARCH WARNING ╞═══════════════════════════════════════════════════════════════════════════════';
 
-const monarchWarningEnd = 
+const monarchWarningEnd =
     '════════════════════════════════════════════════════════════════════════════════════════════════════';

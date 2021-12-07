@@ -59,16 +59,16 @@ class MonarchBinding extends BindingBase
 
   @override
   Future<void> performReassemble() async {
-    /// First: 
-    /// - Call [reassembleCallback] which should reload the monarch data and 
-    ///   send it to the platform app. 
-    /// - The platform app will then compute new user selections based on the 
+    /// First:
+    /// - Call [reassembleCallback] which should reload the monarch data and
+    ///   send it to the platform app.
+    /// - The platform app will then compute new user selections based on the
     ///   new monarch data and send those selections back to us.
     /// - Those selections become the new active state.
     await reassembleCallback();
 
     /// Second:
-    /// - Call [WidgetsBinding.performReassemble] which should rebuild the 
+    /// - Call [WidgetsBinding.performReassemble] which should rebuild the
     ///   entire subtree under the [MonarchStoryApp] widget.
     await super.performReassemble();
   }
