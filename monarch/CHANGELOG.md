@@ -1,4 +1,4 @@
-## 2.1.1
+## 2.1.0-pre.1 - 2021-12-07
 - Reassemble (i.e. hot reload) using MonarchBinding.
 - Reset story channel method. 
 - Generate MonarchData code using getters instead of final static variables.
@@ -13,7 +13,7 @@
 - Simplify MonarchStoryView: use UniqueKey instead of ValueKey. It also makes 
   sure the framework always renders a fresh story.
 
-## 2.0.0
+## 2.0.0 - 2021-10-19
 - Handle common Flutter error "RenderBox was not laid out" by showing a placeholder
   error view (MonarchStoryErrorView), which prevents secondary errors from 
   polluting the experience.
@@ -31,7 +31,7 @@
 - Simplify Monarch widget tree
 - Use lints instead of pedantic
 
-## 1.1.0
+## 1.1.0 - 2021-10-19
 - All changes from version 2.0.0 but compatible with older Flutter SDK versions 
   (prior to Flutter 2.4.0-4.0.pre)
 
