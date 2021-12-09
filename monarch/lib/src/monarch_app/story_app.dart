@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -84,6 +85,7 @@ class MonarchMaterialApp extends StatelessWidget {
         alignment: Alignment.topLeft,
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
+            scrollBehavior: MonarchScrollBehavior(),
             localizationsDelegates:
                 locale == null || monarchDataInstance.metaLocalizations.isEmpty
                     ? null
@@ -99,4 +101,12 @@ class MonarchMaterialApp extends StatelessWidget {
             locale: locale,
             home: home));
   }
+}
+
+class MonarchScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => { 
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+  };
 }

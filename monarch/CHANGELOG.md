@@ -1,3 +1,6 @@
+## 2.1.0-pre.2 - 2021-12-09
+- MonarchScrollBehavior to simulate drag gestures with the mouse
+
 ## 2.1.0-pre.1 - 2021-12-07
 - Reassemble (i.e. hot reload) using MonarchBinding.
 - Reset story channel method. 
