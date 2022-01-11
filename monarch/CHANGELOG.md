@@ -1,7 +1,5 @@
-## 2.1.0-pre.2 - 2021-12-09
+## 2.1.0 - 2022-01-11
 - MonarchScrollBehavior to simulate drag gestures with the mouse
-
-## 2.1.0-pre.1 - 2021-12-07
 - Reassemble (i.e. hot reload) using MonarchBinding.
 - Reset story channel method. 
 - Generate MonarchData code using getters instead of final static variables.
@@ -13,8 +11,8 @@
 - Simplify MaterialApp composition to avoid changing widget tree as 
   localizations are added or removed.
 - Simplify StoryApp.
-- Simplify MonarchStoryView: use UniqueKey instead of ValueKey. It also makes 
-  sure the framework always renders a fresh story.
+- Simplify MonarchStoryView: use UniqueKey instead of ValueKey. Framework should 
+  always render a fresh story.
 
 ## 2.0.0 - 2021-10-19
 - Handle common Flutter error "RenderBox was not laid out" by showing a placeholder
