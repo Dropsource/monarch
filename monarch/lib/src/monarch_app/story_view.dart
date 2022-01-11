@@ -2,23 +2,21 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:monarch/src/monarch_app/active_story_error.dart';
-import 'package:monarch/src/monarch_app/story_error_view.dart';
 import 'package:monarch_utils/log.dart';
 
 import 'active_device.dart';
 import 'active_story.dart';
 import 'active_theme.dart';
+import 'active_story_error.dart';
 import 'device_definitions.dart';
+import 'monarch_data_instance.dart';
 import 'monarch_data.dart';
+import 'story_error_view.dart';
 
 final _logger = Logger('MonarchStoryView');
 
 class MonarchStoryView extends StatefulWidget {
-  final MonarchData monarchData;
-  final String localeKey;
-
-  MonarchStoryView({required this.monarchData, required this.localeKey});
+  MonarchStoryView();
 
   @override
   State<StatefulWidget> createState() {
@@ -28,10 +26,8 @@ class MonarchStoryView extends StatefulWidget {
 
 class _MonarchStoryViewState extends State<MonarchStoryView> {
   late DeviceDefinition _device;
-  late String _themeId;
   late ThemeData _themeData;
 
-  String? _storyKey;
   StoryFunction? _storyFunction;
 
   String? _storyErrorMessage;
@@ -84,44 +80,42 @@ class _MonarchStoryViewState extends State<MonarchStoryView> {
 
   void _setThemeData() {
     _themeData = activeTheme.value.theme!;
-    _themeId = activeTheme.value.id;
   }
 
   void _setStoryFunction() {
     final activeStoryId = activeStory.value;
 
     if (activeStoryId == null) {
-      _storyKey = null;
       _storyFunction = null;
     } else {
       final metaStories =
-          widget.monarchData.metaStoriesMap[activeStoryId.pathKey]!;
-      _storyKey = activeStoryId.storyKey;
+          monarchDataInstance.metaStoriesMap[activeStoryId.pathKey]!;
       _storyFunction = metaStories.storiesMap[activeStoryId.name];
     }
   }
 
   void _setStoryErrorMessage() => _storyErrorMessage = activeStoryError.value;
 
-  String get keyValue =>
-      '$_storyKey|$_themeId|${_device.id}|${widget.localeKey}';
-
   @override
   Widget build(BuildContext context) {
     if (_storyFunction == null) {
       return MonarchSimpleMessageView(message: 'Please select a story');
-    } else {
-      if (_storyErrorMessage == null) {
-        return _buildStory();
-      } else {
-        return MonarchStoryErrorView(message: _storyErrorMessage!);
-      }
+    }
+    if (_storyErrorMessage != null) {
+      return MonarchStoryErrorView(message: _storyErrorMessage!);
+    }
+
+    try {
+      var story = _storyFunction!();
+      return _buildStory(story);
+    } on NoSuchMethodError {
+      return MonarchSimpleMessageView(message: 'Please select a story');
     }
   }
 
-  Widget _buildStory() {
+  Widget _buildStory(Widget story) {
     return Scaffold(
-      key: ValueKey(keyValue),
+      key: UniqueKey(),
       body: Theme(
           data: _themeData.copyWith(
               platform: _device.targetPlatform,
@@ -131,8 +125,7 @@ class _MonarchStoryViewState extends State<MonarchStoryView> {
               // Otherwise, flutter desktop uses VisualDensity.compact.
               visualDensity: VisualDensity.standard),
           child: Container(
-              color: _themeData.scaffoldBackgroundColor,
-              child: _storyFunction!())),
+              color: _themeData.scaffoldBackgroundColor, child: story)),
     );
 
     // If we need to pass the selected device's `devicePixelRatio`, then we

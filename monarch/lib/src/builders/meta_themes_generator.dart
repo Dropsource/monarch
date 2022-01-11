@@ -19,31 +19,61 @@ class MetaThemesGenerator extends Generator {
 
     final expressions = <String>[];
 
+    void addExpression(AnnotatedElement annotatedElement) {
+      var annotation = annotatedElement.annotation;
+      var element = annotatedElement.element;
+
+      var themeName = annotation.read('name').stringValue;
+      var isDefault = annotation.read('isDefault').boolValue;
+      var themeVariableName = element.name;
+      expressions
+          .add("MetaTheme.user('$themeName', $themeVariableName, $isDefault)");
+    }
+
+    String proposedChangeMessage(Element element) => '''
+Proposed change:
+```
+@MonarchTheme(...)
+ThemeData get ${element.name} => ...
+```
+
+After you make the change, run `monarch run` again.
+Documentation: https://monarchapp.io/docs/themes''';
+
     for (var annotatedElement in annotations) {
       final element = annotatedElement.element;
 
       if (element is TopLevelVariableElement) {
-        log.fine(
-            'Found MonarchTheme annotation on top-level element: ${element.name}');
-        final annotation = annotatedElement.annotation;
+        log.warning('''
+$monarchWarningBegin
+Consider changing top-level variable `${element.name}` to a getter. Hot reloading works better with 
+top-level getters. 
 
-        final themeName = annotation.read('name').stringValue;
-        final isDefault = annotation.read('isDefault').boolValue;
-        final themeVariableName = element.name;
+${proposedChangeMessage(element)}
+$monarchWarningEnd
+''');
 
-        expressions.add(
-            "MetaTheme.user('$themeName', $themeVariableName, $isDefault)");
-      } else {
-        final msg = '''
-Found MonarchTheme annotation on an element that is not a top-level variable.
-The MonarchTheme annotation must be placed on a top-level variable.
-Element name: ${element.name}
-''';
-        log.warning(msg);
+        addExpression(annotatedElement);
+        continue;
       }
+
+      if (element is PropertyAccessorElement && element.isGetter) {
+        log.fine('Found MonarchTheme annotation on getter: ${element.name}');
+        addExpression(annotatedElement);
+        continue;
+      }
+
+      log.warning('''
+$monarchWarningBegin
+`@MonarchTheme` annotation on element `${element.name}` will not be used. The `@MonarchTheme` 
+annotation should be placed on a top-level (or library) getter.
+
+${proposedChangeMessage(element)}
+$monarchWarningEnd
+''');
     }
 
-    final pathToThemeFile = getImportUriOrRelativePath(buildStep.inputId);
+    var pathToThemeFile = getImportUriOrRelativePath(buildStep.inputId);
 
     return _outputContents(pathToThemeFile, expressions);
   }
@@ -54,7 +84,7 @@ Element name: ${element.name}
 import 'package:monarch/monarch.dart';
 import '$pathToThemeFile';
 
-final metaThemeItems = [
+List<MetaTheme> get metaThemeItems => [
   ${metaThemeExpressions.join(', ')}
 ];
 

@@ -55,6 +55,11 @@ Future<dynamic> _handler(MethodCall call) async {
       activeStory.value = StoryId.fromNodeKey(storyKey);
       break;
 
+    case MethodNames.resetStory:
+      resetErrors();
+      activeStory.value = null;
+      break;
+
     case MethodNames.setActiveLocale:
       String locale = args!['locale'];
       resetErrors();

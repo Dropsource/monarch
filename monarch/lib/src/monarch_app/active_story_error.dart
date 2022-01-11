@@ -12,7 +12,8 @@ class ActiveStoryError extends ActiveValue<String?> {
   }
 
   @override
-  String get valueSetMessage => 'active story error set';
+  String get valueSetMessage =>
+      value == null ? 'active story error reset' : 'active story error set';
 }
 
 final activeStoryError = ActiveStoryError();

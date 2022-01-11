@@ -30,3 +30,9 @@ String getRelativePathFromOutputToInput(AssetId inputId) {
 
 /// Asset paths always have forward slashes regardless of platform.
 String normalizeAssetPath(String path) => path.replaceAll(r'\', '/');
+
+const monarchWarningBegin =
+    '══╡ MONARCH WARNING ╞═══════════════════════════════════════════════════════════════════════════════';
+
+const monarchWarningEnd =
+    '════════════════════════════════════════════════════════════════════════════════════════════════════';

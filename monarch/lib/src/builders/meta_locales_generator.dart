@@ -19,44 +19,79 @@ class MetaLocalizationsGenerator extends Generator {
 
     final expressions = <String>[];
 
+    void addExpression(AnnotatedElement annotatedElement) {
+      var annotation = annotatedElement.annotation;
+      var element = annotatedElement.element;
+
+      var localesDartObjects = annotation.read('locales').listValue;
+      var locales = localesDartObjects.map((x) {
+        var languageCode = x.getField('languageCode')!.toStringValue();
+        var countryCode = x.getField('countryCode')!.toStringValue();
+        if (countryCode == null) {
+          return "Locale('$languageCode')";
+        } else {
+          return "Locale('$languageCode', '$countryCode')";
+        }
+      });
+      var localesExpression = "[${locales.join(', ')}]";
+
+      expressions.add(
+          "MetaLocalization.user($localesExpression, ${element.name}, '${element.name}')");
+    }
+
+    String proposedChangeMessage(VariableElement element) => '''
+Proposed change:
+```
+@MonarchLocalizations(...)
+${element.type.getDisplayString(withNullability: false)} get ${element.name} => ...
+```
+
+After you make the change, run `monarch run` again.
+Documentation: https://monarchapp.io/docs/internationalization''';
+
     for (var annotatedElement in annotations) {
       final element = annotatedElement.element;
-
       if (element is TopLevelVariableElement) {
-        log.fine(
-            'Found MonarchLocalizations annotation on top-level element: ${element.name}');
-        final annotation = annotatedElement.annotation;
+        if (!element.isConst) {
+          log.warning('''
+$monarchWarningBegin
+Consider changing top-level variable `${element.name}` to a getter or const. Hot reloading works better 
+with top-level getters or const variables. 
 
-        final localesDartObjects = annotation.read('locales').listValue;
-        final locales = localesDartObjects.map((x) {
-          final languageCode = x.getField('languageCode')!.toStringValue();
-          final countryCode = x.getField('countryCode')!.toStringValue();
-          if (countryCode == null) {
-            return "Locale('$languageCode')";
-          } else {
-            return "Locale('$languageCode', '$countryCode')";
-          }
-        });
-        final localesExpression = "[${locales.join(', ')}]";
+${proposedChangeMessage(element)}
+$monarchWarningEnd
+''');
+        }
 
-        expressions.add(
-            "MetaLocalization.user($localesExpression, ${element.name}, '${element.name}')");
-      } else {
-        final msg = '''
-Found MonarchLocalizations annotation on an element that is not a top-level variable.
-The MonarchLocalizations annotation must be placed on a top-level variable.
-Element name: ${element.name}
-''';
-        log.warning(msg);
+        addExpression(annotatedElement);
+        continue;
       }
+
+      if (element is PropertyAccessorElement && element.isGetter) {
+        log.fine('Found MonarchLocalizations on getter: ${element.name}');
+        addExpression(annotatedElement);
+        continue;
+      }
+
+      log.warning('''
+$monarchWarningBegin
+`@MonarchLocalizations` annotation on element `${element.name}` will not be used. 
+The `@MonarchLocalizations` annotation should be placed on a top-level getter or const.
+$monarchWarningEnd
+''');
     }
 
     if (isInLib(buildStep.inputId)) {
       return _outputContents(buildStep.inputId.uri.toString(), expressions);
     } else {
-      log.warning(
-          'Could not compute import URI to file with MonarchLocalizations annotation. '
-          'Please make sure the file is inside the lib directory.');
+      // Could not compute import URI to file with MonarchLocalizations annotation
+      // outside of lib directory.
+      log.warning('''
+$monarchWarningBegin
+`@MonarchLocalizations` annotation on library ${buildStep.inputId.path} will not be used.
+The `@MonarchLocalizations` annotation should be used in libraries inside the lib directory.
+$monarchWarningEnd
+''');
       return null;
     }
   }
@@ -68,7 +103,7 @@ import 'dart:ui';
 import 'package:monarch/monarch.dart';
 import '$pathToLocalizationsFile';
 
-final metaLocalizationItems = [
+List<MetaLocalization> get metaLocalizationItems => [
   ${metaLocalizationExpressions.join(', ')}
 ];
 

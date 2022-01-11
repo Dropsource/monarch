@@ -1,13 +1,12 @@
 import 'package:flutter/foundation.dart';
-import 'package:monarch/src/monarch_app/monarch_binding.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import 'active_story.dart';
 import 'active_story_error.dart';
+import 'monarch_binding.dart';
+import 'monarch_data_instance.dart';
 import 'log_level.dart';
-import 'monarch_data.dart';
 
-late MonarchData _monarchData;
 int _uncaughtErrorCount = 0;
 int _flutterErrorCount = 0;
 const errorLineMarker = '##err-line##';
@@ -54,9 +53,7 @@ $folded
 
 /// Handles errors caught by the Flutter Framework. It replaces the original
 /// implementation of `debugPrint` with our own.
-void handleFlutterFrameworkErrors(MonarchData monarchData) {
-  _monarchData = monarchData;
-
+void handleFlutterFrameworkErrors() {
   // Replacing original implementation of `debugPrint` with our own.
   debugPrint = _debugPrintMonarch;
 
@@ -158,7 +155,7 @@ String _getActiveStoryErrorMessage() {
 }
 
 String _getRelevantStoryMessage(StoryId activeStoryId) {
-  var metaStories = _monarchData.metaStoriesMap[activeStoryId.pathKey];
+  var metaStories = monarchDataInstance.metaStoriesMap[activeStoryId.pathKey];
   if (metaStories == null) {
     return 'Unexpected - Could not find meta stories for ${activeStoryId.pathKey}';
   }
