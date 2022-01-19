@@ -38,7 +38,7 @@ Monarch is inspired by [Storybook](https://storybook.js.org/).
 - Ditch the emulator for common tasks, free up memory and resources.
 
 <p align="center">
-  <img style="border-radius: 7px;" src="https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch-build.gif" alt="Build widgets faster with Monarch">
+  <img src="https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch-build.gif" alt="Build widgets faster with Monarch">
 </p>
 
 ### Find and fix bugs with ease
@@ -49,7 +49,7 @@ Monarch is inspired by [Storybook](https://storybook.js.org/).
 - Reuse your stories from your widget tests.
 
 <p align="center">
-  <img style="border-radius: 7px;" src="https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch-fix.gif" alt="Find and fix bugs with ease">
+  <img src="https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch-fix.gif" alt="Find and fix bugs with ease">
 </p>
 
 ### Build responsive UIs easily
@@ -59,7 +59,7 @@ Monarch is inspired by [Storybook](https://storybook.js.org/).
 - Make sure your app remains accessible and usable at large text scale factors.
 
 <p align="center">
-  <img style="border-radius: 7px;" src="https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch-knobs.gif" alt="Build responsive UIs easily">
+  <img src="https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch-knobs.gif" alt="Build responsive UIs easily">
 </p>
 
 ### Debug widgets in isolation
@@ -69,5 +69,5 @@ Monarch is inspired by [Storybook](https://storybook.js.org/).
 - Debug your widgets without running the full app.
 
 <p align="center">
-  <img style="border-radius: 7px;" src="https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch-debug.gif" alt="Build responsive UIs easily">
+  <img src="https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch-debug.gif" alt="Build responsive UIs easily">
 </p>
