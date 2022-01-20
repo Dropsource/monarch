@@ -1,3 +1,6 @@
+## 2.1.1 - 2022-01-20
+- README update.
+
 ## 2.1.0 - 2022-01-11
 - MonarchScrollBehavior to simulate drag gestures with the mouse
 - Reassemble (i.e. hot reload) using MonarchBinding.
