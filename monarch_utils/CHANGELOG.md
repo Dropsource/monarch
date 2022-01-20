@@ -1,3 +1,6 @@
+## 1.0.3 - 2022-01-20
+- pubspec description update.
+
 ## 1.0.2 - 2021-11-23
 - Heartbeat: end sentences with period.
 

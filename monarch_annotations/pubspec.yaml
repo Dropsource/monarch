@@ -1,6 +1,6 @@
 name: monarch_annotations
-description: Contains annotations for monarch. Monarch lets you generate stories for your widgets.
-version: 1.0.0
+description: Annotations for Monarch. Monarch is a tool for building Flutter widgets in isolation. It makes building beautiful apps a simpler and faster experience.
+version: 1.0.1
 homepage: https://monarchapp.io
 repository: https://github.com/Dropsource/monarch
 issue_tracker: https://github.com/Dropsource/monarch/issues

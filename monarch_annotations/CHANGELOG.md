@@ -1,3 +1,6 @@
+## 2.1.1 - 2022-01-20
+- pubspec description update.
+
 ## 1.0.0 - 2021-09-01
 - Bumping version to 1.0.0 since API is stable and users depend on it already.
 
