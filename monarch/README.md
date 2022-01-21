@@ -6,8 +6,7 @@
 
 # Monarch
 
-Build high-quality UIs with ease. Monarch is a tool for building Flutter widgets in isolation. It 
-makes building beautiful apps a simpler and faster experience.
+Build high-quality UIs with ease. Monarch is a tool for building Flutter widgets in isolation. It makes it easy to build, test and debug complex UIs.
 
 ## Documentation
 * [Getting Started](https://monarchapp.io/docs/introduction)
@@ -26,8 +25,7 @@ packages, patterns and tools.
 * If you have any questions or run into any issues, please create an issue in this repo.
 
 ## About Monarch
-Monarch is a tool for Flutter development. It helps you build high-quality UIs by isolating widgets.
-It makes it easy to prototype, develop, test and debug complex UIs.
+Monarch is a tool for building Flutter widgets in isolation. It makes it easy to build, test and debug complex UIs.
 
 Monarch is inspired by [Storybook](https://storybook.js.org/). 
 

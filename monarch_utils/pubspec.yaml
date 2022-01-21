@@ -1,6 +1,6 @@
 name: monarch_utils
-description: Utilities for the monarch package. Monarch is a tool for building Flutter widgets in isolation. It makes building beautiful apps a simpler and faster experience.
-version: 1.0.3
+description: Utilities for the monarch package. Monarch is a tool for building Flutter widgets in isolation. It makes it easy to build, test and debug complex UIs.
+version: 1.0.4
 homepage: https://monarchapp.io
 repository: https://github.com/Dropsource/monarch
 issue_tracker: https://github.com/Dropsource/monarch/issues
