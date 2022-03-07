@@ -1,3 +1,6 @@
+## 2.2.0 - 2021-03-07
+- Update versions of packages analyzer and vm_service.
+
 ## 2.1.2 - 2022-01-20
 - README update.
 
