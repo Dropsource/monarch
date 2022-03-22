@@ -55,7 +55,7 @@ class _MonarchStoryAppState extends State<MonarchStoryApp> {
 
   @override
   Widget build(BuildContext context) {
-    monarchBindingInstance.lockEventsWhileRendering();
+    MonarchBinding.instance.lockEventsWhileRendering();
     if (_isReady) {
       return MonarchMaterialApp(
           scale: _storyScale, locale: _locale, home: MonarchStoryView());

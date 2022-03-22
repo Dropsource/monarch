@@ -78,7 +78,7 @@ void _handleMouseTrackerDebugErrorIfNeeded(Object error) {
     var err = error.toString();
     if (err.contains('rendering/mouse_tracker.dart') &&
         err.contains("'!_debugDuringDeviceUpdate': is not true")) {
-      monarchBindingInstance.resetMouseTracker();
+      MonarchBinding.instance.resetMouseTracker();
     }
   }
 }

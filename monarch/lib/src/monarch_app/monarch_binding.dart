@@ -25,7 +25,11 @@ class MonarchBinding extends BindingBase
         SemanticsBinding,
         RendererBinding,
         WidgetsBinding {
-  MonarchBinding() {
+  @override
+  void initInstances() {
+    super.initInstances();
+    _instance = this;
+
     _onDeviceChanged(activeDevice.value);
     _onTextScaleFactorChanged(activeTextScaleFactor.value);
 
@@ -33,12 +37,14 @@ class MonarchBinding extends BindingBase
     activeTextScaleFactor.stream.listen(_onTextScaleFactorChanged);
   }
 
-  static WidgetsBinding ensureInitialized() {
-    if (WidgetsBinding.instance == null) {
+  static MonarchBinding get instance => BindingBase.checkInstance(_instance);
+  static MonarchBinding? _instance;
+
+  static MonarchBinding ensureInitialized() {
+    if (MonarchBinding._instance == null) {
       MonarchBinding();
     }
-    assert(WidgetsBinding.instance is MonarchBinding);
-    return WidgetsBinding.instance!;
+    return MonarchBinding.instance;
   }
 
   @override
@@ -52,7 +58,7 @@ class MonarchBinding extends BindingBase
   }
 
   void _onTextScaleFactorChanged(double factor) {
-    window.textScaleFactorTestValue = factor;
+    window.platformDispatcher.textScaleFactorTestValue = factor;
   }
 
   late final Future<void> Function() reassembleCallback;
@@ -101,9 +107,6 @@ class MonarchBinding extends BindingBase
 
   void resetMouseTracker() {
     // ignore: invalid_use_of_visible_for_testing_member
-    RendererBinding.instance!.initMouseTracker();
+    RendererBinding.instance.initMouseTracker();
   }
 }
-
-MonarchBinding get monarchBindingInstance =>
-    WidgetsBinding.instance! as MonarchBinding;

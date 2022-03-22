@@ -27,7 +27,7 @@ void startMonarch(MonarchData Function() getMonarchData) {
 }
 
 void _startMonarch(MonarchData Function() getMonarchData) async {
-  final monarchBinding = MonarchBinding.ensureInitialized() as MonarchBinding;
+  final monarchBinding = MonarchBinding.ensureInitialized();
 
   _setUpLog();
   readySignal.loading();
@@ -39,8 +39,10 @@ void _startMonarch(MonarchData Function() getMonarchData) async {
     await channelMethodsSender.sendMonarchData(monarchDataInstance);
   };
 
-  monarchBinding.attachRootWidget(MonarchStoryApp());
-  monarchBinding.scheduleFrame();
+  Timer.run(() {
+    monarchBinding.attachRootWidget(MonarchStoryApp());
+  });
+  monarchBinding.scheduleWarmUpFrame();
 
   receiveChannelMethodCalls();
   await _connectToVmService();

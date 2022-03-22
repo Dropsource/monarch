@@ -1,4 +1,7 @@
-## 2.2.0 - 2021-03-07
+## 2.3.0-pre.1 - 2022-03-22
+- Support new Flutter binding interfaces changed in Flutter version 2.12.0-4.1.pre
+
+## 2.2.0 - 2022-03-07
 - Update versions of packages analyzer and vm_service.
 
 ## 2.1.2 - 2022-01-20
