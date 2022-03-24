@@ -27,7 +27,7 @@ jobs:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'stable' # or: 'beta', 'dev' or 'master'
+          channel: 'beta' # or: 'stable', 'beta', 'dev' or 'master'
           
       - name: Install dependencies
         working-directory: monarch
