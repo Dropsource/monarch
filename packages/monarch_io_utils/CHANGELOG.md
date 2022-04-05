@@ -1,4 +1,7 @@
-## 1.0.1 - 2021-11-04
+## 1.0.1 - 2022-04-05
+- Explicitly add package:meta dependency
+
+## 1.0.0 - 2021-11-04
 - Add string utility function `hardWrap`
 - This package is stable, bumping to version 1.0.0
 
