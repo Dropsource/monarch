@@ -1,0 +1,1 @@
+// builds all the monarch components, calls other build scripts
