@@ -1,2 +1,6 @@
 local_settings.yaml
 ephemeral/
+
+.dart_tool/
+pubspec.lock
+.packages
