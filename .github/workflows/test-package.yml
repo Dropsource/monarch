@@ -63,3 +63,22 @@ jobs:
       - name: Run tests
         working-directory: packages/monarch_utils
         run: dart test
+
+  test_monarch_io_utils:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1
+      - name: Install dependencies
+        working-directory: packages/monarch_io_utils
+        run: dart pub get
+      - name: Analyze project source
+        working-directory: packages/monarch_io_utils
+        run: dart analyze
+      - name: Run tests
+        working-directory: packages/monarch_io_utils
+        run: dart test
