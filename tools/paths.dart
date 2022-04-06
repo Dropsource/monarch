@@ -26,29 +26,59 @@ final out_ui = p.join(out_bin_cache, 'monarch_ui');
 String out_ui_flutter_id(String version, String channel) =>
     p.join(out_ui, 'flutter_${os}_$version-$channel');
 
-String out_ui_flutter_id_monarch_macos_app(String flutterIdPath) =>
-    p.join(flutterIdPath, 'monarch_macos.app');
+String out_ui_flutter_id_monarch_macos_app(String flutter_id) =>
+    p.join(flutter_id, 'monarch_macos.app');
 
-String darwin_flutter_framework(String flutterSdkPath) => p.join(flutterSdkPath,
+String out_ui_flutter_id_controller(String flutter_id) =>
+    p.join(flutter_id, 'controller');
+
+String darwin_flutter_framework(String flutter_sdk) => p.join(flutter_sdk,
     'bin/cache/artifacts/engine/darwin-x64/FlutterMacOS.framework');
+
+String flutter_exe(String flutter_sdk) => p.join(flutter_sdk, 'bin', 'flutter');
 
 final os = valueForPlatform(macos: 'macos', windows: 'windows', linux: 'linux');
 
 const local_settings_yaml = 'local_settings.yaml';
 
-List<String> flutter_sdks() {
+List<String> read_flutter_sdks() {
   var yaml = readLocalSettingsYaml();
   var key = 'local_flutter_sdks';
-  if (!yaml.containsKey(key)) throw 'Expected to find `$key` in $local_settings_yaml';
+  if (!yaml.containsKey(key))
+    throw 'Expected to find `$key` in $local_settings_yaml';
   var sdks = yaml[key];
-  if (!(sdks is YamlList)) throw '`$key` in $local_settings_yaml should be yaml list';
+  if (!(sdks is YamlList))
+    throw '`$key` in $local_settings_yaml should be yaml list';
   if (sdks.isEmpty) throw '`$key` should not be empty';
   return sdks.nodes.map((sdk) => sdk.value.toString()).toList();
 }
 
 YamlMap readLocalSettingsYaml() {
   var file = File(p.join(tools, local_settings_yaml));
-  if (!file.existsSync()) throw 'Make sure you create $local_settings_yaml inside the tools directory';
+  if (!file.existsSync())
+    throw 'Make sure you create $local_settings_yaml inside the tools directory';
   var contents = file.readAsStringSync();
   return loadYaml(contents) as YamlMap;
+}
+
+void createDirectoryIfNeeded(String path) {
+  var dir = Directory(path);
+  if (!dir.existsSync()) dir.createSync(recursive: true);
+}
+
+String compute_out_ui_flutter_id(String flutter_sdk) {
+  var version = File(p.join(flutter_sdk, 'version')).readAsStringSync();
+  print('Flutter version is $version');
+
+  var result = Process.runSync('git', ['branch', '--show-current'],
+      workingDirectory: flutter_sdk);
+  if (result.exitCode != 0) {
+    print('Error reading flutter channel');
+    print(result.stdout);
+    print(result.stderr);
+  }
+  var channel = result.stdout.trim();
+  print('Flutter channel is $channel');
+
+  return out_ui_flutter_id(version, channel);
 }

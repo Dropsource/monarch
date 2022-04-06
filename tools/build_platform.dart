@@ -4,46 +4,35 @@ import 'package:path/path.dart' as p;
 import 'paths.dart' as paths;
 
 void main() {
-  var uiDir = Directory(paths.out_ui);
-  if (uiDir.existsSync()) uiDir.deleteSync(recursive: true);
-  uiDir.createSync(recursive: true);
+  paths.createDirectoryIfNeeded(paths.out_ui);
 
-  for (final flutterSdkPath in paths.flutter_sdks()) {
+  for (final flutter_sdk in paths.read_flutter_sdks()) {
     print('''
 ===============================================================================
 Using flutter sdk at:
-  $flutterSdkPath
+  $flutter_sdk
 ''');
 
-    var version = File(p.join(flutterSdkPath, 'version')).readAsStringSync();
-    print('Flutter version is $version');
-
-    var result = Process.runSync('git', ['branch', '--show-current'],
-        workingDirectory: flutterSdkPath);
-    if (result.exitCode != 0) {
-      print('Error reading flutter channel');
-      print(result.stdout);
-      print(result.stderr);
-    }
-    var channel = result.stdout.trim();
-    print('Flutter channel is $channel');
-
-    var flutterIdPath = paths.out_ui_flutter_id(version, channel);
-    print('''
-Will output monarch ${paths.os} binaries to:
-  $flutterIdPath
-''');
+    var out_ui_flutter_id = paths.compute_out_ui_flutter_id(flutter_sdk);
+    paths.createDirectoryIfNeeded(out_ui_flutter_id);
 
     if (Platform.isMacOS) {
-      var ephemeralDir = Directory(paths.platform_macos_ephemeral);
-      if (ephemeralDir.existsSync()) ephemeralDir.deleteSync(recursive: true);
-      ephemeralDir.createSync(recursive: true);
+      const monarch_macos = 'monarch_macos';
+      print('''
+Will output $monarch_macos to:
+  $out_ui_flutter_id
+''');
 
-      print('Copying darwin flutter framework bundle to ephemeral directory...');
+      var ephemeral_dir = Directory(paths.platform_macos_ephemeral);
+      if (ephemeral_dir.existsSync()) ephemeral_dir.deleteSync(recursive: true);
+      ephemeral_dir.createSync(recursive: true);
+
+      print(
+          'Copying darwin flutter framework bundle to ephemeral directory...');
 
       var result = Process.runSync('cp', [
         '-R',
-        paths.darwin_flutter_framework(flutterSdkPath),
+        paths.darwin_flutter_framework(flutter_sdk),
         paths.platform_macos_ephemeral
       ]);
       if (result.exitCode != 0) {
@@ -52,26 +41,29 @@ Will output monarch ${paths.os} binaries to:
         print(result.stderr);
       }
 
-      var macosAppDir =
-          Directory(paths.out_ui_flutter_id_monarch_macos_app(flutterIdPath));
-      if (macosAppDir.existsSync())
-        macosAppDir.deleteSync(recursive: true);
+      var monarch_macos_app_dir =
+          Directory(paths.out_ui_flutter_id_monarch_macos_app(out_ui_flutter_id));
+      if (monarch_macos_app_dir.existsSync())
+        monarch_macos_app_dir.deleteSync(recursive: true);
 
-      print('Building monarch_macos with xcodebuild...');
+      print('Building $monarch_macos with xcodebuild...');
 
-      result = Process.runSync('xcodebuild', [
-        '-scheme',
-        'monarch_macos',
-        'CONFIGURATION_BUILD_DIR=$flutterIdPath',
-        'build'
-      ], workingDirectory: paths.platform_macos);
+      result = Process.runSync(
+          'xcodebuild',
+          [
+            '-scheme',
+            '$monarch_macos',
+            'CONFIGURATION_BUILD_DIR=$out_ui_flutter_id',
+            'build'
+          ],
+          workingDirectory: paths.platform_macos);
       if (result.exitCode != 0) {
         print('Error running xcodebuild');
         print(result.stdout);
         print(result.stderr);
       }
 
-      Directory(p.join(flutterIdPath, 'monarch_macos.swiftmodule'))
+      Directory(p.join(out_ui_flutter_id, '$monarch_macos.swiftmodule'))
           .deleteSync(recursive: true);
     }
     print('''
