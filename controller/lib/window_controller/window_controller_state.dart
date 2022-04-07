@@ -12,21 +12,45 @@ class ConnectedWindowControllerState extends WindowControllerState {
   final MonarchData monarchData;
   final String? activeStoryName;
 
+  final String currentDevice;
+  final List<String> devices;
+
+  final Locale currentLocale;
+  final MetaTheme currentTheme;
+
   ConnectedWindowControllerState({
     required bool active,
     required this.monarchData,
     this.activeStoryName,
+    required this.devices,
+    required this.currentDevice,
+    required this.currentLocale,
+    required this.currentTheme,
   }) : super(active: active);
 
   factory ConnectedWindowControllerState.test() =>
       ConnectedWindowControllerState(
+          devices: [
+            'iPhone 13',
+            'iPhone 13 Pro Max',
+            'Samsung S22',
+          ],
+          currentDevice: 'iPhone 13',
           active: true,
+          currentLocale: const Locale('en'),
+          currentTheme: MetaTheme(
+            'theme_id',
+            'Default',
+            null,
+            true,
+          ),
           monarchData: MonarchData(
             'test_package_name',
             [
               MetaLocalization(
                 [
-                  const Locale('en'),
+                  const Locale('en',),
+                  const Locale('es'),
                 ],
                 null,
                 'locale_delegate_class_name',
@@ -35,13 +59,13 @@ class ConnectedWindowControllerState extends WindowControllerState {
             [
               MetaTheme(
                 'theme_id',
-                'default',
+                'Default',
                 null,
                 true,
               ),
               MetaTheme(
                 'other_theme_id',
-                'other',
+                'Material Light',
                 null,
                 false,
               ),
@@ -96,11 +120,21 @@ class ConnectedWindowControllerState extends WindowControllerState {
           ),
           activeStoryName: null);
 
-  ConnectedWindowControllerState copyWith(
-          {String? activeStoryName, MonarchData? monarchData, bool? active}) =>
+  ConnectedWindowControllerState copyWith({
+    String? activeStoryName,
+    MonarchData? monarchData,
+    bool? active,
+    String? currentDevice,
+    Locale? currentLocale,
+    MetaTheme? currentTheme,
+  }) =>
       ConnectedWindowControllerState(
         activeStoryName: activeStoryName ?? this.activeStoryName,
         monarchData: monarchData ?? this.monarchData,
         active: active ?? this.active,
+        currentDevice: currentDevice ?? this.currentDevice,
+        devices: devices,
+        currentLocale: currentLocale ?? this.currentLocale,
+        currentTheme: currentTheme ?? this.currentTheme,
       );
 }

@@ -44,6 +44,14 @@ class MetaTheme implements OutboundChannelArgument {
   Map<String, dynamic> toStandardMap() {
     return {'id': id, 'name': name, 'isDefault': isDefault};
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MetaTheme && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 class MetaLocalization implements OutboundChannelArgument {

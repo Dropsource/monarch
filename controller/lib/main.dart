@@ -11,8 +11,8 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     setWindowTitle('Monarch');
-    setWindowMinSize(const Size(500, 500));
-    setWindowMaxSize(const Size(500, 800));
+    setWindowMinSize(const Size(505, 500));
+    //setWindowMaxSize(const Size(505, 800));
   }
   runApp(const MyApp());
 }

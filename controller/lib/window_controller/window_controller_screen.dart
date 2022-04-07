@@ -27,15 +27,15 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
             final state = snapshot.data!;
 
             return Container(
-              width: 650,
-              height: 600,
+              width: double.infinity,
+              //height: 600,
               padding: const EdgeInsets.all(8),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Container(
-                      constraints: const BoxConstraints(minWidth: 300),
+                      constraints: const BoxConstraints(minWidth: 280),
                       padding: const EdgeInsets.only(
                         top: 16,
                       ),
@@ -60,7 +60,9 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
                       ),
                     ),
                   ),
-                  ControlsPanel(state:state),
+                  if (state is ConnectedWindowControllerState) ...[
+                    ControlsPanel(state: state),
+                  ],
                 ],
               ),
             );
