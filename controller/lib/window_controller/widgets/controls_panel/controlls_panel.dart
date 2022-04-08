@@ -8,6 +8,7 @@ import 'package:monarch_window_controller/window_controller/widgets/components/n
 import 'package:monarch_window_controller/window_controller/window_controller_state.dart';
 
 import '../../../main.dart';
+import '../../../utils/tranlsations.dart';
 
 class ControlsPanel extends StatelessWidget {
   final ConnectedWindowControllerState state;
@@ -22,6 +23,8 @@ class ControlsPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final translations = Translations.of(context)!;
+
     return SizedBox(
       width: width,
       child: Column(
@@ -92,10 +95,16 @@ class ControlsPanel extends StatelessWidget {
             devToolsOptions: state.devToolOptions,
             enabledFeatures: state.enabledDevToolsFeatures,
           ),
-          MaterialButton(
-            color: Colors.red,
-            onPressed: () {},
-            child: const Text('Launch DevTools...'),
+          Padding(
+            padding: const EdgeInsets.only(
+              right: 16,
+              top: 40,
+            ),
+            child: MaterialButton(
+              color: Colors.red,
+              onPressed: () {},
+              child:  Text(translations.text('dev_tools.launch')),
+            ),
           ),
         ],
       ),

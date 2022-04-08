@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:monarch_window_controller/utils/localization.dart';
 import 'package:monarch_window_controller/window_controller/default_theme.dart'
     as theme;
 import 'package:monarch_window_controller/window_controller/window_controller_screen.dart';
@@ -15,7 +17,7 @@ void main() {
     setWindowMinSize(
       const Size(
         505,
-        650,
+        850,
       ),
     );
     //setWindowMaxSize(const Size(505, 800));
@@ -33,6 +35,13 @@ class MyApp extends StatelessWidget {
       title: 'Window Controller',
       theme: theme.theme,
       home: const WindowControllerScreen(),
+      localizationsDelegates: [
+        localizationDelegate, // Add this line
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: localizationDelegate.supportedLocales
     );
   }
 }
