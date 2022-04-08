@@ -8,24 +8,29 @@ class LabeledControl extends Padding {
   final double verticalPadding;
   final double horizontalPadding;
 
-  LabeledControl({Key? key,
+  LabeledControl({
+    Key? key,
     required this.label,
     required this.control,
     this.controlWidth = 380,
     this.labelControlSpacing = 8,
     this.verticalPadding = 4,
     this.horizontalPadding = 8,
-  }) : super(key: key,
+  }) : super(
+          key: key,
           padding: EdgeInsets.symmetric(
               vertical: verticalPadding, horizontal: horizontalPadding),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
-
             children: [
-              Text(label),
+              Flexible(
+                child: Text(
+                  label,
+                  textAlign: TextAlign.end,
+                ),
+              ),
               SizedBox(
                 width: labelControlSpacing,
-
               ),
               SizedBox(
                 width: controlWidth,

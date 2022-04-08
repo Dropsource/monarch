@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:monarch_window_controller/window_controller/default_theme.dart' as theme;
+import 'package:monarch_window_controller/window_controller/default_theme.dart'
+    as theme;
 import 'package:monarch_window_controller/window_controller/window_controller_screen.dart';
 import 'package:window_size/window_size.dart';
 
@@ -11,7 +12,12 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     setWindowTitle('Monarch');
-    setWindowMinSize(const Size(505, 500));
+    setWindowMinSize(
+      const Size(
+        505,
+        650,
+      ),
+    );
     //setWindowMaxSize(const Size(505, 800));
   }
   runApp(const MyApp());
