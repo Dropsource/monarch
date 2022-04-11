@@ -1,14 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:monarch_window_controller/window_controller/data/dock_definition.dart';
 import 'package:monarch_window_controller/window_controller/data/monarch_data.dart';
+import 'package:monarch_window_controller/window_controller/data/story_scale_definitions.dart';
 import 'package:monarch_window_controller/window_controller/widgets/components/checkbox_grid.dart';
 import 'package:monarch_window_controller/window_controller/widgets/components/dropdown.dart';
 import 'package:monarch_window_controller/window_controller/widgets/components/labeled_control.dart';
 import 'package:monarch_window_controller/window_controller/widgets/components/numbered_slider.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_state.dart';
 
-import '../../../main.dart';
-import '../../../utils/tranlsations.dart';
+import '../../../utils/translations.dart';
+import '../../data/device_definitions.dart';
 
 class ControlsPanel extends StatelessWidget {
   final ConnectedWindowControllerState state;
@@ -33,10 +34,10 @@ class ControlsPanel extends StatelessWidget {
         children: [
           LabeledControl(
             label: 'Device',
-            control: DropDown<String>(
+            control: DropDown<DeviceDefinition>(
               currentValue: state.currentDevice,
               values: state.devices,
-              toStringFunction: (e) => e,
+              toStringFunction: (e) => e.name,
             ),
             controlWidth: controlWidth,
           ),
@@ -70,19 +71,19 @@ class ControlsPanel extends StatelessWidget {
           ),
           LabeledControl(
             label: 'Scale',
-            control: DropDown<String>(
+            control: DropDown<StoryScaleDefinition>(
               currentValue: state.currentScale,
               values: state.scaleList.toList(),
-              toStringFunction: (e) => e,
+              toStringFunction: (e) => e.name,
             ),
             controlWidth: controlWidth,
           ),
           LabeledControl(
             label: 'Dock',
-            control: DropDown<String>(
+            control: DropDown<DockDefinition>(
               currentValue: state.currentDock,
               values: state.dockList.toList(),
-              toStringFunction: (e) => e,
+              toStringFunction: (e) => e.name,
             ),
             controlWidth: controlWidth,
           ),
@@ -103,7 +104,7 @@ class ControlsPanel extends StatelessWidget {
             child: MaterialButton(
               color: Colors.red,
               onPressed: () {},
-              child:  Text(translations.text('dev_tools.launch')),
+              child: Text(translations.text('dev_tools.launch')),
             ),
           ),
         ],

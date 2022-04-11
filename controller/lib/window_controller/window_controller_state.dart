@@ -1,7 +1,14 @@
 import 'dart:ui';
 
 import 'package:monarch_window_controller/window_controller/data/dev_tools_option.dart';
+import 'package:monarch_window_controller/window_controller/data/device_definitions.dart';
+import 'package:monarch_window_controller/window_controller/data/dock_definition.dart';
 import 'package:monarch_window_controller/window_controller/data/monarch_data.dart';
+import 'package:monarch_window_controller/window_controller/data/definitions.dart'
+    as defs;
+import 'package:monarch_window_controller/window_controller/data/story_scale_definitions.dart';
+
+import 'data/definitions.dart';
 
 abstract class WindowControllerState {
   final bool active;
@@ -13,18 +20,18 @@ class ConnectedWindowControllerState extends WindowControllerState {
   final MonarchData monarchData;
   final String? activeStoryName;
 
-  final String currentDevice;
-  final List<String> devices;
+  final DeviceDefinition currentDevice;
+  final List<DeviceDefinition> devices;
 
   final Locale currentLocale;
   final MetaTheme currentTheme;
 
-  final String currentScale;
+  final StoryScaleDefinition currentScale;
 
-  final List<String> scaleList;
+  final List<StoryScaleDefinition> scaleList;
 
-  final String currentDock;
-  final List<String> dockList;
+  final DockDefinition currentDock;
+  final List<DockDefinition> dockList;
 
   final List<DevToolsOption> devToolOptions;
   final Set<DevToolFeature> enabledDevToolsFeatures;
@@ -47,14 +54,10 @@ class ConnectedWindowControllerState extends WindowControllerState {
 
   factory ConnectedWindowControllerState.test() =>
       ConnectedWindowControllerState(
-        devices: [
-          'iPhone 13',
-          'iPhone 13 Pro Max',
-          'Samsung S22',
-        ],
-        currentDevice: 'iPhone 13',
+        devices: deviceDefinitions,
+        currentDevice: defaultDeviceDefinition,
         active: true,
-        currentLocale: const Locale('en'),
+        currentLocale: defs.defaultLocale,
         currentTheme: MetaTheme(
           'theme_id',
           'Default',
@@ -64,30 +67,14 @@ class ConnectedWindowControllerState extends WindowControllerState {
         monarchData: MonarchData(
           'test_package_name',
           [
-            MetaLocalization(
-              [
-                const Locale(
-                  'en',
-                ),
-                const Locale('es'),
-              ],
-              null,
-              'locale_delegate_class_name',
-            ),
+            MetaLocalization([
+              const Locale('en', 'US'),
+              const Locale('es', 'ES'),
+            ], null, 'locale_delegate_class_name'),
           ],
           [
-            MetaTheme(
-              'theme_id',
-              'Default',
-              null,
-              true,
-            ),
-            MetaTheme(
-              'other_theme_id',
-              'Material Light',
-              null,
-              false,
-            ),
+            MetaTheme('theme_id', 'Default', null, true),
+            MetaTheme('other_theme_id', 'Material Light', null, false),
           ],
           {
             'test': const MetaStories(
@@ -138,58 +125,23 @@ class ConnectedWindowControllerState extends WindowControllerState {
           },
         ),
         activeStoryName: null,
-        currentDock: 'Dock to left',
-        dockList: ['Dock to left', 'Dock to right', 'Undock'],
-        currentScale: '100%',
-        scaleList: [
-          '50%',
-          '67%',
-          '75%',
-          '80%',
-          '90%',
-          '100%',
-          '110%',
-          '125%',
-          '150%',
-          '175%',
-          '200%',
-          '250%',
-          '300%',
-        ],
+        currentDock: defs.defaultDock,
+        dockList: defs.dockList,
+        currentScale: defaultScaleDefinition,
+        scaleList: storyScaleDefinitions,
         enabledDevToolsFeatures: {},
-        devToolOptions: [
-          DevToolsOption(
-            label: 'Slow Animations',
-            feature: DevToolFeature.slowAnimations,
-          ),
-          DevToolsOption(
-            label: 'Highlight Repaints',
-            feature: DevToolFeature.highlightRepaints,
-          ),
-          DevToolsOption(
-            label: 'Show Guideliness',
-            feature: DevToolFeature.showGuidelines,
-          ),
-          DevToolsOption(
-            label: 'Highlight Oversized Images',
-            feature: DevToolFeature.highlightOversizedImages,
-          ),
-          DevToolsOption(
-            label: 'Show Baseliness',
-            feature: DevToolFeature.showBaselines,
-          ),
-        ],
+        devToolOptions: devToolsOptions,
       );
 
   ConnectedWindowControllerState copyWith({
     String? activeStoryName,
     MonarchData? monarchData,
     bool? active,
-    String? currentDevice,
+    DeviceDefinition? currentDevice,
     Locale? currentLocale,
     MetaTheme? currentTheme,
-    String? currentScale,
-    String? currentDock,
+    StoryScaleDefinition? currentScale,
+    DockDefinition? currentDock,
     Set<DevToolFeature>? enabledDevToolsFeatures,
   }) =>
       ConnectedWindowControllerState(
