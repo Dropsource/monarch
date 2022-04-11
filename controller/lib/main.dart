@@ -10,16 +10,30 @@ import 'package:window_size/window_size.dart';
 
 const controlsWidth = 250.0;
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-    setWindowTitle('Monarch');
-    setWindowMinSize(
-      const Size(
-        505,
-        850,
-      ),
-    );
+
+
+    var window = await getWindowInfo();
+    if (window.screen != null) {
+      final screenFrame = window.screen!.visibleFrame;
+      const width = 700.0;
+      const height = 850.0;
+      final left = ((screenFrame.width - width) / 2).roundToDouble();
+      final top = ((screenFrame.height - height) / 3).roundToDouble();
+
+      final frame = Rect.fromLTWH(left, top, width, height);
+      setWindowFrame(frame);
+
+      setWindowTitle('Monarch');
+      setWindowMinSize(
+        const Size(
+          700,
+          850,
+        ),
+      );
+    }
     //setWindowMaxSize(const Size(505, 800));
   }
   runApp(const MyApp());
