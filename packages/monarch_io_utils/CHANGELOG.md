@@ -1,3 +1,6 @@
+## 1.1.0 - 2022-04-12
+- Migrate from pedantic to lints
+
 ## 1.0.1 - 2022-04-05
 - Explicitly add package:meta dependency
 
