@@ -1,0 +1,14 @@
+name: monarch_http
+description: Http utilities.
+version: 1.1.0
+publish_to: none
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+dependencies:
+  http: ^0.13.1
+  monarch_utils: ^1.0.0
+
+dev_dependencies:
+  lints: ^1.0.1
