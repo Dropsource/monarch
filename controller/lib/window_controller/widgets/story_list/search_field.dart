@@ -6,13 +6,14 @@ class SearchField extends Stack {
     required TextEditingController controller,
     Function(String)? onChanged,
     bool canReset = false,
+    String? hint,
     Function? onReset,
   }) : super(key: key, children: [
           TextFormField(
             controller: controller,
             onChanged: (value) => onChanged?.call(value),
             decoration: InputDecoration(
-              hintText: 'Search...',
+              hintText: hint,
               //border: const OutlineInputBorder(),
               //fillColor: Colors.white,
               //filled: true,

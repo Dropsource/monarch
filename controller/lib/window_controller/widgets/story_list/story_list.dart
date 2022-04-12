@@ -3,6 +3,7 @@ import 'package:monarch_window_controller/window_controller/data/monarch_data.da
 import 'package:monarch_window_controller/window_controller/widgets/story_list/search_field.dart';
 import 'package:monarch_window_controller/window_controller/widgets/tree_view/flutter_simple_treeview.dart';
 
+import '../../../utils/translations.dart';
 
 class StoryList extends StatefulWidget {
   const StoryList({
@@ -35,6 +36,7 @@ class StoryListState extends State<StoryList> {
           SearchField(
             controller: controller,
             canReset: query.isNotEmpty,
+            hint: Translations.of(context)?.text('story_list.search'),
             onReset: () {
               query = '';
               controller.text = query;
@@ -44,7 +46,8 @@ class StoryListState extends State<StoryList> {
           ),
           Expanded(
             child: SingleChildScrollView(
-              child: TreeView(nodes:  widget.stories.entries
+                child: TreeView(
+                    nodes: widget.stories.entries
                         .where(_filterStories)
                         .map((e) => TreeNode(
                               content: Text(e.key),
@@ -55,7 +58,12 @@ class StoryListState extends State<StoryList> {
                                         onTap: () => widget.onActiveStoryChange
                                             ?.call(name),
                                         child: Container(
-                                          padding: const EdgeInsets.only(left: 40, top: 8, bottom: 8, right: 8,),
+                                          padding: const EdgeInsets.only(
+                                            left: 40,
+                                            top: 8,
+                                            bottom: 8,
+                                            right: 8,
+                                          ),
                                           color: widget.activeStoryName == name
                                               ? Colors.blue
                                               : Colors.transparent,
@@ -68,9 +76,7 @@ class StoryListState extends State<StoryList> {
                                   )
                                   .toList(),
                             ))
-                        .toList())
-
-            ),
+                        .toList())),
           ),
         ],
       ),
@@ -92,8 +98,6 @@ class StoryListState extends State<StoryList> {
   bool _filterStories(MapEntry<String, MetaStories> element) {
     final name = element.key;
     final storyNames = element.value.storiesNames;
-
-    print('Filtering: name: $name');
 
     return name.contains(query) ||
         storyNames.where((element) => element.contains(query)).isNotEmpty;

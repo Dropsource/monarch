@@ -2,6 +2,7 @@ import 'channel_methods.dart';
 
 class StoryScaleDefinition implements OutboundChannelArgument {
   const StoryScaleDefinition(this.scale, this.name);
+
   final double scale;
   final String name;
 
@@ -21,19 +22,19 @@ class StoryScaleDefinitions implements OutboundChannelArgument {
   }
 }
 
-final defaultScaleDefinition = StoryScaleDefinition(1, '100%');
+const defaultScaleDefinition = StoryScaleDefinition(1, '100%');
 final storyScaleDefinitions = [
-  StoryScaleDefinition(0.5, '50%'),
-  StoryScaleDefinition(0.67, '67%'),
-  StoryScaleDefinition(0.75, '75%'),
-  StoryScaleDefinition(0.8, '80%'),
-  StoryScaleDefinition(0.9, '90%'),
+  const StoryScaleDefinition(0.5, '50%'),
+  const StoryScaleDefinition(0.67, '67%'),
+  const StoryScaleDefinition(0.75, '75%'),
+  const StoryScaleDefinition(0.8, '80%'),
+  const StoryScaleDefinition(0.9, '90%'),
   defaultScaleDefinition,
-  StoryScaleDefinition(1.1, '110%'),
-  StoryScaleDefinition(1.25, '125%'),
-  StoryScaleDefinition(1.5, '150%'),
-  StoryScaleDefinition(1.75, '175%'),
-  StoryScaleDefinition(2, '200%'),
-  StoryScaleDefinition(2.5, '250%'),
-  StoryScaleDefinition(3, '300%'),
+  const StoryScaleDefinition(1.1, '110%'),
+  const StoryScaleDefinition(1.25, '125%'),
+  const StoryScaleDefinition(1.5, '150%'),
+  const StoryScaleDefinition(1.75, '175%'),
+  const StoryScaleDefinition(2, '200%'),
+  const StoryScaleDefinition(2.5, '250%'),
+  const StoryScaleDefinition(3, '300%'),
 ];

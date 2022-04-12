@@ -4,6 +4,8 @@ import 'package:monarch_window_controller/window_controller/widgets/story_list/s
 import 'package:monarch_window_controller/window_controller/window_controller_manager.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_state.dart';
 
+import '../utils/translations.dart';
+
 class WindowControllerScreen extends StatefulWidget {
   const WindowControllerScreen({Key? key}) : super(key: key);
 
@@ -16,6 +18,7 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _translations = Translations.of(context)!;
     return Scaffold(
       body: StreamBuilder<WindowControllerState>(
           stream: manager.stream,
@@ -41,9 +44,9 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
                       ),
                       child: Column(
                         children: [
-                          const Text('Story List'),
+                          Text(_translations.text('story_list.title')),
                           if (!state.active) ...[
-                            const Text('Loading Stories'),
+                            Text(_translations.text('story_list.loading')),
                           ],
                           if (state is ConnectedWindowControllerState) ...[
                             Expanded(

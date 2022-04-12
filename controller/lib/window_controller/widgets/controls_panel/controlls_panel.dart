@@ -24,7 +24,7 @@ class ControlsPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final translations = Translations.of(context)!;
+    final _translations = Translations.of(context)!;
 
     return SizedBox(
       width: width,
@@ -33,7 +33,7 @@ class ControlsPanel extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           LabeledControl(
-            label: 'Device',
+            label: _translations.text('controls.device'),
             control: DropDown<DeviceDefinition>(
               currentValue: state.currentDevice,
               values: state.devices,
@@ -42,7 +42,7 @@ class ControlsPanel extends StatelessWidget {
             controlWidth: controlWidth,
           ),
           LabeledControl(
-            label: 'Theme',
+            label: _translations.text('controls.theme'),
             control: DropDown<MetaTheme>(
               currentValue: state.currentTheme,
               values: state.monarchData.metaThemes,
@@ -51,7 +51,7 @@ class ControlsPanel extends StatelessWidget {
             controlWidth: controlWidth,
           ),
           LabeledControl(
-            label: 'Locale',
+            label: _translations.text('controls.locale'),
             control: DropDown<Locale>(
               currentValue: state.currentLocale,
               values: state.monarchData.allLocales.toList(),
@@ -60,7 +60,7 @@ class ControlsPanel extends StatelessWidget {
             controlWidth: controlWidth,
           ),
           LabeledControl(
-            label: 'Text Scale Factor',
+            label: _translations.text('controls.text_scale_factor'),
             control: const NumberedSlider(),
             controlWidth: controlWidth,
           ),
@@ -70,7 +70,7 @@ class ControlsPanel extends StatelessWidget {
             color: Colors.white.withAlpha(100),
           ),
           LabeledControl(
-            label: 'Scale',
+            label: _translations.text('controls.scale'),
             control: DropDown<StoryScaleDefinition>(
               currentValue: state.currentScale,
               values: state.scaleList.toList(),
@@ -79,11 +79,11 @@ class ControlsPanel extends StatelessWidget {
             controlWidth: controlWidth,
           ),
           LabeledControl(
-            label: 'Dock',
+            label: _translations.text('controls.dock'),
             control: DropDown<DockDefinition>(
               currentValue: state.currentDock,
               values: state.dockList.toList(),
-              toStringFunction: (e) => e.name,
+              toStringFunction: (e) => _translations.text(e.name),
             ),
             controlWidth: controlWidth,
           ),
@@ -104,7 +104,7 @@ class ControlsPanel extends StatelessWidget {
             child: MaterialButton(
               color: Colors.red,
               onPressed: () {},
-              child: Text(translations.text('dev_tools.launch')),
+              child: Text(_translations.text('dev_tools.launch')),
             ),
           ),
         ],

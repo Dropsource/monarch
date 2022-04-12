@@ -1,3 +1,21 @@
 {
-  "dev_tools.launch": "Launch DevTools..."
+  "dev_tools.launch": "Launch DevTools...",
+  "story_list.search": "Search...",
+  "story_list.title": "Story List",
+  "story_list.loading": "Loading Stories...",
+  "controls.device": "Device",
+  "controls.theme": "Theme",
+  "controls.locale": "Locale",
+  "controls.text_scale_factor": "Text Scale Factor",
+  "controls.scale": "Scale",
+  "controls.dock": "Dock",
+  "dock_settings.left": "Dock to left",
+  "dock_settings.right": "Dock to right",
+  "dock_settings.undock": "Undock",
+  "dev_tools.slow_animations": "Slow Animations",
+  "dev_tools.highlight_repaints": "Highlight Repaints",
+  "dev_tools.show_guideliness": "Show Guideliness",
+  "dev_tools.highlight_oversized_images": "Highlight Oversized Images",
+  "dev_tools.show_baseliness": "Show Baseliness",
+  "window.title": "Monarch"
 }

@@ -5,32 +5,32 @@ import 'dev_tools_option.dart';
 
 const defaultLocale = Locale('en', 'US');
 
-final defaultDock = DockDefinition(name: 'Dock to left', id: 'left');
+final defaultDock = DockDefinition(name: 'dock_settings.left', id: 'left');
 final dockList = [
   defaultDock,
-  DockDefinition(name: 'Dock to right', id: 'right'),
-  DockDefinition(name: 'Undock', id: 'undock'),
+  DockDefinition(name: 'dock_settings.right', id: 'right'),
+  DockDefinition(name: 'dock_settings.undock', id: 'undock'),
 ];
 
 final devToolsOptions = [
   DevToolsOption(
-    label: 'Slow Animations',
+    label: 'dev_tools.slow_animations',
     feature: DevToolFeature.slowAnimations,
   ),
   DevToolsOption(
-    label: 'Highlight Repaints',
+    label: 'dev_tools.highlight_repaints',
     feature: DevToolFeature.highlightRepaints,
   ),
   DevToolsOption(
-    label: 'Show Guideliness',
+    label: 'dev_tools.show_guideliness',
     feature: DevToolFeature.showGuidelines,
   ),
   DevToolsOption(
-    label: 'Highlight Oversized Images',
+    label: 'dev_tools.highlight_oversized_images',
     feature: DevToolFeature.highlightOversizedImages,
   ),
   DevToolsOption(
-    label: 'Show Baseliness',
+    label: 'dev_tools.show_baseliness',
     feature: DevToolFeature.showBaselines,
   ),
 ];
