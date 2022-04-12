@@ -60,7 +60,7 @@ class WindowManager {
             controllerWindowController.contentViewController = controllerWindow.contentViewController
             previewWindowController.contentViewController = previewWindow.contentViewController
             
-            controllerWindow.setContentSize(NSSize(width: 600, height: 700))
+            controllerWindow.setContentSize(NSSize(width: 700, height: 830))
             controllerWindow.title = "Monarch"
             controllerWindowController.window = controllerWindow
             controllerWindowController.showWindow(self)
