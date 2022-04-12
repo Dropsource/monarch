@@ -22,20 +22,19 @@ class WindowManager {
     
     func launchWindows() {
         // self.checkCommandLineArguments()
-//        let controller = _initFlutterViewController("/Users/fertrig/development/monarch_product/monarch_shift/out/monarch/bin/cache/monarch_ui/flutter_macos_2.10.3-stable/controller")
-//        let preview = _initFlutterViewController("/Users/fertrig/development/scratch/multi/multi_preview/.mariposa")
+        let controller = _initFlutterViewController("/Users/fertrig/development/monarch_product/monarch_shift/out/monarch/bin/cache/monarch_ui/flutter_macos_2.10.3-stable/controller")
+        let preview = _initFlutterViewController("/Users/fertrig/development/scratch/multi/multi_preview/.mariposa")
         
         
-        let controller = _initFlutterViewController("/Users/fertrig/development/scratch/multi/multi_controller")
-        let preview = _initFlutterViewController("/Users/fertrig/development/scratch/multi/multi_preview")
+//        let controller = _initFlutterViewController("/Users/fertrig/development/scratch/multi/multi_controller")
+//        let preview = _initFlutterViewController("/Users/fertrig/development/scratch/multi/multi_preview")
         
         _launchFlutterWindows(preview, controller)
     }
     
     
-    func _initFlutterViewController(_ projectPath: String) -> FlutterViewController {
-        let projectUrl = URL(fileURLWithPath: projectPath)
-        let bundleUrl = projectUrl.appendingPathComponent(".mariposa")
+    func _initFlutterViewController(_ bundlePath: String) -> FlutterViewController {
+        let bundleUrl = URL(fileURLWithPath: bundlePath)
         
         logger.fine("Will use bundle at: \(bundleUrl.path)")
         
