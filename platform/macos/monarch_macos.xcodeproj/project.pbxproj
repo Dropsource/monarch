@@ -11,7 +11,28 @@
 		C82C966827FB8F0E00DC66AA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C966727FB8F0E00DC66AA /* ViewController.swift */; };
 		C82C966A27FB8F0F00DC66AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C82C966927FB8F0F00DC66AA /* Assets.xcassets */; };
 		C82C966D27FB8F0F00DC66AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C82C966B27FB8F0F00DC66AA /* Main.storyboard */; };
+		C82C967527FE287800DC66AA /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C967427FE287800DC66AA /* WindowManager.swift */; };
+		C82C967D27FE34C200DC66AA /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C967C27FE34C200DC66AA /* Logger.swift */; };
+		C82C967F27FE34DB00DC66AA /* DockSide.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C967E27FE34DB00DC66AA /* DockSide.swift */; };
+		C82C968127FE352300DC66AA /* DeviceDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C968027FE352300DC66AA /* DeviceDefinition.swift */; };
+		C82C968327FE35AB00DC66AA /* LogicalResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C968227FE35AB00DC66AA /* LogicalResolution.swift */; };
+		C82C968B2805DB1900DC66AA /* FlutterMacOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C82C96892805DAB100DC66AA /* FlutterMacOS.framework */; };
+		C82C968C2805DB1A00DC66AA /* FlutterMacOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C82C96892805DAB100DC66AA /* FlutterMacOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C82C968D2805DB1A00DC66AA /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C82C968C2805DB1A00DC66AA /* FlutterMacOS.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		C82C966227FB8F0E00DC66AA /* monarch_macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = monarch_macos.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -20,6 +41,13 @@
 		C82C966927FB8F0F00DC66AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C82C966C27FB8F0F00DC66AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C82C966E27FB8F0F00DC66AA /* monarch_macos.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = monarch_macos.entitlements; sourceTree = "<group>"; };
+		C82C967427FE287800DC66AA /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
+		C82C967C27FE34C200DC66AA /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		C82C967E27FE34DB00DC66AA /* DockSide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockSide.swift; sourceTree = "<group>"; };
+		C82C968027FE352300DC66AA /* DeviceDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDefinition.swift; sourceTree = "<group>"; };
+		C82C968227FE35AB00DC66AA /* LogicalResolution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogicalResolution.swift; sourceTree = "<group>"; };
+		C82C968527FE382E00DC66AA /* FlutterMacOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FlutterMacOS.framework; path = ephemeral/FlutterMacOS.framework; sourceTree = "<group>"; };
+		C82C96892805DAB100DC66AA /* FlutterMacOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FlutterMacOS.framework; path = ephemeral/FlutterMacOS.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C82C968B2805DB1900DC66AA /* FlutterMacOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -36,8 +65,10 @@
 		C82C965927FB8F0E00DC66AA = {
 			isa = PBXGroup;
 			children = (
+				C82C96892805DAB100DC66AA /* FlutterMacOS.framework */,
 				C82C966427FB8F0E00DC66AA /* monarch_macos */,
 				C82C966327FB8F0E00DC66AA /* Products */,
+				C82C968427FE382E00DC66AA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,8 +88,21 @@
 				C82C966927FB8F0F00DC66AA /* Assets.xcassets */,
 				C82C966B27FB8F0F00DC66AA /* Main.storyboard */,
 				C82C966E27FB8F0F00DC66AA /* monarch_macos.entitlements */,
+				C82C967427FE287800DC66AA /* WindowManager.swift */,
+				C82C967C27FE34C200DC66AA /* Logger.swift */,
+				C82C967E27FE34DB00DC66AA /* DockSide.swift */,
+				C82C968027FE352300DC66AA /* DeviceDefinition.swift */,
+				C82C968227FE35AB00DC66AA /* LogicalResolution.swift */,
 			);
 			path = monarch_macos;
+			sourceTree = "<group>";
+		};
+		C82C968427FE382E00DC66AA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C82C968527FE382E00DC66AA /* FlutterMacOS.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,6 +115,7 @@
 				C82C965E27FB8F0E00DC66AA /* Sources */,
 				C82C965F27FB8F0E00DC66AA /* Frameworks */,
 				C82C966027FB8F0E00DC66AA /* Resources */,
+				C82C968D2805DB1A00DC66AA /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -131,8 +176,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C82C968327FE35AB00DC66AA /* LogicalResolution.swift in Sources */,
+				C82C968127FE352300DC66AA /* DeviceDefinition.swift in Sources */,
+				C82C967F27FE34DB00DC66AA /* DockSide.swift in Sources */,
 				C82C966827FB8F0E00DC66AA /* ViewController.swift in Sources */,
 				C82C966627FB8F0E00DC66AA /* AppDelegate.swift in Sources */,
+				C82C967527FE287800DC66AA /* WindowManager.swift in Sources */,
+				C82C967D27FE34C200DC66AA /* Logger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,7 +325,11 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CTY49PK23Z;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ephemeral",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
@@ -302,7 +356,11 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CTY49PK23Z;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ephemeral",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;

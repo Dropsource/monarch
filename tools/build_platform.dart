@@ -4,6 +4,11 @@ import 'package:path/path.dart' as p;
 import 'paths.dart' as paths;
 
 void main() {
+  print('''
+
+### build_platform.dart
+''');
+
   paths.createDirectoryIfNeeded(paths.out_ui);
 
   for (final flutter_sdk in paths.read_flutter_sdks()) {

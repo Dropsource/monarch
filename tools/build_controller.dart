@@ -5,6 +5,11 @@ import 'package:path/path.dart' as p;
 import 'paths.dart' as paths;
 
 void main() {
+    print('''
+
+### build_controller.dart
+''');
+
   paths.createDirectoryIfNeeded(paths.out_ui);
 
   for (final flutter_sdk in paths.read_flutter_sdks()) {
@@ -46,25 +51,6 @@ Using flutter sdk at:
         print(result.stdout);
         print(result.stderr);
       }
-
-    // _buildStoryAppTask = ProcessTask(
-    // taskName: TaskNames.buildStoryAppBundle,
-    // executable: config.flutterExecutablePath,
-    // arguments: [
-    //   'build',
-    //   'bundle',
-    //   '-t',
-    //   generatedMainFilePath,
-    //   '--debug',
-    //   '--target-platform',
-    //   valueForPlatform(
-    //       macos: _getDarwinTargetPlatform(), windows: 'windows-x64'),
-    //   '--asset-dir',
-    //   flutterAssetsDirectoryPath,
-    //   if (isVerbose) '--verbose'
-    // ],
-    // workingDirectory: projectDirectory.path,
-    // analytics: analytics);
 
     print('''
 ===============================================================================

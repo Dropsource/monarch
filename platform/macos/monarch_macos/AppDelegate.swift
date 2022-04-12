@@ -18,10 +18,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // setbuf(__stdoutp, nil);
         // https://stackoverflow.com/questions/24171362/swift-how-to-flush-stdout-after-println
         
-//        let controller = _initFlutterViewController("/Users/fertrig/development/scratch/multi/multi_controller")
-//        let preview = _initFlutterViewController("/Users/fertrig/development/scratch/multi/multi_preview")
-//        
-//        _launchFlutterWindow(preview, controller)
+        let windowManager = WindowManager.init()
+        windowManager.launchWindows()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
