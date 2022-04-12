@@ -1,0 +1,13 @@
+{
+    "properties": {
+        "code": {
+            "type": "short"
+        },
+        "description": {
+            "type": "text"
+        },
+        "is_failure": {
+            "type": "boolean"
+        }
+    }
+}

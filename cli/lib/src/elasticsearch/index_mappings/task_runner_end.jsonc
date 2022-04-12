@@ -1,0 +1,14 @@
+{
+    "mappings": {
+        "dynamic": false,
+        "properties": {
+            /* @GOTCHA: merge json properties from common_analytics_properties.jsonc */
+            "exit_code": {
+                /* @GOTCHA: insert properties from exit_code_properties.jsonc */
+            },
+            "task_runner_process_memory": {
+                /* @GOTCHA: insert properties from task_runner_process_memory.jsonc */
+            }
+        }
+    }
+}

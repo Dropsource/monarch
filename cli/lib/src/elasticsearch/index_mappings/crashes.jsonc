@@ -1,0 +1,56 @@
+{
+    "mappings": {
+        "dynamic": false,
+        "properties": {
+            "crash_id": {
+                "type": "keyword"
+            },
+            "timestamp": {
+                "type": "date",
+                "format": "epoch_millis"
+            },
+            "crash_entry": {
+                "properties": {
+                    "level": {
+                        "properties": {
+                            "value": {
+                                "type": "integer"
+                            },
+                            "name": {
+                                "type": "keyword"
+                            }
+                        }
+                    },
+                    "logger_name": {
+                        "type": "keyword"
+                    },
+                    "message": {
+                        "type": "text"
+                    },
+                    "error_details": {
+                        "type": "text"
+                    },
+                    "stack_trace": {
+                        "type": "text"
+                    },
+                    "timestamp": {
+                        "type": "date",
+                        "format": "epoch_millis"
+                    }
+                }
+            },
+            "entries": {
+                "type": "text"
+            },
+            "recurrence_index": {
+                "type": "integer"
+            },
+            "session_id": {
+                "type": "keyword"
+            },
+            "context_info": { 
+                /* @GOTCHA: insert json from context_info.jsonc */
+            }
+        }
+    }
+}

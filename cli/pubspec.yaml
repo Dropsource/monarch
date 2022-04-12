@@ -1,0 +1,26 @@
+name: monarch_cli
+description: Command-line interface for Monarch binaries.
+version: 2.0.0
+publish_to: none
+
+environment:
+  sdk: '>=2.14.0 <3.0.0'
+
+dependencies:
+  pubspec_parse: ^1.0.0
+  uuid: ^3.0.4
+  pub_semver: ^2.0.0
+  args: ^2.1.0
+  yaml_edit: ^2.0.0
+  package_config: ^2.0.2
+  monarch_utils: ^1.0.2
+  monarch_http:
+    path: ../packages/monarch_http
+  monarch_io_utils:
+    path: ../packages/monarch_io_utils
+
+dev_dependencies:
+  lints: ^1.0.1
+  test: ^1.17.2
+  mockito: ^5.0.7
+  build_runner:
