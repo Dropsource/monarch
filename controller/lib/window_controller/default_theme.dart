@@ -13,6 +13,7 @@ const Color secondaryLightGrey = Color(0xFFEEEFF2);
 const Color secondaryGrey = Color(0xFF9CA0AD);
 const Color red = Color(0xFFDF7272);
 const Color dark = Color(0xFF1C1E22);
+const Color darkGrey = Color(0xFF2E3137);
 
 const Color fontPrimaryColor = Colors.white;
 const Color fontSecondaryColor = Color(0xFFF3F3F3);

@@ -19,7 +19,7 @@ void main() async {
     if (window.screen != null) {
       final screenFrame = window.screen!.visibleFrame;
       const width = 700.0;
-      const height = 850.0;
+      const height = 830.0;
       final left = ((screenFrame.width - width) / 2).roundToDouble();
       final top = ((screenFrame.height - height) / 3).roundToDouble();
 
@@ -30,7 +30,7 @@ void main() async {
       setWindowMinSize(
         const Size(
           700,
-          850,
+          830,
         ),
       );
     }
