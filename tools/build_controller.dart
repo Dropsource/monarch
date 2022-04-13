@@ -3,16 +3,17 @@ import 'package:monarch_io_utils/utils.dart';
 import 'package:path/path.dart' as p;
 
 import 'paths.dart' as paths;
+import 'utils.dart' as utils;
 
 void main() {
-    print('''
+  print('''
 
 ### build_controller.dart
 ''');
 
-  paths.createDirectoryIfNeeded(paths.out_ui);
+  utils.createDirectoryIfNeeded(paths.out_ui);
 
-  for (final flutter_sdk in paths.read_flutter_sdks()) {
+  for (final flutter_sdk in utils.read_flutter_sdks()) {
     print('''
 ===============================================================================
 Using flutter sdk at:
@@ -20,12 +21,13 @@ Using flutter sdk at:
 ''');
 
     var out_ui_flutter_id = paths.compute_out_ui_flutter_id(flutter_sdk);
-    paths.createDirectoryIfNeeded(out_ui_flutter_id);
+    utils.createDirectoryIfNeeded(out_ui_flutter_id);
 
     var out_ui_flutter_id_controller =
         paths.out_ui_flutter_id_controller(out_ui_flutter_id);
     var out_controller_dir = Directory(out_ui_flutter_id_controller);
-    if (out_controller_dir.existsSync()) out_controller_dir.deleteSync(recursive: true);
+    if (out_controller_dir.existsSync())
+      out_controller_dir.deleteSync(recursive: true);
     out_controller_dir.createSync(recursive: true);
 
     print('Building monarch controller flutter bundle...');
@@ -47,15 +49,20 @@ Using flutter sdk at:
         workingDirectory: paths.controller);
 
     if (result.exitCode != 0) {
-        print('Error building monarch controller flutter bundle');
-        print(result.stdout);
-        print(result.stderr);
-      }
+      print('Error building monarch controller flutter bundle');
+      print(result.stdout);
+      print(result.stderr);
+    }
 
     print('''
 ===============================================================================
 ''');
   }
 
-  print('Monarch controller build finished.');
+  var version = utils.readPubspecVersion(p.join(paths.controller, 'pubspec.yaml'));
+  version = utils.getVersionSuffix(version);
+
+  utils.writeInternalFile('controller_version.txt', version);
+
+  print('Monarch controller build finished. Version $version');
 }
