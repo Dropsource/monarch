@@ -275,8 +275,10 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         executable:
             monarchBinaries.monarchAppExecutableFile(config.flutterSdkId).path,
         arguments: [
-          '--project-path',
-          projectDirectory.path,
+          '--controller-bundle',
+          monarchBinaries.controllerDirectory(config.flutterSdkId).path,
+          '--project-bundle',
+          p.join(projectDirectory.path, dotMonarch),
           '--log-level',
           defaultLogLevel.name
         ],
