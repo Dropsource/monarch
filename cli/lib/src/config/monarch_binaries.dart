@@ -36,5 +36,5 @@ class MonarchBinaries {
   }
 
   Directory controllerDirectory(FlutterSdkId id) =>
-      Directory(p.join(uiIdDirectory(id).path, 'controller'));
+      Directory(p.join(uiIdDirectory(id).path, 'monarch_controller'));
 }

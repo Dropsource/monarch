@@ -30,7 +30,7 @@ String out_ui_flutter_id_monarch_macos_app(String flutter_id) =>
     p.join(flutter_id, 'monarch_macos.app');
 
 String out_ui_flutter_id_controller(String flutter_id) =>
-    p.join(flutter_id, 'controller');
+    p.join(flutter_id, 'monarch_controller');
 
 String darwin_flutter_framework(String flutter_sdk) => p.join(flutter_sdk,
     'bin/cache/artifacts/engine/darwin-x64/FlutterMacOS.framework');
