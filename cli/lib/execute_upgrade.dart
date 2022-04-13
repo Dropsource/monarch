@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:async/async.dart';
+import 'dart:async';
 
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';

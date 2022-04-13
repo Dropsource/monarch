@@ -23,6 +23,9 @@ final out_bin_cache = p.join(out_bin, 'cache');
 final out_ui = p.join(out_bin_cache, 'monarch_ui');
 final out_bin_internal = p.join(out_bin, 'internal');
 
+final out_bin_monarch_exe =
+    p.join(out_bin, valueForPlatform(macos: 'monarch', windows: 'monarch.exe'));
+
 String out_ui_flutter_id(String version, String channel) =>
     p.join(out_ui, 'flutter_${os}_$version-$channel');
 

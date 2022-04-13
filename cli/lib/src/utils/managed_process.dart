@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:io/io.dart';
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_io_utils/utils.dart';
-import 'dart:async/async.dart';
 import 'standard_output.dart';
 
 /// A process that can be started and terminated. It exposes decoded stdout
