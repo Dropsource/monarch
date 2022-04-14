@@ -13,7 +13,7 @@ const Color secondaryLightGrey = Color(0xFFEEEFF2);
 const Color secondaryGrey = Color(0xFF9CA0AD);
 const Color red = Color(0xFFDF7272);
 const Color dark = Color(0xFF1C1E22);
-const Color darkGrey = Color(0xFF2E3137);
+const Color darkGrey = Color(0xFF38393D);
 
 const Color fontPrimaryColor = Colors.white;
 const Color fontSecondaryColor = Color(0xFFF3F3F3);
@@ -50,7 +50,7 @@ const EdgeInsets listPadding =
     EdgeInsets.symmetric(horizontal: 20, vertical: 10);
 
 @MonarchTheme('Default Theme', isDefault: true)
-final ThemeData theme = ThemeData.dark().copyWith(
+ ThemeData get theme => ThemeData.dark().copyWith(
   primaryColor: blue,
   splashColor: Colors.transparent,
   errorColor: red,

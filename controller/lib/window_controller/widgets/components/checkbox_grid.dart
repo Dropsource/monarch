@@ -32,6 +32,7 @@ class CheckboxGrid extends StatelessWidget {
             value: enabledFeatures.contains(item.feature),
             onChanged: (newValue) => onOptionToggle?.call(item),
             controlAffinity: ListTileControlAffinity.leading,
+            contentPadding: const EdgeInsets.only(left: 60),
           );
         });
   }

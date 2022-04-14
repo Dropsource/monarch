@@ -17,15 +17,21 @@ class WindowControllerManager {
       state = value;
     });
 
-    _streamController.sink.add(ConnectedWindowControllerState.test());
+    _streamController.sink.add(WindowControllerState.test());
   }
 
   void onActiveStoryChanged(String activeStoryName) async {
-    final localState = state;
+      _updateState((state) => state.copyWith(activeStoryName: activeStoryName));
+  }
 
-    if (localState is ConnectedWindowControllerState) {
+  void onTextScaleFactorChanged(double val) {
+    _updateState((state) => state.copyWith(textScaleFactor: val));
+  }
+
+  void _updateState(Function(WindowControllerState) stateReporter){
+    if (state != null) {
       _streamController.sink
-          .add(localState.copyWith(activeStoryName: activeStoryName));
+          .add(stateReporter(state!));
     }
   }
 
@@ -34,4 +40,5 @@ class WindowControllerManager {
     _subscription = null;
     _streamController.close();
   }
+
 }

@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class NumberedSlider extends StatefulWidget {
-  const NumberedSlider({Key? key}) : super(key: key);
+  final double initialValue;
+  final Function(double) onChanged;
+
+  const NumberedSlider({
+    Key? key,
+    this.initialValue = 1.0,
+    required this.onChanged,
+  }) : super(key: key);
 
   @override
   State<NumberedSlider> createState() => _NumberedSlideState();
@@ -9,6 +16,12 @@ class NumberedSlider extends StatefulWidget {
 
 class _NumberedSlideState extends State<NumberedSlider> {
   double value = 1.0;
+
+  @override
+  void initState() {
+    value = widget.initialValue;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +32,10 @@ class _NumberedSlideState extends State<NumberedSlider> {
       thumbColor: Colors.white,
       divisions: 13,
       label: value.toStringAsFixed(1),
-      onChangeStart: (double value) {
-        print('Start value is ' + value.toString());
-      },
-      onChangeEnd: (double value) {
-        print('Finish value is ' + value.toString());
-      },
       onChanged: (double newValue) {
         setState(() {
           value = newValue;
+          widget.onChanged(newValue);
         });
       },
       activeColor: Colors.white,

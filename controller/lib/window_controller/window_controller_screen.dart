@@ -30,7 +30,7 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
             return Container(
               width: double.infinity,
               //height: 600,
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -52,7 +52,7 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
                               shouldTranslate: true,
                             ),
                           ],
-                          if (state is ConnectedWindowControllerState) ...[
+                          if (state.active) ...[
                             Expanded(
                               child: StoryList(
                                 projectName: state.monarchData.packageName,
@@ -67,8 +67,8 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
                       ),
                     ),
                   ),
-                  if (state is ConnectedWindowControllerState) ...[
-                    ControlsPanel(state: state),
+                  if (state.active) ...[
+                    ControlsPanel(state: state, manager: manager,),
                   ],
                 ],
               ),

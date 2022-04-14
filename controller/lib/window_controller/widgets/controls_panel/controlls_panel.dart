@@ -6,6 +6,7 @@ import 'package:monarch_window_controller/window_controller/widgets/components/c
 import 'package:monarch_window_controller/window_controller/widgets/components/dropdown.dart';
 import 'package:monarch_window_controller/window_controller/widgets/components/labeled_control.dart';
 import 'package:monarch_window_controller/window_controller/widgets/components/numbered_slider.dart';
+import 'package:monarch_window_controller/window_controller/window_controller_manager.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_state.dart';
 
 import '../../../utils/translations.dart';
@@ -13,12 +14,14 @@ import '../../data/device_definitions.dart';
 import '../components/text.dart';
 
 class ControlsPanel extends StatelessWidget {
-  final ConnectedWindowControllerState state;
+  final WindowControllerState state;
   final double width;
   final dividerHeight = 24.0;
+  final WindowControllerManager manager;
 
   const ControlsPanel({
     required this.state,
+    required this.manager,
     Key? key,
     this.width = 353,
   }) : super(key: key);
@@ -32,6 +35,7 @@ class ControlsPanel extends StatelessWidget {
       width: width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
+
         mainAxisSize: MainAxisSize.max,
         children: [
           LabeledControl(
@@ -62,8 +66,9 @@ class ControlsPanel extends StatelessWidget {
             controlWidth: controlWidth,
           ),
           LabeledControl(
-            label: 'controls.text_scale_factor',
-            control: const NumberedSlider(),
+            label: '${_translations.text("controls.text_scale_factor")} (${state.textScaleFactor.toStringAsFixed(1)})',
+            control:  NumberedSlider(initialValue: state.textScaleFactor, onChanged: (val) => manager.onTextScaleFactorChanged(val),),
+            shouldTranslate: false,
             controlWidth: controlWidth,
           ),
           Divider(

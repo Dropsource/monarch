@@ -8,6 +8,7 @@ class LabeledControl extends Padding {
   final double labelControlSpacing;
   final double verticalPadding;
   final double horizontalPadding;
+  final bool shouldTranslate;
 
   LabeledControl({
     Key? key,
@@ -16,18 +17,20 @@ class LabeledControl extends Padding {
     this.controlWidth = 340,
     this.labelControlSpacing = 16,
     this.verticalPadding = 0,
-    this.horizontalPadding = 16,
+    this.horizontalPadding = 0,
+    this.shouldTranslate = true,
   }) : super(
           key: key,
           padding: EdgeInsets.symmetric(
               vertical: verticalPadding, horizontal: horizontalPadding),
           child: Row(
+
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Flexible(
                 child: TextBody1(
                   label,
-                  shouldTranslate: true,
+                  shouldTranslate: shouldTranslate,
                   textAlign: TextAlign.end,
                 ),
               ),

@@ -10,13 +10,8 @@ import 'package:monarch_window_controller/window_controller/data/story_scale_def
 
 import 'data/definitions.dart';
 
-abstract class WindowControllerState {
+class WindowControllerState {
   final bool active;
-
-  WindowControllerState({required this.active});
-}
-
-class ConnectedWindowControllerState extends WindowControllerState {
   final MonarchData monarchData;
   final String? activeStoryName;
 
@@ -36,8 +31,10 @@ class ConnectedWindowControllerState extends WindowControllerState {
   final List<DevToolsOption> devToolOptions;
   final Set<DevToolFeature> enabledDevToolsFeatures;
 
-  ConnectedWindowControllerState({
-    required bool active,
+  final double textScaleFactor;
+
+  WindowControllerState({
+    required this.active,
     required this.monarchData,
     this.activeStoryName,
     required this.devices,
@@ -50,13 +47,15 @@ class ConnectedWindowControllerState extends WindowControllerState {
     required this.scaleList,
     required this.devToolOptions,
     required this.enabledDevToolsFeatures,
-  }) : super(active: active);
+    required this.textScaleFactor,
+  });
 
-  factory ConnectedWindowControllerState.test() =>
-      ConnectedWindowControllerState(
+  factory WindowControllerState.test() =>
+      WindowControllerState(
         devices: deviceDefinitions,
         currentDevice: defaultDeviceDefinition,
         active: true,
+        textScaleFactor: 1.0,
         currentLocale: defs.defaultLocale,
         currentTheme: MetaTheme(
           'theme_id',
@@ -133,7 +132,7 @@ class ConnectedWindowControllerState extends WindowControllerState {
         devToolOptions: devToolsOptions,
       );
 
-  ConnectedWindowControllerState copyWith({
+  WindowControllerState copyWith({
     String? activeStoryName,
     MonarchData? monarchData,
     bool? active,
@@ -143,8 +142,9 @@ class ConnectedWindowControllerState extends WindowControllerState {
     StoryScaleDefinition? currentScale,
     DockDefinition? currentDock,
     Set<DevToolFeature>? enabledDevToolsFeatures,
+    double? textScaleFactor,
   }) =>
-      ConnectedWindowControllerState(
+      WindowControllerState(
         activeStoryName: activeStoryName ?? this.activeStoryName,
         monarchData: monarchData ?? this.monarchData,
         active: active ?? this.active,
@@ -159,5 +159,6 @@ class ConnectedWindowControllerState extends WindowControllerState {
         devToolOptions: devToolOptions,
         enabledDevToolsFeatures:
             enabledDevToolsFeatures ?? this.enabledDevToolsFeatures,
+        textScaleFactor: textScaleFactor ?? this.textScaleFactor,
       );
 }
