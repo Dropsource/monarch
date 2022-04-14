@@ -137,7 +137,7 @@ final ThemeData theme = ThemeData.dark().copyWith(
     ),
   ),
   inputDecorationTheme: const InputDecorationTheme(
-    contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+    contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     labelStyle: TextStyle(
       color: inputHintColor,
       fontSize: 11,

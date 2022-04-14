@@ -10,6 +10,7 @@ import 'package:monarch_window_controller/window_controller/window_controller_st
 
 import '../../../utils/translations.dart';
 import '../../data/device_definitions.dart';
+import '../components/text.dart';
 
 class ControlsPanel extends StatelessWidget {
   final ConnectedWindowControllerState state;
@@ -100,12 +101,11 @@ class ControlsPanel extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(
               right: 16,
-              top: 40,
+              top: 16,
             ),
-            child: MaterialButton(
-              color: Colors.red,
+            child: OutlinedButton(
               onPressed: () {},
-              child: Text(_translations.text('dev_tools.launch')),
+              child: const TextBody1('dev_tools.launch', shouldTranslate: true),
             ),
           ),
         ],
