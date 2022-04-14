@@ -14,6 +14,7 @@ import '../../data/device_definitions.dart';
 class ControlsPanel extends StatelessWidget {
   final ConnectedWindowControllerState state;
   final double width;
+  final dividerHeight = 24.0;
 
   const ControlsPanel({
     required this.state,
@@ -33,7 +34,7 @@ class ControlsPanel extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           LabeledControl(
-            label: _translations.text('controls.device'),
+            label: 'controls.device',
             control: DropDown<DeviceDefinition>(
               currentValue: state.currentDevice,
               values: state.devices,
@@ -42,7 +43,7 @@ class ControlsPanel extends StatelessWidget {
             controlWidth: controlWidth,
           ),
           LabeledControl(
-            label: _translations.text('controls.theme'),
+            label: 'controls.theme',
             control: DropDown<MetaTheme>(
               currentValue: state.currentTheme,
               values: state.monarchData.metaThemes,
@@ -51,7 +52,7 @@ class ControlsPanel extends StatelessWidget {
             controlWidth: controlWidth,
           ),
           LabeledControl(
-            label: _translations.text('controls.locale'),
+            label: 'controls.locale',
             control: DropDown<Locale>(
               currentValue: state.currentLocale,
               values: state.monarchData.allLocales.toList(),
@@ -60,17 +61,17 @@ class ControlsPanel extends StatelessWidget {
             controlWidth: controlWidth,
           ),
           LabeledControl(
-            label: _translations.text('controls.text_scale_factor'),
+            label: 'controls.text_scale_factor',
             control: const NumberedSlider(),
             controlWidth: controlWidth,
           ),
           Divider(
             thickness: 1.0,
-            height: 10,
+            height: dividerHeight,
             color: Colors.white.withAlpha(100),
           ),
           LabeledControl(
-            label: _translations.text('controls.scale'),
+            label: 'controls.scale',
             control: DropDown<StoryScaleDefinition>(
               currentValue: state.currentScale,
               values: state.scaleList.toList(),
@@ -79,7 +80,7 @@ class ControlsPanel extends StatelessWidget {
             controlWidth: controlWidth,
           ),
           LabeledControl(
-            label: _translations.text('controls.dock'),
+            label: 'controls.dock',
             control: DropDown<DockDefinition>(
               currentValue: state.currentDock,
               values: state.dockList.toList(),
@@ -89,7 +90,7 @@ class ControlsPanel extends StatelessWidget {
           ),
           Divider(
             thickness: 1.0,
-            height: 10,
+            height: dividerHeight,
             color: Colors.white.withAlpha(100),
           ),
           CheckboxGrid(

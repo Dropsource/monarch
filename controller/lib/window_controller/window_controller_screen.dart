@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:monarch_window_controller/window_controller/widgets/components/text.dart';
 import 'package:monarch_window_controller/window_controller/widgets/controls_panel/controlls_panel.dart';
 import 'package:monarch_window_controller/window_controller/widgets/story_list/story_list.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_manager.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_state.dart';
-
-import '../utils/translations.dart';
 
 class WindowControllerScreen extends StatefulWidget {
   const WindowControllerScreen({Key? key}) : super(key: key);
@@ -18,7 +17,6 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _translations = Translations.of(context)!;
     return Scaffold(
       body: StreamBuilder<WindowControllerState>(
           stream: manager.stream,
@@ -44,9 +42,15 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
                       ),
                       child: Column(
                         children: [
-                          Text(_translations.text('story_list.title')),
+                          const TextHeadline5(
+                            'story_list.title',
+                            shouldTranslate: true,
+                          ),
                           if (!state.active) ...[
-                            Text(_translations.text('story_list.loading')),
+                            const TextBody1(
+                              'story_list.loading',
+                              shouldTranslate: true,
+                            ),
                           ],
                           if (state is ConnectedWindowControllerState) ...[
                             Expanded(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monarch_window_controller/window_controller/widgets/components/text.dart';
 
 class LabeledControl extends Padding {
   final String label;
@@ -12,10 +13,10 @@ class LabeledControl extends Padding {
     Key? key,
     required this.label,
     required this.control,
-    this.controlWidth = 380,
-    this.labelControlSpacing = 8,
-    this.verticalPadding = 4,
-    this.horizontalPadding = 8,
+    this.controlWidth = 340,
+    this.labelControlSpacing = 16,
+    this.verticalPadding = 0,
+    this.horizontalPadding = 16,
   }) : super(
           key: key,
           padding: EdgeInsets.symmetric(
@@ -24,8 +25,9 @@ class LabeledControl extends Padding {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Flexible(
-                child: Text(
+                child: TextBody1(
                   label,
+                  shouldTranslate: true,
                   textAlign: TextAlign.end,
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monarch_window_controller/window_controller/data/monarch_data.dart';
 import 'package:monarch_window_controller/window_controller/default_theme.dart';
+import 'package:monarch_window_controller/window_controller/widgets/components/text.dart';
 import 'package:monarch_window_controller/window_controller/widgets/story_list/search_field.dart';
 import 'package:monarch_window_controller/window_controller/widgets/tree_view/flutter_simple_treeview.dart';
 
@@ -60,7 +61,7 @@ class StoryListState extends State<StoryList> {
                   nodes: widget.stories.entries
                       .where(_filterStories)
                       .map((e) => TreeNode(
-                            content: Text(e.key),
+                            content: TextBody1(e.key),
                             children: e.value.storiesNames
                                 .map(
                                   (name) => TreeNode(
@@ -70,14 +71,14 @@ class StoryListState extends State<StoryList> {
                                       child: Container(
                                         padding: const EdgeInsets.only(
                                           left: 40,
-                                          top: 8,
-                                          bottom: 8,
+                                          top: 4,
+                                          bottom: 4,
                                           right: 8,
                                         ),
                                         color: widget.activeStoryName == name
                                             ? Colors.blue
                                             : Colors.transparent,
-                                        child: Text(
+                                        child: TextBody1(
                                           name,
                                         ),
                                       ),

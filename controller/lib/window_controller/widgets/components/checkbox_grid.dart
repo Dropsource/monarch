@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monarch_window_controller/window_controller/data/dev_tools_option.dart';
-
-import '../../../utils/translations.dart';
+import 'package:monarch_window_controller/window_controller/widgets/components/text.dart';
 
 class CheckboxGrid extends StatelessWidget {
   final List<DevToolsOption> devToolsOptions;
@@ -17,23 +16,22 @@ class CheckboxGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _translations = Translations.of(context)!;
     return GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          childAspectRatio: 6.5
-        ),
+            crossAxisCount: 1, childAspectRatio: 8.0),
         itemCount: devToolsOptions.length,
         shrinkWrap: true,
-
         itemBuilder: (BuildContext context, int index) {
           final item = devToolsOptions[index];
           return CheckboxListTile(
-            title: Text(_translations.text(item.label)),
+            dense: true,
+            title: TextBody1(
+              item.label,
+              shouldTranslate: true,
+            ),
             value: enabledFeatures.contains(item.feature),
             onChanged: (newValue) => onOptionToggle?.call(item),
-            controlAffinity:
-                ListTileControlAffinity.leading,
+            controlAffinity: ListTileControlAffinity.leading,
           );
         });
   }
