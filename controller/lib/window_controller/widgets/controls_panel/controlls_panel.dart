@@ -106,7 +106,6 @@ class ControlsPanel extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(
               right: 16,
-              top: 16,
             ),
             child: OutlinedButton(
               onPressed: () {},
