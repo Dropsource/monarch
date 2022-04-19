@@ -16,7 +16,7 @@ class WindowManager {
     
     var previewWindow: NSWindow?
     var controllerWindow: NSWindow?
-    var isFlutterWindowReady: Bool = false
+    var channels: Channels?
     
     let logger: Logger = Logger("WindowManager")
     
@@ -54,6 +54,11 @@ class WindowManager {
     func _loadWindows(controllerBundlePath: String, previewBundlePath: String) {
         let controller = _initFlutterViewController(controllerBundlePath)
         let preview = _initFlutterViewController(previewBundlePath)
+        
+        channels = Channels.init(
+            controllerMessenger: controller.engine.binaryMessenger,
+            previewMessenger: preview.engine.binaryMessenger)
+        channels!.setUpCallForwarding()
         
         _launchFlutterWindows(preview, controller)
     }

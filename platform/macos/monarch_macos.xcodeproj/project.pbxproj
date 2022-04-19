@@ -18,6 +18,7 @@
 		C82C968327FE35AB00DC66AA /* LogicalResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C968227FE35AB00DC66AA /* LogicalResolution.swift */; };
 		C82C968B2805DB1900DC66AA /* FlutterMacOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C82C96892805DAB100DC66AA /* FlutterMacOS.framework */; };
 		C82C968C2805DB1A00DC66AA /* FlutterMacOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C82C96892805DAB100DC66AA /* FlutterMacOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C82C968F280F1C2B00DC66AA /* Channels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C968E280F1C2B00DC66AA /* Channels.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,6 +49,9 @@
 		C82C968227FE35AB00DC66AA /* LogicalResolution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogicalResolution.swift; sourceTree = "<group>"; };
 		C82C968527FE382E00DC66AA /* FlutterMacOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FlutterMacOS.framework; path = ephemeral/FlutterMacOS.framework; sourceTree = "<group>"; };
 		C82C96892805DAB100DC66AA /* FlutterMacOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FlutterMacOS.framework; path = ephemeral/FlutterMacOS.framework; sourceTree = "<group>"; };
+		C82C968E280F1C2B00DC66AA /* Channels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channels.swift; sourceTree = "<group>"; };
+		C82C9690280F419200DC66AA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		C82C9691280F41B200DC66AA /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +69,8 @@
 		C82C965927FB8F0E00DC66AA = {
 			isa = PBXGroup;
 			children = (
+				C82C9691280F41B200DC66AA /* CHANGELOG.md */,
+				C82C9690280F419200DC66AA /* README.md */,
 				C82C96892805DAB100DC66AA /* FlutterMacOS.framework */,
 				C82C966427FB8F0E00DC66AA /* monarch_macos */,
 				C82C966327FB8F0E00DC66AA /* Products */,
@@ -93,6 +99,7 @@
 				C82C967E27FE34DB00DC66AA /* DockSide.swift */,
 				C82C968027FE352300DC66AA /* DeviceDefinition.swift */,
 				C82C968227FE35AB00DC66AA /* LogicalResolution.swift */,
+				C82C968E280F1C2B00DC66AA /* Channels.swift */,
 			);
 			path = monarch_macos;
 			sourceTree = "<group>";
@@ -181,6 +188,7 @@
 				C82C967F27FE34DB00DC66AA /* DockSide.swift in Sources */,
 				C82C966827FB8F0E00DC66AA /* ViewController.swift in Sources */,
 				C82C966627FB8F0E00DC66AA /* AppDelegate.swift in Sources */,
+				C82C968F280F1C2B00DC66AA /* Channels.swift in Sources */,
 				C82C967527FE287800DC66AA /* WindowManager.swift in Sources */,
 				C82C967D27FE34C200DC66AA /* Logger.swift in Sources */,
 			);

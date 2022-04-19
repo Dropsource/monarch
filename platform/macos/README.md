@@ -1,1 +1,1 @@
-Monarch Window Manager for macOS.
+## Monarch macOS
