@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 'channel_methods.dart';
+import 'channel_argument.dart';
 import 'logical_resolution.dart';
 
 const String _ios = 'ios';
@@ -11,14 +11,6 @@ String? targetPlatformToString(TargetPlatform platform) {
       ? _ios
       : platform == TargetPlatform.android
           ? _android
-          : null;
-}
-
-TargetPlatform? targetPlatformFromString(String platform) {
-  return platform == _ios
-      ? TargetPlatform.iOS
-      : platform == _android
-          ? TargetPlatform.android
           : null;
 }
 
@@ -71,12 +63,12 @@ const iPhone13DeviceDefinition = DeviceDefinition(
 
 /// @GOTCHA: if you change the [defaultDeviceDefinition] here, make sure to
 /// also change it in:
-/// - monarch_mac_app/monarch/monarch/DeviceDefinition.swift
-/// - monarch_windows_app/device_definition.cpp
-/// Then, release mac and windows builds.
+/// - controller/lib/window_controller/data/device_definitions.dart
+/// 
+/// Then, release a new monarch build.
 ///
 /// Make sure to not delete a default device that is used in previous versions
-/// of the desktop apps. Otherwise, users running different versions may see
+/// of the controller. Otherwise, users running different versions may see
 /// unexpected errors.
 final defaultDeviceDefinition = iPhone13DeviceDefinition;
 

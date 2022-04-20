@@ -1,4 +1,4 @@
-import 'channel_methods.dart';
+import 'channel_argument.dart';
 
 /// Flutter uses logical pixels. Also called device-independent or
 /// resolution-independent pixels.
