@@ -10,7 +10,7 @@ import 'package:monarch_window_controller/window_controller/data/story_scale_def
 
 import 'data/definitions.dart';
 
-abstract class WindowControllerState {
+class WindowControllerState {
   final bool active;
 
   WindowControllerState({required this.active});
@@ -36,6 +36,7 @@ class ConnectedWindowControllerState extends WindowControllerState {
   final DockDefinition currentDock;
   final List<DockDefinition> dockList;
 
+  final double textScaleFactor;
   // final List<DevToolsOption> devToolOptions;
   // final Set<DevToolFeature> enabledDevToolsFeatures;
 
@@ -53,6 +54,7 @@ class ConnectedWindowControllerState extends WindowControllerState {
     required this.currentScale,
     required this.dockList,
     required this.scaleList,
+    required this.textScaleFactor,
     // required this.devToolOptions,
     // required this.enabledDevToolsFeatures,
   }) : super(active: active);
@@ -69,7 +71,8 @@ class ConnectedWindowControllerState extends WindowControllerState {
           currentDock: defs.defaultDock,
           currentScale: defaultScaleDefinition,
           dockList: defs.dockList,
-          scaleList: [defaultScaleDefinition]);
+          scaleList: [defaultScaleDefinition],
+          textScaleFactor: 1.0);
 
   // factory ConnectedWindowControllerState.test() =>
   //     ConnectedWindowControllerState(
@@ -162,6 +165,7 @@ class ConnectedWindowControllerState extends WindowControllerState {
     MetaTheme? currentTheme,
     StoryScaleDefinition? currentScale,
     DockDefinition? currentDock,
+    double? textScaleFactor,
     // Set<DevToolFeature>? enabledDevToolsFeatures,
   }) =>
       ConnectedWindowControllerState(
@@ -178,6 +182,7 @@ class ConnectedWindowControllerState extends WindowControllerState {
         currentScale: currentScale ?? this.currentScale,
         dockList: dockList,
         currentDock: currentDock ?? this.currentDock,
+        textScaleFactor: textScaleFactor ?? this.textScaleFactor,
         // devToolOptions: devToolOptions,
         // enabledDevToolsFeatures:
         //     enabledDevToolsFeatures ?? this.enabledDevToolsFeatures,

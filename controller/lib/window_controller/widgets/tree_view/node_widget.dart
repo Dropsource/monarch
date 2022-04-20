@@ -59,8 +59,11 @@ class _NodeWidgetState extends State<NodeWidget> {
           children: [
             if (onIconPressed != null) ...[
               IconButton(
-                iconSize: widget.iconSize ?? 24.0,
-                icon: Icon(icon),
+                iconSize: widget.iconSize ?? 16.0,
+                splashRadius: 8,
+                padding: const EdgeInsets.all(4),
+                constraints: const BoxConstraints(),
+                icon: Icon(icon, size: 16,),
                 onPressed: onIconPressed,
               ),
             ],

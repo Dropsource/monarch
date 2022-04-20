@@ -6,17 +6,22 @@ import 'package:monarch_window_controller/window_controller/widgets/components/c
 import 'package:monarch_window_controller/window_controller/widgets/components/dropdown.dart';
 import 'package:monarch_window_controller/window_controller/widgets/components/labeled_control.dart';
 import 'package:monarch_window_controller/window_controller/widgets/components/numbered_slider.dart';
+import 'package:monarch_window_controller/window_controller/window_controller_manager.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_state.dart';
 
 import '../../../utils/translations.dart';
 import '../../data/device_definitions.dart';
+import '../components/text.dart';
 
 class ControlsPanel extends StatelessWidget {
   final ConnectedWindowControllerState state;
   final double width;
+  final dividerHeight = 24.0;
+  final WindowControllerManager manager;
 
   const ControlsPanel({
     required this.state,
+    required this.manager,
     Key? key,
     this.width = 353,
   }) : super(key: key);
@@ -30,10 +35,11 @@ class ControlsPanel extends StatelessWidget {
       width: width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
+
         mainAxisSize: MainAxisSize.max,
         children: [
           LabeledControl(
-            label: _translations.text('controls.device'),
+            label: 'controls.device',
             control: DropDown<DeviceDefinition>(
               currentValue: state.currentDevice,
               values: state.devices,
@@ -42,7 +48,7 @@ class ControlsPanel extends StatelessWidget {
             controlWidth: controlWidth,
           ),
           LabeledControl(
-            label: _translations.text('controls.theme'),
+            label: 'controls.theme',
             control: DropDown<MetaTheme>(
               currentValue: state.currentTheme,
               values: state.themes,
@@ -60,17 +66,18 @@ class ControlsPanel extends StatelessWidget {
             controlWidth: controlWidth,
           ),
           LabeledControl(
-            label: _translations.text('controls.text_scale_factor'),
-            control: const NumberedSlider(),
+            label: '${_translations.text("controls.text_scale_factor")} (${state.textScaleFactor.toStringAsFixed(1)})',
+            control:  NumberedSlider(initialValue: state.textScaleFactor, onChanged: (val) => null), //manager.onTextScaleFactorChanged(val),),
+            shouldTranslate: false,
             controlWidth: controlWidth,
           ),
           Divider(
             thickness: 1.0,
-            height: 10,
+            height: dividerHeight,
             color: Colors.white.withAlpha(100),
           ),
           LabeledControl(
-            label: _translations.text('controls.scale'),
+            label: 'controls.scale',
             control: DropDown<StoryScaleDefinition>(
               currentValue: state.currentScale,
               values: state.scaleList.toList(),
@@ -79,7 +86,7 @@ class ControlsPanel extends StatelessWidget {
             controlWidth: controlWidth,
           ),
           LabeledControl(
-            label: _translations.text('controls.dock'),
+            label: 'controls.dock',
             control: DropDown<DockDefinition>(
               currentValue: state.currentDock,
               values: state.dockList.toList(),
@@ -89,7 +96,7 @@ class ControlsPanel extends StatelessWidget {
           ),
           Divider(
             thickness: 1.0,
-            height: 10,
+            height: dividerHeight,
             color: Colors.white.withAlpha(100),
           ),
           // CheckboxGrid(
@@ -99,12 +106,10 @@ class ControlsPanel extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(
               right: 16,
-              top: 40,
             ),
-            child: MaterialButton(
-              color: Colors.red,
+            child: OutlinedButton(
               onPressed: () {},
-              child: Text(_translations.text('dev_tools.launch')),
+              child: const TextBody1('dev_tools.launch', shouldTranslate: true),
             ),
           ),
         ],

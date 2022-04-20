@@ -13,7 +13,7 @@ const Color secondaryLightGrey = Color(0xFFEEEFF2);
 const Color secondaryGrey = Color(0xFF9CA0AD);
 const Color red = Color(0xFFDF7272);
 const Color dark = Color(0xFF1C1E22);
-const Color darkGrey = Color(0xFF2E3137);
+const Color darkGrey = Color(0xFF38393D);
 
 const Color fontPrimaryColor = Colors.white;
 const Color fontSecondaryColor = Color(0xFFF3F3F3);
@@ -50,7 +50,7 @@ const EdgeInsets listPadding =
     EdgeInsets.symmetric(horizontal: 20, vertical: 10);
 
 @MonarchTheme('Default Theme', isDefault: true)
-final ThemeData theme = ThemeData.dark().copyWith(
+ ThemeData get theme => ThemeData.dark().copyWith(
   primaryColor: blue,
   splashColor: Colors.transparent,
   errorColor: red,
@@ -82,7 +82,7 @@ final ThemeData theme = ThemeData.dark().copyWith(
     ),
     headline5: TextStyle(
       fontFamily: 'Roboto',
-      fontSize: 22.0,
+      fontSize: 13.0,
       color: fontPrimaryColor,
       fontWeight: FontWeight.w600,
     ),
@@ -94,21 +94,21 @@ final ThemeData theme = ThemeData.dark().copyWith(
     ),
     bodyText1: TextStyle(
       fontFamily: 'Roboto',
-      color: grey,
+      color: fontPrimaryColor,
       fontWeight: FontWeight.w500,
-      fontSize: 14,
+      fontSize: 11,
     ),
     bodyText2: TextStyle(
       fontFamily: 'Roboto',
       color: fontPrimaryColor,
       fontWeight: FontWeight.w500,
-      fontSize: 12,
+      fontSize: 9,
     ),
     subtitle1: TextStyle(
       fontFamily: 'Roboto',
       color: fontPrimaryColor,
       fontWeight: FontWeight.w500,
-      fontSize: 16,
+      fontSize: 12,
     ),
     subtitle2: TextStyle(
       fontFamily: 'Roboto',
@@ -137,15 +137,15 @@ final ThemeData theme = ThemeData.dark().copyWith(
     ),
   ),
   inputDecorationTheme: const InputDecorationTheme(
-    contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+    contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     labelStyle: TextStyle(
       color: inputHintColor,
-      fontSize: 13,
+      fontSize: 11,
       fontWeight: FontWeight.w600,
     ),
     hintStyle: TextStyle(
       fontWeight: FontWeight.w600,
-      fontSize: 13,
+      fontSize: 11,
       color: inputHintColor,
     ),
     border: OutlineInputBorder(

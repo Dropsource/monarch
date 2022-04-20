@@ -36,6 +36,7 @@ class WindowControllerManager {
     _subscription = null;
     _streamController.close();
   }
+
 }
 
 final manager = WindowControllerManager();

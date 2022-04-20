@@ -11,18 +11,19 @@ class SearchField extends Stack {
   }) : super(key: key, children: [
           TextFormField(
             controller: controller,
+
             onChanged: (value) => onChanged?.call(value),
             decoration: InputDecoration(
               hintText: hint,
-              //border: const OutlineInputBorder(),
-              //fillColor: Colors.white,
-              //filled: true,
-              suffixIcon:canReset?  IconButton(
-                icon: const Icon(Icons.clear_rounded),
-                hoverColor: Colors.transparent,
-                splashRadius: 15,
-                onPressed: () => onReset?.call(),
-              ) : null,
+              contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              suffixIcon: canReset
+                  ? IconButton(
+                      icon: const Icon(Icons.clear_rounded),
+                      hoverColor: Colors.transparent,
+                      splashRadius: 15,
+                      onPressed: () => onReset?.call(),
+                    )
+                  : null,
             ),
           )
         ]);
