@@ -25,11 +25,13 @@ class Channels {
         self.controllerChannel.setMethodCallHandler {
             (call: FlutterMethodCall, result: FlutterResult) -> Void in
             self.previewChannel.invokeMethod(call.method, arguments: call.arguments)
+            result(nil)
         }
         
         self.previewChannel.setMethodCallHandler {
             (call: FlutterMethodCall, result: FlutterResult) -> Void in
             self.controllerChannel.invokeMethod(call.method, arguments: call.arguments)
+            result(nil)
         }
     }
 }
