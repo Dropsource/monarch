@@ -4,6 +4,7 @@ import 'package:monarch_window_controller/utils/localization.dart';
 import 'package:monarch_window_controller/window_controller/default_theme.dart'
     as theme;
 import 'package:monarch_window_controller/window_controller/window_controller_screen.dart';
+import 'package:stockholm/stockholm.dart';
 
 const controlsWidth = 250.0;
 

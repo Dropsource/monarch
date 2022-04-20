@@ -38,6 +38,7 @@ class ControlsPanel extends StatelessWidget {
 
         mainAxisSize: MainAxisSize.max,
         children: [
+          const SizedBox(height: 8,),
           LabeledControl(
             label: 'controls.device',
             control: DropDown<DeviceDefinition>(
@@ -47,6 +48,7 @@ class ControlsPanel extends StatelessWidget {
             ),
             controlWidth: controlWidth,
           ),
+          const SizedBox(height: 8,),
           LabeledControl(
             label: 'controls.theme',
             control: DropDown<MetaTheme>(
@@ -56,10 +58,12 @@ class ControlsPanel extends StatelessWidget {
             ),
             controlWidth: controlWidth,
           ),
+          const SizedBox(height: 8,),
           LabeledControl(
             label: 'controls.locale',
             control: DropDown<Locale>(
               currentValue: state.currentLocale,
+
               values: state.monarchData.allLocales.toList(),
               toStringFunction: (e) => e.toString(),
             ),
@@ -85,6 +89,7 @@ class ControlsPanel extends StatelessWidget {
             ),
             controlWidth: controlWidth,
           ),
+          const SizedBox(height: 8,),
           LabeledControl(
             label: 'controls.dock',
             control: DropDown<DockDefinition>(
@@ -102,6 +107,7 @@ class ControlsPanel extends StatelessWidget {
           CheckboxGrid(
             devToolsOptions: state.devToolOptions,
             enabledFeatures: state.enabledDevToolsFeatures,
+            onOptionToggle: manager.onDevToolOptionToggled,
           ),
           Padding(
             padding: const EdgeInsets.only(

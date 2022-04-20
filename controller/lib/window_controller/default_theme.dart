@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monarch_annotations/monarch_annotations.dart';
+import 'package:stockholm/stockholm.dart';
 
 // const Color offWhite = Color(0xFFF8F9FA);
 const Color black = Color(0xFF071232);
@@ -50,7 +51,7 @@ const EdgeInsets listPadding =
     EdgeInsets.symmetric(horizontal: 20, vertical: 10);
 
 @MonarchTheme('Default Theme', isDefault: true)
- ThemeData get theme => ThemeData.dark().copyWith(
+ ThemeData get theme => StockholmThemeData.dark().copyWith(
   primaryColor: blue,
   splashColor: Colors.transparent,
   errorColor: red,
@@ -96,7 +97,7 @@ const EdgeInsets listPadding =
       fontFamily: 'Roboto',
       color: fontPrimaryColor,
       fontWeight: FontWeight.w500,
-      fontSize: 11,
+      fontSize: 9,
     ),
     bodyText2: TextStyle(
       fontFamily: 'Roboto',
@@ -136,44 +137,44 @@ const EdgeInsets listPadding =
       fontWeight: FontWeight.w500,
     ),
   ),
-  inputDecorationTheme: const InputDecorationTheme(
-    contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    labelStyle: TextStyle(
-      color: inputHintColor,
-      fontSize: 11,
-      fontWeight: FontWeight.w600,
-    ),
-    hintStyle: TextStyle(
-      fontWeight: FontWeight.w600,
-      fontSize: 11,
-      color: inputHintColor,
-    ),
-    border: OutlineInputBorder(
-        borderSide: BorderSide(color: lightGrey), borderRadius: borderRadius),
-    enabledBorder: OutlineInputBorder(
-        borderRadius: borderRadius, borderSide: BorderSide(color: lightGrey)),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: borderRadius,
-      borderSide: BorderSide(color: lightGrey),
-    ),
-    errorBorder: OutlineInputBorder(
-      borderRadius: borderRadius,
-      borderSide: BorderSide(color: red),
-    ),
-    focusedErrorBorder: OutlineInputBorder(
-      borderRadius: borderRadius,
-      borderSide: BorderSide(color: red),
-    ),
-  ),
-  buttonTheme: const ButtonThemeData(
-    height: 50.0,
-    shape: RoundedRectangleBorder(borderRadius: borderRadius),
-    splashColor: Colors.transparent,
-  ),
+  // inputDecorationTheme: const InputDecorationTheme(
+  //   contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  //   labelStyle: TextStyle(
+  //     color: inputHintColor,
+  //     fontSize: 11,
+  //     fontWeight: FontWeight.w600,
+  //   ),
+  //   hintStyle: TextStyle(
+  //     fontWeight: FontWeight.w600,
+  //     fontSize: 11,
+  //     color: inputHintColor,
+  //   ),
+  //   border: OutlineInputBorder(
+  //       borderSide: BorderSide(color: lightGrey), borderRadius: borderRadius),
+  //   enabledBorder: OutlineInputBorder(
+  //       borderRadius: borderRadius, borderSide: BorderSide(color: lightGrey)),
+  //   focusedBorder: OutlineInputBorder(
+  //     borderRadius: borderRadius,
+  //     borderSide: BorderSide(color: lightGrey),
+  //   ),
+  //   errorBorder: OutlineInputBorder(
+  //     borderRadius: borderRadius,
+  //     borderSide: BorderSide(color: red),
+  //   ),
+  //   focusedErrorBorder: OutlineInputBorder(
+  //     borderRadius: borderRadius,
+  //     borderSide: BorderSide(color: red),
+  //   ),
+  // ),
+  // buttonTheme: const ButtonThemeData(
+  //   height: 50.0,
+  //   shape: RoundedRectangleBorder(borderRadius: borderRadius),
+  //   splashColor: Colors.transparent,
+  // ),
   //bottomAppBarColor: Colors.white,
-  appBarTheme: const AppBarTheme(
-    elevation: 1.5,
-    iconTheme: IconThemeData(color: blue),
-  ),
+  // appBarTheme: const AppBarTheme(
+  //   elevation: 1.5,
+  //   iconTheme: IconThemeData(color: blue),
+  // ),
   backgroundColor: dark,
 );
