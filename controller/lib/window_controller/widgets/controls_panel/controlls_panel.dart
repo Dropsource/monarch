@@ -45,16 +45,16 @@ class ControlsPanel extends StatelessWidget {
             label: _translations.text('controls.theme'),
             control: DropDown<MetaTheme>(
               currentValue: state.currentTheme,
-              values: state.monarchData.metaThemes,
+              values: state.themes,
               toStringFunction: (e) => e.name,
             ),
             controlWidth: controlWidth,
           ),
           LabeledControl(
             label: _translations.text('controls.locale'),
-            control: DropDown<Locale>(
+            control: DropDown<String>(
               currentValue: state.currentLocale,
-              values: state.monarchData.allLocales.toList(),
+              values: state.locales,
               toStringFunction: (e) => e.toString(),
             ),
             controlWidth: controlWidth,
@@ -92,10 +92,10 @@ class ControlsPanel extends StatelessWidget {
             height: 10,
             color: Colors.white.withAlpha(100),
           ),
-          CheckboxGrid(
-            devToolsOptions: state.devToolOptions,
-            enabledFeatures: state.enabledDevToolsFeatures,
-          ),
+          // CheckboxGrid(
+          //   devToolsOptions: state.devToolOptions,
+          //   enabledFeatures: state.enabledDevToolsFeatures,
+          // ),
           Padding(
             padding: const EdgeInsets.only(
               right: 16,

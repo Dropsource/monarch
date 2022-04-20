@@ -10,23 +10,25 @@ class WindowControllerManager {
   StreamSubscription<WindowControllerState>? _subscription;
 
   Stream<WindowControllerState> get stream => _streamController.stream;
-  WindowControllerState? state;
+  late WindowControllerState _state;
+  ConnectedWindowControllerState get state =>
+      _state as ConnectedWindowControllerState;
 
   WindowControllerManager() {
     _subscription = _streamController.listen((value) {
-      state = value;
+      _state = value;
     });
 
-    _streamController.sink.add(ConnectedWindowControllerState.test());
+    _streamController.sink.add(ConnectedWindowControllerState.init());
+  }
+
+  void update(ConnectedWindowControllerState newState) {
+    _streamController.sink.add(newState);
   }
 
   void onActiveStoryChanged(String activeStoryName) async {
-    final localState = state;
-
-    if (localState is ConnectedWindowControllerState) {
-      _streamController.sink
-          .add(localState.copyWith(activeStoryName: activeStoryName));
-    }
+    _streamController.sink
+        .add(state.copyWith(activeStoryName: activeStoryName));
   }
 
   void dispose() {
@@ -35,3 +37,5 @@ class WindowControllerManager {
     _streamController.close();
   }
 }
+
+final manager = WindowControllerManager();

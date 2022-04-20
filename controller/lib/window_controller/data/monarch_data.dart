@@ -24,7 +24,7 @@ class MetaTheme {
   final String name;
   final bool isDefault;
 
-  MetaTheme({required this.id, required this.name, required this.isDefault});
+  const MetaTheme({required this.id, required this.name, required this.isDefault});
 
   static MetaTheme fromStandardMap(Map<String, dynamic> args) {
     return MetaTheme(

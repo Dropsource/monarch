@@ -14,7 +14,6 @@ class WindowControllerScreen extends StatefulWidget {
 }
 
 class UiWindowControllerState extends State<WindowControllerScreen> {
-  final manager = WindowControllerManager();
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +50,8 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
                           if (state is ConnectedWindowControllerState) ...[
                             Expanded(
                               child: StoryList(
-                                projectName: state.monarchData.packageName,
-                                stories: state.monarchData.metaStoriesMap,
+                                projectName: state.monarchData == null ? '' : state.monarchData!.packageName,
+                                stories: state.monarchData == null ? {} : state.monarchData!.metaStoriesMap,
                                 activeStoryName: state.activeStoryName,
                                 onActiveStoryChange: (name) =>
                                     manager.onActiveStoryChanged(name),

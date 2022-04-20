@@ -1,9 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:monarch_window_controller/window_controller/data/dock_definition.dart';
+import 'package:monarch_window_controller/window_controller/data/monarch_data.dart';
 
 import 'dev_tools_option.dart';
 
-const defaultLocale = Locale('en', 'US');
+const defaultTheme = MetaTheme(
+    id: '__material-light-theme__',
+    name: 'Material Light Theme',
+    isDefault: true);
+
+const defaultLocale = 'System Locale';
 
 final defaultDock = DockDefinition(name: 'dock_settings.left', id: 'left');
 final dockList = [

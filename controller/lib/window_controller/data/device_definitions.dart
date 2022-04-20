@@ -30,16 +30,19 @@ class DeviceDefinition {
     return DeviceDefinition(
         id: args['id'],
         name: args['name'],
-        logicalResolution:
-            LogicalResolution.fromStandardMap(args['logicalResolution']),
+        logicalResolution: LogicalResolution.fromStandardMap(
+            Map<String, dynamic>.from(args['logicalResolution'])),
         devicePixelRatio: args['devicePixelRatio'],
         targetPlatform: targetPlatformFromString(args['targetPlatform']));
   }
 }
 
 List<DeviceDefinition> getDeviceDefinitions(Map<String, dynamic> args) {
-  var defsArg = args['definitions'] as List<Map<String, dynamic>>;
-  return defsArg.map((e) => DeviceDefinition.fromStandardMap(e)).toList();
+  var defsArg = args['definitions'] as List<dynamic>;
+  return defsArg
+      .map(
+          (e) => DeviceDefinition.fromStandardMap(Map<String, dynamic>.from(e)))
+      .toList();
 }
 
 const iPhone13DeviceDefinition = DeviceDefinition(
