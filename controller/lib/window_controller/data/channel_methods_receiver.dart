@@ -1,13 +1,13 @@
 import 'package:flutter/services.dart';
 import 'package:monarch_utils/log.dart';
+import 'package:monarch_channels/monarch_channels.dart';
 
-import 'channel_methods.dart';
 import 'channel_methods_sender.dart';
 
 final logger = Logger('ChannelMethodsReceiver');
 
 void receiveChannelMethodCalls() {
-  Channels.controllerChannel.setMethodCallHandler((MethodCall call) async {
+  MonarchChannels.controller.setMethodCallHandler((MethodCall call) async {
     logger.finest('channel method received: ${call.method}');
 
     try {
@@ -25,7 +25,7 @@ Future<dynamic> _handler(MethodCall call) async {
   final Map? args = call.arguments;
 
   switch (call.method) {
-    case MethodNames.ping:
+    case MonarchMethods.ping:
       channelMethodsSender.setUpLog(LogLevel.ALL.value);
       break;
 

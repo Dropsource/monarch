@@ -1,40 +1,17 @@
-import 'channel_methods.dart';
-
-class StoryScaleDefinition implements OutboundChannelArgument {
-  const StoryScaleDefinition(this.scale, this.name);
+class StoryScaleDefinition {
+  const StoryScaleDefinition({required this.scale, required this.name});
 
   final double scale;
   final String name;
 
-  @override
-  Map<String, dynamic> toStandardMap() {
-    return {'scale': scale, 'name': name};
+  static StoryScaleDefinition fromStandardMap(Map<String, dynamic> args) {
+    return StoryScaleDefinition(scale: args['scale'], name: args['name']);
   }
 }
 
-class StoryScaleDefinitions implements OutboundChannelArgument {
-  @override
-  Map<String, dynamic> toStandardMap() {
-    return {
-      'definitions':
-          storyScaleDefinitions.map((d) => d.toStandardMap()).toList(),
-    };
-  }
+List<StoryScaleDefinition> getStoryScaleDefinitions(Map<String, dynamic> args) {
+  var defsArgs = args['definitions'] as List<Map<String, dynamic>>;
+  return defsArgs.map((e) => StoryScaleDefinition.fromStandardMap(e)).toList();
 }
 
-const defaultScaleDefinition = StoryScaleDefinition(1, '100%');
-final storyScaleDefinitions = [
-  const StoryScaleDefinition(0.5, '50%'),
-  const StoryScaleDefinition(0.67, '67%'),
-  const StoryScaleDefinition(0.75, '75%'),
-  const StoryScaleDefinition(0.8, '80%'),
-  const StoryScaleDefinition(0.9, '90%'),
-  defaultScaleDefinition,
-  const StoryScaleDefinition(1.1, '110%'),
-  const StoryScaleDefinition(1.25, '125%'),
-  const StoryScaleDefinition(1.5, '150%'),
-  const StoryScaleDefinition(1.75, '175%'),
-  const StoryScaleDefinition(2, '200%'),
-  const StoryScaleDefinition(2.5, '250%'),
-  const StoryScaleDefinition(3, '300%'),
-];
+const defaultScaleDefinition = StoryScaleDefinition(scale: 1.0, name: '100%');
