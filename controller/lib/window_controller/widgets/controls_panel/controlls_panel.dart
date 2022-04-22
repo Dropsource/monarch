@@ -31,14 +31,16 @@ class ControlsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final _translations = Translations.of(context)!;
 
-    return SizedBox(
+    return Container(
       width: width,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
-
         mainAxisSize: MainAxisSize.max,
         children: [
-          const SizedBox(height: 8,),
+          const SizedBox(
+            height: 8,
+          ),
           LabeledControl(
             label: 'controls.device',
             control: DropDown<DeviceDefinition>(
@@ -48,7 +50,9 @@ class ControlsPanel extends StatelessWidget {
             ),
             controlWidth: controlWidth,
           ),
-          const SizedBox(height: 8,),
+          const SizedBox(
+            height: 8,
+          ),
           LabeledControl(
             label: 'controls.theme',
             control: DropDown<MetaTheme>(
@@ -58,20 +62,25 @@ class ControlsPanel extends StatelessWidget {
             ),
             controlWidth: controlWidth,
           ),
-          const SizedBox(height: 8,),
+          const SizedBox(
+            height: 8,
+          ),
           LabeledControl(
             label: 'controls.locale',
             control: DropDown<Locale>(
               currentValue: state.currentLocale,
-
               values: state.monarchData.allLocales.toList(),
               toStringFunction: (e) => e.toString(),
             ),
             controlWidth: controlWidth,
           ),
           LabeledControl(
-            label: '${_translations.text("controls.text_scale_factor")} (${state.textScaleFactor.toStringAsFixed(1)})',
-            control:  NumberedSlider(initialValue: state.textScaleFactor, onChanged: (val) => manager.onTextScaleFactorChanged(val),),
+            label:
+                '${_translations.text("controls.text_scale_factor")} (${state.textScaleFactor.toStringAsFixed(1)})',
+            control: NumberedSlider(
+              initialValue: state.textScaleFactor,
+              onChanged: (val) => manager.onTextScaleFactorChanged(val),
+            ),
             shouldTranslate: false,
             controlWidth: controlWidth,
           ),
@@ -89,7 +98,9 @@ class ControlsPanel extends StatelessWidget {
             ),
             controlWidth: controlWidth,
           ),
-          const SizedBox(height: 8,),
+          const SizedBox(
+            height: 8,
+          ),
           LabeledControl(
             label: 'controls.dock',
             control: DropDown<DockDefinition>(
