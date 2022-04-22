@@ -8,6 +8,7 @@ import 'package:monarch_window_controller/window_controller/widgets/components/l
 import 'package:monarch_window_controller/window_controller/widgets/components/numbered_slider.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_manager.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_state.dart';
+import 'package:stockholm/stockholm.dart';
 
 import '../../../utils/translations.dart';
 import '../../data/device_definitions.dart';
@@ -36,7 +37,7 @@ class ControlsPanel extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(
             height: 8,
@@ -122,11 +123,15 @@ class ControlsPanel extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(
-              right: 16,
+              top: 8,
             ),
-            child: OutlinedButton(
-              onPressed: () {},
-              child: const TextBody1('dev_tools.launch', shouldTranslate: true),
+            child: SizedBox(
+              width: 120,
+              child: StockholmButton(
+                onPressed: () {},
+                child:
+                    const TextBody1('dev_tools.launch', shouldTranslate: true),
+              ),
             ),
           ),
         ],

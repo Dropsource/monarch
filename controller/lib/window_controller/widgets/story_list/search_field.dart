@@ -22,7 +22,9 @@ class SearchField extends StatelessWidget {
     return CupertinoTextField(
       controller: controller,
       style: Theme.of(context).textTheme.bodyText2,
+      placeholderStyle: Theme.of(context).textTheme.bodyText2,
       onChanged: (value) => onChanged?.call(value),
+
       placeholder: hint,
       // decoration: InputDecoration(
       //   hintText: hint,

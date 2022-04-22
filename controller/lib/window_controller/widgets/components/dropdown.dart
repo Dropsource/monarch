@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monarch_window_controller/window_controller/widgets/components/text.dart';
-import 'package:stockholm/stockholm.dart';
+
+import 'dropdown_button.dart';
 
 class DropDown<T> extends StatelessWidget {
   final List<T> values;
@@ -27,11 +28,7 @@ class DropDown<T> extends StatelessWidget {
   Widget build(BuildContext context) => StockholmDropdownButton<String>(
         key: key,
         value: toStringFunction(currentValue),
-        icon: const Icon(Icons.arrow_drop_down),
-        // elevation: 8,
-        // isExpanded: true,
-        // underline: const SizedBox(),
-        // style: const TextStyle(color: Colors.white),
+        icon: const Icon(Icons.arrow_drop_down, size: 18,),
         width: 240,
         onChanged: (string) => onChange?.call(stringfiedValues[string]!),
         items: values.map<StockholmDropdownItem<String>>((T value) {

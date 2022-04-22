@@ -54,6 +54,7 @@ const EdgeInsets listPadding =
  ThemeData get theme => StockholmThemeData.dark().copyWith(
   primaryColor: blue,
   splashColor: Colors.transparent,
+  visualDensity: VisualDensity.compact,
   errorColor: red,
   scaffoldBackgroundColor: dark,
   textTheme: const TextTheme(
@@ -137,44 +138,5 @@ const EdgeInsets listPadding =
       fontWeight: FontWeight.w500,
     ),
   ),
-  // inputDecorationTheme: const InputDecorationTheme(
-  //   contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-  //   labelStyle: TextStyle(
-  //     color: inputHintColor,
-  //     fontSize: 11,
-  //     fontWeight: FontWeight.w600,
-  //   ),
-  //   hintStyle: TextStyle(
-  //     fontWeight: FontWeight.w600,
-  //     fontSize: 11,
-  //     color: inputHintColor,
-  //   ),
-  //   border: OutlineInputBorder(
-  //       borderSide: BorderSide(color: lightGrey), borderRadius: borderRadius),
-  //   enabledBorder: OutlineInputBorder(
-  //       borderRadius: borderRadius, borderSide: BorderSide(color: lightGrey)),
-  //   focusedBorder: OutlineInputBorder(
-  //     borderRadius: borderRadius,
-  //     borderSide: BorderSide(color: lightGrey),
-  //   ),
-  //   errorBorder: OutlineInputBorder(
-  //     borderRadius: borderRadius,
-  //     borderSide: BorderSide(color: red),
-  //   ),
-  //   focusedErrorBorder: OutlineInputBorder(
-  //     borderRadius: borderRadius,
-  //     borderSide: BorderSide(color: red),
-  //   ),
-  // ),
-  // buttonTheme: const ButtonThemeData(
-  //   height: 50.0,
-  //   shape: RoundedRectangleBorder(borderRadius: borderRadius),
-  //   splashColor: Colors.transparent,
-  // ),
-  //bottomAppBarColor: Colors.white,
-  // appBarTheme: const AppBarTheme(
-  //   elevation: 1.5,
-  //   iconTheme: IconThemeData(color: blue),
-  // ),
   backgroundColor: dark,
 );

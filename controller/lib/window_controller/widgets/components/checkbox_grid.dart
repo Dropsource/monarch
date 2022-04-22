@@ -21,9 +21,9 @@ class CheckboxGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return SizedBox(
       // width: 200,
-      // height: 200,
+       height: 60,
       child: AlignedGridView.count(
           crossAxisCount: 2,
           mainAxisSpacing: 4,
