@@ -15,7 +15,7 @@ import '../../data/device_definitions.dart';
 import '../components/text.dart';
 
 class ControlsPanel extends StatelessWidget {
-  final ConnectedWindowControllerState state;
+  final WindowControllerState state;
   final double width;
   final dividerHeight = 24.0;
   final WindowControllerManager manager;
@@ -117,8 +117,7 @@ class ControlsPanel extends StatelessWidget {
             color: Colors.white.withAlpha(100),
           ),
           CheckboxGrid(
-            devToolsOptions: state.devToolOptions,
-            enabledFeatures: state.enabledDevToolsFeatures,
+            devToolsOptions: state.visualDebugFlags,
             onOptionToggle: manager.onDevToolOptionToggled,
           ),
           Padding(

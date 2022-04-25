@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:monarch_window_controller/window_controller/data/dev_tools_option.dart';
+import 'package:monarch_window_controller/window_controller/data/visual_debug_flags.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_state.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -12,30 +12,27 @@ class WindowControllerManager {
 
   Stream<WindowControllerState> get stream => _streamController.stream;
   late WindowControllerState _state;
-  ConnectedWindowControllerState get state =>
-      _state as ConnectedWindowControllerState;
+  WindowControllerState get state =>
+      _state;
 
   WindowControllerManager() {
     _subscription = _streamController.listen((value) {
       _state = value;
     });
 
-    _streamController.sink.add(ConnectedWindowControllerState.init());
+    _streamController.sink.add(WindowControllerState.init());
   }
 
   void onActiveStoryChanged(String activeStoryName) async {
     _updateState((state) => state.copyWith(activeStoryName: activeStoryName));
   }
 
-  void onActiveStoryChanged(String activeStoryName) async {
-    _streamController.sink
-        .add(state.copyWith(activeStoryName: activeStoryName));
+  void update(WindowControllerState newState){
+    _streamController.sink.add(newState);
   }
 
   void _updateState(Function(WindowControllerState) stateReporter) {
-    if (state != null) {
-      _streamController.sink.add(stateReporter(state!));
-    }
+      _streamController.sink.add(stateReporter(state));
   }
 
   void dispose() {
@@ -44,21 +41,21 @@ class WindowControllerManager {
     _streamController.close();
   }
 
-  onDevToolOptionToggled(DevToolsOption option) {
-    final localState = state;
-    if (localState == null) {
-      return;
-    }
-    if (localState.enabledDevToolsFeatures.contains(option.feature)) {
-      _updateState((state) => state.copyWith(
-          enabledDevToolsFeatures: localState.enabledDevToolsFeatures
-            ..remove(option.feature)));
-    } else {
-      _updateState((state) => state.copyWith(
-          enabledDevToolsFeatures: localState.enabledDevToolsFeatures
-            ..add(option.feature)));
-    }
+  void onDevToolOptionToggled(VisualDebugFlag option) {
+
+    option = option.copyWith(enabled: !option.isEnabled);
+
+    final element = state.visualDebugFlags.firstWhere((element) => element.name == option.name);
+    final index = state.visualDebugFlags.indexOf(element);
+    final list = state.visualDebugFlags..setAll(index, [option]);
+    update(state.copyWith(visualDebugFlags: list));
+
+    //TODO send information about [option] element updated to channel
+
+
   }
+
+  void onTextScaleFactorChanged(double val) {}
 }
 
 final manager = WindowControllerManager();

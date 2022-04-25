@@ -52,7 +52,7 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
                               shouldTranslate: true,
                             ),
                           ],
-                          if (state is ConnectedWindowControllerState) ...[
+                          if (state.active) ...[
                             Expanded(
                               child: StoryList(
                                 projectName: state.monarchData == null ? '' : state.monarchData!.packageName,
