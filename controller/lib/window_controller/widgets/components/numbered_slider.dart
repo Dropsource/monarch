@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class NumberedSlider extends StatefulWidget {
   final double initialValue;
@@ -25,14 +26,20 @@ class _NumberedSlideState extends State<NumberedSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return Slider(
+    return SfSlider(
       value: value,
       min: 0.7,
       max: 2.0,
-      thumbColor: Colors.white,
-      divisions: 13,
-      label: value.toStringAsFixed(1),
-      onChanged: (double newValue) {
+      stepSize: 0.1,
+      showDividers: true,
+      interval: 0.3,
+      showLabels: true,
+      showTicks: true,
+      enableTooltip: true,
+      //thumbColor: Colors.white,
+      //divisions: 13,
+      //label: value.toStringAsFixed(1),
+      onChanged: ( newValue) {
         setState(() {
           value = newValue;
           widget.onChanged(newValue);

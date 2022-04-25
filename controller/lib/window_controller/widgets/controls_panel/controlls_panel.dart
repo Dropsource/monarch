@@ -77,7 +77,7 @@ class ControlsPanel extends StatelessWidget {
           ),
           LabeledControl(
             label:
-                '${_translations.text("controls.text_scale_factor")} (${state.textScaleFactor.toStringAsFixed(1)})',
+                _translations.text("controls.text_scale_factor"),
             control: NumberedSlider(
               initialValue: state.textScaleFactor,
               onChanged: (val) => manager.onTextScaleFactorChanged(val),
