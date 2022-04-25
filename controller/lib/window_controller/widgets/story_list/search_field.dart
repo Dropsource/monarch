@@ -24,20 +24,7 @@ class SearchField extends StatelessWidget {
       style: Theme.of(context).textTheme.bodyText2,
       placeholderStyle: Theme.of(context).textTheme.bodyText2,
       onChanged: (value) => onChanged?.call(value),
-
       placeholder: hint,
-      // decoration: InputDecoration(
-      //   hintText: hint,
-      //   contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      //   suffixIcon: canReset
-      //       ? IconButton(
-      //           icon: const Icon(Icons.clear_rounded),
-      //           hoverColor: Colors.transparent,
-      //           splashRadius: 15,
-      //           onPressed: () => onReset?.call(),
-      //         )
-      //       : null,
-      // ),
     );
   }
 }

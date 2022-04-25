@@ -36,9 +36,6 @@ class _NumberedSlideState extends State<NumberedSlider> {
       showLabels: true,
       showTicks: true,
       enableTooltip: true,
-      //thumbColor: Colors.white,
-      //divisions: 13,
-      //label: value.toStringAsFixed(1),
       onChanged: ( newValue) {
         setState(() {
           value = newValue;
