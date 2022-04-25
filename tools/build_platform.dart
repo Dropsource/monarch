@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 
 import 'paths.dart' as paths;
+import 'utils.dart' as utils;
 
 void main() {
   print('''
@@ -9,9 +10,9 @@ void main() {
 ### build_platform.dart
 ''');
 
-  paths.createDirectoryIfNeeded(paths.out_ui);
+  utils.createDirectoryIfNeeded(paths.out_ui);
 
-  for (final flutter_sdk in paths.read_flutter_sdks()) {
+  for (final flutter_sdk in utils.read_flutter_sdks()) {
     print('''
 ===============================================================================
 Using flutter sdk at:
@@ -19,7 +20,7 @@ Using flutter sdk at:
 ''');
 
     var out_ui_flutter_id = paths.compute_out_ui_flutter_id(flutter_sdk);
-    paths.createDirectoryIfNeeded(out_ui_flutter_id);
+    utils.createDirectoryIfNeeded(out_ui_flutter_id);
 
     if (Platform.isMacOS) {
       const monarch_macos = 'monarch_macos';
@@ -46,8 +47,8 @@ Will output $monarch_macos to:
         print(result.stderr);
       }
 
-      var monarch_macos_app_dir =
-          Directory(paths.out_ui_flutter_id_monarch_macos_app(out_ui_flutter_id));
+      var monarch_macos_app_dir = Directory(
+          paths.out_ui_flutter_id_monarch_macos_app(out_ui_flutter_id));
       if (monarch_macos_app_dir.existsSync())
         monarch_macos_app_dir.deleteSync(recursive: true);
 
@@ -76,5 +77,32 @@ Will output $monarch_macos to:
 ''');
   }
 
-  print('Monarch platform build finished.');
+  if (Platform.isMacOS) {
+    var version = readMacosProjectVersion();
+    version = utils.getVersionSuffix(version);
+    utils.writeInternalFile('platform_app_version.txt', version);
+    print('Monarch macos platform build finished. Version $version');
+  }
+
+}
+
+String readMacosProjectVersion() {
+  var result = Process.runSync('xcodebuild', ['-showBuildSettings'],
+      workingDirectory: paths.platform_macos);
+  if (result.exitCode != 0) {
+    print('Error running xcodebuild -showBuildSettings');
+    print(result.stdout);
+    print(result.stderr);
+    return 'unknown';
+  }
+  var contents = result.stdout.toString();
+  var r = RegExp(r'^\s*MARKETING_VERSION = (\S+)$', multiLine: true);
+  try {
+    var version = r.firstMatch(contents)!.group(1)!;
+    return version;
+  } catch (e) {
+    print('Error parsing version from xcode build setings');
+    print(e);
+    return 'unknown';
+  }
 }

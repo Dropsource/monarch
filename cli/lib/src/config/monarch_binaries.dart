@@ -13,7 +13,7 @@ class MonarchBinaries {
   Directory get monarchDirectory => binDirectory.parent;
 
   String get monarchAppExecutableName => valueForPlatform(
-      macos: p.join('monarch_mac.app', 'Contents', 'MacOS', 'monarch'),
+      macos: p.join('monarch_macos.app', 'Contents', 'MacOS', 'monarch_macos'),
       windows: 'monarch_windows_app.exe');
 
   Directory get cacheDirectory => Directory(p.join(binDirectory.path, 'cache'));
@@ -34,4 +34,7 @@ class MonarchBinaries {
     final path = p.join(uiIdDirectory(id).path, 'icudtl.dat');
     return File(path);
   }
+
+  Directory controllerDirectory(FlutterSdkId id) =>
+      Directory(p.join(uiIdDirectory(id).path, 'monarch_controller'));
 }

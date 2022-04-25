@@ -11,22 +11,25 @@ class WindowControllerManager {
   StreamSubscription<WindowControllerState>? _subscription;
 
   Stream<WindowControllerState> get stream => _streamController.stream;
-  WindowControllerState? state;
+  late WindowControllerState _state;
+  ConnectedWindowControllerState get state =>
+      _state as ConnectedWindowControllerState;
 
   WindowControllerManager() {
     _subscription = _streamController.listen((value) {
-      state = value;
+      _state = value;
     });
 
-    _streamController.sink.add(WindowControllerState.test());
+    _streamController.sink.add(ConnectedWindowControllerState.init());
   }
 
   void onActiveStoryChanged(String activeStoryName) async {
     _updateState((state) => state.copyWith(activeStoryName: activeStoryName));
   }
 
-  void onTextScaleFactorChanged(double val) {
-    _updateState((state) => state.copyWith(textScaleFactor: val));
+  void onActiveStoryChanged(String activeStoryName) async {
+    _streamController.sink
+        .add(state.copyWith(activeStoryName: activeStoryName));
   }
 
   void _updateState(Function(WindowControllerState) stateReporter) {
@@ -57,3 +60,5 @@ class WindowControllerManager {
     }
   }
 }
+
+final manager = WindowControllerManager();

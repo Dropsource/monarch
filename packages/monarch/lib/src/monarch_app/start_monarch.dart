@@ -52,7 +52,8 @@ void _startMonarch(MonarchData Function() getMonarchData) async {
 }
 
 void _setUpLog() {
-  writeLogEntryStream(print, printTimestamp: false, printLoggerName: true);
+  writeLogEntryStream((String line) => print('preview: $line'),
+      printTimestamp: false, printLoggerName: true);
 }
 
 Future<void> _connectToVmService() async {

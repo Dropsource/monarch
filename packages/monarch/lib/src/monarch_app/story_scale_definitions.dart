@@ -1,4 +1,4 @@
-import 'channel_methods.dart';
+import 'channel_argument.dart';
 
 class StoryScaleDefinition implements OutboundChannelArgument {
   const StoryScaleDefinition(this.scale, this.name);

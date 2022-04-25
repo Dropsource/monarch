@@ -29,6 +29,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  monarch_channels: 
+    path: ../packages/monarch_channels
   monarch_utils: ^1.0.0
 
   # The following adds the Cupertino Icons font to your application.

@@ -1,54 +1,51 @@
-import 'package:flutter/services.dart';
-
 import 'package:monarch_utils/log.dart';
-import 'channel_methods.dart';
+import 'package:monarch_channels/monarch_channels.dart';
+import 'channel_argument.dart';
 
 class ChannelMethodsSender with Log {
-  final MethodChannel _dropsourceMonarchChannel =
-      Channels.dropsourceMonarchChannel;
 
   Future<T?> _invokeMonarchChannelMethod<T>(String method,
       [dynamic arguments]) async {
     log.finest('sending channel method: $method');
-    return _dropsourceMonarchChannel.invokeMethod(method, arguments);
+    return MonarchChannels.preview.invokeMethod(method, arguments);
   }
 
   Future sendPing() {
-    return _invokeMonarchChannelMethod(MethodNames.ping);
+    return _invokeMonarchChannelMethod(MonarchMethods.ping);
   }
 
   Future sendDeviceDefinitions(OutboundChannelArgument definitions) {
     return _invokeMonarchChannelMethod(
-        MethodNames.deviceDefinitions, definitions.toStandardMap());
+        MonarchMethods.deviceDefinitions, definitions.toStandardMap());
   }
 
   Future sendStoryScaleDefinitions(OutboundChannelArgument definitions) {
     return _invokeMonarchChannelMethod(
-        MethodNames.storyScaleDefinitions, definitions.toStandardMap());
+        MonarchMethods.storyScaleDefinitions, definitions.toStandardMap());
   }
 
   Future sendStandardThemes(OutboundChannelArgument definitions) {
     return _invokeMonarchChannelMethod(
-        MethodNames.standardThemes, definitions.toStandardMap());
+        MonarchMethods.standardThemes, definitions.toStandardMap());
   }
 
   Future sendDefaultTheme(String id) {
     return _invokeMonarchChannelMethod(
-        MethodNames.defaultTheme, {'themeId': id});
+        MonarchMethods.defaultTheme, {'themeId': id});
   }
 
   Future sendMonarchData(OutboundChannelArgument monarchData) {
     return _invokeMonarchChannelMethod(
-        MethodNames.monarchData, monarchData.toStandardMap());
+        MonarchMethods.monarchData, monarchData.toStandardMap());
   }
 
   Future sendReadySignal() {
-    return _invokeMonarchChannelMethod(MethodNames.readySignal);
+    return _invokeMonarchChannelMethod(MonarchMethods.readySignal);
   }
 
   Future sendToggleVisualDebugFlag(OutboundChannelArgument visualDebugFlag) {
     return _invokeMonarchChannelMethod(
-        MethodNames.toggleVisualDebugFlag, visualDebugFlag.toStandardMap());
+        MonarchMethods.toggleVisualDebugFlag, visualDebugFlag.toStandardMap());
   }
 }
 

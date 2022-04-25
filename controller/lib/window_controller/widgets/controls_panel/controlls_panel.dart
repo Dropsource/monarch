@@ -15,7 +15,7 @@ import '../../data/device_definitions.dart';
 import '../components/text.dart';
 
 class ControlsPanel extends StatelessWidget {
-  final WindowControllerState state;
+  final ConnectedWindowControllerState state;
   final double width;
   final dividerHeight = 24.0;
   final WindowControllerManager manager;
@@ -58,7 +58,7 @@ class ControlsPanel extends StatelessWidget {
             label: 'controls.theme',
             control: DropDown<MetaTheme>(
               currentValue: state.currentTheme,
-              values: state.monarchData.metaThemes,
+              values: state.themes,
               toStringFunction: (e) => e.name,
             ),
             controlWidth: controlWidth,
@@ -67,10 +67,10 @@ class ControlsPanel extends StatelessWidget {
             height: 8,
           ),
           LabeledControl(
-            label: 'controls.locale',
-            control: DropDown<Locale>(
+            label: _translations.text('controls.locale'),
+            control: DropDown<String>(
               currentValue: state.currentLocale,
-              values: state.monarchData.allLocales.toList(),
+              values: state.locales,
               toStringFunction: (e) => e.toString(),
             ),
             controlWidth: controlWidth,

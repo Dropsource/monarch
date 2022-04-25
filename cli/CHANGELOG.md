@@ -2,6 +2,8 @@
 - Prep for orchestration of new Monarch architecture
 - Move to new repo
 - Migrate from pedantic to lints
+- Support new VM service connection message and also support the legacy 
+  Observatory message.
 
 ## 1.10.5 - 2022-03-30
 - Analytics changes

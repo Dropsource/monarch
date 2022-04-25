@@ -16,18 +16,49 @@ class WindowManager {
     
     var previewWindow: NSWindow?
     var controllerWindow: NSWindow?
-    var isFlutterWindowReady: Bool = false
+    var channels: Channels?
     
     let logger: Logger = Logger("WindowManager")
     
     func launchWindows() {
-        // self.checkCommandLineArguments()
-        let controller = _initFlutterViewController("/Users/fertrig/development/monarch_product/monarch_shift/out/monarch/bin/cache/monarch_ui/flutter_macos_2.10.3-stable/controller")
-        let preview = _initFlutterViewController("/Users/fertrig/development/scratch/multi/multi_preview/.mariposa")
+         self.checkCommandLineArguments()
+    }
+    
+    func checkCommandLineArguments() {
+        let arguments = CommandLine.arguments
+        
+        logger.fine("arguments \(arguments)");
+        
+        var controllerBundlePath: String?
+        var projectBundlePath: String?
         
         
-//        let controller = _initFlutterViewController("/Users/fertrig/development/scratch/multi/multi_controller")
-//        let preview = _initFlutterViewController("/Users/fertrig/development/scratch/multi/multi_preview")
+        if (arguments.count > 2 && arguments[1] == "--controller-bundle") {
+            controllerBundlePath = arguments[2]
+        }
+        if (arguments.count > 4 && arguments[3] == "--project-bundle") {
+            projectBundlePath = arguments[4]
+        }
+        if (arguments.count > 6 && arguments[5] == "--log-level") {
+            defaultLogLevel = logLevelFromString(levelString: arguments[6])
+        }
+        
+        if let controllerBundlePath = controllerBundlePath,
+           let projectBundlePath = projectBundlePath {
+            self._loadWindows(
+                controllerBundlePath: controllerBundlePath,
+                previewBundlePath: projectBundlePath)
+        }
+    }
+    
+    func _loadWindows(controllerBundlePath: String, previewBundlePath: String) {
+        let controller = _initFlutterViewController(controllerBundlePath)
+        let preview = _initFlutterViewController(previewBundlePath)
+        
+        channels = Channels.init(
+            controllerMessenger: controller.engine.binaryMessenger,
+            previewMessenger: preview.engine.binaryMessenger)
+        channels!.setUpCallForwarding()
         
         _launchFlutterWindows(preview, controller)
     }

@@ -6,7 +6,6 @@ import 'package:path/path.dart' as p;
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';
 import 'package:monarch_io_utils/utils.dart';
-import 'dart:async/async.dart';
 import 'package:pub_semver/pub_semver.dart' as pub;
 
 import '../analytics/analytics.dart';
@@ -275,8 +274,10 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         executable:
             monarchBinaries.monarchAppExecutableFile(config.flutterSdkId).path,
         arguments: [
-          '--project-path',
-          projectDirectory.path,
+          '--controller-bundle',
+          monarchBinaries.controllerDirectory(config.flutterSdkId).path,
+          '--project-bundle',
+          p.join(projectDirectory.path, dotMonarch),
           '--log-level',
           defaultLogLevel.name
         ],
