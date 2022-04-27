@@ -1,4 +1,3 @@
-import 'package:monarch_utils/log.dart';
 
 import 'channel_methods.dart';
 
@@ -25,13 +24,4 @@ class Flags {
   static const showBaselines = 'showBaselines';
   static const highlightRepaints = 'highlightRepaints';
   static const highlightOversizedImages = 'highlightOversizedImages';
-}
-
-class ExtensionMethods {
-  static const timeDilation = 'ext.flutter.timeDilation';
-  static const debugPaint = 'ext.flutter.debugPaint';
-  static const debugPaintBaselinesEnabled =
-      'ext.flutter.debugPaintBaselinesEnabled';
-  static const repaintRainbow = 'ext.flutter.repaintRainbow';
-  static const invertOversizedImages = 'ext.flutter.invertOversizedImages';
 }

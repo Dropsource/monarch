@@ -11,29 +11,3 @@ abstract class OutboundChannelArgument extends ChannelArgument {
   Map<String, dynamic> toStandardMap();
 }
 
-class Channels {
-  static const dropsourceMonarchChannel = MethodChannel('dropsource.monarch');
-}
-
-class MethodNames {
-  static const ping = 'dropsource.monarch.ping';
-  static const firstLoadSignal = 'dropsource.monarch.firstLoadSignal';
-  static const readySignalAck = 'dropsource.monarch.readySignalAck';
-  static const monarchData = 'dropsource.monarch.monarchData';
-  static const deviceDefinitions = 'dropsource.monarch.deviceDefinitions';
-  static const storyScaleDefinitions =
-      'dropsource.monarch.storyScaleDefinitions';
-  static const standardThemes = 'dropsource.monarch.standardThemes';
-  static const defaultTheme = 'dropsource.monarch.defaultTheme';
-  static const readySignal = 'dropsource.monarch.readySignal';
-  static const loadStory = 'dropsource.monarch.loadStory';
-  static const resetStory = 'dropsource.monarch.resetStory';
-  static const setUpLog = 'dropsource.monarch.setUpLog';
-  static const setActiveLocale = 'dropsource.monarch.setActiveLocale';
-  static const setActiveTheme = 'dropsource.monarch.setActiveTheme';
-  static const setActiveDevice = 'dropsource.monarch.setActiveDevice';
-  static const setTextScaleFactor = 'dropsource.monarch.setTextScaleFactor';
-  static const toggleVisualDebugFlag =
-      'dropsource.monarch.toggleVisualDebugFlag';
-  static const setStoryScale = 'dropsource.monarch.setStoryScale';
-}
