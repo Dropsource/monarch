@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monarch_window_controller/window_controller/widgets/components/text.dart';
 
-import '../stockholm/dropdown_button.dart';
+import 'dropdown_button.dart';
 
 class DropDown<T> extends StatelessWidget {
   final List<T> values;

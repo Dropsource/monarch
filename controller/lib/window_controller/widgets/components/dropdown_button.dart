@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../stockholm/stockholm.dart';
+import 'package:stockholm/stockholm.dart';
 
 import 'button.dart' as local;
 

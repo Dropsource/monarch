@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monarch_annotations/monarch_annotations.dart';
-import 'package:monarch_window_controller/window_controller/widgets/stockholm/theme.dart';
+import 'package:stockholm/stockholm.dart';
 
 // const Color offWhite = Color(0xFFF8F9FA);
 const Color black = Color(0xFF071232);

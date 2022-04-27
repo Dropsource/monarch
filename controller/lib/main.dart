@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';
+
 import 'package:monarch_window_controller/utils/localization.dart';
 import 'package:monarch_window_controller/window_controller/default_theme.dart'
     as theme;
 import 'package:monarch_window_controller/window_controller/window_controller_screen.dart';
 import 'window_controller/data/channel_methods_receiver.dart';
+import 'package:stockholm/stockholm.dart';
 
 const controlsWidth = 250.0;
 
