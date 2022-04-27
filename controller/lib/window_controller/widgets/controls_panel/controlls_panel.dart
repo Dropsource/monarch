@@ -8,7 +8,7 @@ import 'package:monarch_window_controller/window_controller/widgets/components/l
 import 'package:monarch_window_controller/window_controller/widgets/components/numbered_slider.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_manager.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_state.dart';
-import 'package:stockholm/stockholm.dart';
+import '../stockholm/stockholm.dart';
 
 import '../../../utils/translations.dart';
 import '../../data/device_definitions.dart';

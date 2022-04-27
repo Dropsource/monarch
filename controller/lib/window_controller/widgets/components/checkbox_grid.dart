@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:monarch_window_controller/window_controller/data/visual_debug_flags.dart';
-import 'package:monarch_window_controller/window_controller/widgets/components/text.dart';
-import 'package:stockholm/stockholm.dart';
 
 import '../../../utils/translations.dart';
-import 'checkbox_list_tile.dart';
+import '../stockholm/stockholm.dart';
 
 class CheckboxGrid extends StatelessWidget {
   final List<VisualDebugFlag> devToolsOptions;
