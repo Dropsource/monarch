@@ -4,6 +4,7 @@ import 'package:monarch_window_controller/window_controller/default_theme.dart';
 import 'package:monarch_window_controller/window_controller/widgets/components/text.dart';
 import 'package:monarch_window_controller/window_controller/widgets/story_list/search_field.dart';
 import 'package:monarch_window_controller/window_controller/widgets/tree_view/flutter_simple_treeview.dart';
+import 'package:monarch_window_controller/window_controller/window_controller_manager.dart';
 
 import '../../../utils/translations.dart';
 import '../components/no_stories_found_text.dart';
@@ -13,6 +14,7 @@ class StoryList extends StatefulWidget {
     Key? key,
     required this.stories,
     required this.projectName,
+    required this.manager,
     this.activeStoryName,
     this.onActiveStoryChange,
   }) : super(key: key);
@@ -21,6 +23,7 @@ class StoryList extends StatefulWidget {
   final String projectName;
   final String? activeStoryName;
   final Function(String)? onActiveStoryChange;
+  final WindowControllerManager manager;
 
   @override
   State<StatefulWidget> createState() => StoryListState();
@@ -32,7 +35,7 @@ class StoryListState extends State<StoryList> {
 
   @override
   Widget build(BuildContext context) {
-    final _filteredStories = widget.stories.entries.where(_filterStories);
+    final _filteredStories = widget.stories.entries.where((element) => manager.filterStories(element, query));
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
       child: Column(
@@ -68,7 +71,7 @@ class StoryListState extends State<StoryList> {
                     : TreeView(
                         nodes: _filteredStories
                             .map((e) => TreeNode(
-                                  content: TextBody1(e.key),
+                                  content: TextBody1(_readStoryName(e.key)),
                                   children: e.value.storiesNames
                                       .map(
                                         (name) => TreeNode(
@@ -117,11 +120,11 @@ class StoryListState extends State<StoryList> {
     setState(() {});
   }
 
-  bool _filterStories(MapEntry<String, MetaStories> element) {
-    final name = element.key;
-    final storyNames = element.value.storiesNames;
-
-    return name.contains(query) ||
-        storyNames.where((element) => element.contains(query)).isNotEmpty;
+  String _readStoryName(String key) {
+    ///// As of 2020-04-15, the key looks like `$packageName|$generatedStoriesFilePath`
+    //test|stories/sample_button_stories.main_generated.g.dart
+    final firstSlash = key.indexOf('/');
+    final firstDot = key.indexOf('.');
+    return key.substring(firstSlash + 1, firstDot);
   }
 }

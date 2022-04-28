@@ -11,11 +11,13 @@ class MetaStories {
   const MetaStories(
       {required this.package, required this.path, required this.storiesNames});
 
-  static MetaStories fromStandardMap(Map<String, dynamic> args) {
+  static MetaStories fromStandardMap(dynamic args) {
     return MetaStories(
         package: args['package'],
         path: args['path'],
-        storiesNames: args['storiesNames']);
+        storiesNames: List.from(
+          args['storiesNames'].cast<String>(),
+        ));
   }
 }
 
@@ -24,9 +26,10 @@ class MetaTheme {
   final String name;
   final bool isDefault;
 
-  const MetaTheme({required this.id, required this.name, required this.isDefault});
+  const MetaTheme(
+      {required this.id, required this.name, required this.isDefault});
 
-  static MetaTheme fromStandardMap(Map<String, dynamic> args) {
+  static MetaTheme fromStandardMap(dynamic args) {
     return MetaTheme(
         id: args['id'], name: args['name'], isDefault: args['isDefault']);
   }
@@ -68,12 +71,15 @@ class MonarchData {
   static MonarchData fromStandardMap(Map<String, dynamic> args) {
     String packageName = args['packageName'];
     List<MetaLocalization> metaLocalizations = args['metaLocalizations']
-        .map((e) => MetaLocalization.fromStandardMap(e))
+        .map<MetaLocalization>((e) => MetaLocalization.fromStandardMap(e))
         .toList();
-    List<MetaTheme> metaThemes =
-        args['metaThemes'].map((e) => MetaTheme.fromStandardMap(e)).toList();
+    List<MetaTheme> metaThemes = args['metaThemes']
+        .map<MetaTheme>((e) => MetaTheme.fromStandardMap(e))
+        .toList();
+
     Map<String, MetaStories> metaStoriesMap = args['metaStoriesMap']
-        .map((key, value) => MapEntry(key, MetaStories.fromStandardMap(value)));
+        .map<String, MetaStories>((key, value) => MapEntry<String, MetaStories>(
+            key, MetaStories.fromStandardMap(value)));
 
     return MonarchData(
         packageName: packageName,
@@ -81,4 +87,9 @@ class MonarchData {
         metaThemes: metaThemes,
         metaStoriesMap: metaStoriesMap);
   }
+}
+
+List<MetaTheme> getStandardThemes(dynamic args) {
+  final themes = args['standardThemes'];
+  return themes.map<MetaTheme>((element) => MetaTheme.fromStandardMap(element)).toList();
 }

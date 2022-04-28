@@ -58,6 +58,7 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
                                 projectName: state.monarchData == null ? '' : state.monarchData!.packageName,
                                 stories: state.monarchData == null ? {} : state.monarchData!.metaStoriesMap,
                                 activeStoryName: state.activeStoryName,
+                                manager: manager,
                                 onActiveStoryChange: (name) =>
                                     manager.onActiveStoryChanged(name),
                               ),

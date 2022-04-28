@@ -4,6 +4,8 @@ import 'package:monarch_window_controller/window_controller/data/visual_debug_fl
 import 'package:monarch_window_controller/window_controller/window_controller_state.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'data/monarch_data.dart';
+
 class WindowControllerManager {
   final BehaviorSubject<WindowControllerState> _streamController =
       BehaviorSubject<WindowControllerState>();
@@ -56,6 +58,14 @@ class WindowControllerManager {
   }
 
   void onTextScaleFactorChanged(double val) {}
+
+  bool filterStories(MapEntry<String, MetaStories> element, String query) {
+    final name = element.key;
+    final storyNames = element.value.storiesNames;
+
+    return name.contains(query) ||
+        storyNames.where((element) => element.contains(query)).isNotEmpty;
+  }
 }
 
 final manager = WindowControllerManager();

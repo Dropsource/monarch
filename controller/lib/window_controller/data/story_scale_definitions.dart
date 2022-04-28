@@ -4,14 +4,14 @@ class StoryScaleDefinition {
   final double scale;
   final String name;
 
-  static StoryScaleDefinition fromStandardMap(Map<String, dynamic> args) {
+  static StoryScaleDefinition fromStandardMap(dynamic args) {
     return StoryScaleDefinition(scale: args['scale'], name: args['name']);
   }
 }
 
-List<StoryScaleDefinition> getStoryScaleDefinitions(Map<String, dynamic> args) {
-  var defsArgs = args['definitions'] as List<Map<String, dynamic>>;
-  return defsArgs.map((e) => StoryScaleDefinition.fromStandardMap(e)).toList();
+List<StoryScaleDefinition> getStoryScaleDefinitions(dynamic args) {
+  var defsArgs = List.from(args['definitions']);
+  return defsArgs.map<StoryScaleDefinition>((e) => StoryScaleDefinition.fromStandardMap(e)).toList();
 }
 
 const defaultScaleDefinition = StoryScaleDefinition(scale: 1.0, name: '100%');
