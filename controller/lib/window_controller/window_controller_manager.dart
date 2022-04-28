@@ -17,12 +17,13 @@ class WindowControllerManager {
   WindowControllerState get state =>
       _state;
 
-  WindowControllerManager() {
+
+
+  WindowControllerManager({WindowControllerState? initialState}) {
     _subscription = _streamController.listen((value) {
       _state = value;
     });
-
-    _streamController.sink.add(WindowControllerState.init());
+    _streamController.sink.add(initialState ?? WindowControllerState.init());
   }
 
   void onActiveStoryChanged(String activeStoryName) async {
@@ -68,4 +69,4 @@ class WindowControllerManager {
   }
 }
 
-final manager = WindowControllerManager();
+

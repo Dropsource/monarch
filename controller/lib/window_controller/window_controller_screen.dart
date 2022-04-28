@@ -7,13 +7,25 @@ import 'package:monarch_window_controller/window_controller/window_controller_ma
 import 'package:monarch_window_controller/window_controller/window_controller_state.dart';
 
 class WindowControllerScreen extends StatefulWidget {
-  const WindowControllerScreen({Key? key}) : super(key: key);
+  const WindowControllerScreen({
+    Key? key,
+    required this.manager,
+  }) : super(key: key);
+
+  final WindowControllerManager manager;
 
   @override
   State<StatefulWidget> createState() => UiWindowControllerState();
 }
 
 class UiWindowControllerState extends State<WindowControllerScreen> {
+  late WindowControllerManager manager;
+
+  @override
+  void initState() {
+    super.initState();
+    manager = widget.manager;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +67,12 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
                           if (state.active) ...[
                             Expanded(
                               child: StoryList(
-                                projectName: state.monarchData == null ? '' : state.monarchData!.packageName,
-                                stories: state.monarchData == null ? {} : state.monarchData!.metaStoriesMap,
+                                projectName: state.monarchData == null
+                                    ? ''
+                                    : state.monarchData!.packageName,
+                                stories: state.monarchData == null
+                                    ? {}
+                                    : state.monarchData!.metaStoriesMap,
                                 activeStoryName: state.activeStoryName,
                                 manager: manager,
                                 onActiveStoryChange: (name) =>
@@ -68,7 +84,7 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
                       ),
                     ),
                   ),
-                 const VerticalDivider(
+                  const VerticalDivider(
                     width: 1,
                     thickness: 1,
                   ),

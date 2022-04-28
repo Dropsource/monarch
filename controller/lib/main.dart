@@ -7,11 +7,13 @@ import 'package:monarch_utils/log_config.dart';
 import 'package:monarch_window_controller/utils/localization.dart';
 import 'package:monarch_window_controller/window_controller/default_theme.dart'
     as theme;
+import 'package:monarch_window_controller/window_controller/window_controller_manager.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_screen.dart';
 import 'window_controller/data/channel_methods_receiver.dart';
 import 'package:stockholm/stockholm.dart';
 
 const controlsWidth = 250.0;
+final manager = WindowControllerManager();
 
 void main() async {
   _setUpLog();
@@ -27,7 +29,7 @@ void _setUpLog() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Window Controller',
         theme: theme.theme,
-        home: const WindowControllerScreen(),
+        home:  WindowControllerScreen(manager: manager),
         localizationsDelegates: [
           localizationDelegate, // Add this line
           GlobalMaterialLocalizations.delegate,

@@ -5,6 +5,7 @@ import 'package:monarch_window_controller/window_controller/data/device_definiti
 import 'package:monarch_window_controller/window_controller/data/story_scale_definitions.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_manager.dart';
 
+import '../../main.dart';
 import 'channel_methods_sender.dart';
 import 'monarch_data.dart';
 
