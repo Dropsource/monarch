@@ -112,7 +112,7 @@ class ControlsPanel extends StatelessWidget {
             control: DropDown<DockDefinition>(
               currentValue: state.currentDock,
               values: state.dockList.toList(),
-              //todo dock change
+              onChange: manager.onDockSettingsChange,
               toStringFunction: (e) => _translations.text(e.name),
             ),
             controlWidth: controlWidth,

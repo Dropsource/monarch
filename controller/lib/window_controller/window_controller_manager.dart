@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:monarch_window_controller/window_controller/data/device_definitions.dart';
+import 'package:monarch_window_controller/window_controller/data/dock_definition.dart';
 import 'package:monarch_window_controller/window_controller/data/story_scale_definitions.dart';
 import 'package:monarch_window_controller/window_controller/data/visual_debug_flags.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_state.dart';
@@ -70,12 +71,6 @@ class WindowControllerManager {
     });
 
     return filtered;
-
-    // final name = element.key;
-    // final storyNames = element.value.storiesNames;
-    //
-    // return name.contains(query) ||
-    //     storyNames.where((element) => element.contains(query)).isNotEmpty;
   }
 
   void onVisualFlagToggle(String name, bool isEnabled) {
@@ -105,5 +100,10 @@ class WindowControllerManager {
   void onScaleChanged(StoryScaleDefinition scaleDefinition) {
     update(state.copyWith(currentScale: scaleDefinition));
     channelMethodsSender.setStoryScale(scaleDefinition.scale);
+  }
+
+  void onDockSettingsChange(DockDefinition dockDefinition) {
+    update(state.copyWith(currentDock: dockDefinition));
+    //todo send info that dock settings changes
   }
 }

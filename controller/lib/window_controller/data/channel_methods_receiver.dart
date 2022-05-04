@@ -28,9 +28,6 @@ Future<dynamic> _handler(MethodCall call) async {
   final args =
       call.arguments == null ? null : Map<String, dynamic>.from(call.arguments);
 
-  logger.info('Received method call: ${call.method}');
-  logger.info('Method data: ${args.toString()}');
-
   switch (call.method) {
     case MonarchMethods.ping:
       channelMethodsSender.setUpLog(LogLevel.ALL.value);
@@ -49,7 +46,6 @@ Future<dynamic> _handler(MethodCall call) async {
       } else {
         manager.update(manager.state.copyWith(active: true));
         //send first load signal
-        //ChannelMethodsSender.sendFirstLoadSignal()
         channelMethodsSender.sendFirstLoadSignal();
         logger.info('story-flutter-window-ready');
       }
