@@ -75,8 +75,8 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
                                     : state.monarchData!.metaStoriesMap,
                                 activeStoryName: state.activeStoryName,
                                 manager: manager,
-                                onActiveStoryChange: (name) =>
-                                    manager.onActiveStoryChanged(name),
+                                onActiveStoryChange: (key, name) =>
+                                    manager.onActiveStoryChanged(key, name),
                               ),
                             ),
                           ],

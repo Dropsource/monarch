@@ -3,7 +3,6 @@ import 'package:monarch_utils/log.dart';
 import 'package:monarch_channels/monarch_channels.dart';
 import 'package:monarch_window_controller/window_controller/data/device_definitions.dart';
 import 'package:monarch_window_controller/window_controller/data/story_scale_definitions.dart';
-import 'package:monarch_window_controller/window_controller/window_controller_manager.dart';
 
 import '../../main.dart';
 import 'channel_methods_sender.dart';
@@ -32,11 +31,30 @@ Future<dynamic> _handler(MethodCall call) async {
   logger.info('Received method call: ${call.method}');
   logger.info('Method data: ${args.toString()}');
 
-  print('test');
-
   switch (call.method) {
     case MonarchMethods.ping:
       channelMethodsSender.setUpLog(LogLevel.ALL.value);
+      break;
+
+    case MonarchMethods.defaultTheme:
+      //todo: Method data: {themeId: __material-light-theme__}
+      manager.update(manager.state.copyWith(
+          currentTheme: manager.state.themes
+              .firstWhere((element) => element.id == args!['themeId'])));
+      break;
+
+    case MonarchMethods.readySignal:
+      if (manager.state.active) {
+        logger.info(
+            'flutter window had been ready, ready signal means potential reload');
+      } else {
+        manager.update(manager.state.copyWith(active: true));
+        //send first load signal
+        //ChannelMethodsSender.sendFirstLoadSignal()
+        channelMethodsSender.sendFirstLoadSignal();
+        logger.info('story-flutter-window-ready');
+      }
+      channelMethodsSender.sendReadySignalAck();
       break;
 
     case MonarchMethods.deviceDefinitions:
@@ -44,25 +62,13 @@ Future<dynamic> _handler(MethodCall call) async {
           .update(manager.state.copyWith(devices: getDeviceDefinitions(args!)));
       break;
 
-    case MonarchMethods.readySignal:
-      manager.update(manager.state.copyWith(active: true));
-      break;
-
     case MonarchMethods.standardThemes:
-      // manager.up
-      //todo merge themes with monarch data
-      //todo move to manager
+
       final themes = manager.state.themes;
       final newThemes = getStandardThemes(args);
       newThemes.where((element) => !themes.contains(element));
       themes.addAll(newThemes);
       manager.update(manager.state.copyWith(themes: newThemes));
-      break;
-    case MonarchMethods.defaultTheme:
-      //todo: Method data: {themeId: __material-light-theme__}
-      manager.update(manager.state.copyWith(
-          currentTheme: manager.state.themes
-              .firstWhere((element) => element.id == args!['themeId'])));
       break;
 
     case MonarchMethods.storyScaleDefinitions:
@@ -73,6 +79,12 @@ Future<dynamic> _handler(MethodCall call) async {
     case MonarchMethods.monarchData:
       manager.update(manager.state
           .copyWith(monarchData: MonarchData.fromStandardMap(args!)));
+      break;
+
+    case MonarchMethods.toggleVisualDebugFlag:
+      final name = args!['name'];
+      final isEnabled = args['isEnabled'];
+      manager.onVisualFlagToggle(name, isEnabled);
       break;
 
     default:

@@ -22,7 +22,7 @@ class StoryList extends StatefulWidget {
   final Map<String, MetaStories> stories;
   final String projectName;
   final String? activeStoryName;
-  final Function(String)? onActiveStoryChange;
+  final Function(String key, String name)? onActiveStoryChange;
   final WindowControllerManager manager;
 
   @override
@@ -78,7 +78,7 @@ class StoryListState extends State<StoryList> {
                                           content: GestureDetector(
                                             onTap: () => widget
                                                 .onActiveStoryChange
-                                                ?.call(name),
+                                                ?.call(e.key, name),
                                             child: Container(
                                               padding: const EdgeInsets.only(
                                                 left: 40,

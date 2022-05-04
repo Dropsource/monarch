@@ -4,6 +4,8 @@ import 'package:monarch_window_controller/window_controller/data/visual_debug_fl
 import 'package:monarch_window_controller/window_controller/window_controller_state.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'data/channel_methods_receiver.dart';
+import 'data/channel_methods_sender.dart';
 import 'data/monarch_data.dart';
 
 class WindowControllerManager {
@@ -17,8 +19,6 @@ class WindowControllerManager {
   WindowControllerState get state =>
       _state;
 
-
-
   WindowControllerManager({WindowControllerState? initialState}) {
     _subscription = _streamController.listen((value) {
       _state = value;
@@ -26,8 +26,10 @@ class WindowControllerManager {
     _streamController.sink.add(initialState ?? WindowControllerState.init());
   }
 
-  void onActiveStoryChanged(String activeStoryName) async {
+  void onActiveStoryChanged(String key, String activeStoryName) async {
+    logger.warning('Selected story with name $activeStoryName');
     _updateState((state) => state.copyWith(activeStoryName: activeStoryName));
+    channelMethodsSender.loadStory('$key|$activeStoryName');
   }
 
   void update(WindowControllerState newState){
@@ -45,20 +47,12 @@ class WindowControllerManager {
   }
 
   void onDevToolOptionToggled(VisualDebugFlag option) {
-
-    option = option.copyWith(enabled: !option.isEnabled);
-
-    final element = state.visualDebugFlags.firstWhere((element) => element.name == option.name);
-    final index = state.visualDebugFlags.indexOf(element);
-    final list = state.visualDebugFlags..setAll(index, [option]);
-    update(state.copyWith(visualDebugFlags: list));
-
-    //TODO send information about [option] element updated to channel
-
-
+    channelMethodsSender.sendToggleVisualDebugFlag(option);
   }
 
-  void onTextScaleFactorChanged(double val) {}
+  void onTextScaleFactorChanged(double val) {
+    channelMethodsSender.setTextScaleFactor(val);
+  }
 
   bool filterStories(MapEntry<String, MetaStories> element, String query) {
     final name = element.key;
@@ -66,6 +60,13 @@ class WindowControllerManager {
 
     return name.contains(query) ||
         storyNames.where((element) => element.contains(query)).isNotEmpty;
+  }
+
+  void onVisualFlagToggle(String name, bool isEnabled) {
+    final element = state.visualDebugFlags.firstWhere((element) => element.name == name);
+    final index = state.visualDebugFlags.indexOf(element);
+    final list = state.visualDebugFlags..setAll(index, [element.copyWith(enabled: isEnabled)]);
+    update(state.copyWith(visualDebugFlags: list));
   }
 }
 
