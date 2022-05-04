@@ -22,7 +22,10 @@ void main() {
   }
   print('Using ${result.stdout.trim()}');
 
-  print('Building monarch cli...');
+  print('''
+Building monarch_cli executable. Will output to:
+  ${paths.out_bin_monarch_exe}
+''');
 
   result = Process.runSync('dart',
       ['compile', 'exe', 'bin/main.dart', '-o', paths.out_bin_monarch_exe],
