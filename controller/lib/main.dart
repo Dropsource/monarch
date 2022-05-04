@@ -9,6 +9,7 @@ import 'package:monarch_window_controller/window_controller/default_theme.dart'
     as theme;
 import 'package:monarch_window_controller/window_controller/window_controller_screen.dart';
 import 'window_controller/data/channel_methods_receiver.dart';
+import 'package:stockholm/stockholm.dart';
 
 const controlsWidth = 250.0;
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monarch_window_controller/window_controller/default_theme.dart';
 import 'package:monarch_window_controller/window_controller/widgets/components/text.dart';
 import 'package:monarch_window_controller/window_controller/widgets/controls_panel/controlls_panel.dart';
 import 'package:monarch_window_controller/window_controller/widgets/story_list/story_list.dart';
@@ -29,12 +30,12 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
             return Container(
               width: double.infinity,
               //height: 600,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Container(
+                      color: darkGrey,
                       constraints: const BoxConstraints(minWidth: 280),
                       padding: const EdgeInsets.only(
                         top: 16,
@@ -51,7 +52,7 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
                               shouldTranslate: true,
                             ),
                           ],
-                          if (state is ConnectedWindowControllerState) ...[
+                          if (state.active) ...[
                             Expanded(
                               child: StoryList(
                                 projectName: state.monarchData == null ? '' : state.monarchData!.packageName,
@@ -66,8 +67,15 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
                       ),
                     ),
                   ),
-                  if (state is ConnectedWindowControllerState) ...[
-                    ControlsPanel(state: state, manager: manager,),
+                 const VerticalDivider(
+                    width: 1,
+                    thickness: 1,
+                  ),
+                  if (state.active) ...[
+                    ControlsPanel(
+                      state: state,
+                      manager: manager,
+                    ),
                   ],
                 ],
               ),

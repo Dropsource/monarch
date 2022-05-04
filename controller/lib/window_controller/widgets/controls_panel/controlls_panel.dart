@@ -8,13 +8,14 @@ import 'package:monarch_window_controller/window_controller/widgets/components/l
 import 'package:monarch_window_controller/window_controller/widgets/components/numbered_slider.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_manager.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_state.dart';
+import 'package:stockholm/stockholm.dart';
 
 import '../../../utils/translations.dart';
 import '../../data/device_definitions.dart';
 import '../components/text.dart';
 
 class ControlsPanel extends StatelessWidget {
-  final ConnectedWindowControllerState state;
+  final WindowControllerState state;
   final double width;
   final dividerHeight = 24.0;
   final WindowControllerManager manager;
@@ -31,13 +32,16 @@ class ControlsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final _translations = Translations.of(context)!;
 
-    return SizedBox(
+    return Container(
       width: width,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
-
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         children: [
+          const SizedBox(
+            height: 8,
+          ),
           LabeledControl(
             label: 'controls.device',
             control: DropDown<DeviceDefinition>(
@@ -47,6 +51,9 @@ class ControlsPanel extends StatelessWidget {
             ),
             controlWidth: controlWidth,
           ),
+          const SizedBox(
+            height: 8,
+          ),
           LabeledControl(
             label: 'controls.theme',
             control: DropDown<MetaTheme>(
@@ -55,6 +62,9 @@ class ControlsPanel extends StatelessWidget {
               toStringFunction: (e) => e.name,
             ),
             controlWidth: controlWidth,
+          ),
+          const SizedBox(
+            height: 8,
           ),
           LabeledControl(
             label: _translations.text('controls.locale'),
@@ -66,8 +76,12 @@ class ControlsPanel extends StatelessWidget {
             controlWidth: controlWidth,
           ),
           LabeledControl(
-            label: '${_translations.text("controls.text_scale_factor")} (${state.textScaleFactor.toStringAsFixed(1)})',
-            control:  NumberedSlider(initialValue: state.textScaleFactor, onChanged: (val) => null), //manager.onTextScaleFactorChanged(val),),
+            label:
+                _translations.text("controls.text_scale_factor"),
+            control: NumberedSlider(
+              initialValue: state.textScaleFactor,
+              onChanged: (val) => manager.onTextScaleFactorChanged(val),
+            ),
             shouldTranslate: false,
             controlWidth: controlWidth,
           ),
@@ -85,6 +99,9 @@ class ControlsPanel extends StatelessWidget {
             ),
             controlWidth: controlWidth,
           ),
+          const SizedBox(
+            height: 8,
+          ),
           LabeledControl(
             label: 'controls.dock',
             control: DropDown<DockDefinition>(
@@ -99,17 +116,21 @@ class ControlsPanel extends StatelessWidget {
             height: dividerHeight,
             color: Colors.white.withAlpha(100),
           ),
-          // CheckboxGrid(
-          //   devToolsOptions: state.devToolOptions,
-          //   enabledFeatures: state.enabledDevToolsFeatures,
-          // ),
+          CheckboxGrid(
+            devToolsOptions: state.visualDebugFlags,
+            onOptionToggle: manager.onDevToolOptionToggled,
+          ),
           Padding(
             padding: const EdgeInsets.only(
-              right: 16,
+              top: 8,
             ),
-            child: OutlinedButton(
-              onPressed: () {},
-              child: const TextBody1('dev_tools.launch', shouldTranslate: true),
+            child: SizedBox(
+              width: 120,
+              child: StockholmButton(
+                onPressed: () {},
+                child:
+                    const TextBody1('dev_tools.launch', shouldTranslate: true),
+              ),
             ),
           ),
         ],

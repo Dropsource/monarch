@@ -9,3 +9,4 @@ out/
 /controller/.packages
 /controller/.flutter-plugins-dependencies
 /controller/.monarch
+.idea/

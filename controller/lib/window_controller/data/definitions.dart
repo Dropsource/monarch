@@ -1,7 +1,6 @@
 import 'package:monarch_window_controller/window_controller/data/dock_definition.dart';
 import 'package:monarch_window_controller/window_controller/data/monarch_data.dart';
-
-import 'dev_tools_option.dart';
+import 'package:monarch_window_controller/window_controller/data/visual_debug_flags.dart';
 
 const defaultTheme = MetaTheme(
     id: '__material-light-theme__',
@@ -18,24 +17,24 @@ final dockList = [
 ];
 
 final devToolsOptions = [
-  DevToolsOption(
+  VisualDebugFlag(
+    name: Flags.slowAnimations,
     label: 'dev_tools.slow_animations',
-    feature: DevToolFeature.slowAnimations,
   ),
-  DevToolsOption(
+  VisualDebugFlag(
+    name: Flags.highlightRepaints,
     label: 'dev_tools.highlight_repaints',
-    feature: DevToolFeature.highlightRepaints,
   ),
-  DevToolsOption(
+  VisualDebugFlag(
     label: 'dev_tools.show_guideliness',
-    feature: DevToolFeature.showGuidelines,
+    name: Flags.showGuidelines,
   ),
-  DevToolsOption(
+  VisualDebugFlag(
+    name: Flags.highlightOversizedImages,
     label: 'dev_tools.highlight_oversized_images',
-    feature: DevToolFeature.highlightOversizedImages,
   ),
-  DevToolsOption(
+  VisualDebugFlag(
     label: 'dev_tools.show_baseliness',
-    feature: DevToolFeature.showBaselines,
+    name: Flags.showBaselines,
   ),
 ];

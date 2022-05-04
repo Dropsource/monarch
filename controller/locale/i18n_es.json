@@ -3,6 +3,7 @@
   "story_list.search": "Search...",
   "story_list.title": "Story List",
   "story_list.loading": "Loading Stories...",
+  "story_list.no_stories": "No stories found!",
   "controls.device": "Device",
   "controls.theme": "Theme",
   "controls.locale": "Locale",
