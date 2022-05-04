@@ -6,7 +6,7 @@ import 'dropdown_button.dart';
 class DropDown<T> extends StatelessWidget {
   final List<T> values;
   final T currentValue;
-  final Function(T?)? onChange;
+  final Function(T)? onChange;
   final String Function(T) toStringFunction;
   final double horizontalPadding;
 

@@ -37,7 +37,6 @@ Future<dynamic> _handler(MethodCall call) async {
       break;
 
     case MonarchMethods.defaultTheme:
-      //todo: Method data: {themeId: __material-light-theme__}
       manager.update(manager.state.copyWith(
           currentTheme: manager.state.themes
               .firstWhere((element) => element.id == args!['themeId'])));
@@ -63,7 +62,6 @@ Future<dynamic> _handler(MethodCall call) async {
       break;
 
     case MonarchMethods.standardThemes:
-
       final themes = manager.state.themes;
       final newThemes = getStandardThemes(args);
       newThemes.where((element) => !themes.contains(element));
@@ -77,8 +75,19 @@ Future<dynamic> _handler(MethodCall call) async {
       break;
 
     case MonarchMethods.monarchData:
-      manager.update(manager.state
-          .copyWith(monarchData: MonarchData.fromStandardMap(args!)));
+      final monarchData = MonarchData.fromStandardMap(args!);
+      manager.update(
+        manager.state.copyWith(
+          monarchData: monarchData,
+          themes: manager.state.themes..addAll(monarchData.metaThemes),
+          locales: monarchData.allLocales.isNotEmpty
+              ? monarchData.allLocales.toList()
+              : null,
+          currentLocale: monarchData.allLocales.isNotEmpty
+              ? monarchData.allLocales.first
+              : null,
+        ),
+      );
       break;
 
     case MonarchMethods.toggleVisualDebugFlag:

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:monarch_window_controller/window_controller/data/device_definitions.dart';
+import 'package:monarch_window_controller/window_controller/data/story_scale_definitions.dart';
 import 'package:monarch_window_controller/window_controller/data/visual_debug_flags.dart';
 import 'package:monarch_window_controller/window_controller/window_controller_state.dart';
 import 'package:rxdart/rxdart.dart';
@@ -16,8 +18,8 @@ class WindowControllerManager {
 
   Stream<WindowControllerState> get stream => _streamController.stream;
   late WindowControllerState _state;
-  WindowControllerState get state =>
-      _state;
+
+  WindowControllerState get state => _state;
 
   WindowControllerManager({WindowControllerState? initialState}) {
     _subscription = _streamController.listen((value) {
@@ -32,12 +34,12 @@ class WindowControllerManager {
     channelMethodsSender.loadStory('$key|$activeStoryName');
   }
 
-  void update(WindowControllerState newState){
+  void update(WindowControllerState newState) {
     _streamController.sink.add(newState);
   }
 
   void _updateState(Function(WindowControllerState) stateReporter) {
-      _streamController.sink.add(stateReporter(state));
+    _streamController.sink.add(stateReporter(state));
   }
 
   void dispose() {
@@ -47,7 +49,7 @@ class WindowControllerManager {
   }
 
   void onDevToolOptionToggled(VisualDebugFlag option) {
-    channelMethodsSender.sendToggleVisualDebugFlag(option);
+    channelMethodsSender.sendToggleVisualDebugFlag(option.copyWith(enabled: !option.isEnabled));
   }
 
   void onTextScaleFactorChanged(double val) {
@@ -63,11 +65,31 @@ class WindowControllerManager {
   }
 
   void onVisualFlagToggle(String name, bool isEnabled) {
-    final element = state.visualDebugFlags.firstWhere((element) => element.name == name);
+    final element =
+        state.visualDebugFlags.firstWhere((element) => element.name == name);
     final index = state.visualDebugFlags.indexOf(element);
-    final list = state.visualDebugFlags..setAll(index, [element.copyWith(enabled: isEnabled)]);
+    final list = state.visualDebugFlags
+      ..setAll(index, [element.copyWith(enabled: isEnabled)]);
     update(state.copyWith(visualDebugFlags: list));
   }
+
+  void onDeviceChanged(DeviceDefinition deviceDefinition) {
+    update(state.copyWith(currentDevice: deviceDefinition));
+    channelMethodsSender.setActiveDevice(deviceDefinition.id);
+  }
+
+  void onThemeChanged(MetaTheme theme) {
+    update(state.copyWith(currentTheme: theme));
+    channelMethodsSender.setActiveTheme(theme.id);
+  }
+
+  void onLocaleChanged(String locale) {
+    update(state.copyWith(currentLocale: locale));
+    channelMethodsSender.setActiveLocale(locale);
+  }
+
+  void onScaleChanged(StoryScaleDefinition scaleDefinition) {
+    update(state.copyWith(currentScale: scaleDefinition));
+    channelMethodsSender.setStoryScale(scaleDefinition.scale);
+  }
 }
-
-

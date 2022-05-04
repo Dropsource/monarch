@@ -41,9 +41,9 @@ class MetaLocalization {
 
   MetaLocalization({required this.locales, required this.delegateClassName});
 
-  static MetaLocalization fromStandardMap(Map<String, dynamic> args) {
+  static MetaLocalization fromStandardMap(dynamic args) {
     return MetaLocalization(
-        locales: args['locales'], delegateClassName: args['delegateClassName']);
+        locales: List.from(args['locales'].cast<String>()), delegateClassName: args['delegateClassName']);
   }
 }
 

@@ -48,6 +48,7 @@ class ControlsPanel extends StatelessWidget {
               currentValue: state.currentDevice,
               values: state.devices,
               toStringFunction: (e) => e.name,
+              onChange: manager.onDeviceChanged,
             ),
             controlWidth: controlWidth,
           ),
@@ -60,6 +61,7 @@ class ControlsPanel extends StatelessWidget {
               currentValue: state.currentTheme,
               values: state.themes,
               toStringFunction: (e) => e.name,
+              onChange: manager.onThemeChanged,
             ),
             controlWidth: controlWidth,
           ),
@@ -68,10 +70,12 @@ class ControlsPanel extends StatelessWidget {
           ),
           LabeledControl(
             label: _translations.text('controls.locale'),
+            shouldTranslate: false,
             control: DropDown<String>(
               currentValue: state.currentLocale,
               values: state.locales,
               toStringFunction: (e) => e.toString(),
+              onChange: manager.onLocaleChanged,
             ),
             controlWidth: controlWidth,
           ),
@@ -80,7 +84,7 @@ class ControlsPanel extends StatelessWidget {
                 _translations.text("controls.text_scale_factor"),
             control: NumberedSlider(
               initialValue: state.textScaleFactor,
-              onChanged: (val) => manager.onTextScaleFactorChanged(val),
+              onChanged: manager.onTextScaleFactorChanged,
             ),
             shouldTranslate: false,
             controlWidth: controlWidth,
@@ -95,6 +99,7 @@ class ControlsPanel extends StatelessWidget {
             control: DropDown<StoryScaleDefinition>(
               currentValue: state.currentScale,
               values: state.scaleList.toList(),
+              onChange: manager.onScaleChanged,
               toStringFunction: (e) => e.name,
             ),
             controlWidth: controlWidth,
@@ -107,6 +112,7 @@ class ControlsPanel extends StatelessWidget {
             control: DropDown<DockDefinition>(
               currentValue: state.currentDock,
               values: state.dockList.toList(),
+              //todo dock change
               toStringFunction: (e) => _translations.text(e.name),
             ),
             controlWidth: controlWidth,
