@@ -49,19 +49,33 @@ class WindowControllerManager {
   }
 
   void onDevToolOptionToggled(VisualDebugFlag option) {
-    channelMethodsSender.sendToggleVisualDebugFlag(option.copyWith(enabled: !option.isEnabled));
+    channelMethodsSender
+        .sendToggleVisualDebugFlag(option.copyWith(enabled: !option.isEnabled));
   }
 
   void onTextScaleFactorChanged(double val) {
     channelMethodsSender.setTextScaleFactor(val);
   }
 
-  bool filterStories(MapEntry<String, MetaStories> element, String query) {
-    final name = element.key;
-    final storyNames = element.value.storiesNames;
+  Iterable<MapEntry<String, MetaStories>> filterStories(
+      Map<String, MetaStories> stories, String query) {
+    final filtered = stories.entries.map((e) {
+      return MapEntry<String, MetaStories>(
+          e.key,
+          e.value.copyWith(
+              storiesNames: e.value.storiesNames
+                  .where((element) =>
+                      element.toLowerCase().contains(query.toLowerCase()))
+                  .toList()));
+    });
 
-    return name.contains(query) ||
-        storyNames.where((element) => element.contains(query)).isNotEmpty;
+    return filtered;
+
+    // final name = element.key;
+    // final storyNames = element.value.storiesNames;
+    //
+    // return name.contains(query) ||
+    //     storyNames.where((element) => element.contains(query)).isNotEmpty;
   }
 
   void onVisualFlagToggle(String name, bool isEnabled) {

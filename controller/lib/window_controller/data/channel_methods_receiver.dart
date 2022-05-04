@@ -88,6 +88,11 @@ Future<dynamic> _handler(MethodCall call) async {
               : null,
         ),
       );
+
+      channelMethodsSender.setActiveLocale(manager.state.currentLocale);
+      channelMethodsSender.setActiveTheme(manager.state.currentTheme.id);
+      channelMethodsSender.setActiveDevice(manager.state.currentDevice.id);
+      channelMethodsSender.setTextScaleFactor(manager.state.textScaleFactor);
       break;
 
     case MonarchMethods.toggleVisualDebugFlag:

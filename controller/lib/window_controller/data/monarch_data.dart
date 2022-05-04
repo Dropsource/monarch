@@ -19,6 +19,13 @@ class MetaStories {
           args['storiesNames'].cast<String>(),
         ));
   }
+
+  MetaStories copyWith({List<String>? storiesNames}) {
+    return MetaStories(
+        package: package,
+        path: path,
+        storiesNames: storiesNames ?? this.storiesNames);
+  }
 }
 
 class MetaTheme {
@@ -43,7 +50,8 @@ class MetaLocalization {
 
   static MetaLocalization fromStandardMap(dynamic args) {
     return MetaLocalization(
-        locales: List.from(args['locales'].cast<String>()), delegateClassName: args['delegateClassName']);
+        locales: List.from(args['locales'].cast<String>()),
+        delegateClassName: args['delegateClassName']);
   }
 }
 
@@ -91,5 +99,7 @@ class MonarchData {
 
 List<MetaTheme> getStandardThemes(dynamic args) {
   final themes = args['standardThemes'];
-  return themes.map<MetaTheme>((element) => MetaTheme.fromStandardMap(element)).toList();
+  return themes
+      .map<MetaTheme>((element) => MetaTheme.fromStandardMap(element))
+      .toList();
 }

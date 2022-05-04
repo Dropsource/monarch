@@ -35,7 +35,7 @@ class StoryListState extends State<StoryList> {
 
   @override
   Widget build(BuildContext context) {
-    final _filteredStories = widget.stories.entries.where((element) => widget.manager.filterStories(element, query));
+    final _filteredStories = widget.manager.filterStories(widget.stories, query);
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
       child: Column(
