@@ -1,4 +1,4 @@
-# monarch_cli
+# Monarch CLI (Command Line Interface)
 
 ### Running tests
 1. Generate the mocks
