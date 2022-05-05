@@ -13,7 +13,9 @@ final logger = Logger('ChannelMethodsReceiver');
 void receiveChannelMethodCalls() {
   MonarchChannels.controller.setMethodCallHandler((MethodCall call) async {
     logger.finest('channel method received: ${call.method}');
-
+    if (call.arguments != null) {
+      logger.finest('with arguments: ${call.arguments}');
+    }
     try {
       return await _handler(call);
     } catch (e, s) {
@@ -72,20 +74,21 @@ Future<dynamic> _handler(MethodCall call) async {
 
     case MonarchMethods.monarchData:
       final monarchData = MonarchData.fromStandardMap(args!);
+      final allLocales = monarchData.allLocales;
       manager.update(
         manager.state.copyWith(
           monarchData: monarchData,
           themes: manager.state.themes..addAll(monarchData.metaThemes),
-          locales: monarchData.allLocales.isNotEmpty
-              ? monarchData.allLocales.toList()
-              : null,
-          currentLocale: monarchData.allLocales.isNotEmpty
-              ? monarchData.allLocales.first
-              : null,
+          locales: allLocales.isNotEmpty ? allLocales.toList() : null,
+          currentLocale: allLocales.isNotEmpty ? allLocales.first : null,
         ),
       );
 
-      channelMethodsSender.setActiveLocale(manager.state.currentLocale);
+      if (allLocales.isNotEmpty) {
+        channelMethodsSender.setActiveLocale(allLocales.first);
+      } else {
+        channelMethodsSender.setActiveLocale('en-US');
+      }
       channelMethodsSender.setActiveTheme(manager.state.currentTheme.id);
       channelMethodsSender.setActiveDevice(manager.state.currentDevice.id);
       channelMethodsSender.setTextScaleFactor(manager.state.textScaleFactor);
