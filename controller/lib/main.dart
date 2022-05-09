@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';
 
-import 'package:monarch_window_controller/utils/localization.dart';
-import 'package:monarch_window_controller/window_controller/default_theme.dart'
+import 'package:monarch_controller/utils/localization.dart';
+import 'package:monarch_controller/default_theme.dart'
     as theme;
-import 'package:monarch_window_controller/window_controller/window_controller_manager.dart';
-import 'package:monarch_window_controller/window_controller/window_controller_screen.dart';
-import 'window_controller/data/channel_methods_receiver.dart';
+import 'package:monarch_controller/manager/controller_manager.dart';
+import 'package:monarch_controller/screens/window_controller_screen.dart';
+import 'package:monarch_controller/data/channel_methods_receiver.dart';
 
 const controlsWidth = 250.0;
-final manager = WindowControllerManager();
+final manager = ControllerManager();
 
 void main() async {
   _setUpLog();

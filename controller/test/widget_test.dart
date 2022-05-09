@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:monarch_window_controller/main.dart';
+import 'package:monarch_controller/main.dart';
 
 void main() {
 
