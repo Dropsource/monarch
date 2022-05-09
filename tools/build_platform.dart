@@ -69,8 +69,8 @@ Will output $monarch_macos to:
         print(result.stderr);
       }
 
-      Directory(p.join(out_ui_flutter_id, '$monarch_macos.swiftmodule'))
-          .deleteSync(recursive: true);
+      var swiftmodule = Directory(p.join(out_ui_flutter_id, '$monarch_macos.swiftmodule'));
+      if (swiftmodule.existsSync()) swiftmodule.deleteSync(recursive: true);
     }
     print('''
 ===============================================================================

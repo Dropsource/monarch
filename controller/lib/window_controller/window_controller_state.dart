@@ -7,8 +7,10 @@ import 'package:monarch_window_controller/window_controller/data/definitions.dar
 import 'package:monarch_window_controller/window_controller/data/story_scale_definitions.dart';
 import 'package:monarch_window_controller/window_controller/data/visual_debug_flags.dart';
 
+import 'data/channel_methods.dart';
 
-class WindowControllerState {
+
+class WindowControllerState implements OutboundChannelArgument{
   final bool active;
   final MonarchData? monarchData;
   final String? activeStoryName;
@@ -99,4 +101,16 @@ class WindowControllerState {
         textScaleFactor: textScaleFactor ?? this.textScaleFactor,
         visualDebugFlags: visualDebugFlags ?? this.visualDebugFlags,
       );
+
+  @override
+  Map<String, dynamic> toStandardMap() {
+    // As of 2022-05, we only return device, scale and dock.
+    // In the future, if clients require more state properties then add 
+    // them as needed.
+    return {
+      'device': currentDevice.toStandardMap(),
+      'scale': currentScale.toStandardMap(),
+      'dock': currentDock.id
+    };
+  }
 }

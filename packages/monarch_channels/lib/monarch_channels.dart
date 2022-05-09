@@ -24,4 +24,6 @@ class MonarchMethods {
   static const setTextScaleFactor = 'monarch.setTextScaleFactor';
   static const toggleVisualDebugFlag = 'monarch.toggleVisualDebugFlag';
   static const setStoryScale = 'monarch.setStoryScale';
+  static const setDockSide = 'monarch.setDockSide';
+  static const getState = 'monarch.getState';
 }

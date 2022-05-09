@@ -57,7 +57,8 @@ class WindowManager {
         
         channels = Channels.init(
             controllerMessenger: controller.engine.binaryMessenger,
-            previewMessenger: preview.engine.binaryMessenger)
+            previewMessenger: preview.engine.binaryMessenger,
+            windowManager: self)
         channels!.setUpCallForwarding()
         
         _launchFlutterWindows(preview, controller)
@@ -199,22 +200,53 @@ class WindowManager {
             y: _window.frame.origin.y + _window.frame.height)
     }
     
-    func changeFlutterWindowDockSide(_ side: DockSide) {
+    func changePreviewWindowDockSide(_ side: DockSide) {
         previewWindow!.setFrameTopLeftPoint(_getPreviewWindowTopLeft(side))
     }
     
-    func undockFlutterWindow() {
+    func undockPreviewWindow() {
         let offset: CGFloat = 24
         let pos = _getTopLeftPoint(previewWindow!)
         previewWindow!.setFrameTopLeftPoint(NSPoint(x: pos.x + offset, y: pos.y - offset))
     }
     
-    func resizeFlutterWindow(size: NSSize, title: String, side: DockSide) {
-        if let flutterWindow = previewWindow {
+    func setDocking() {
+        channels!.getMonarchState() { (state) -> () in
+            switch state.dock {
+            case .left:
+                self.changePreviewWindowDockSide(.left)
+                break
+            case .right:
+                self.changePreviewWindowDockSide(.right)
+                break
+            case .undock:
+                self.undockPreviewWindow()
+                break
+            }
+        }
+    }
+    
+    func resizePreviewWindow() {
+        channels!.getMonarchState() { (state) -> () in
+            let deviceSize = state.device.logicalResolution.size
+            let scaledWidth = Double(deviceSize.width) * state.scale.scale
+            let scaledHeight = Double(deviceSize.height) * state.scale.scale
+            let scaledSize = NSSize.init(
+                width: scaledWidth,
+                height: scaledHeight)
+            let title = state.scale.scale == defaultScaleDefinition.scale ?
+                state.device.title :
+                state.device.title + " | " + state.scale.name
+            self.resizePreviewWindow(size: scaledSize, title: title, side: state.dock)
+        }
+    }
+    
+    func resizePreviewWindow(size: NSSize, title: String, side: DockSide) {
+        if let previewWindow = previewWindow {
             //let lastTopLeft = _getTopLeftPoint(flutterWindow)
-            flutterWindow.setContentSize(size)
-            flutterWindow.setFrameTopLeftPoint(_getPreviewWindowTopLeft(side))
-            flutterWindow.title = title
+            previewWindow.setContentSize(size)
+            previewWindow.setFrameTopLeftPoint(_getPreviewWindowTopLeft(side))
+            previewWindow.title = title
         }
     }
     

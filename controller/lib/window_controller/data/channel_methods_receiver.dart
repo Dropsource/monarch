@@ -33,13 +33,13 @@ Future<dynamic> _handler(MethodCall call) async {
   switch (call.method) {
     case MonarchMethods.ping:
       channelMethodsSender.setUpLog(LogLevel.ALL.value);
-      break;
+      return;
 
     case MonarchMethods.defaultTheme:
       manager.update(manager.state.copyWith(
           currentTheme: manager.state.themes
               .firstWhere((element) => element.id == args!['themeId'])));
-      break;
+      return;
 
     case MonarchMethods.readySignal:
       if (manager.state.active) {
@@ -52,12 +52,12 @@ Future<dynamic> _handler(MethodCall call) async {
         logger.info('story-flutter-window-ready');
       }
       channelMethodsSender.sendReadySignalAck();
-      break;
+      return;
 
     case MonarchMethods.deviceDefinitions:
       manager
           .update(manager.state.copyWith(devices: getDeviceDefinitions(args!)));
-      break;
+      return;
 
     case MonarchMethods.standardThemes:
       final themes = manager.state.themes;
@@ -65,12 +65,12 @@ Future<dynamic> _handler(MethodCall call) async {
       newThemes.where((element) => !themes.contains(element));
       themes.addAll(newThemes);
       manager.update(manager.state.copyWith(themes: newThemes));
-      break;
+      return;
 
     case MonarchMethods.storyScaleDefinitions:
       manager.update(
           manager.state.copyWith(scaleList: getStoryScaleDefinitions(args!)));
-      break;
+      return;
 
     case MonarchMethods.monarchData:
       final monarchData = MonarchData.fromStandardMap(args!);
@@ -92,17 +92,19 @@ Future<dynamic> _handler(MethodCall call) async {
       channelMethodsSender.setActiveTheme(manager.state.currentTheme.id);
       channelMethodsSender.setActiveDevice(manager.state.currentDevice.id);
       channelMethodsSender.setTextScaleFactor(manager.state.textScaleFactor);
-      break;
+      return;
 
     case MonarchMethods.toggleVisualDebugFlag:
       final name = args!['name'];
       final isEnabled = args['isEnabled'];
       manager.onVisualFlagToggle(name, isEnabled);
-      break;
+      return;
+
+    case MonarchMethods.getState:
+      return manager.state.toStandardMap();
 
     default:
-      logger.warning('method ${call.method} not implemented');
-      // return exception to the platform side, do not throw
-      return MissingPluginException('method ${call.method} not implemented');
+      logger.fine('method ${call.method} not implemented');
+      return;
   }
 }

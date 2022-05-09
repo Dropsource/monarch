@@ -104,6 +104,6 @@ class WindowControllerManager {
 
   void onDockSettingsChange(DockDefinition dockDefinition) {
     update(state.copyWith(currentDock: dockDefinition));
-    //todo send info that dock settings changes
+    channelMethodsSender.setDockSide(dockDefinition.id);
   }
 }
