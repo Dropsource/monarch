@@ -10,7 +10,8 @@ import 'package:monarch_controller/data/visual_debug_flags.dart';
 
 class ControllerState {
   final bool isReady;
-  final MonarchData? monarchData;
+  final String packageName;
+  final Map<String, MetaStories> storiesMap;
   final String? activeStoryName;
 
   final DeviceDefinition currentDevice;
@@ -20,7 +21,8 @@ class ControllerState {
   final List<String> locales;
 
   final MetaTheme currentTheme;
-  final List<MetaTheme> themes;
+  final List<MetaTheme> standardThemes;
+  final List<MetaTheme> userThemes;
 
   final StoryScaleDefinition currentScale;
 
@@ -34,13 +36,15 @@ class ControllerState {
 
   ControllerState({
     required this.isReady,
-    this.monarchData,
+    this.packageName = '',
+    this.storiesMap = const {},
     this.activeStoryName,
     required this.devices,
     required this.currentDevice,
     required this.locales,
     required this.currentLocale,
-    required this.themes,
+    required this.standardThemes,
+    required this.userThemes,
     required this.currentTheme,
     required this.currentDock,
     required this.currentScale,
@@ -56,7 +60,8 @@ class ControllerState {
         currentDevice: defaultDeviceDefinition,
         locales: [defs.defaultLocale],
         currentLocale: defs.defaultLocale,
-        themes: [defs.defaultTheme],
+        standardThemes: [defs.defaultTheme],
+        userThemes: [],
         currentTheme: defs.defaultTheme,
         currentDock: defs.defaultDock,
         currentScale: defaultScaleDefinition,
@@ -68,14 +73,16 @@ class ControllerState {
 
   ControllerState copyWith({
     String? activeStoryName,
-    MonarchData? monarchData,
+    String? packageName,
+    Map<String, MetaStories>? storiesMap,
     bool? isReady,
     List<DeviceDefinition>? devices,
     DeviceDefinition? currentDevice,
     String? currentLocale,
     List<String>? locales,
     MetaTheme? currentTheme,
-    List<MetaTheme>? themes,
+    List<MetaTheme>? standardThemes,
+    List<MetaTheme>? userThemes,
     StoryScaleDefinition? currentScale,
     DockDefinition? currentDock,
     double? textScaleFactor,
@@ -84,13 +91,14 @@ class ControllerState {
   }) =>
       ControllerState(
         activeStoryName: activeStoryName ?? this.activeStoryName,
-        monarchData: monarchData ?? this.monarchData,
+        storiesMap: storiesMap ?? this.storiesMap,
         isReady: isReady ?? this.isReady,
         devices: devices ?? this.devices,
         currentDevice: currentDevice ?? this.currentDevice,
         locales: locales ?? this.locales,
         currentLocale: currentLocale ?? this.currentLocale,
-        themes: themes ?? this.themes,
+        standardThemes: standardThemes ?? this.standardThemes,
+        userThemes: userThemes ?? this.userThemes,
         currentTheme: currentTheme ?? this.currentTheme,
         scaleList: scaleList ?? this.scaleList,
         currentScale: currentScale ?? this.currentScale,
@@ -98,5 +106,6 @@ class ControllerState {
         currentDock: currentDock ?? this.currentDock,
         textScaleFactor: textScaleFactor ?? this.textScaleFactor,
         visualDebugFlags: visualDebugFlags ?? this.visualDebugFlags,
+        packageName: packageName ?? this.packageName,
       );
 }

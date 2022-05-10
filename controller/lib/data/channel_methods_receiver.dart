@@ -36,9 +36,8 @@ Future<dynamic> _handler(MethodCall call) async {
       break;
 
     case MonarchMethods.defaultTheme:
-      manager.update(manager.state.copyWith(
-          currentTheme: manager.state.themes
-              .firstWhere((element) => element.id == args!['themeId'])));
+      final String themeId = args!['themeId'];
+      manager.onDefaultThemeChange(themeId);
       break;
 
     case MonarchMethods.readySignal:
@@ -46,52 +45,30 @@ Future<dynamic> _handler(MethodCall call) async {
         logger.info(
             'flutter window had been ready, ready signal means potential reload');
       } else {
-        manager.update(manager.state.copyWith(isReady: true));
-        //send first load signal
-        channelMethodsSender.sendFirstLoadSignal();
-        logger.info('story-flutter-window-ready');
+        manager.onReady();
+
       }
       channelMethodsSender.sendReadySignalAck();
       break;
 
     case MonarchMethods.deviceDefinitions:
-      manager
-          .update(manager.state.copyWith(devices: getDeviceDefinitions(args!)));
+      final deviceDefinitions = getDeviceDefinitions(args!);
+      manager.onDeviceDefinitionsChanged(deviceDefinitions);
       break;
 
     case MonarchMethods.standardThemes:
-      final themes = manager.state.themes;
-      final newThemes = getStandardThemes(args);
-      newThemes.where((element) => !themes.contains(element));
-      themes.addAll(newThemes);
-      manager.update(manager.state.copyWith(themes: newThemes));
+      final themes = getStandardThemes(args!);
+      manager.onStandardThemesChanged(themes);
       break;
 
     case MonarchMethods.storyScaleDefinitions:
-      manager.update(
-          manager.state.copyWith(scaleList: getStoryScaleDefinitions(args!)));
+      final scaleDefinitions = getStoryScaleDefinitions(args!);
+      manager.onStoryScaleDefinitionsChanged(scaleDefinitions);
       break;
 
     case MonarchMethods.monarchData:
       final monarchData = MonarchData.fromStandardMap(args!);
-      final allLocales = monarchData.allLocales;
-      manager.update(
-        manager.state.copyWith(
-          monarchData: monarchData,
-          themes: manager.state.themes..addAll(monarchData.metaThemes),
-          locales: allLocales.isNotEmpty ? allLocales.toList() : null,
-          currentLocale: allLocales.isNotEmpty ? allLocales.first : null,
-        ),
-      );
-
-      if (allLocales.isNotEmpty) {
-        channelMethodsSender.setActiveLocale(allLocales.first);
-      } else {
-        channelMethodsSender.setActiveLocale('en-US');
-      }
-      channelMethodsSender.setActiveTheme(manager.state.currentTheme.id);
-      channelMethodsSender.setActiveDevice(manager.state.currentDevice.id);
-      channelMethodsSender.setTextScaleFactor(manager.state.textScaleFactor);
+      manager.onMonarchDataChanged(monarchData);
       break;
 
     case MonarchMethods.toggleVisualDebugFlag:

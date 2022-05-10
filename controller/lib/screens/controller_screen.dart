@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:monarch_controller/default_theme.dart';
 import 'package:monarch_controller/widgets/components/text.dart';
-import 'package:monarch_controller/widgets/controls_panel/controlls_panel.dart';
 import 'package:monarch_controller/widgets/story_list/story_list.dart';
 import 'package:monarch_controller/manager/controller_manager.dart';
 import 'package:monarch_controller/manager/controller_state.dart';
 
-class WindowControllerScreen extends StatefulWidget {
-  const WindowControllerScreen({
+import '../widgets/control_panel/control_panel.dart';
+
+class ControllerScreen extends StatefulWidget {
+  const ControllerScreen({
     Key? key,
     required this.manager,
   }) : super(key: key);
@@ -18,7 +19,7 @@ class WindowControllerScreen extends StatefulWidget {
   State<StatefulWidget> createState() => UiWindowControllerState();
 }
 
-class UiWindowControllerState extends State<WindowControllerScreen> {
+class UiWindowControllerState extends State<ControllerScreen> {
   late ControllerManager manager;
 
   @override
@@ -67,12 +68,10 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
                           if (state.isReady) ...[
                             Expanded(
                               child: StoryList(
-                                projectName: state.monarchData == null
+                                projectName: state.storiesMap.isEmpty
                                     ? ''
-                                    : state.monarchData!.packageName,
-                                stories: state.monarchData == null
-                                    ? {}
-                                    : state.monarchData!.metaStoriesMap,
+                                    : state.packageName,
+                                stories: state.storiesMap,
                                 activeStoryName: state.activeStoryName,
                                 manager: manager,
                                 onActiveStoryChange: (key, name) =>
@@ -89,7 +88,7 @@ class UiWindowControllerState extends State<WindowControllerScreen> {
                     thickness: 1,
                   ),
                   if (state.isReady) ...[
-                    ControlsPanel(
+                    ControlPanel(
                       state: state,
                       manager: manager,
                     ),

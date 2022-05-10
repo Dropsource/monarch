@@ -11,15 +11,6 @@ const Color fontSecondaryColor = Color(0xFFF3F3F3);
 const Color primaryButtonBackground = Color(0xFF2a2d52);
 const Color blue = Color(0xFF2D407F);
 
-const BorderRadius borderRadius = BorderRadius.all(Radius.circular(8.0));
-
-const EdgeInsets horizontalPadding = EdgeInsets.symmetric(horizontal: 20);
-
-const boldStyle = TextStyle(fontWeight: FontWeight.bold);
-
-const EdgeInsets listPadding =
-    EdgeInsets.symmetric(horizontal: 20, vertical: 10);
-
 @MonarchTheme('Default Theme', isDefault: true)
  ThemeData get theme => StockholmThemeData.dark().copyWith(
   primaryColor: blue,

@@ -10,8 +10,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../data/channel_methods_receiver.dart';
 import '../data/monarch_data.dart';
-
-
+import 'package:monarch_controller/data/definitions.dart' as defs;
 
 class ControllerManager {
   final BehaviorSubject<ControllerState> _streamController =
@@ -32,22 +31,8 @@ class ControllerManager {
   }
 
   void onActiveStoryChanged(String key, String activeStoryName) async {
-    _updateState((state) => state.copyWith(activeStoryName: activeStoryName));
+    _update(state.copyWith(activeStoryName: activeStoryName));
     channelMethodsSender.loadStory('$key|$activeStoryName');
-  }
-
-  void update(ControllerState newState) {
-    _streamController.sink.add(newState);
-  }
-
-  void _updateState(Function(ControllerState) stateReporter) {
-    _streamController.sink.add(stateReporter(state));
-  }
-
-  void dispose() {
-    _subscription?.cancel();
-    _subscription = null;
-    _streamController.close();
   }
 
   void onDevToolOptionToggled(VisualDebugFlag option) {
@@ -80,31 +65,124 @@ class ControllerManager {
     final index = state.visualDebugFlags.indexOf(element);
     final list = state.visualDebugFlags
       ..setAll(index, [element.copyWith(enabled: isEnabled)]);
-    update(state.copyWith(visualDebugFlags: list));
+    _update(state.copyWith(visualDebugFlags: list));
   }
 
   void onDeviceChanged(DeviceDefinition deviceDefinition) {
-    update(state.copyWith(currentDevice: deviceDefinition));
+    _update(state.copyWith(currentDevice: deviceDefinition));
     channelMethodsSender.setActiveDevice(deviceDefinition.id);
   }
 
   void onThemeChanged(MetaTheme theme) {
-    update(state.copyWith(currentTheme: theme));
+    _update(state.copyWith(currentTheme: theme));
     channelMethodsSender.setActiveTheme(theme.id);
   }
 
   void onLocaleChanged(String locale) {
-    update(state.copyWith(currentLocale: locale));
+    _update(state.copyWith(currentLocale: locale));
     channelMethodsSender.setActiveLocale(locale);
   }
 
   void onScaleChanged(StoryScaleDefinition scaleDefinition) {
-    update(state.copyWith(currentScale: scaleDefinition));
+    _update(state.copyWith(currentScale: scaleDefinition));
     channelMethodsSender.setStoryScale(scaleDefinition.scale);
   }
 
   void onDockSettingsChange(DockDefinition dockDefinition) {
-    update(state.copyWith(currentDock: dockDefinition));
+    _update(state.copyWith(currentDock: dockDefinition));
     //todo send info that dock settings changes
+  }
+
+  void onMonarchDataChanged(MonarchData monarchData) {
+    logger.finest(
+        "monarchData - user localizations count: ${monarchData.metaLocalizations.length}");
+    logger.finest(
+        "monarchData - user theme count: ${monarchData.metaThemes.length}");
+    logger.finest(
+        "monarchData - key count in metaStoriesMap: ${monarchData.metaStoriesMap.length}");
+    logger.finest("monarchData - package name: ${monarchData.packageName}");
+
+    final allLocales = monarchData.allLocales.isNotEmpty
+        ? monarchData.allLocales
+        : [defs.defaultLocale];
+
+    final String currentLocale = _checkCurrentLocale(allLocales);
+
+    final allThemes = state.standardThemes + monarchData.metaThemes;
+    final MetaTheme currentTheme = _checkCurrentTheme(allThemes);
+
+    _update(state.copyWith(
+      packageName: monarchData.packageName,
+      storiesMap: monarchData.metaStoriesMap,
+      userThemes: monarchData.metaThemes,
+      currentTheme: currentTheme,
+      locales: allLocales.toList(),
+      currentLocale: currentLocale,
+    ));
+
+    channelMethodsSender.setActiveLocale(state.currentLocale);
+
+    channelMethodsSender.setActiveTheme(state.currentTheme.id);
+    channelMethodsSender.setActiveDevice(state.currentDevice.id);
+    channelMethodsSender.setTextScaleFactor(state.textScaleFactor);
+    channelMethodsSender.setStoryScale(state.currentScale.scale);
+  }
+
+  void onDefaultThemeChange(String themeId) {
+    final allThemes = state.standardThemes + state.userThemes;
+
+    _update(state.copyWith(
+        currentTheme:
+            allThemes.firstWhere((element) => element.id == themeId)));
+  }
+
+  void onReady() {
+    _update(state.copyWith(isReady: true));
+    //send first load signal
+    channelMethodsSender.sendFirstLoadSignal();
+    logger.info('story-flutter-window-ready');
+  }
+
+  void onStandardThemesChanged(List<MetaTheme> themes) {
+    _update(state.copyWith(standardThemes: themes));
+  }
+
+  void onStoryScaleDefinitionsChanged(
+      List<StoryScaleDefinition> scaleDefinitions) {
+    _update(state.copyWith(scaleList: scaleDefinitions));
+  }
+
+  void onDeviceDefinitionsChanged(List<DeviceDefinition> deviceDefinitions) {
+    _update(state.copyWith(devices: deviceDefinitions));
+  }
+
+  void _update(ControllerState newState) {
+    _streamController.sink.add(newState);
+  }
+
+  String _checkCurrentLocale(Iterable<String> allLocales) {
+    if (!allLocales.contains(state.currentLocale)) {
+      if (allLocales.isEmpty) {
+        return defs.defaultLocale;
+      } else {
+        return allLocales.first;
+      }
+    } else {
+      return state.currentLocale;
+    }
+  }
+
+  MetaTheme _checkCurrentTheme(List<MetaTheme> allThemes) {
+    if (!allThemes.contains(state.currentTheme)) {
+      return state.standardThemes.first;
+    } else {
+      return state.currentTheme;
+    }
+  }
+
+  void dispose() {
+    _subscription?.cancel();
+    _subscription = null;
+    _streamController.close();
   }
 }

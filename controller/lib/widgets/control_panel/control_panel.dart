@@ -14,13 +14,13 @@ import '../../../utils/translations.dart';
 import '../../data/device_definitions.dart';
 import '../components/text.dart';
 
-class ControlsPanel extends StatelessWidget {
+class ControlPanel extends StatelessWidget {
   final ControllerState state;
   final double width;
   final dividerHeight = 24.0;
   final ControllerManager manager;
 
-  const ControlsPanel({
+  const ControlPanel({
     required this.state,
     required this.manager,
     Key? key,
@@ -59,7 +59,7 @@ class ControlsPanel extends StatelessWidget {
             label: 'controls.theme',
             control: DropDown<MetaTheme>(
               currentValue: state.currentTheme,
-              values: state.themes,
+              values: state.standardThemes + state.userThemes,
               toStringFunction: (e) => e.name,
               onChange: manager.onThemeChanged,
             ),
