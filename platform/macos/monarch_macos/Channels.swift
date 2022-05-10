@@ -68,6 +68,14 @@ class Channels {
             state(MonarchState.init(standardMap: res!))
         }
     }
+    
+    func sendPreviewScreenChanged() {
+        self.previewChannel.invokeMethod(MonarchMethods.screenChanged, arguments: nil)
+    }
+    
+    func sendControllerScreenChanged() {
+        self.controllerChannel.invokeMethod(MonarchMethods.screenChanged, arguments: nil)
+    }
 }
 
 class MonarchMethods {
@@ -75,6 +83,7 @@ class MonarchMethods {
     static let setStoryScale = "monarch.setStoryScale"
     static let setDockSide = "monarch.setDockSide"
     static let getState = "monarch.getState"
+    static let screenChanged = "monarch.screenChanged"
 }
 
 protocol ChannelArgument {}

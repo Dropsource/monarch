@@ -77,6 +77,11 @@ Future<dynamic> _handler(MethodCall call) async {
       activeDevice.value = activeDevice.getDeviceDefinition(deviceId);
       return;
 
+    case MonarchMethods.screenChanged:
+      // foce the monarch binding to recalculate the physical size.
+      activeDevice.value = activeDevice.value;
+      return;
+
     case MonarchMethods.setTextScaleFactor:
       double factor = args!['factor'];
       resetErrors();
