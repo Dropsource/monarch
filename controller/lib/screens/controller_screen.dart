@@ -40,7 +40,7 @@ class UiWindowControllerState extends State<ControllerScreen> {
 
             final state = snapshot.data!;
 
-            return Container(
+            return SizedBox(
               width: double.infinity,
               //height: 600,
               child: Row(

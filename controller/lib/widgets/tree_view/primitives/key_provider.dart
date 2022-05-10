@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 class _TreeNodeKey extends ValueKey {
-  _TreeNodeKey(dynamic value) : super(value);
+  const _TreeNodeKey(dynamic value) : super(value);
 }
 
 /// Provides unique keys and verifies duplicates.

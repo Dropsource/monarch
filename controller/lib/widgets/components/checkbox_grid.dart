@@ -4,7 +4,6 @@ import 'package:stockholm/stockholm.dart';
 
 import '../../../utils/translations.dart';
 import '../../data/visual_debug_flags.dart';
-import 'checkbox_list_tile.dart';
 
 class CheckboxGrid extends StatelessWidget {
   final List<VisualDebugFlag> devToolsOptions;
@@ -19,7 +18,6 @@ class CheckboxGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      // width: 200,
       height: 60,
       child: AlignedGridView.count(
           crossAxisCount: 2,
