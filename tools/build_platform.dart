@@ -68,8 +68,13 @@ Building $monarch_macos with xcodebuild. Will output to:
         print(result.stderr);
       }
 
-      Directory(p.join(out_ui_flutter_id, '$monarch_macos.swiftmodule'))
-          .deleteSync(recursive: true);
+      // //failing
+      // try {
+      //   Directory(p.join(out_ui_flutter_id, '$monarch_macos.swiftmodule'))
+      //       .deleteSync(recursive: true);
+      // } catch (err) {
+      //   print('Failed because of: $err');
+      // }
     }
     print('''
 ===============================================================================
@@ -82,7 +87,6 @@ Building $monarch_macos with xcodebuild. Will output to:
     utils.writeInternalFile('platform_app_version.txt', version);
     print('Monarch macos platform build finished. Version $version');
   }
-
 }
 
 String readMacosProjectVersion() {
