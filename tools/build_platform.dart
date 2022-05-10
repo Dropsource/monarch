@@ -24,10 +24,6 @@ Using flutter sdk at:
 
     if (Platform.isMacOS) {
       const monarch_macos = 'monarch_macos';
-      print('''
-Will output $monarch_macos to:
-  $out_ui_flutter_id
-''');
 
       var ephemeral_dir = Directory(paths.platform_macos_ephemeral);
       if (ephemeral_dir.existsSync()) ephemeral_dir.deleteSync(recursive: true);
@@ -52,7 +48,10 @@ Will output $monarch_macos to:
       if (monarch_macos_app_dir.existsSync())
         monarch_macos_app_dir.deleteSync(recursive: true);
 
-      print('Building $monarch_macos with xcodebuild...');
+      print('''
+Building $monarch_macos with xcodebuild. Will output to:
+  ${paths.out_ui_flutter_id_monarch_macos_app(out_ui_flutter_id)}
+''');
 
       result = Process.runSync(
           'xcodebuild',
@@ -83,7 +82,6 @@ Will output $monarch_macos to:
     utils.writeInternalFile('platform_app_version.txt', version);
     print('Monarch macos platform build finished. Version $version');
   }
-
 }
 
 String readMacosProjectVersion() {

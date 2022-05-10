@@ -1,1 +1,1 @@
-monarch_controller_window
+monarch_controller

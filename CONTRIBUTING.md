@@ -17,9 +17,10 @@ $ dart tools/build.dart
 
 If you want to build a specific module, then you can run either of these scripts:
 ```
-$ dart tools/build_cli.dart
-$ dart tools/build_controller.dart
-$ dart tools/build_platform.dart
+$ dart tools/build_cli.dart - compilation failed, missing settings and versions
+$ dart tools/build_controller.dart all good
+$ dart tools/build_platform.dart Failed because of: FileSystemException: Deletion failed, path = '/Users/bartoszkraszewski/Documents/workspace/flutter/monarch_shift/out/monarch/bin/cache/monarch_ui/flutter_macos_2.13.0-0.2.pre-beta/monarch_macos.swiftmodule' (OS Error: No such file or directory, errno = 2)
+
 ```
 
 The build scripts will output the built artifacts to the out directory.

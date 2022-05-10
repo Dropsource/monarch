@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart' show Locale;
 import 'package:monarch_annotations/monarch_annotations.dart';
-import 'package:monarch_window_controller/utils/translations.dart';
+import 'package:monarch_controller/utils/translations.dart';
 
 const Locale _english = Locale('en', 'US');
 const Locale _spanish = Locale('es', 'ES');
