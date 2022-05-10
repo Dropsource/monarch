@@ -4,6 +4,7 @@ import 'package:monarch_controller/data/dock_definition.dart';
 import 'package:monarch_controller/data/monarch_data.dart';
 import 'package:monarch_controller/data/definitions.dart'
     as defs;
+import 'package:monarch_controller/data/stories.dart';
 import 'package:monarch_controller/data/story_scale_definitions.dart';
 import 'package:monarch_controller/data/visual_debug_flags.dart';
 
@@ -11,8 +12,8 @@ import 'package:monarch_controller/data/visual_debug_flags.dart';
 class ControllerState {
   final bool isReady;
   final String packageName;
-  final Map<String, MetaStories> storiesMap;
-  final String? activeStoryName;
+  final List<StoryGroup> storyGroups;
+  final String? activeStoryKey;
 
   final DeviceDefinition currentDevice;
   final List<DeviceDefinition> devices;
@@ -37,8 +38,8 @@ class ControllerState {
   ControllerState({
     required this.isReady,
     this.packageName = '',
-    this.storiesMap = const {},
-    this.activeStoryName,
+    this.storyGroups = const [],
+    this.activeStoryKey,
     required this.devices,
     required this.currentDevice,
     required this.locales,
@@ -72,9 +73,9 @@ class ControllerState {
       );
 
   ControllerState copyWith({
-    String? activeStoryName,
+    String? activeStoryKey,
     String? packageName,
-    Map<String, MetaStories>? storiesMap,
+    List<StoryGroup>? storyGroups,
     bool? isReady,
     List<DeviceDefinition>? devices,
     DeviceDefinition? currentDevice,
@@ -90,8 +91,8 @@ class ControllerState {
     List<StoryScaleDefinition>? scaleList,
   }) =>
       ControllerState(
-        activeStoryName: activeStoryName ?? this.activeStoryName,
-        storiesMap: storiesMap ?? this.storiesMap,
+        activeStoryKey: activeStoryKey ?? this.activeStoryKey,
+        storyGroups: storyGroups ?? this.storyGroups,
         isReady: isReady ?? this.isReady,
         devices: devices ?? this.devices,
         currentDevice: currentDevice ?? this.currentDevice,

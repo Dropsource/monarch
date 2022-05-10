@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monarch_controller/data/monarch_data.dart';
+import 'package:monarch_controller/data/stories.dart';
 import 'package:monarch_controller/widgets/components/text.dart';
 import 'package:monarch_controller/widgets/story_list/search_field.dart';
 import 'package:monarch_controller/widgets/tree_view/flutter_simple_treeview.dart';
@@ -14,14 +15,14 @@ class StoryList extends StatefulWidget {
     required this.stories,
     required this.projectName,
     required this.manager,
-    this.activeStoryName,
+    this.activeStoryKey,
     this.onActiveStoryChange,
   }) : super(key: key);
 
-  final Map<String, MetaStories> stories;
+  final List<StoryGroup> stories;
   final String projectName;
-  final String? activeStoryName;
-  final Function(String key, String name)? onActiveStoryChange;
+  final String? activeStoryKey;
+  final Function(String key)? onActiveStoryChange;
   final ControllerManager manager;
 
   @override
@@ -69,15 +70,15 @@ class StoryListState extends State<StoryList> {
                     ? const NoStoriesFoundWidget()
                     : TreeView(
                         nodes: _filteredStories
-                            .map((e) => TreeNode(
-                                  content: TextBody1(_readStoryName(e.key)),
-                                  children: e.value.storiesNames
+                            .map((group) => TreeNode(
+                                  content: TextBody1(group.groupName),
+                                  children: group.stories
                                       .map(
-                                        (name) => TreeNode(
+                                        (story) => TreeNode(
                                           content: GestureDetector(
                                             onTap: () => widget
                                                 .onActiveStoryChange
-                                                ?.call(e.key, name),
+                                                ?.call(story.key),
                                             child: Container(
                                               padding: const EdgeInsets.only(
                                                 left: 40,
@@ -86,11 +87,11 @@ class StoryListState extends State<StoryList> {
                                                 right: 8,
                                               ),
                                               color:
-                                                  widget.activeStoryName == name
+                                                  widget.activeStoryKey == story.key
                                                       ? Colors.blue
                                                       : Colors.transparent,
                                               child: TextBody1(
-                                                name,
+                                                story.name,
                                               ),
                                             ),
                                           ),
@@ -119,11 +120,5 @@ class StoryListState extends State<StoryList> {
     setState(() {});
   }
 
-  String _readStoryName(String key) {
-    ///// As of 2020-04-15, the key looks like `$packageName|$generatedStoriesFilePath`
-    //test|stories/sample_button_stories.main_generated.g.dart
-    final firstSlash = key.indexOf('/');
-    final firstDot = key.indexOf('.');
-    return key.substring(firstSlash + 1, firstDot);
-  }
+
 }

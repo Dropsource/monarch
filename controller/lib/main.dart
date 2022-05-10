@@ -4,8 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:monarch_utils/log_config.dart';
 
 import 'package:monarch_controller/utils/localization.dart';
-import 'package:monarch_controller/default_theme.dart'
-    as theme;
+import 'package:monarch_controller/default_theme.dart' as theme;
 import 'package:monarch_controller/manager/controller_manager.dart';
 import 'package:monarch_controller/screens/controller_screen.dart';
 import 'package:monarch_controller/data/channel_methods_receiver.dart';
@@ -27,14 +26,15 @@ void _setUpLog() {
 }
 
 class MonarchControllerApp extends StatelessWidget {
-   const MonarchControllerApp({Key? key}) : super(key: key);
+  const MonarchControllerApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Window Controller',
+        title: 'Monarch Controller',
         theme: theme.theme,
-        home:  ControllerScreen(manager: manager),
+        debugShowCheckedModeBanner: false,
+        home: ControllerScreen(manager: manager),
         localizationsDelegates: [
           localizationDelegate,
           GlobalMaterialLocalizations.delegate,

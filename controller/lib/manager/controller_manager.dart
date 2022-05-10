@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:monarch_controller/data/channel_methods_sender.dart';
 import 'package:monarch_controller/data/device_definitions.dart';
 import 'package:monarch_controller/data/dock_definition.dart';
+import 'package:monarch_controller/data/stories.dart';
 import 'package:monarch_controller/data/story_scale_definitions.dart';
 import 'package:monarch_controller/data/visual_debug_flags.dart';
 import 'package:monarch_controller/manager/controller_state.dart';
@@ -30,9 +31,9 @@ class ControllerManager {
     _streamController.sink.add(initialState ?? ControllerState.init());
   }
 
-  void onActiveStoryChanged(String key, String activeStoryName) async {
-    _update(state.copyWith(activeStoryName: activeStoryName));
-    channelMethodsSender.loadStory('$key|$activeStoryName');
+  void onActiveStoryChanged(String key) async {
+    _update(state.copyWith(activeStoryKey: key));
+    channelMethodsSender.loadStory(key);
   }
 
   void onDevToolOptionToggled(VisualDebugFlag option) {
@@ -44,16 +45,14 @@ class ControllerManager {
     channelMethodsSender.setTextScaleFactor(val);
   }
 
-  Iterable<MapEntry<String, MetaStories>> filterStories(
-      Map<String, MetaStories> stories, String query) {
-    final filtered = stories.entries.map((e) {
-      return MapEntry<String, MetaStories>(
-          e.key,
-          e.value.copyWith(
-              storiesNames: e.value.storiesNames
-                  .where((element) =>
-                      element.toLowerCase().contains(query.toLowerCase()))
-                  .toList()));
+  Iterable<StoryGroup> filterStories(List<StoryGroup> stories, String query) {
+    final filtered = stories.map((e) {
+      return StoryGroup(
+          groupName: e.groupName,
+          stories: e.stories
+              .where((element) =>
+                  element.name.toLowerCase().contains(query.toLowerCase()))
+              .toList());
     });
 
     return filtered;
@@ -113,7 +112,7 @@ class ControllerManager {
 
     _update(state.copyWith(
       packageName: monarchData.packageName,
-      storiesMap: monarchData.metaStoriesMap,
+      storyGroups: _translateStories(monarchData.metaStoriesMap),
       userThemes: monarchData.metaThemes,
       currentTheme: currentTheme,
       locales: allLocales.toList(),
@@ -184,5 +183,23 @@ class ControllerManager {
     _subscription?.cancel();
     _subscription = null;
     _streamController.close();
+  }
+
+  List<StoryGroup> _translateStories(Map<String, MetaStories> metaStoriesMap) {
+    return metaStoriesMap.entries
+        .map((group) => StoryGroup(
+            groupName: _readStoryGroupName(group.key),
+            stories: group.value.storiesNames
+                .map((story) => Story(key: '${group.key}|$story', name: story))
+                .toList()))
+        .toList();
+  }
+
+  String _readStoryGroupName(String key) {
+    ///// As of 2020-04-15, the key looks like `$packageName|$generatedStoriesFilePath`
+    //test|stories/sample_button_stories.main_generated.g.dart
+    final firstSlash = key.indexOf('/');
+    final firstDot = key.indexOf('.');
+    return key.substring(firstSlash + 1, firstDot);
   }
 }

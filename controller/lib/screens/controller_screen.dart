@@ -68,14 +68,14 @@ class UiWindowControllerState extends State<ControllerScreen> {
                           if (state.isReady) ...[
                             Expanded(
                               child: StoryList(
-                                projectName: state.storiesMap.isEmpty
+                                projectName: state.storyGroups.isEmpty
                                     ? ''
                                     : state.packageName,
-                                stories: state.storiesMap,
-                                activeStoryName: state.activeStoryName,
+                                stories: state.storyGroups,
+                                activeStoryKey: state.activeStoryKey,
                                 manager: manager,
-                                onActiveStoryChange: (key, name) =>
-                                    manager.onActiveStoryChanged(key, name),
+                                onActiveStoryChange: (key) =>
+                                    manager.onActiveStoryChanged(key),
                               ),
                             ),
                           ],
