@@ -18,6 +18,8 @@ class WindowManager {
     var controllerWindow: NSWindow?
     var channels: Channels?
     
+    var selectedDockSide: DockSide = defaultDockSide
+    
     let logger: Logger = Logger("WindowManager")
     
     func launchWindows() {
@@ -57,7 +59,8 @@ class WindowManager {
         
         channels = Channels.init(
             controllerMessenger: controller.engine.binaryMessenger,
-            previewMessenger: preview.engine.binaryMessenger)
+            previewMessenger: preview.engine.binaryMessenger,
+            windowManager: self)
         channels!.setUpCallForwarding()
         
         _launchFlutterWindows(preview, controller)
@@ -79,72 +82,78 @@ class WindowManager {
         controllerWindow = NSWindow()
         previewWindow = NSWindow()
         
-        //        RegisterGeneratedPlugins(registry: flutterViewController)
+        guard let controllerWindow = controllerWindow,
+              let previewWindow = previewWindow else { return }
         
-        if let previewWindow = previewWindow, let controllerWindow = controllerWindow {
-            controllerWindow.contentViewController = controllerFVC
-            previewWindow.contentViewController = previewFVC
-                    
-            let controllerWindowController = NSWindowController()
-            let previewWindowController = NSWindowController()
-            
-            controllerWindowController.contentViewController = controllerWindow.contentViewController
-            previewWindowController.contentViewController = previewWindow.contentViewController
-            
-            controllerWindow.setContentSize(NSSize(width: 700, height: 830))
-            controllerWindow.title = "Monarch"
-            controllerWindowController.window = controllerWindow
-            controllerWindowController.showWindow(self)
-            
-            previewWindow.setContentSize(defaultDeviceDefinition.logicalResolution.size)
-            previewWindow.setFrameTopLeftPoint(_getPreviewWindowTopLeft(defaultDockSide))
-            previewWindow.title = defaultDeviceDefinition.title
-            
-            previewWindow.styleMask.insert(.closable)
-            previewWindow.styleMask.insert(.miniaturizable)
-            
-            previewWindowController.window = previewWindow
-            previewWindowController.showWindow(self)
-            
-            // bring windows to front
-            NSApp.activate(ignoringOtherApps: true)
-            
-            NotificationCenter.default.addObserver(
-                forName: NSWindow.didMoveNotification,
-                object: controllerWindow,
-                queue: OperationQueue.main,
-                using: { (n: Notification) in
-                    previewWindow.setFrameTopLeftPoint(
-                        self._getPreviewWindowTopLeft(DockSide.right))
-                })
-            
-            NotificationCenter.default.addObserver(
-                forName: NSWindow.didResizeNotification,
-                object: controllerWindow,
-                queue: OperationQueue.main,
-                using: { (n: Notification) in
-                    previewWindow.setFrameTopLeftPoint(
-                        self._getPreviewWindowTopLeft(DockSide.right))
-                })
-            
-            NotificationCenter.default.addObserver(
-                forName: NSWindow.didMoveNotification,
-                object: previewWindow,
-                queue: OperationQueue.main,
-                using: { (n: Notification) in
-                    controllerWindow.setFrameTopLeftPoint(
-                        self._getControllerWindowTopLeft(DockSide.right))
-                })
-            
-//            NotificationCenter.default.addObserver(
-//                forName: NSWindow.didChangeScreenNotification,
-//                object: flutterWindow,
-//                queue: OperationQueue.main,
-//                using: { (n: Notification) in
-//                    ChannelMethodsSender.setActiveDevice(
-//                        deviceId: verticalViewController.selectedDeviceId)
-//                })
-        }
+        controllerWindow.contentViewController = controllerFVC
+        previewWindow.contentViewController = previewFVC
+                
+        let controllerWindowController = NSWindowController()
+        let previewWindowController = NSWindowController()
+        
+        controllerWindowController.contentViewController = controllerWindow.contentViewController
+        previewWindowController.contentViewController = previewWindow.contentViewController
+        
+        controllerWindow.setContentSize(NSSize(width: 700, height: 830))
+        controllerWindow.title = "Monarch"
+        controllerWindowController.window = controllerWindow
+        controllerWindowController.showWindow(self)
+        
+        previewWindow.setContentSize(defaultDeviceDefinition.logicalResolution.size)
+        previewWindow.setFrameTopLeftPoint(_getPreviewWindowTopLeft(defaultDockSide))
+        previewWindow.title = defaultDeviceDefinition.title
+        
+        previewWindow.styleMask.insert(.closable)
+        previewWindow.styleMask.insert(.miniaturizable)
+        
+        previewWindowController.window = previewWindow
+        previewWindowController.showWindow(self)
+        
+        // bring windows to front
+        NSApp.activate(ignoringOtherApps: true)
+        
+        NotificationCenter.default.addObserver(
+            forName: NSWindow.didMoveNotification,
+            object: controllerWindow,
+            queue: OperationQueue.main,
+            using: { (n: Notification) in
+                previewWindow.setFrameTopLeftPoint(
+                    self._getPreviewWindowTopLeft(self.selectedDockSide))
+            })
+        
+        NotificationCenter.default.addObserver(
+            forName: NSWindow.didResizeNotification,
+            object: controllerWindow,
+            queue: OperationQueue.main,
+            using: { (n: Notification) in
+                previewWindow.setFrameTopLeftPoint(
+                    self._getPreviewWindowTopLeft(self.selectedDockSide))
+            })
+        
+        NotificationCenter.default.addObserver(
+            forName: NSWindow.didMoveNotification,
+            object: previewWindow,
+            queue: OperationQueue.main,
+            using: { (n: Notification) in
+                controllerWindow.setFrameTopLeftPoint(
+                    self._getControllerWindowTopLeft(self.selectedDockSide))
+            })
+        
+        NotificationCenter.default.addObserver(
+            forName: NSWindow.didChangeScreenNotification,
+            object: previewWindow,
+            queue: OperationQueue.main,
+            using: { (n: Notification) in
+                self.channels!.sendPreviewScreenChanged()
+            })
+        
+        NotificationCenter.default.addObserver(
+            forName: NSWindow.didChangeScreenNotification,
+            object: controllerWindow,
+            queue: OperationQueue.main,
+            using: { (n: Notification) in
+                self.channels!.sendControllerScreenChanged()
+            })
     }
     
     func _getPreviewWindowTopLeft(_ side: DockSide) -> NSPoint {
@@ -199,22 +208,56 @@ class WindowManager {
             y: _window.frame.origin.y + _window.frame.height)
     }
     
-    func changeFlutterWindowDockSide(_ side: DockSide) {
+    func changePreviewWindowDockSide(_ side: DockSide) {
         previewWindow!.setFrameTopLeftPoint(_getPreviewWindowTopLeft(side))
     }
     
-    func undockFlutterWindow() {
+    func undockPreviewWindow() {
         let offset: CGFloat = 24
         let pos = _getTopLeftPoint(previewWindow!)
         previewWindow!.setFrameTopLeftPoint(NSPoint(x: pos.x + offset, y: pos.y - offset))
     }
     
-    func resizeFlutterWindow(size: NSSize, title: String, side: DockSide) {
-        if let flutterWindow = previewWindow {
+    func setDocking() {
+        channels!.getMonarchState() { (state) -> () in
+            switch state.dock {
+            case .right:
+                self.selectedDockSide = .right
+                self.changePreviewWindowDockSide(.right)
+                break
+            case .left:
+                self.selectedDockSide = .left
+                self.changePreviewWindowDockSide(.left)
+                break
+            case .undock:
+                self.selectedDockSide = .undock
+                self.undockPreviewWindow()
+                break
+            }
+        }
+    }
+    
+    func resizePreviewWindow() {
+        channels!.getMonarchState() { (state) -> () in
+            let deviceSize = state.device.logicalResolution.size
+            let scaledWidth = Double(deviceSize.width) * state.scale.scale
+            let scaledHeight = Double(deviceSize.height) * state.scale.scale
+            let scaledSize = NSSize.init(
+                width: scaledWidth,
+                height: scaledHeight)
+            let title = state.scale.scale == defaultScaleDefinition.scale ?
+                state.device.title :
+                state.device.title + " | " + state.scale.name
+            self.resizePreviewWindow(size: scaledSize, title: title, side: state.dock)
+        }
+    }
+    
+    func resizePreviewWindow(size: NSSize, title: String, side: DockSide) {
+        if let previewWindow = previewWindow {
             //let lastTopLeft = _getTopLeftPoint(flutterWindow)
-            flutterWindow.setContentSize(size)
-            flutterWindow.setFrameTopLeftPoint(_getPreviewWindowTopLeft(side))
-            flutterWindow.title = title
+            previewWindow.setContentSize(size)
+            previewWindow.setFrameTopLeftPoint(_getPreviewWindowTopLeft(side))
+            previewWindow.title = title
         }
     }
     

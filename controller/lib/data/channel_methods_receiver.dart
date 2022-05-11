@@ -33,7 +33,7 @@ Future<dynamic> _handler(MethodCall call) async {
   switch (call.method) {
     case MonarchMethods.ping:
       channelMethodsSender.setUpLog(LogLevel.ALL.value);
-      break;
+      return;
 
     case MonarchMethods.defaultTheme:
       final String themeId = args!['themeId'];
@@ -49,7 +49,7 @@ Future<dynamic> _handler(MethodCall call) async {
 
       }
       channelMethodsSender.sendReadySignalAck();
-      break;
+      return;
 
     case MonarchMethods.deviceDefinitions:
       final deviceDefinitions = getDeviceDefinitions(args!);
@@ -75,11 +75,13 @@ Future<dynamic> _handler(MethodCall call) async {
       final name = args!['name'];
       final isEnabled = args['isEnabled'];
       manager.onVisualFlagToggle(name, isEnabled);
-      break;
+      return;
+
+    case MonarchMethods.getState:
+      return manager.state.toStandardMap();
 
     default:
-      logger.warning('method ${call.method} not implemented');
-      // return exception to the platform side, do not throw
-      return MissingPluginException('method ${call.method} not implemented');
+      logger.fine('method ${call.method} not implemented');
+      return;
   }
 }

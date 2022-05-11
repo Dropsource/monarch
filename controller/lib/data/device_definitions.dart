@@ -5,6 +5,14 @@ import 'logical_resolution.dart';
 const String _ios = 'ios';
 const String _android = 'android';
 
+String? targetPlatformToString(TargetPlatform? platform) {
+  return platform == TargetPlatform.iOS
+      ? _ios
+      : platform == TargetPlatform.android
+          ? _android
+          : null;
+}
+
 TargetPlatform? targetPlatformFromString(String platform) {
   return platform == _ios
       ? TargetPlatform.iOS
@@ -34,6 +42,16 @@ class DeviceDefinition {
             Map<String, dynamic>.from(args['logicalResolution'])),
         devicePixelRatio: args['devicePixelRatio'],
         targetPlatform: targetPlatformFromString(args['targetPlatform']));
+  }
+
+  Map<String, dynamic> toStandardMap() {
+    return {
+      'id': id,
+      'name': name,
+      'logicalResolution': logicalResolution.toStandardMap(),
+      'devicePixelRatio': devicePixelRatio,
+      'targetPlatform': targetPlatformToString(targetPlatform),
+    };
   }
 }
 

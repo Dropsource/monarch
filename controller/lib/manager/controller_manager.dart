@@ -89,7 +89,7 @@ class ControllerManager {
 
   void onDockSettingsChange(DockDefinition dockDefinition) {
     _update(state.copyWith(currentDock: dockDefinition));
-    //todo send info that dock settings changes
+    channelMethodsSender.setDockSide(dockDefinition.id);
   }
 
   void onMonarchDataChanged(MonarchData monarchData) {

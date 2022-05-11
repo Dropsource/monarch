@@ -11,10 +11,10 @@ const defaultTheme = MetaTheme(
 
 const defaultLocale = 'System Locale';
 
-final defaultDock = DockDefinition(name: 'dock_settings.left', id: 'left');
+final defaultDock = DockDefinition(name: 'dock_settings.right', id: 'right');
 final dockList = [
   defaultDock,
-  DockDefinition(name: 'dock_settings.right', id: 'right'),
+  DockDefinition(name: 'dock_settings.left', id: 'left'),
   DockDefinition(name: 'dock_settings.undock', id: 'undock'),
 ];
 

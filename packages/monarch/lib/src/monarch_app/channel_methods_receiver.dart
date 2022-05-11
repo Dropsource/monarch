@@ -38,66 +38,70 @@ Future<dynamic> _handler(MethodCall call) async {
     case MonarchMethods.setUpLog:
       setDefaultLogLevel(args!['defaultLogLevelValue']);
       logCurrentProcessInformation(logger, LogLevel.FINE);
-      break;
+      return;
 
     case MonarchMethods.firstLoadSignal:
       logEnvironmentInformation(logger, LogLevel.FINE);
-      break;
+      return;
 
     case MonarchMethods.readySignalAck:
       readySignal.ready();
-      break;
+      return;
 
     case MonarchMethods.loadStory:
       String storyKey = args!['storyKey'];
       resetErrors();
       activeStory.value = StoryId.fromNodeKey(storyKey);
-      break;
+      return;
 
     case MonarchMethods.resetStory:
       resetErrors();
       activeStory.value = null;
-      break;
+      return;
 
     case MonarchMethods.setActiveLocale:
       String locale = args!['locale'];
       resetErrors();
       activeLocale.setActiveLocaleTag(locale);
-      break;
+      return;
 
     case MonarchMethods.setActiveTheme:
       String themeId = args!['themeId'];
       resetErrors();
       activeTheme.value = activeTheme.getMetaTheme(themeId);
-      break;
+      return;
 
     case MonarchMethods.setActiveDevice:
       String deviceId = args!['deviceId'];
       resetErrors();
       activeDevice.value = activeDevice.getDeviceDefinition(deviceId);
-      break;
+      return;
+
+    case MonarchMethods.screenChanged:
+      // foce the monarch binding to recalculate the physical size.
+      activeDevice.value = activeDevice.value;
+      return;
 
     case MonarchMethods.setTextScaleFactor:
       double factor = args!['factor'];
       resetErrors();
       activeTextScaleFactor.value = factor;
-      break;
+      return;
 
     case MonarchMethods.setStoryScale:
       double scale = args!['scale'];
       resetErrors();
       activeStoryScale.value = scale;
-      break;
+      return;
 
     case MonarchMethods.toggleVisualDebugFlag:
       String name = args!['name'];
       bool isEnabled = args['isEnabled'];
       await visual_debug.toggleFlagViaVmServiceExtension(name, isEnabled);
-      break;
+      return;
 
     default:
-      logger.warning('method ${call.method} not implemented');
-      // return exception to the platform side, do not throw
-      return MissingPluginException('method ${call.method} not implemented');
+      logger.fine('method ${call.method} not implemented');
+      return;
   }
 }

@@ -13,3 +13,16 @@ enum DockSide {
 }
 
 let defaultDockSide: DockSide = .right
+
+func dockFromString(dockString: String) -> DockSide {
+    switch dockString {
+    case "left":
+        return .left
+    case "right":
+        return .right
+    case "undock":
+        return .undock
+    default:
+        return .right
+    }
+}
