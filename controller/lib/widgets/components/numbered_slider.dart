@@ -39,7 +39,6 @@ class _NumberedSlideState extends State<NumberedSlider> {
         activeTrackColor: sliderTrackColor,
         inactiveTrackColor: sliderTrackColor,
         thumbColor: sliderThumbColor,
-        thumbStrokeColor: Colors.green,
         activeTickColor: sliderDividerColor,
         inactiveTickColor: sliderDividerColor,
         activeDividerColor: sliderDividerColor,
