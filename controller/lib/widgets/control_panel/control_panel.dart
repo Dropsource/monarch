@@ -59,7 +59,7 @@ class ControlPanel extends StatelessWidget {
             label: 'controls.theme',
             control: DropDown<MetaTheme>(
               currentValue: state.currentTheme,
-              values: state.standardThemes + state.userThemes,
+              values: state.allThemes,
               toStringFunction: (e) => e.name,
               onChange: manager.onThemeChanged,
             ),
@@ -79,6 +79,7 @@ class ControlPanel extends StatelessWidget {
             ),
             controlWidth: controlWidth,
           ),
+          const SizedBox(height: 20,),
           LabeledControl(
             label:
                 _translations.text("controls.text_scale_factor"),
