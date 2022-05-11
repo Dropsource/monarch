@@ -36,6 +36,8 @@ class ControllerState implements OutboundChannelArgument {
   final double textScaleFactor;
   final List<VisualDebugFlag> visualDebugFlags;
 
+  List<MetaTheme> get allThemes => standardThemes + userThemes;
+
   ControllerState({
     required this.isReady,
     this.packageName = '',

@@ -12,6 +12,7 @@ import 'package:rxdart/rxdart.dart';
 import '../data/channel_methods_receiver.dart';
 import '../data/monarch_data.dart';
 import 'package:monarch_controller/data/definitions.dart' as defs;
+import '../extensions/iterable_extensions.dart';
 
 class ControllerManager {
   final BehaviorSubject<ControllerState> _streamController =
@@ -128,11 +129,22 @@ class ControllerManager {
   }
 
   void onDefaultThemeChange(String themeId) {
+    MetaTheme? selectedTheme;
     final allThemes = state.standardThemes + state.userThemes;
+    final currentTheme =
+        allThemes.firstWhereOrNull((element) => element.id == themeId);
 
-    _update(state.copyWith(
-        currentTheme:
-            allThemes.firstWhere((element) => element.id == themeId)));
+    if (currentTheme == null) {
+      if (allThemes.isNotEmpty) {
+        selectedTheme = allThemes.first;
+      }else{
+        //standard themes are empty, this should not happen, but just in case we are not selecting anything as currentTheme
+      }
+    } else {
+      selectedTheme = currentTheme;
+    }
+
+    _update(state.copyWith(currentTheme: selectedTheme));
   }
 
   void onReady() {

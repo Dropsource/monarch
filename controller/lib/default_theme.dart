@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:monarch_annotations/monarch_annotations.dart';
 import 'package:stockholm/stockholm.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 const Color red = Color(0xFFDF7272);
 const Color dark = Color(0xFF1C1E22);
 const Color darkGrey = Color(0xFF27282B);
+const Color sliderTrackColor = Color(0xFF3F4042);
+const Color sliderThumbColor = Color(0xFFDADADA);
+const Color sliderDividerColor = sliderTrackColor;
 
 const Color fontPrimaryColor = Colors.white;
 const Color fontSecondaryColor = Color(0xFFF3F3F3);
