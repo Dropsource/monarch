@@ -32,6 +32,13 @@ void main() {
       expect(1, output.toList()[0].stories.length);
       expect(1, output.toList()[1].stories.length);
     });
+
+    test('should filter out everything if query text has no match', () async {
+      final input = _test_data();
+      final output = cut.filterStories(input, 'monarch is awesome');
+
+      expect(0, output.length);
+    });
   });
 }
 
