@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monarch_controller/data/stories.dart';
 import 'package:monarch_controller/widgets/components/text.dart';
 import 'package:monarch_controller/widgets/story_list/search_field.dart';
+import 'package:monarch_controller/widgets/story_list/text_with_highlight.dart';
 import 'package:monarch_controller/widgets/tree_view/flutter_simple_treeview.dart';
 import 'package:monarch_controller/manager/controller_manager.dart';
 
@@ -34,7 +35,8 @@ class StoryListState extends State<StoryList> {
 
   @override
   Widget build(BuildContext context) {
-    final _filteredStories = widget.manager.filterStories(widget.stories, query);
+    final _filteredStories =
+        widget.manager.filterStories(widget.stories, query);
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
       child: Column(
@@ -70,7 +72,10 @@ class StoryListState extends State<StoryList> {
                     : TreeView(
                         nodes: _filteredStories
                             .map((group) => TreeNode(
-                                  content: TextBody1(group.groupName),
+                                  content: TextWithHighlight(
+                                    text: group.groupName,
+                                    highlightedText: query,
+                                  ),
                                   children: group.stories
                                       .map(
                                         (story) => TreeNode(
@@ -85,12 +90,13 @@ class StoryListState extends State<StoryList> {
                                                 bottom: 4,
                                                 right: 8,
                                               ),
-                                              color:
-                                                  widget.activeStoryKey == story.key
-                                                      ? Colors.blue
-                                                      : Colors.transparent,
-                                              child: TextBody1(
-                                                story.name,
+                                              color: widget.activeStoryKey ==
+                                                      story.key
+                                                  ? Colors.blue
+                                                  : Colors.transparent,
+                                              child: TextWithHighlight(
+                                                text: story.name,
+                                                highlightedText: query,
                                               ),
                                             ),
                                           ),
@@ -118,6 +124,4 @@ class StoryListState extends State<StoryList> {
 
     setState(() {});
   }
-
-
 }
