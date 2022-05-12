@@ -7,4 +7,8 @@ class LogicalResolution {
   static LogicalResolution fromStandardMap(Map<String, dynamic> args) {
     return LogicalResolution(width: args['width'], height: args['height']);
   }
+
+  Map<String, double> toStandardMap() {
+    return {'width': width, 'height': height};
+  }
 }

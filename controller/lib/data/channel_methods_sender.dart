@@ -64,6 +64,10 @@ class ChannelMethodsSender with Log {
   void setStoryScale(double scale) {
     _invokeMonarchChannelMethod(MonarchMethods.setStoryScale, {'scale': scale});
   }
+
+  void setDockSide(String dock) {
+    _invokeMonarchChannelMethod(MonarchMethods.setDockSide, {'dock': dock});
+  }
 }
 
 final channelMethodsSender = ChannelMethodsSender();

@@ -50,13 +50,6 @@ extension DeviceDefinition : InboundChannelArgument {
     }
 }
 
-func getDeviceDefinitions(standardMap args: [String: Any]) -> [DeviceDefinition] {
-    let definitionsArg = args["definitions"] as! [[String: Any]]
-    return definitionsArg.map({
-        DeviceDefinition(standardMap: $0)
-    })
-}
-
 let iPhone13DeviceDefinition: DeviceDefinition = DeviceDefinition.init(
     id: "ios-iphone-13",
     name: "iPhone 13",
@@ -66,8 +59,4 @@ let iPhone13DeviceDefinition: DeviceDefinition = DeviceDefinition.init(
 
 let defaultDeviceDefinition = iPhone13DeviceDefinition
 
-protocol ChannelArgument {}
 
-protocol InboundChannelArgument : ChannelArgument {
-    init(standardMap args : [String: Any]);
-}

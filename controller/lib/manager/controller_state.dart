@@ -8,8 +8,9 @@ import 'package:monarch_controller/data/stories.dart';
 import 'package:monarch_controller/data/story_scale_definitions.dart';
 import 'package:monarch_controller/data/visual_debug_flags.dart';
 
+import '../data/channel_methods.dart';
 
-class ControllerState {
+class ControllerState implements OutboundChannelArgument {
   final bool isReady;
   final String packageName;
   final List<StoryGroup> storyGroups;
@@ -111,4 +112,16 @@ class ControllerState {
         visualDebugFlags: visualDebugFlags ?? this.visualDebugFlags,
         packageName: packageName ?? this.packageName,
       );
+
+  @override
+  Map<String, dynamic> toStandardMap() {
+    // As of 2022-05, we only return device, scale and dock.
+    // In the future, if clients require more state properties then add 
+    // them as needed.
+    return {
+      'device': currentDevice.toStandardMap(),
+      'scale': currentScale.toStandardMap(),
+      'dock': currentDock.id
+    };
+  }
 }

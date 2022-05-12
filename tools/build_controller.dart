@@ -30,7 +30,10 @@ Using flutter sdk at:
       out_controller_dir.deleteSync(recursive: true);
     out_controller_dir.createSync(recursive: true);
 
-    print('Building monarch controller flutter bundle...');
+    print('''
+Building monarch controller flutter bundle. Will output to:
+  $out_ui_flutter_id_controller
+''');
 
     var result = Process.runSync(
         paths.flutter_exe(flutter_sdk),

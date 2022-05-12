@@ -7,6 +7,13 @@ class StoryScaleDefinition {
   static StoryScaleDefinition fromStandardMap(dynamic args) {
     return StoryScaleDefinition(scale: args['scale'], name: args['name']);
   }
+
+  Map<String, dynamic> toStandardMap() {
+    return {
+      'scale': scale,
+      'name': name
+    };
+  }
 }
 
 List<StoryScaleDefinition> getStoryScaleDefinitions(dynamic args) {
