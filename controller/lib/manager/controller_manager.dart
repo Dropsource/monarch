@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:monarch_controller/data/abstract_channel_methods_sender.dart';
 import 'package:monarch_controller/data/channel_methods_sender.dart';
 import 'package:monarch_controller/data/device_definitions.dart';
 import 'package:monarch_controller/data/dock_definition.dart';
@@ -26,8 +27,9 @@ class ControllerManager {
 
   ControllerState get state => _state;
   final _searchManager = SearchManager();
+  final AbstractChannelMethodsSender channelMethodsSender;
 
-  ControllerManager({ControllerState? initialState}) {
+  ControllerManager({ControllerState? initialState, required this.channelMethodsSender}) {
     _subscription = _streamController.listen((value) {
       _state = value;
     });

@@ -34,8 +34,16 @@ class UiWindowControllerState extends State<ControllerScreen> {
       body: StreamBuilder<ControllerState>(
           stream: manager.stream,
           builder: (context, snapshot) {
-            if (snapshot.data == null) {
-              return Container();
+            if (snapshot.data == null || !snapshot.data!.isReady) {
+              return const SizedBox(
+                height: 200,
+                child: Center(
+                  child: TextBody1(
+                    'app.loading',
+                    shouldTranslate: true,
+                  ),
+                ),
+              );
             }
 
             final state = snapshot.data!;
