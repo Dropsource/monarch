@@ -1,3 +1,7 @@
+## 2.3.0
+- Release version 2.3.0 which supports new binding interfaces released 
+  with Flutter 3.0.0.
+
 ## 2.3.0-pre.1 - 2022-03-22
 - Support new Flutter binding interfaces changed in Flutter version 2.12.0-4.1.pre
 
