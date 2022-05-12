@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:monarch_controller/data/channel_methods_sender.dart';
 
 import 'package:monarch_utils/log_config.dart';
 
@@ -10,7 +11,7 @@ import 'package:monarch_controller/screens/controller_screen.dart';
 import 'package:monarch_controller/data/channel_methods_receiver.dart';
 
 const controlsWidth = 250.0;
-final manager = ControllerManager();
+final manager = ControllerManager(channelMethodsSender: channelMethodsSender);
 
 void main() async {
   _setUpLog();

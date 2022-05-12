@@ -1,5 +1,6 @@
 {
   "dev_tools.launch": "Launch DevTools...",
+  "app.loading": "Launching Monarch",
   "story_list.search": "Search...",
   "story_list.title": "Story List",
   "story_list.loading": "Loading Stories...",

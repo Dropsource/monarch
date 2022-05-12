@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:monarch_controller/data/abstract_channel_methods_sender.dart';
 import 'package:monarch_controller/data/channel_methods_sender.dart';
 import 'package:monarch_controller/data/device_definitions.dart';
 import 'package:monarch_controller/data/dock_definition.dart';
@@ -7,6 +8,7 @@ import 'package:monarch_controller/data/stories.dart';
 import 'package:monarch_controller/data/story_scale_definitions.dart';
 import 'package:monarch_controller/data/visual_debug_flags.dart';
 import 'package:monarch_controller/manager/controller_state.dart';
+import 'package:monarch_controller/manager/search_manager.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../data/channel_methods_receiver.dart';
@@ -24,8 +26,10 @@ class ControllerManager {
   late ControllerState _state;
 
   ControllerState get state => _state;
+  final _searchManager = SearchManager();
+  final AbstractChannelMethodsSender channelMethodsSender;
 
-  ControllerManager({ControllerState? initialState}) {
+  ControllerManager({ControllerState? initialState, required this.channelMethodsSender}) {
     _subscription = _streamController.listen((value) {
       _state = value;
     });
@@ -47,16 +51,7 @@ class ControllerManager {
   }
 
   Iterable<StoryGroup> filterStories(List<StoryGroup> stories, String query) {
-    final filtered = stories.map((e) {
-      return StoryGroup(
-          groupName: e.groupName,
-          stories: e.stories
-              .where((element) =>
-                  element.name.toLowerCase().contains(query.toLowerCase()))
-              .toList());
-    });
-
-    return filtered;
+    return _searchManager.filterStories(stories, query);
   }
 
   void onVisualFlagToggle(String name, bool isEnabled) {
