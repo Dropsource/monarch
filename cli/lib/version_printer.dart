@@ -13,6 +13,5 @@ Monarch modules:
 
 Revision:
 ${internal.binariesRevision}
-
 ''');
 }
