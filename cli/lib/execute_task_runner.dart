@@ -27,8 +27,6 @@ import 'src/config/environment_mutations.dart';
 import 'src/version_api/version_api.dart';
 import 'src/version_api/notification.dart';
 
-import 'versions.dart' as versions;
-
 final _logger = Logger('CommandTaskRunner');
 
 late final LogStreamFileWriter _logStreamFileWriter;
@@ -60,6 +58,7 @@ void executeTaskRunner(
 
   _logger.config('Verbose flag is $_isVerbose');
   _logger.config('Default log level is ${defaultLogLevel.name}');
+
   _logEnvironmentInfo();
 
   _logger.config('User project directory ${projectDirectory.path}');
@@ -73,7 +72,8 @@ void executeTaskRunner(
       VersionApi(readUserId: contextInfo.userDeviceIdOrUnknown));
   notificationsReader.read(contextInfo);
 
-  final projectConfig = TaskRunnerProjectConfig(projectDirectory);
+  final projectConfig =
+      TaskRunnerProjectConfig(projectDirectory, contextInfo.internalInfo);
   await projectConfig.validate();
 
   if (!projectConfig.isValid) {
@@ -224,10 +224,6 @@ Future<void> _exit(CliExitCode exitCode) async {
 }
 
 void _logEnvironmentInfo() {
-  _logger.info('monarch binaries:'
-      ' version=${versions.monarchBinariesVersion}'
-      ' cli_version=${versions.monarchCliVersionTag}'
-      ' ui_version=${versions.monarchUiVersionTag}');
   logEnvironmentInformation(_logger, LogLevel.FINE);
   logCurrentProcessInformation(_logger, LogLevel.FINE);
 }
@@ -240,7 +236,7 @@ Future<CliExitCode> _fetchMonarchUi(ProjectConfig projectConfig,
   var uiFetcher = MonarchUiFetcher(
       stdout_: stdout_default,
       monarchBinaries: defaultMonarchBinaries,
-      binariesVersionNumber: versions.monarchBinariesVersion,
+      binariesVersionNumber: contextInfo.internalInfo.binariesVersion,
       id: projectConfig.flutterSdkId,
       userDeviceId: contextInfo.userDeviceIdOrUnknown);
 

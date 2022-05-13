@@ -5,9 +5,9 @@ import 'package:monarch_utils/log.dart';
 import 'package:monarch_io_utils/utils.dart';
 
 import 'application_support_directory.dart';
+import 'internal_info.dart';
 import 'project_config.dart';
 import '../../settings.dart' as settings;
-import '../../versions.dart' as versions;
 
 class OsInfo {
   final String name;
@@ -45,6 +45,7 @@ class TimeZone {
 class ContextInfo with Log {
   final bool isLogVerbose;
   final String deployment;
+  final InternalInfo internalInfo;
 
   OsInfo? _osInfo;
   OsInfo? get osInfo => _osInfo;
@@ -78,14 +79,16 @@ class ContextInfo with Log {
   String get userDeviceIdOrUnknown =>
       userDeviceId?.id ?? 'user-device-id-unknown';
 
-  ContextInfo(this.isLogVerbose) : deployment = settings.DEPLOYMENT;
+  ContextInfo(this.isLogVerbose, this.internalInfo) : deployment = settings.DEPLOYMENT;
 
   Map<String, dynamic> toPropertiesMap() => {
         'user_device_id': userDeviceId?.id,
         'monarch_binaries': {
-          'version': versions.monarchBinariesVersion,
-          'cli_version': versions.monarchCliVersionTag,
-          'desktop_app_version': versions.monarchUiVersionTag
+          'version': internalInfo.binariesVersion,
+          'cli_version': internalInfo.cliVersion,
+          'desktop_app_version': internalInfo.platformAppVersion,
+          'controller_version': internalInfo.controllerVersion,
+          'revision': internalInfo.binariesRevision,
         },
         'project_info': {
           'flutter_version': projectConfig?.flutterSdkId.version,
@@ -233,8 +236,7 @@ class ContextInfo with Log {
   Future<void> readTimeZone() async {
     _timeZone = TimeZone(
         DateTime.now().timeZoneName, DateTime.now().timeZoneOffset.inHours);
-    log.config('...');
-    // log.config(
-    //     'Time zone info, time_zone_name=${_timeZone.name} time_zone_offset_in_hours=${_timeZone.offsetInHours}');
+    log.config(
+        'Time zone info, time_zone_name=${_timeZone!.name} time_zone_offset_in_hours=${_timeZone!.offsetInHours}');
   }
 }
