@@ -48,7 +48,7 @@ Future<InternalInfo> readInternalFiles(MonarchBinaries monarchBinaries) async {
 
 Future<String> _readInternalFile(
     String name, MonarchBinaries monarchBinaries) async {
-  var path = p.join(monarchBinaries.internalDirectory.path, 'name');
+  var path = p.join(monarchBinaries.internalDirectory.path, name);
   var file = File(path);
   if (await file.exists()) {
     var contents = await file.readAsString();
