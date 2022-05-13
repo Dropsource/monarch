@@ -12,7 +12,7 @@ import '../utils/standard_output.dart';
 import 'package_config_helper.dart';
 import 'lockfile_parser.dart';
 import 'validator.dart';
-import '../../versions.dart' as versions;
+import 'internal_info.dart';
 
 const pubspecFileName = 'pubspec.yaml';
 const kFlutter = 'flutter';
@@ -33,8 +33,9 @@ class ProjectConfigStateError extends StateError {
 
 class ProjectConfig extends Validator with Log {
   final Directory projectDirectory;
+  final InternalInfo internalInfo;
 
-  ProjectConfig(this.projectDirectory)
+  ProjectConfig(this.projectDirectory, this.internalInfo)
       : _packageConfigHelper = PackageConfigHelper(projectDirectory);
 
   File get pubspecFile => File(p.join(projectDirectory.path, pubspecFileName));
@@ -165,17 +166,17 @@ class ProjectConfig extends Validator with Log {
 
   void _validateFlutterVersionSupport(List<String> errors) {
     try {
-      var minimumFlutter = pub.Version.parse(versions.minFlutterVersion);
+      var minimumFlutter = pub.Version.parse(internalInfo.minFlutterVersion);
       var projectFlutter = pub.Version.parse(flutterSdkId.version);
       if (minimumFlutter <= projectFlutter) {
         log.info(
-            'min_flutter_version=${versions.minFlutterVersion} flutter version support ok');
+            'min_flutter_version=${internalInfo.minFlutterVersion} flutter version support ok');
       } else {
         log.info(
-            'min_flutter_version=${versions.minFlutterVersion} flutter version support not ok');
+            'min_flutter_version=${internalInfo.minFlutterVersion} flutter version support not ok');
         errors.add(
             'The Flutter version this project is using is not supported by this version of Monarch. '
-            'The minimum Flutter version supported by Monarch is ${versions.minFlutterVersion}. '
+            'The minimum Flutter version supported by Monarch is ${internalInfo.minFlutterVersion}. '
             'Please upgrade your Flutter version to use Monarch.');
       }
     } catch (e, s) {
@@ -200,7 +201,7 @@ class ProjectConfig extends Validator with Log {
 }
 
 class TaskRunnerProjectConfig extends ProjectConfig {
-  TaskRunnerProjectConfig(Directory projectDirectory) : super(projectDirectory);
+  TaskRunnerProjectConfig(Directory projectDirectory, InternalInfo internalInfo) : super(projectDirectory, internalInfo);
 
   pub.Version? _monarchPackageVersion;
   pub.Version get monarchPackageVersion {

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:monarch_cli/src/config/context_info.dart';
+import 'package:monarch_cli/src/config/internal_info.dart';
 import 'package:test/test.dart';
 
 const xcodebuild_ok_output = '''
@@ -26,12 +27,20 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 16.7.0.37604
 foo''';
 
+const internalInfoBlank = InternalInfo(
+    binariesRevision: '',
+    binariesVersion: '',
+    cliVersion: '',
+    controllerVersion: '',
+    minFlutterVersion: '',
+    platformAppVersion: '');
+
 void main() {
   group('xcodebuild', () {
     late ContextInfo contextInfo;
 
     setUp(() {
-      contextInfo = ContextInfo(false);
+      contextInfo = ContextInfo(false, internalInfoBlank);
     });
 
     test('can read xcodebuild version', () async {
@@ -70,7 +79,7 @@ void main() {
     late ContextInfo contextInfo;
 
     setUp(() {
-      contextInfo = ContextInfo(false);
+      contextInfo = ContextInfo(false, internalInfoBlank);
     });
 
     test('can read MSBuild version', () async {
