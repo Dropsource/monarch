@@ -3,7 +3,6 @@ import 'package:monarch_channels/monarch_channels.dart';
 import 'channel_argument.dart';
 
 class ChannelMethodsSender with Log {
-
   Future<T?> _invokeMonarchChannelMethod<T>(String method,
       [dynamic arguments]) async {
     log.finest('sending channel method: $method');

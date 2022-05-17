@@ -1,5 +1,6 @@
-## 2.4.0
+## 2.4.0-pre.1
 - Use package monarch_channels.
+- Support for Monarch v2 architecture.
 
 ## 2.3.0-pre.1 - 2022-03-22
 - Support new Flutter binding interfaces changed in Flutter version 2.12.0-4.1.pre
