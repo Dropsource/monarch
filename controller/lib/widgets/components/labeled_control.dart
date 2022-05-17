@@ -24,7 +24,6 @@ class LabeledControl extends Padding {
           padding: EdgeInsets.symmetric(
               vertical: verticalPadding, horizontal: horizontalPadding),
           child: Row(
-
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Flexible(

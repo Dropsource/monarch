@@ -8,15 +8,24 @@ void main() {
 
   group('Tests for search manager', () {
     test('should not filter anything when search query is empty', () async {
-      final input = _test_data();
+      final input = _testData();
       final output = cut.filterStories(input, '');
+
+      expect(true, listEquals(output.toList(), input));
+    });
+
+    test(
+        'should not filter anything when search query is present, but input is empty',
+        () async {
+      final input = <StoryGroup>[];
+      final output = cut.filterStories(input, 'hello');
 
       expect(true, listEquals(output.toList(), input));
     });
 
     test('should filter by the group name and preserve all stories if match.',
         () async {
-      final input = _test_data();
+      final input = _testData();
       final output = cut.filterStories(input, 'first_group');
 
       expect(1, output.length);
@@ -25,7 +34,7 @@ void main() {
 
     test('should filter out individual stories from the group by name',
         () async {
-      final input = _test_data();
+      final input = _testData();
       final output = cut.filterStories(input, 'first_story');
 
       expect(2, output.length);
@@ -34,7 +43,7 @@ void main() {
     });
 
     test('should filter out everything if query text has no match', () async {
-      final input = _test_data();
+      final input = _testData();
       final output = cut.filterStories(input, 'monarch is awesome');
 
       expect(0, output.length);
@@ -42,7 +51,7 @@ void main() {
   });
 }
 
-List<StoryGroup> _test_data() => [
+List<StoryGroup> _testData() => [
       StoryGroup(groupName: 'first_group', stories: [
         Story(name: 'first_story', key: 'first_story_key'),
         Story(name: 'second_story', key: 'second_story_key'),

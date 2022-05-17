@@ -1,23 +1,19 @@
-import 'package:monarch_utils/log.dart';
-import 'package:monarch_channels/monarch_channels.dart';
-
 import 'channel_methods.dart';
 
-abstract class AbstractChannelMethodsSender  {
-
+abstract class AbstractChannelMethodsSender {
   Future setUpLog(int defaultLogLevelValue);
 
   Future sendToggleVisualDebugFlag(OutboundChannelArgument visualDebugFlag);
 
-  void sendFirstLoadSignal() ;
+  void sendFirstLoadSignal();
 
   void sendReadySignalAck();
 
-  void setTextScaleFactor(double scale) ;
+  void setTextScaleFactor(double scale);
 
-  void loadStory(String storyKey) ;
+  void loadStory(String storyKey);
 
-  void resetStory() ;
+  void resetStory();
 
   void setActiveLocale(String locale);
 

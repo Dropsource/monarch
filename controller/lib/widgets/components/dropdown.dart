@@ -31,7 +31,10 @@ class DropDown<T> extends StatelessWidget {
   Widget build(BuildContext context) => StockholmDropdownButton<String>(
         key: key,
         value: toStringFunction(currentValue),
-        icon: const Icon(Icons.arrow_drop_down, size: 18,),
+        icon: const Icon(
+          Icons.arrow_drop_down,
+          size: 18,
+        ),
         width: 240,
         onChanged: (string) => onChange?.call(stringfiedValues[string]!),
         items: values.map<StockholmDropdownItem<String>>((T value) {

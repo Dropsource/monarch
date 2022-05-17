@@ -1,4 +1,3 @@
-
 import 'channel_methods.dart';
 
 class VisualDebugFlag implements OutboundChannelArgument {
@@ -6,7 +5,8 @@ class VisualDebugFlag implements OutboundChannelArgument {
   final String label;
   final bool isEnabled;
 
-  VisualDebugFlag({required this.name,  this.isEnabled = false, required this.label});
+  VisualDebugFlag(
+      {required this.name, this.isEnabled = false, required this.label});
 
   @override
   Map<String, dynamic> toStandardMap() {
@@ -14,7 +14,8 @@ class VisualDebugFlag implements OutboundChannelArgument {
   }
 
   VisualDebugFlag copyWith({bool? enabled}) {
-    return VisualDebugFlag(name: name, isEnabled: enabled ?? isEnabled, label: label);
+    return VisualDebugFlag(
+        name: name, isEnabled: enabled ?? isEnabled, label: label);
   }
 }
 

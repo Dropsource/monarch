@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stockholm/stockholm.dart';
 
 import 'button.dart' as local;
+
 ///code credits to stockholm widget library
 ///https://github.com/serverpod/stockholm
 ///
@@ -36,16 +37,16 @@ class _StockholmDropdownButtonState<T>
     var items = widget.items
         .map(
           (e) => StockholmMenuItem(
-        onSelected: () {
-          widget.onChanged(e.value);
-        },
-        child: e,
-      ),
-    )
+            onSelected: () {
+              widget.onChanged(e.value);
+            },
+            child: e,
+          ),
+        )
         .toList();
 
     var currentIndex =
-    widget.items.indexWhere((element) => element.value == widget.value);
+        widget.items.indexWhere((element) => element.value == widget.value);
     Widget currentItem = widget.items[currentIndex];
 
     var offsetY = 0.0;

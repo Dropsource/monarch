@@ -59,7 +59,10 @@ class _NodeWidgetState extends State<NodeWidget> {
                 splashRadius: 8,
                 padding: const EdgeInsets.all(4),
                 constraints: const BoxConstraints(),
-                icon: Icon(icon, size: 16,),
+                icon: Icon(
+                  icon,
+                  size: 16,
+                ),
                 onPressed: onIconPressed,
               ),
             ],

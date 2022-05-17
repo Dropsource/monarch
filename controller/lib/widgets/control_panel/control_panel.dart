@@ -79,10 +79,11 @@ class ControlPanel extends StatelessWidget {
             ),
             controlWidth: controlWidth,
           ),
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 20,
+          ),
           LabeledControl(
-            label:
-                _translations.text("controls.text_scale_factor"),
+            label: _translations.text("controls.text_scale_factor"),
             control: NumberedSlider(
               initialValue: state.textScaleFactor,
               onChanged: manager.onTextScaleFactorChanged,

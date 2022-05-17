@@ -9,16 +9,15 @@ class StoryScaleDefinition {
   }
 
   Map<String, dynamic> toStandardMap() {
-    return {
-      'scale': scale,
-      'name': name
-    };
+    return {'scale': scale, 'name': name};
   }
 }
 
 List<StoryScaleDefinition> getStoryScaleDefinitions(dynamic args) {
   var defsArgs = List.from(args['definitions']);
-  return defsArgs.map<StoryScaleDefinition>((e) => StoryScaleDefinition.fromStandardMap(e)).toList();
+  return defsArgs
+      .map<StoryScaleDefinition>((e) => StoryScaleDefinition.fromStandardMap(e))
+      .toList();
 }
 
 const defaultScaleDefinition = StoryScaleDefinition(scale: 1.0, name: '100%');

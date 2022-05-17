@@ -32,6 +32,23 @@ Widget sample_story_list() => ControllerScreen(
           packageName: 'monarch_demo'),
     ));
 
+Widget devices_themes_and_locales_list() => ControllerScreen(
+        manager: ControllerManager(
+      channelMethodsSender: mockChannelMethodsSender,
+      initialState: ControllerState.init().copyWith(
+          isReady: true,
+          storyGroups: _longStoryList(),
+          devices: deviceDefinitions,
+          locales: [
+            'en-US',
+            'es-US',
+            'en-UK',
+          ],
+          currentLocale: 'en-US',
+          standardThemes: standardMetaThemes,
+          packageName: 'monarch_demo'),
+    ));
+
 Widget all_dev_tools_enabled() => ControllerScreen(
         manager: ControllerManager(
       channelMethodsSender: mockChannelMethodsSender,
