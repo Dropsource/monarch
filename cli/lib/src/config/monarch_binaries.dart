@@ -17,6 +17,8 @@ class MonarchBinaries {
       windows: 'monarch_windows_app.exe');
 
   Directory get cacheDirectory => Directory(p.join(binDirectory.path, 'cache'));
+  Directory get internalDirectory =>
+      Directory(p.join(binDirectory.path, 'internal'));
 
   Directory get monarchUiDirectory =>
       Directory(p.join(cacheDirectory.path, 'monarch_ui'));

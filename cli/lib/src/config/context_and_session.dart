@@ -1,4 +1,6 @@
 import 'context_info.dart';
+import 'internal_info.dart';
+import 'monarch_binaries.dart';
 import 'session_manager.dart';
 
 mixin ContextAndSession {
@@ -10,7 +12,9 @@ Future<ContextInfo> setUpContextAndSession(
     bool isVerbose,
     ContextAndSession crashReportBuilder,
     ContextAndSession analyticsEventBuilder) async {
-  final contextInfo = ContextInfo(isVerbose);
+  var internal = await readInternalFiles(defaultMonarchBinaries);
+
+  final contextInfo = ContextInfo(isVerbose, internal);
 
   await contextInfo.readContext();
 
