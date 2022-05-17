@@ -1,9 +1,7 @@
-
 import 'package:monarch_controller/data/device_definitions.dart';
 import 'package:monarch_controller/data/dock_definition.dart';
 import 'package:monarch_controller/data/monarch_data.dart';
-import 'package:monarch_controller/data/definitions.dart'
-    as defs;
+import 'package:monarch_controller/data/definitions.dart' as defs;
 import 'package:monarch_controller/data/stories.dart';
 import 'package:monarch_controller/data/story_scale_definitions.dart';
 import 'package:monarch_controller/data/visual_debug_flags.dart';
@@ -116,7 +114,7 @@ class ControllerState implements OutboundChannelArgument {
   @override
   Map<String, dynamic> toStandardMap() {
     // As of 2022-05, we only return device, scale and dock.
-    // In the future, if clients require more state properties then add 
+    // In the future, if clients require more state properties then add
     // them as needed.
     return {
       'device': currentDevice.toStandardMap(),

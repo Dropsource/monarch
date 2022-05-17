@@ -14,7 +14,7 @@ class StoryGroup {
       identical(this, other) ||
       other is StoryGroup &&
           groupName == other.groupName &&
-          listEquals(stories,other.stories);
+          listEquals(stories, other.stories);
 
   @override
   int get hashCode => groupName.hashCode ^ stories.hashCode;

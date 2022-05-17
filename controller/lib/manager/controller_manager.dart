@@ -28,7 +28,8 @@ class ControllerManager {
   final _searchManager = SearchManager();
   final AbstractChannelMethodsSender channelMethodsSender;
 
-  ControllerManager({ControllerState? initialState, required this.channelMethodsSender}) {
+  ControllerManager(
+      {ControllerState? initialState, required this.channelMethodsSender}) {
     _subscription = _streamController.listen((value) {
       _state = value;
     });
@@ -131,7 +132,7 @@ class ControllerManager {
     if (currentTheme == null) {
       if (allThemes.isNotEmpty) {
         selectedTheme = allThemes.first;
-      }else{
+      } else {
         //standard themes are empty, this should not happen, but just in case we are not selecting anything as currentTheme
       }
     } else {

@@ -16,92 +16,92 @@ const Color blue = Color(0xFF2D407F);
 const Color searchHighlightColor = Colors.amber;
 
 @MonarchTheme('Default Theme', isDefault: true)
- ThemeData get theme => StockholmThemeData.dark().copyWith(
-  primaryColor: blue,
-  splashColor: Colors.transparent,
-  visualDensity: VisualDensity.compact,
-  errorColor: red,
-  scaffoldBackgroundColor: dark,
-  textTheme: const TextTheme(
-    headline1: TextStyle(
-      fontFamily: 'San Francisco',
-      fontSize: 30.0,
-      color: fontPrimaryColor,
-      fontWeight: FontWeight.w500,
-    ),
-    headline2: TextStyle(
-      fontFamily: 'San Francisco',
-      fontSize: 28.0,
-      color: fontPrimaryColor,
-      fontWeight: FontWeight.w500,
-    ),
-    headline3: TextStyle(
-      fontFamily: 'San Francisco',
-      fontSize: 26.0,
-      color: fontPrimaryColor,
-      fontWeight: FontWeight.w500,
-    ),
-    headline4: TextStyle(
-      fontFamily: 'San Francisco',
-      fontSize: 24.0,
-      color: fontPrimaryColor,
-      fontWeight: FontWeight.w500,
-    ),
-    headline5: TextStyle(
-      fontFamily: 'San Francisco',
-      fontSize: 13.0,
-      color: fontPrimaryColor,
-      fontWeight: FontWeight.w600,
-    ),
-    headline6: TextStyle(
-      fontFamily: 'San Francisco',
-      color: fontPrimaryColor,
-      fontWeight: FontWeight.bold,
-      fontSize: 20,
-    ),
-    bodyText1: TextStyle(
-      fontFamily: 'San Francisco',
-      color: fontPrimaryColor,
-      fontWeight: FontWeight.w500,
-      fontSize: 10,
-    ),
-    bodyText2: TextStyle(
-      fontFamily: 'San Francisco',
-      color: fontPrimaryColor,
-      fontWeight: FontWeight.w500,
-      fontSize: 10,
-    ),
-    subtitle1: TextStyle(
-      fontFamily: 'San Francisco',
-      color: fontPrimaryColor,
-      fontWeight: FontWeight.w500,
-      fontSize: 12,
-    ),
-    subtitle2: TextStyle(
-      fontFamily: 'San Francisco',
-      color: fontPrimaryColor,
-      fontWeight: FontWeight.w500,
-      fontSize: 14,
-    ),
-    caption: TextStyle(
-      fontFamily: 'San Francisco',
-      color: fontPrimaryColor,
-      fontWeight: FontWeight.w500,
-      fontSize: 9,
-    ),
-    overline: TextStyle(
-      fontFamily: 'San Francisco',
-      color: fontPrimaryColor,
-      fontWeight: FontWeight.w500,
-      fontSize: 11,
-      letterSpacing: 1.1,
-    ),
-    button: TextStyle(
-      fontFamily: 'San Francisco',
-      color: fontPrimaryColor,
-      fontSize: 15.0,
-      fontWeight: FontWeight.w500,
-    ),
-  ),
-  backgroundColor: dark,
-);
+ThemeData get theme => StockholmThemeData.dark().copyWith(
+      primaryColor: blue,
+      splashColor: Colors.transparent,
+      visualDensity: VisualDensity.compact,
+      errorColor: red,
+      scaffoldBackgroundColor: dark,
+      textTheme: const TextTheme(
+        headline1: TextStyle(
+          fontFamily: 'San Francisco',
+          fontSize: 30.0,
+          color: fontPrimaryColor,
+          fontWeight: FontWeight.w500,
+        ),
+        headline2: TextStyle(
+          fontFamily: 'San Francisco',
+          fontSize: 28.0,
+          color: fontPrimaryColor,
+          fontWeight: FontWeight.w500,
+        ),
+        headline3: TextStyle(
+          fontFamily: 'San Francisco',
+          fontSize: 26.0,
+          color: fontPrimaryColor,
+          fontWeight: FontWeight.w500,
+        ),
+        headline4: TextStyle(
+          fontFamily: 'San Francisco',
+          fontSize: 24.0,
+          color: fontPrimaryColor,
+          fontWeight: FontWeight.w500,
+        ),
+        headline5: TextStyle(
+          fontFamily: 'San Francisco',
+          fontSize: 13.0,
+          color: fontPrimaryColor,
+          fontWeight: FontWeight.w600,
+        ),
+        headline6: TextStyle(
+          fontFamily: 'San Francisco',
+          color: fontPrimaryColor,
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+        ),
+        bodyText1: TextStyle(
+          fontFamily: 'San Francisco',
+          color: fontPrimaryColor,
+          fontWeight: FontWeight.w500,
+          fontSize: 10,
+        ),
+        bodyText2: TextStyle(
+          fontFamily: 'San Francisco',
+          color: fontPrimaryColor,
+          fontWeight: FontWeight.w500,
+          fontSize: 10,
+        ),
+        subtitle1: TextStyle(
+          fontFamily: 'San Francisco',
+          color: fontPrimaryColor,
+          fontWeight: FontWeight.w500,
+          fontSize: 12,
+        ),
+        subtitle2: TextStyle(
+          fontFamily: 'San Francisco',
+          color: fontPrimaryColor,
+          fontWeight: FontWeight.w500,
+          fontSize: 14,
+        ),
+        caption: TextStyle(
+          fontFamily: 'San Francisco',
+          color: fontPrimaryColor,
+          fontWeight: FontWeight.w500,
+          fontSize: 9,
+        ),
+        overline: TextStyle(
+          fontFamily: 'San Francisco',
+          color: fontPrimaryColor,
+          fontWeight: FontWeight.w500,
+          fontSize: 11,
+          letterSpacing: 1.1,
+        ),
+        button: TextStyle(
+          fontFamily: 'San Francisco',
+          color: fontPrimaryColor,
+          fontSize: 15.0,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      backgroundColor: dark,
+    );

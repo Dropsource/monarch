@@ -10,4 +10,3 @@ abstract class OutboundChannelArgument extends ChannelArgument {
   /// This map is used by the channel's codec [StandardMethodCodec].
   Map<String, dynamic> toStandardMap();
 }
-

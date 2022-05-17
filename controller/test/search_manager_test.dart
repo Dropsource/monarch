@@ -14,7 +14,9 @@ void main() {
       expect(true, listEquals(output.toList(), input));
     });
 
-    test('should not filter anything when search query is present, but input is empty', () async {
+    test(
+        'should not filter anything when search query is present, but input is empty',
+        () async {
       final input = <StoryGroup>[];
       final output = cut.filterStories(input, 'hello');
 

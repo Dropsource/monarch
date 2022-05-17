@@ -46,7 +46,6 @@ Future<dynamic> _handler(MethodCall call) async {
             'flutter window had been ready, ready signal means potential reload');
       } else {
         manager.onReady();
-
       }
       channelMethodsSender.sendReadySignalAck();
       return;

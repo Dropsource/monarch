@@ -17,7 +17,8 @@ class MockChannelMethodsSender implements AbstractChannelMethodsSender {
   void sendReadySignalAck() {}
 
   @override
-  Future sendToggleVisualDebugFlag(OutboundChannelArgument visualDebugFlag) => Future.value();
+  Future sendToggleVisualDebugFlag(OutboundChannelArgument visualDebugFlag) =>
+      Future.value();
 
   @override
   void setActiveDevice(String deviceId) {}
