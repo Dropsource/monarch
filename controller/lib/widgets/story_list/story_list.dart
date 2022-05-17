@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:monarch_controller/data/stories.dart';
-import 'package:monarch_controller/widgets/components/text.dart';
 import 'package:monarch_controller/widgets/story_list/search_field.dart';
 import 'package:monarch_controller/widgets/story_list/text_with_highlight.dart';
 import 'package:monarch_controller/widgets/tree_view/flutter_simple_treeview.dart';

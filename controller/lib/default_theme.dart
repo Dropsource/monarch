@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monarch_annotations/monarch_annotations.dart';
 import 'package:stockholm/stockholm.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 const Color red = Color(0xFFDF7272);
 const Color dark = Color(0xFF1C1E22);

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:monarch_controller/data/abstract_channel_methods_sender.dart';
-import 'package:monarch_controller/data/channel_methods_sender.dart';
 import 'package:monarch_controller/data/device_definitions.dart';
 import 'package:monarch_controller/data/dock_definition.dart';
 import 'package:monarch_controller/data/stories.dart';
