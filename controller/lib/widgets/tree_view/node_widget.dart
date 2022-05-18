@@ -43,39 +43,39 @@ class _NodeWidgetState extends State<NodeWidget> {
             ? Icons.expand_more
             : Icons.chevron_right;
 
-    var onIconPressed = _isLeaf
+    var onNodeClicked = _isLeaf
         ? null
         : () => setState(
             () => widget.state.toggleNodeExpanded(widget.treeNode.key!));
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            if (onIconPressed != null) ...[
-              IconButton(
-                iconSize: widget.iconSize ?? 16.0,
-                splashRadius: 8,
-                padding: const EdgeInsets.all(4),
-                constraints: const BoxConstraints(),
-                icon: Icon(
-                  icon,
-                  size: 16,
+    return InkWell(
+      onTap: onNodeClicked,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              if (onNodeClicked != null) ...[
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  constraints: const BoxConstraints(),
+                  child: Icon(
+                    icon,
+                    size: 16,
+                  ),
                 ),
-                onPressed: onIconPressed,
-              ),
+              ],
+              Expanded(child: widget.treeNode.content),
             ],
-            Expanded(child: widget.treeNode.content),
-          ],
-        ),
-        if (_isExpanded && !_isLeaf)
-          Padding(
-            padding: EdgeInsets.zero, //EdgeInsets.only(left: widget.indent!),
-            child: buildNodes(widget.treeNode.children!, widget.indent,
-                widget.state, widget.iconSize),
-          )
-      ],
+          ),
+          if (_isExpanded && !_isLeaf)
+            Padding(
+              padding: EdgeInsets.zero,
+              child: buildNodes(widget.treeNode.children!, widget.indent,
+                  widget.state, widget.iconSize),
+            )
+        ],
+      ),
     );
   }
 }
