@@ -8,8 +8,12 @@ final Map<String, dynamic> jsonVersion01 = {
   'affects_operating_system': true,
   'installation_bundle_url':
       'https://dyymmqcqox4dd.cloudfront.net/macos/monarch_macos_0.3.11.zip',
-  'cli_version_tag': 'v0.2.12',
-  'desktop_app_version_tag': 'v0.1.9'
+  'version_tag': 'v0.3.11',
+  'revision': 'abcdefghi',
+  'min_flutter_version': '2.4.0-pre.1',
+  'is_released': true,
+  'cli_version_tag': null,
+  'desktop_app_version_tag': null
 };
 
 void main() {
@@ -24,8 +28,10 @@ void main() {
       expect(version.affectsOperatingSystem, true);
       expect(version.installationBundleUrl,
           'https://dyymmqcqox4dd.cloudfront.net/macos/monarch_macos_0.3.11.zip');
-      expect(version.cliVersionTag, 'v0.2.12');
-      expect(version.desktopAppVersionTag, 'v0.1.9');
+      expect(version.versionTag, 'v0.3.11');
+      expect(version.revision, 'abcdefghi');
+      expect(version.minFlutterVersion, '2.4.0-pre.1');
+      expect(version.isReleased, isTrue);
     });
 
     test('key', () {
@@ -35,8 +41,10 @@ void main() {
           operatingSystem: 'macos',
           affectsOperatingSystem: true,
           installationBundleUrl: 'foo/bar',
-          cliVersionTag: '3',
-          desktopAppVersionTag: '4');
+          versionTag: 'v1.2.3',
+          revision: 'mnopqr',
+          minFlutterVersion: '2.4.0',
+          isReleased: true);
 
       expect(version.key, 'macos/1.2.3');
     });

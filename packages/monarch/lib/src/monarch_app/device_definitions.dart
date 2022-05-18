@@ -64,7 +64,7 @@ const iPhone13DeviceDefinition = DeviceDefinition(
 /// @GOTCHA: if you change the [defaultDeviceDefinition] here, make sure to
 /// also change it in:
 /// - controller/lib/window_controller/data/device_definitions.dart
-/// 
+///
 /// Then, release a new monarch build.
 ///
 /// Make sure to not delete a default device that is used in previous versions
