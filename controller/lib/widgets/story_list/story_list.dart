@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:monarch_controller/data/stories.dart';
 import 'package:monarch_controller/widgets/story_list/search_field.dart';
 import 'package:monarch_controller/widgets/story_list/story_tree.dart';
-import 'package:monarch_controller/widgets/story_list/text_with_highlight.dart';
-import 'package:monarch_controller/widgets/tree_view/flutter_simple_treeview.dart';
 import 'package:monarch_controller/manager/controller_manager.dart';
 
 import '../../../utils/translations.dart';
@@ -33,7 +30,6 @@ class StoryList extends StatefulWidget {
 class StoryListState extends State<StoryList> {
   final controller = TextEditingController();
   String query = '';
-  bool _focused = false;
   final _storyListFocusNode = FocusNode();
   final _searchFocusNode = FocusNode();
 
@@ -84,6 +80,8 @@ class StoryListState extends State<StoryList> {
                     filteredStories: _filteredStories,
                     query: query,
                     focusNode: _storyListFocusNode,
+                    onStorySelected: (story) =>
+                        widget.manager.onActiveStoryChanged(story.key),
                     // selectionColor: _focused
                   )
                 ],
@@ -105,7 +103,6 @@ class StoryListState extends State<StoryList> {
 
   void _onQueryChanged(String value) {
     query = value;
-
     setState(() {});
   }
 }

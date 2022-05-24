@@ -57,7 +57,7 @@ class _NodeWidgetState extends State<NodeWidget> {
             color: widget.state.isNodeSelected(widget.treeNode.key!)
                 ? widget.state.hasFocus
                     ? Colors.blue
-                    : Colors.blue.withAlpha(20)
+                    : Colors.blue.withAlpha(80)
                 : Colors.transparent,
             child: Row(
               children: [

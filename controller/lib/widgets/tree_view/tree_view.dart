@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:monarch_controller/widgets/tree_view/primitives/key_provider.dart';
 
 import 'builder.dart';
 import 'copy_tree_nodes.dart';
@@ -20,18 +21,18 @@ class TreeView extends StatefulWidget {
   final double? iconSize;
 
   /// Tree controller to manage the tree state.
-  final TreeController? treeController;
 
   final FocusNode? focusNode;
+  final TreeController treeController;
 
-  TreeView({
-    Key? key,
-    required List<TreeNode> nodes,
-    this.indent = 40,
-    this.iconSize,
-    this.treeController,
-    this.focusNode,
-  })  : nodes = copyTreeNodes(nodes),
+  TreeView(
+      {Key? key,
+      required List<TreeNode> nodes,
+      this.indent = 40,
+      this.iconSize,
+      this.focusNode,
+      required this.treeController})
+      : nodes = copyTreeNodes(nodes, treeController.keyProvider),
         super(key: key);
 
   @override
@@ -40,17 +41,11 @@ class TreeView extends StatefulWidget {
 
 class _TreeViewState extends State<TreeView> {
   late TreeController _controller;
-
-  late VoidCallback updateRoot = () => setState(() {});
-  late VoidCallback onFocus = () {
-    if (!_controller.hasFocus) {
-      setState(() => _controller.hasFocus = true);
-    }
-  };
+  late KeyProvider keyProvider;
 
   @override
   void initState() {
-    _controller = widget.treeController ?? TreeController();
+    _controller = widget.treeController;
     super.initState();
   }
 
@@ -65,22 +60,37 @@ class _TreeViewState extends State<TreeView> {
           return KeyEventResult.ignored;
         }
         if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-          _controller.onKeyUp();
-          return KeyEventResult.handled;
+          return _handleKeyEvent(node, event, () => _controller.onKeyUp());
         } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-          _controller.onKeyDown();
-          return KeyEventResult.handled;
+          return _handleKeyEvent(node, event, () => _controller.onKeyDown());
         } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-          _controller.onKeyLeft();
-          return KeyEventResult.handled;
+          return _handleKeyEvent(node, event, () => _controller.onKeyLeft());
         } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-          _controller.onKeyRight();
-          return KeyEventResult.handled;
+          return _handleKeyEvent(node, event, () => _controller.onKeyRight());
         }
         return KeyEventResult.ignored;
       },
       child: buildNodes(widget.nodes, widget.indent, _controller,
-          widget.iconSize, updateRoot, onFocus),
+          widget.iconSize, _updateRoot, _onFocus),
     );
+  }
+
+  KeyEventResult _handleKeyEvent(node, event, bool Function() test) {
+    if (event is! RawKeyDownEvent) {
+      return KeyEventResult.ignored;
+    }
+    final result = test();
+    if (result) setState(() {});
+    return KeyEventResult.handled;
+  }
+
+  void _updateRoot() {
+    setState(() {});
+  }
+
+  void _onFocus() {
+    if (!_controller.hasFocus) {
+      setState(() => _controller.hasFocus = true);
+    }
   }
 }
