@@ -10,6 +10,7 @@ class StockholmButton extends StatelessWidget {
   final bool large;
   final bool important;
   final bool enabled;
+  final FocusNode? focusNode;
 
   const StockholmButton({
     Key? key,
@@ -21,6 +22,7 @@ class StockholmButton extends StatelessWidget {
     this.large = false,
     this.important = false,
     this.enabled = true,
+    this.focusNode,
   }) : super(key: key);
 
   @override
@@ -44,6 +46,7 @@ class StockholmButton extends StatelessWidget {
           ? theme.colorScheme.primary
           : theme.buttonTheme.colorScheme!.surface,
       hoverColor: Theme.of(context).hoverColor,
+      focusNode: focusNode,
       shape: RoundedRectangleBorder(
         borderRadius: const BorderRadius.all(Radius.circular(6)),
         side: BorderSide(color: Theme.of(context).dividerColor, width: 1),

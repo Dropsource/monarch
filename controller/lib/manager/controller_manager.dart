@@ -14,6 +14,7 @@ import '../data/channel_methods_receiver.dart';
 import '../data/monarch_data.dart';
 import 'package:monarch_controller/data/definitions.dart' as defs;
 import '../extensions/iterable_extensions.dart';
+import 'change_story_manager.dart';
 
 class ControllerManager {
   final BehaviorSubject<ControllerState> _streamController =
@@ -26,6 +27,7 @@ class ControllerManager {
 
   ControllerState get state => _state;
   final _searchManager = SearchManager();
+  final _changeStoryManager = ChangeStoryManagerImpl();
   final AbstractChannelMethodsSender channelMethodsSender;
 
   ControllerManager(
@@ -37,8 +39,9 @@ class ControllerManager {
   }
 
   void onActiveStoryChanged(String key) async {
+    logger.info('changing story to $key');
     _update(state.copyWith(activeStoryKey: key));
-    channelMethodsSender.loadStory(key);
+    //channelMethodsSender.loadStory(key);
   }
 
   void onDevToolOptionToggled(VisualDebugFlag option) {
@@ -162,6 +165,29 @@ class ControllerManager {
     _update(state.copyWith(devices: deviceDefinitions));
   }
 
+  void onUpperStoryRequested() {
+    logger.info('going up');
+    final story = _changeStoryManager.prevStory(
+        collapsedGroupKeys: state.collapsedGroupKeys,
+        storyGroups: state.storyGroups,
+        activeStoryKey: state.activeStoryKey);
+    if (story != null && story.key != state.activeStoryKey) {
+      onActiveStoryChanged(story.key);
+    }
+  }
+
+  void onLowerStoryRequested() {
+    logger.info('going down');
+
+    final story = _changeStoryManager.nextStory(
+        collapsedGroupKeys: state.collapsedGroupKeys,
+        storyGroups: state.storyGroups,
+        activeStoryKey: state.activeStoryKey);
+    if (story != null && story.key != state.activeStoryKey) {
+      onActiveStoryChanged(story.key);
+    }
+  }
+
   void _update(ControllerState newState) {
     _streamController.sink.add(newState);
   }
@@ -196,6 +222,7 @@ class ControllerManager {
     return metaStoriesMap.entries
         .map((group) => StoryGroup(
             groupName: _readStoryGroupName(group.key),
+            groupKey: group.key,
             stories: group.value.storiesNames
                 .map((story) => Story(key: '${group.key}|$story', name: story))
                 .toList()))
@@ -208,5 +235,15 @@ class ControllerManager {
     final firstSlash = key.indexOf('/');
     final firstDot = key.indexOf('.');
     return key.substring(firstSlash + 1, firstDot);
+  }
+
+  void onGroupToggle(String groupKey) {
+    if (state.collapsedGroupKeys.contains(groupKey)) {
+      state.collapsedGroupKeys.remove(groupKey);
+    } else {
+      state.collapsedGroupKeys.add(groupKey);
+    }
+
+    print(state.collapsedGroupKeys);
   }
 }

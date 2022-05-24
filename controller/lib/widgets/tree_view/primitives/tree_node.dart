@@ -7,10 +7,12 @@ class TreeNode {
   final List<TreeNode>? children;
   final Widget content;
   final Key? key;
+  final VoidCallback? onNodeClicked;
 
   TreeNode({
     this.key,
     this.children,
+    this.onNodeClicked,
     Widget? content,
   }) : content = content ?? const SizedBox(width: 0, height: 0);
 }

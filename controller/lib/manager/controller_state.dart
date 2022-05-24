@@ -12,6 +12,7 @@ class ControllerState implements OutboundChannelArgument {
   final bool isReady;
   final String packageName;
   final List<StoryGroup> storyGroups;
+  final Set<String> collapsedGroupKeys;
   final String? activeStoryKey;
 
   final DeviceDefinition currentDevice;
@@ -54,16 +55,55 @@ class ControllerState implements OutboundChannelArgument {
     required this.scaleList,
     required this.textScaleFactor,
     required this.visualDebugFlags,
+    required this.collapsedGroupKeys,
   });
 
   factory ControllerState.init() => ControllerState(
-        isReady: false,
+        isReady: true,
+        collapsedGroupKeys: {},
+        storyGroups: [
+          StoryGroup(
+            groupKey: 'button_stories_key',
+            groupName: 'button_stories',
+            stories: [
+              Story(name: 'pRiMaRy', key: '1'),
+              Story(name: 'ALL_CAPS', key: '2'),
+              Story(name: 'gone', key: '3'),
+            ],
+          ),
+          StoryGroup(
+            groupKey: 'other_stories_key',
+            groupName: 'other_stories',
+            stories: [
+              Story(name: 'pRiMaRy', key: '11'),
+              Story(name: 'ALL_CAPS', key: '12'),
+              Story(name: 'gone', key: '13'),
+            ],
+          ),
+          StoryGroup(
+            groupKey: 'no_stories_key',
+            groupName: 'no_stories_here',
+            stories: [],
+          ),
+          StoryGroup(
+            groupKey: 'different_stories_key',
+            groupName: 'different_stories',
+            stories: [
+              Story(name: 'hello', key: '21'),
+              Story(name: 'world', key: '22'),
+              Story(name: 'tester', key: '23'),
+            ],
+          ),
+        ],
         devices: [defaultDeviceDefinition],
         currentDevice: defaultDeviceDefinition,
         locales: [defs.defaultLocale],
         currentLocale: defs.defaultLocale,
         standardThemes: [defs.defaultTheme],
-        userThemes: [],
+        userThemes: [
+          const MetaTheme(id: '1', name: 'hello theme', isDefault: false),
+          const MetaTheme(id: '2', name: 'world theme', isDefault: false),
+        ],
         currentTheme: defs.defaultTheme,
         currentDock: defs.defaultDock,
         currentScale: defaultScaleDefinition,
@@ -109,6 +149,7 @@ class ControllerState implements OutboundChannelArgument {
         textScaleFactor: textScaleFactor ?? this.textScaleFactor,
         visualDebugFlags: visualDebugFlags ?? this.visualDebugFlags,
         packageName: packageName ?? this.packageName,
+        collapsedGroupKeys: collapsedGroupKeys,
       );
 
   @override

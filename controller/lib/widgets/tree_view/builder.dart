@@ -18,6 +18,7 @@ Widget buildNodes(Iterable<TreeNode> nodes, double? indent,
           indent: indent,
           state: state,
           iconSize: iconSize,
+          onNodeClicked: node.onNodeClicked,
         )
     ],
   );

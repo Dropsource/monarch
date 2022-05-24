@@ -12,12 +12,14 @@ class NodeWidget extends StatefulWidget {
   final double? indent;
   final double? iconSize;
   final TreeController state;
+  final VoidCallback? onNodeClicked;
 
   const NodeWidget(
       {Key? key,
       required this.treeNode,
       this.indent,
       required this.state,
+      this.onNodeClicked,
       this.iconSize})
       : super(key: key);
 
@@ -45,8 +47,11 @@ class _NodeWidgetState extends State<NodeWidget> {
 
     var onNodeClicked = _isLeaf
         ? null
-        : () => setState(
-            () => widget.state.toggleNodeExpanded(widget.treeNode.key!));
+        : () {
+            widget.onNodeClicked?.call();
+            setState(
+                () => widget.state.toggleNodeExpanded(widget.treeNode.key!));
+          };
 
     return InkWell(
       onTap: onNodeClicked,
