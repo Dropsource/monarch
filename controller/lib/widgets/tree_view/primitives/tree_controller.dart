@@ -8,19 +8,20 @@ import 'package:flutter/foundation.dart';
 class TreeController {
   bool _allNodesExpanded;
   final Map<Key, bool> _expanded = <Key, bool>{};
+  Key? selectedKey;
 
   TreeController({allNodesExpanded = true})
       : _allNodesExpanded = allNodesExpanded;
 
   bool get allNodesExpanded => _allNodesExpanded;
 
-  bool isNodeExpanded(Key key) {
-    return _expanded[key] ?? _allNodesExpanded;
-  }
+  bool isNodeSelected(Key key) => key == selectedKey;
 
-  void toggleNodeExpanded(Key key) {
-    _expanded[key] = !isNodeExpanded(key);
-  }
+  bool isNodeExpanded(Key key) => _expanded[key] ?? _allNodesExpanded;
+
+  void toggleNodeExpanded(Key key) => _expanded[key] = !isNodeExpanded(key);
+
+  bool hasFocus = false;
 
   void expandAll() {
     _allNodesExpanded = true;
@@ -39,4 +40,16 @@ class TreeController {
   void collapseNode(Key key) {
     _expanded[key] = false;
   }
+
+  void selectKey(Key key) {
+    selectedKey = key;
+  }
+
+  void onKeyLeft() {}
+
+  void onKeyUp() {}
+
+  void onKeyDown() {}
+
+  void onKeyRight() {}
 }

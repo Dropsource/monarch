@@ -18,7 +18,8 @@ List<TreeNode>? _copyNodesRecursively(
       key: keyProvider.key(n.key),
       content: n.content,
       children: _copyNodesRecursively(n.children, keyProvider),
-      onNodeClicked: n.onNodeClicked,
+      onTap: n.onTap,
+      updateRoot: n.updateRoot,
     );
   }));
 }

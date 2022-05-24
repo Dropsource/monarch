@@ -1,6 +1,7 @@
 ///Code credits to https://pub.dev/packages/flutter_simple_treeview
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'builder.dart';
 import 'copy_tree_nodes.dart';
@@ -21,13 +22,16 @@ class TreeView extends StatefulWidget {
   /// Tree controller to manage the tree state.
   final TreeController? treeController;
 
-  TreeView(
-      {Key? key,
-      required List<TreeNode> nodes,
-      this.indent = 40,
-      this.iconSize,
-      this.treeController})
-      : nodes = copyTreeNodes(nodes),
+  final FocusNode? focusNode;
+
+  TreeView({
+    Key? key,
+    required List<TreeNode> nodes,
+    this.indent = 40,
+    this.iconSize,
+    this.treeController,
+    this.focusNode,
+  })  : nodes = copyTreeNodes(nodes),
         super(key: key);
 
   @override
@@ -35,7 +39,14 @@ class TreeView extends StatefulWidget {
 }
 
 class _TreeViewState extends State<TreeView> {
-  TreeController? _controller;
+  late TreeController _controller;
+
+  late VoidCallback updateRoot = () => setState(() {});
+  late VoidCallback onFocus = () {
+    if (!_controller.hasFocus) {
+      setState(() => _controller.hasFocus = true);
+    }
+  };
 
   @override
   void initState() {
@@ -45,7 +56,31 @@ class _TreeViewState extends State<TreeView> {
 
   @override
   Widget build(BuildContext context) {
-    return buildNodes(
-        widget.nodes, widget.indent, _controller!, widget.iconSize);
+    return Focus(
+      focusNode: widget.focusNode,
+      onFocusChange: (focused) =>
+          setState(() => _controller.hasFocus = focused),
+      onKey: (node, event) {
+        if (event is! RawKeyDownEvent) {
+          return KeyEventResult.ignored;
+        }
+        if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+          _controller.onKeyUp();
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+          _controller.onKeyDown();
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+          _controller.onKeyLeft();
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+          _controller.onKeyRight();
+          return KeyEventResult.handled;
+        }
+        return KeyEventResult.ignored;
+      },
+      child: buildNodes(widget.nodes, widget.indent, _controller,
+          widget.iconSize, updateRoot, onFocus),
+    );
   }
 }
