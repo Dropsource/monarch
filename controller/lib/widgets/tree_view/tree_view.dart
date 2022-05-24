@@ -21,9 +21,9 @@ class TreeView extends StatefulWidget {
   final double? iconSize;
 
   /// Tree controller to manage the tree state.
+  final TreeController treeController;
 
   final FocusNode? focusNode;
-  final TreeController treeController;
 
   TreeView(
       {Key? key,

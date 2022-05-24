@@ -65,8 +65,6 @@ class StoryListState extends State<StoryList> {
                 border: Border.fromBorderSide(
                   BorderSide(width: 1, color: Theme.of(context).dividerColor),
                 ),
-                // BorderSide(
-                //     width: 1, color: _focused ? Colors.red : Colors.blue)),
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
               ),
               child: SingleChildScrollView(

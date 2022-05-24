@@ -72,38 +72,31 @@ class _NumberedSlideState extends State<NumberedSlider> {
           inactiveDividerRadius: 4,
           overlayRadius: 0,
         ),
-        child: Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: _focused ? Colors.red : Colors.blue)),
-          child: SfSlider(
-            value: value,
-            min: minValue,
-            max: maxValue,
-            stepSize: stepValue,
-            interval: stepValue,
-            showDividers: true,
-            dividerShape: CustomDividerShape(),
-            //minorTicksPerInterval: 3,
-            labelFormatterCallback: (value, v) {
-              final val = value.toStringAsFixed(1);
-              return intervalsToShowLabel.contains(val) ? val : '';
-            },
-            showLabels: true,
-            showTicks: false,
-            enableTooltip: false,
-            onChanged: (newValue) {
-              setState(() {
-                value = newValue;
-                widget.onChanged(newValue);
+        child: SfSlider(
+          value: value,
+          min: minValue,
+          max: maxValue,
+          stepSize: stepValue,
+          interval: stepValue,
+          showDividers: true,
+          dividerShape: CustomDividerShape(),
+          labelFormatterCallback: (value, v) {
+            final val = value.toStringAsFixed(1);
+            return intervalsToShowLabel.contains(val) ? val : '';
+          },
+          showLabels: true,
+          showTicks: false,
+          enableTooltip: false,
+          onChanged: (newValue) {
+            setState(() {
+              value = newValue;
+              widget.onChanged(newValue);
 
-                if (!_focusNode.hasFocus) {
-                  FocusScope.of(context).requestFocus(_focusNode);
-                }
-              });
-            },
-            // activeColor: Colors.white,
-            // inactiveColor: Colors.white,
-          ),
+              if (!_focusNode.hasFocus) {
+                FocusScope.of(context).requestFocus(_focusNode);
+              }
+            });
+          },
         ),
       ),
     );

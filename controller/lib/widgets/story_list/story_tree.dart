@@ -63,7 +63,6 @@ class _StoryTreeState extends State<StoryTree> {
                             ),
                           ),
                         ),
-                        // ),
                       )
                       .toList(),
                 ))

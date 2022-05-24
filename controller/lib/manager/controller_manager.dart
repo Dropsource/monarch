@@ -37,9 +37,9 @@ class ControllerManager {
   }
 
   void onActiveStoryChanged(String key) async {
-    logger.info('changing story to $key');
+    logger.finest('changing active story to $key');
     _update(state.copyWith(activeStoryKey: key));
-    //channelMethodsSender.loadStory(key);
+    channelMethodsSender.loadStory(key);
   }
 
   void onDevToolOptionToggled(VisualDebugFlag option) {

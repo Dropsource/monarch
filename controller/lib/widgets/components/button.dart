@@ -41,7 +41,6 @@ class StockholmButton extends StatelessWidget {
     }
 
     return MaterialButton(
-      // textTheme: textTheme,
       color: important
           ? theme.colorScheme.primary
           : theme.buttonTheme.colorScheme!.surface,
