@@ -30,31 +30,41 @@ Using flutter sdk at:
       out_controller_dir.deleteSync(recursive: true);
     out_controller_dir.createSync(recursive: true);
 
-    print('''
+    {
+      print('''
+Running `flutter pub get` in:
+  ${paths.controller}
+''');
+      var result = Process.runSync(
+          paths.flutter_exe(flutter_sdk), ['pub', 'get'],
+          workingDirectory: paths.controller);
+      utils.exitIfNeeded(result, 'Error running `flutter pub get`');
+    }
+
+    {
+      print('''
 Building monarch controller flutter bundle. Will output to:
   $out_ui_flutter_id_controller
 ''');
 
-    var result = Process.runSync(
-        paths.flutter_exe(flutter_sdk),
-        [
-          'build',
-          'bundle',
-          '-t',
-          'lib/main.dart',
-          '--debug',
-          '--target-platform',
-          valueForPlatform(macos: 'darwin', windows: 'windows-x64'),
-          '--asset-dir',
-          p.join(out_ui_flutter_id_controller, 'flutter_assets'),
-          '--verbose'
-        ],
-        workingDirectory: paths.controller);
+      var result = Process.runSync(
+          paths.flutter_exe(flutter_sdk),
+          [
+            'build',
+            'bundle',
+            '-t',
+            'lib/main.dart',
+            '--debug',
+            '--target-platform',
+            valueForPlatform(macos: 'darwin', windows: 'windows-x64'),
+            '--asset-dir',
+            p.join(out_ui_flutter_id_controller, 'flutter_assets'),
+            '--verbose'
+          ],
+          workingDirectory: paths.controller);
 
-    if (result.exitCode != 0) {
-      print('Error building monarch controller flutter bundle');
-      print(result.stdout);
-      print(result.stderr);
+      utils.exitIfNeeded(
+          result, 'Error building monarch controller flutter bundle');
     }
 
     print('''
@@ -62,7 +72,8 @@ Building monarch controller flutter bundle. Will output to:
 ''');
   }
 
-  var version = utils.readPubspecVersion(p.join(paths.controller, 'pubspec.yaml'));
+  var version =
+      utils.readPubspecVersion(p.join(paths.controller, 'pubspec.yaml'));
   version = utils.getVersionSuffix(version);
 
   utils.writeInternalFile('controller_version.txt', version);
