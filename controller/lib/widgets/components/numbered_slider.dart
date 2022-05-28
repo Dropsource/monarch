@@ -63,7 +63,8 @@ class _NumberedSlideState extends State<NumberedSlider> {
           thumbRadius: 7,
           activeTrackColor: sliderTrackColor,
           inactiveTrackColor: sliderTrackColor,
-          thumbColor: sliderThumbColor,
+          thumbColor:
+              _focused ? sliderThumbColor : sliderThumbColor.withAlpha(200),
           activeTickColor: sliderDividerColor,
           inactiveTickColor: sliderDividerColor,
           activeDividerColor: sliderDividerColor,
