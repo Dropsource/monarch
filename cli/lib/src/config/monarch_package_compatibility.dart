@@ -2,7 +2,7 @@ import 'package:pub_semver/pub_semver.dart' as pub;
 
 final monarchPackage_2_1 = pub.Version(2, 1, 0);
 final monarchPackage_2_2 = pub.Version(2, 2, 0);
-final monarchPackage_2_3_pre = pub.Version(2, 3, 0, pre: 'pre.1');
+final monarchPackage_2_4_pre = pub.Version(2, 4, 0, pre: 'pre.1');
 
 final buildRunnerPackage2 = pub.Version(2, 1, 0);
 
@@ -28,7 +28,7 @@ class MonarchPackageCompatibility {
   /// version of package:monarch that this version of the CLI is compatible with.
   pub.Version get monarchPackageInitVersion =>
       flutterVersion >= pub.Version(2, 12, 0, pre: '4.1.pre')
-          ? monarchPackage_2_3_pre
+          ? monarchPackage_2_4_pre
           : monarchPackage_2_2;
 
   /// Version of package:build_runner that `monarch init` uses.

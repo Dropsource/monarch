@@ -43,7 +43,7 @@ class MonarchUiFetcher extends LongRunningCli<CliExitCode> with Log {
     stdout_.writeln();
 
     stdout_.writeln('''
-Downloading the Monarch UI for this project\'s flutter version...
+Downloading the Monarch UI for this project's flutter version...
 ''');
 
     var api = getVersionApi(userDeviceId);

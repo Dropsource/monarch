@@ -10,37 +10,44 @@ void main() {
 ### build_cli.dart
 ''');
 
-  utils.createDirectoryIfNeeded(paths.out_bin);
-  var monarch_exe_file = File(paths.out_bin_monarch_exe);
-  if (monarch_exe_file.existsSync()) monarch_exe_file.deleteSync();
-
-  var result = Process.runSync('dart', ['--version']);
-  if (result.exitCode != 0) {
-    print('Error getting dart version');
-    print(result.stdout);
-    print(result.stderr);
+  {
+    utils.createDirectoryIfNeeded(paths.out_bin);
+    var monarch_exe_file = File(paths.out_bin_monarch_exe);
+    if (monarch_exe_file.existsSync()) monarch_exe_file.deleteSync();
   }
-  print('Using ${result.stdout.trim()}');
 
-  print('''
+  {
+    var result = Process.runSync('dart', ['--version']);
+    utils.exitIfNeeded(result, 'Error getting dart version');
+    print('Using ${result.stdout.trim()}');
+  }
+
+  {
+    print('''
+Running `dart pub get` in:
+  ${paths.cli}
+''');
+    var result =
+        Process.runSync('dart', ['pub', 'get'], workingDirectory: paths.cli);
+    utils.exitIfNeeded(result, 'Error running `dart pub get`');
+  }
+
+  {
+    print('''
 Building monarch_cli executable. Will output to:
   ${paths.out_bin_monarch_exe}
 ''');
 
-  result = Process.runSync('dart',
-      ['compile', 'exe', 'bin/main.dart', '-o', paths.out_bin_monarch_exe],
-      workingDirectory: paths.cli);
-  if (result.exitCode != 0) {
-    print('Error building monarch cli');
-    print(result.stdout);
-    print(result.stderr);
+    var result = Process.runSync('dart',
+        ['compile', 'exe', 'bin/main.dart', '-o', paths.out_bin_monarch_exe],
+        workingDirectory: paths.cli);
+    utils.exitIfNeeded(result, 'Error building monarch cli');
   }
 
-  var version =
-      utils.readPubspecVersion(p.join(paths.cli, 'pubspec.yaml'));
-  version = utils.getVersionSuffix(version);
-
-  utils.writeInternalFile('cli_version.txt', version);
-
-  print('Monarch CLI build finished. Version $version');
+  {
+    var version = utils.readPubspecVersion(p.join(paths.cli, 'pubspec.yaml'));
+    version = utils.getVersionSuffix(version);
+    utils.writeInternalFile('cli_version.txt', version);
+    print('Monarch CLI build finished. Version $version');
+  }
 }

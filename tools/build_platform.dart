@@ -22,6 +22,13 @@ Using flutter sdk at:
     var out_ui_flutter_id = paths.compute_out_ui_flutter_id(flutter_sdk);
     utils.createDirectoryIfNeeded(out_ui_flutter_id);
 
+    {
+      print('Running `flutter precache`...');
+      var result =
+          Process.runSync(paths.flutter_exe(flutter_sdk), ['precache']);
+      utils.exitIfNeeded(result, 'Error running `flutter precache`');
+    }
+
     if (Platform.isMacOS) {
       const monarch_macos = 'monarch_macos';
 
@@ -37,11 +44,8 @@ Using flutter sdk at:
         paths.darwin_flutter_framework(flutter_sdk),
         paths.platform_macos_ephemeral
       ]);
-      if (result.exitCode != 0) {
-        print('Error copying darwin flutter framework bundle');
-        print(result.stdout);
-        print(result.stderr);
-      }
+      utils.exitIfNeeded(
+          result, 'Error copying darwin flutter framework bundle');
 
       var monarch_macos_app_dir = Directory(
           paths.out_ui_flutter_id_monarch_macos_app(out_ui_flutter_id));
@@ -50,8 +54,7 @@ Using flutter sdk at:
 
       print('''
 Building $monarch_macos with xcodebuild. Will output to:
-  ${paths.out_ui_flutter_id_monarch_macos_app(out_ui_flutter_id)}
-''');
+  ${paths.out_ui_flutter_id_monarch_macos_app(out_ui_flutter_id)}''');
 
       result = Process.runSync(
           'xcodebuild',
@@ -62,13 +65,10 @@ Building $monarch_macos with xcodebuild. Will output to:
             'build'
           ],
           workingDirectory: paths.platform_macos);
-      if (result.exitCode != 0) {
-        print('Error running xcodebuild');
-        print(result.stdout);
-        print(result.stderr);
-      }
+      utils.exitIfNeeded(result, 'Error running xcodebuild');
 
-      var swiftmodule = Directory(p.join(out_ui_flutter_id, '$monarch_macos.swiftmodule'));
+      var swiftmodule =
+          Directory(p.join(out_ui_flutter_id, '$monarch_macos.swiftmodule'));
       if (swiftmodule.existsSync()) swiftmodule.deleteSync(recursive: true);
     }
     print('''

@@ -60,3 +60,12 @@ void writeInternalFile(String name, String contents) {
   var file = File(p.join(paths.out_bin_internal, name));
   file.writeAsStringSync(contents, mode: FileMode.writeOnly);
 }
+
+void exitIfNeeded(ProcessResult result, String errorMessage) {
+  if (result.exitCode != 0) {
+    print(errorMessage);
+    print(result.stdout);
+    print(result.stderr);
+    exit(1);
+  }
+}
