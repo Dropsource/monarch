@@ -25,14 +25,17 @@ class TreeView extends StatefulWidget {
 
   final FocusNode? focusNode;
 
-  TreeView(
-      {Key? key,
-      required List<TreeNode> nodes,
-      this.indent = 40,
-      this.iconSize,
-      this.focusNode,
-      required this.treeController})
-      : nodes = copyTreeNodes(nodes, treeController.keyProvider),
+  final Function(Key)? onNodeChanged;
+
+  TreeView({
+    Key? key,
+    required List<TreeNode> nodes,
+    this.indent = 40,
+    this.iconSize,
+    this.focusNode,
+    required this.treeController,
+    this.onNodeChanged,
+  })  : nodes = copyTreeNodes(nodes, treeController.keyProvider),
         super(key: key);
 
   @override
@@ -80,7 +83,10 @@ class _TreeViewState extends State<TreeView> {
       return KeyEventResult.ignored;
     }
     final result = test();
-    if (result) setState(() {});
+    if (result && _controller.selectedKey != null) {
+      setState(() {});
+      widget.onNodeChanged?.call(_controller.selectedKey!);
+    }
     return KeyEventResult.handled;
   }
 

@@ -78,8 +78,8 @@ class StoryListState extends State<StoryList> {
                     filteredStories: _filteredStories,
                     query: query,
                     focusNode: _storyListFocusNode,
-                    onStorySelected: (story) =>
-                        widget.manager.onActiveStoryChanged(story.key),
+                    onStorySelected: (storyKey) =>
+                        widget.manager.onActiveStoryChanged(storyKey),
                     // selectionColor: _focused
                   )
                 ],

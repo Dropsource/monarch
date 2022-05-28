@@ -10,7 +10,7 @@ class StoryTree extends StatefulWidget {
   final Iterable<StoryGroup> filteredStories;
   final String query;
   final FocusNode? focusNode;
-  final Function(Story)? onStorySelected;
+  final Function(String)? onStorySelected;
 
   const StoryTree({
     Key? key,
@@ -38,6 +38,11 @@ class _StoryTreeState extends State<StoryTree> {
     return TreeView(
         treeController: treeController,
         focusNode: widget.focusNode,
+        onNodeChanged: (key) {
+          if (key is LeafKey) {
+            widget.onStorySelected?.call(key.value);
+          }
+        },
         nodes: widget.filteredStories
             .map((group) => TreeNode(
                   key: NodeKey(group.groupKey),
@@ -49,7 +54,7 @@ class _StoryTreeState extends State<StoryTree> {
                       .map(
                         (story) => TreeNode(
                           key: LeafKey(story.key),
-                          onTap: () => widget.onStorySelected?.call(story),
+                          onTap: () => widget.onStorySelected?.call(story.key),
                           content: Container(
                             padding: const EdgeInsets.only(
                               left: 40,

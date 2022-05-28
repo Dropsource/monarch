@@ -74,7 +74,6 @@ class _NodeWidgetState extends State<NodeWidget> {
                         ),
                 ),
                 Expanded(child: widget.treeNode.content),
-                Text(widget.treeNode.key.toString()),
               ],
             ),
           ),
