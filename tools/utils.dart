@@ -61,8 +61,10 @@ void writeInternalFile(String name, String contents) {
   file.writeAsStringSync(contents, mode: FileMode.writeOnly);
 }
 
-void exitIfNeeded(ProcessResult result, String errorMessage) {
-  if (result.exitCode != 0) {
+void exitIfNeeded(ProcessResult result, String errorMessage,
+    {List<int>? successExitCodes}) {
+  var success = successExitCodes ?? [0];
+  if (!success.contains(exitCode)) {
     print(errorMessage);
     print(result.stdout);
     print(result.stderr);

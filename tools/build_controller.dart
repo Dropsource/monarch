@@ -20,7 +20,7 @@ Using flutter sdk at:
   $flutter_sdk
 ''');
 
-    var out_ui_flutter_id = paths.compute_out_ui_flutter_id(flutter_sdk);
+    var out_ui_flutter_id = paths.out_ui_flutter_id(flutter_sdk);
     utils.createDirectoryIfNeeded(out_ui_flutter_id);
 
     var out_ui_flutter_id_controller =
