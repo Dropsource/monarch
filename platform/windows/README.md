@@ -1,1 +1,0 @@
-Monarch Window Manager for Windows.
