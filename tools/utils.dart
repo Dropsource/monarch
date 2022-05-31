@@ -71,3 +71,12 @@ void exitIfNeeded(ProcessResult result, String errorMessage,
     exit(1);
   }
 }
+
+void exitIfNeededCheckStderr(ProcessResult result, String errorMessage) {
+  if (result.stderr.toString().isNotEmpty) {
+    print(errorMessage);
+    print(result.stdout);
+    print(result.stderr);
+    exit(1);
+  }
+}

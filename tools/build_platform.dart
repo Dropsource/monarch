@@ -17,6 +17,7 @@ void main() {
 ===============================================================================
 Using flutter sdk at:
   $flutter_sdk
+  Flutter version ${paths.get_flutter_version(flutter_sdk)}, ${paths.get_flutter_channel(flutter_sdk)} channel.
 ''');
 
     var out_ui_flutter_id = paths.out_ui_flutter_id(flutter_sdk);
@@ -118,7 +119,9 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
   if (gen_seed_dir.existsSync()) {
     // do nothing, assume directory is set up correctly to speed up local builds
     // run clean.dart to clean gen_seed directory
+    print('gen_seed for this flutter version already created.');
   } else {
+    print('Running `flutter create` in gen_seed...');
     // run `flutter create` and `flutter build`
     gen_seed_dir.createSync(recursive: true);
     var result = Process.runSync(
@@ -137,29 +140,108 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
         runInShell: true);
     utils.exitIfNeeded(result, 'Error running `flutter create`');
 
+    print('Running `flutter build` in gen_seed...');
     result = Process.runSync(
         paths.flutter_exe(flutter_sdk), ['build', 'windows', '--debug'],
         workingDirectory: gen_seed_dir.path, runInShell: true);
     utils.exitIfNeeded(result, 'Error running `flutter build`');
   }
 
-  var gen_dir = Directory(paths.platform_windows_gen);
-  if (gen_dir.existsSync()) gen_dir.deleteSync(recursive: true);
-  gen_dir.createSync(recursive: true);
+  {
+    print('Cleaning gen directory...');
+    var gen_dir = Directory(paths.platform_windows_gen);
+    if (gen_dir.existsSync()) gen_dir.deleteSync(recursive: true);
+    gen_dir.createSync(recursive: true);
+  }
 
-  var result = Process.runSync(
-      'robocopy',
-      [
-        p.join(paths.gen_seed_flutter_id(
-            paths.platform_windows_gen_seed, flutter_sdk), 'windows'),
-        paths.platform_windows_gen,
-        '*.*',
-        "/E"
-      ],
-      runInShell: true);
+  {
+    print('Copying gen_seed windows source files to gen directory...');
+    var result = Process.runSync(
+        'robocopy',
+        [
+          p.join(
+              paths.gen_seed_flutter_id(
+                  paths.platform_windows_gen_seed, flutter_sdk),
+              'windows'),
+          paths.platform_windows_gen,
+          '*.*',
+          "/E"
+        ],
+        runInShell: true);
 
-  utils.exitIfNeeded(result, 'Error copying gen_seed to gen directory',
-      successExitCodes: [0, 1]);
+    utils.exitIfNeeded(result, 'Error copying gen_seed to gen directory',
+        successExitCodes: [0, 1]);
+  }
+
+  {
+    var main_cpp = p.join(paths.platform_windows_gen, 'runner', 'main.cpp');
+    var main_og_file = File(main_cpp);
+    main_og_file
+        .renameSync(p.join(main_og_file.parent.path, 'main_original.cpp'));
+  }
+
+  {
+    print('Including src files in CMakeLists.txt...');
+    var cmakelists_txt =
+        p.join(paths.platform_windows_gen, 'runner', 'CMakeLists.txt');
+    var cmakelists_og_file = File(cmakelists_txt);
+    var cmakelistsContents = cmakelists_og_file.readAsStringSync();
+    cmakelists_og_file.renameSync(
+        p.join(cmakelists_og_file.parent.path, 'CMakeLists_original.txt'));
+
+    var src_dir = Directory(paths.platform_windows_src);
+    var srcFiles = src_dir.listSync(recursive: true, followLinks: false);
+    srcFiles = srcFiles.where(_isSourceFile).toList();
+    var buffer = StringBuffer();
+    for (var srcFile in srcFiles) {
+      var _path = p.relative(srcFile.path,
+          from: p.join(paths.platform_windows_gen, 'runner'));
+      _path = _path.replaceAll(r'\', r'/');
+      buffer.writeln('  "$_path"');
+    }
+
+    cmakelistsContents =
+        cmakelistsContents.replaceFirst('"main.cpp"', buffer.toString().trim());
+    File(cmakelists_txt).writeAsStringSync(cmakelistsContents);
+  }
+
+  {
+    print('Generating Visual Studio build system using CMake...');
+    var result = Process.runSync(
+        'cmake.exe',
+        [
+          '-S',
+          'gen',
+          '-B',
+          p.join('build', paths.flutter_id(flutter_sdk)),
+          '-G',
+          'Visual Studio 16 2019'
+        ],
+        workingDirectory: paths.platform_windows,
+        runInShell: true);
+
+    utils.exitIfNeededCheckStderr(
+        result, 'cmake error generating Visual Studio build system');
+  }
+
+  {
+    print('Building project using CMake...');
+    var result = Process.runSync(
+        'cmake.exe',
+        [
+          '--build',
+          p.join('build', paths.flutter_id(flutter_sdk)),
+          '--config',
+          'Debug',
+          '--target',
+          'INSTALL',
+          '--verbose'
+        ],
+        workingDirectory: paths.platform_windows,
+        runInShell: true);
+
+    utils.exitIfNeededCheckStderr(result, 'cmake error building project');
+  }
 
   // cp -R .\gen_seed\flutter_windows_3.0.1-stable\windows\* .\gen_x\
 
@@ -176,9 +258,9 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
 // clean gen dir
 // then copy gen_seed/{flutter_sdk}/windows/* to monarch/platform/windows/gen
 
-// NEXT: then rename gen/runner/main.cpp to main_og.cpp
+// then rename gen/runner/main.cpp to main_og.cpp
 
-// edit gen/CMakeList.txt to include our source files from monarch/platform/windows/src,
+// edit gen/runner/CMakeList.txt to include our source files from monarch/platform/windows/src,
 // maybe find and replace "main.cpp", include all files in src, no need for manifest
 // file or yaml file pointing at which files we should use, if it is in src, then it
 // should be built
@@ -186,5 +268,11 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
 // the build directory should be created
 
 // cmd: cmake.exe --build build\{flutter_sdk} --config Debug --target INSTALL --verbose
-// the build/runner/Debug/*.exe files should be created, those files can be copied to the out directory
+// NEXT: figure out cmake exit codes or how to detect when it fails
+// NEXT: the build/runner/Debug/*.exe files should be created, those files can be copied to the out directory
+}
+
+/// Returns source files which should be included in CMakeLists.txt
+bool _isSourceFile(FileSystemEntity element) {
+  return element is File && p.extension(element.path) == '.cpp';
 }
