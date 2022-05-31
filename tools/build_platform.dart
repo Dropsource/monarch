@@ -4,6 +4,7 @@ import 'package:yaml/yaml.dart';
 
 import 'paths.dart' as paths;
 import 'utils.dart' as utils;
+import 'package:monarch_io_utils/utils.dart';
 
 void main() {
   print('''
@@ -44,12 +45,11 @@ Using flutter sdk at:
 ''');
   }
 
-  if (Platform.isMacOS) {
-    var version = readMacosProjectVersion();
-    version = utils.getVersionSuffix(version);
-    utils.writeInternalFile('platform_app_version.txt', version);
-    print('Monarch macos platform build finished. Version $version');
-  }
+  var version = functionForPlatform(
+      macos: readMacosProjectVersion, windows: readWindowsProjectVersion);
+  version = utils.getVersionSuffix(version);
+  utils.writeInternalFile('platform_app_version.txt', version);
+  print('Monarch ${paths.os} platform build finished. Version $version');
 }
 
 void buildMacOs(String out_ui_flutter_id, String flutter_sdk) {
@@ -114,12 +114,23 @@ String readMacosProjectVersion() {
   }
 }
 
+String readWindowsProjectVersion() {
+  var buildSettings =
+      File(p.join(paths.platform_windows, 'build_settings.yaml'))
+          .readAsStringSync();
+  var yaml = loadYaml(buildSettings) as YamlMap;
+  return yaml['version'].toString();
+}
+
+/// Builds the monarch_windows_app for the given [flutter_sdk].
 void buildWindows(out_ui_flutter_id, flutter_sdk) {
   var gen_seed_dir = Directory(
       paths.gen_seed_flutter_id(paths.platform_windows_gen_seed, flutter_sdk));
   if (gen_seed_dir.existsSync()) {
-    // do nothing, assume directory is set up correctly to speed up local builds
-    // run clean.dart to clean gen_seed directory
+    // If gen_seed directory exists, do nothing.
+    // Assume directory is set up correctly which will speed up local builds
+    // since `flutter create` and `flutter build` are slow.
+    // Run clean.dart to clean gen_seed directory.
     print('gen_seed for this flutter version already created.');
   } else {
     print('Running `flutter create` in gen_seed...');
@@ -148,6 +159,10 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
         paths.flutter_exe(flutter_sdk), ['build', 'windows', '--debug'],
         workingDirectory: gen_seed_dir.path, runInShell: true);
     utils.exitIfNeeded(result, 'Error running `flutter build`');
+
+    // After `flutter build`, the ephemeral directory in
+    // gen_seed/{flutter_id}/windows/flutter/ephemeral
+    // should be there with the flutter windows dlls.
   }
 
   {
@@ -158,7 +173,7 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
   }
 
   {
-    print('Copying gen_seed windows source files to gen directory...');
+    print('Copying gen_seed/{flutter_id}/windows/* to gen directory...');
     var result = Process.runSync(
         'robocopy',
         [
@@ -250,6 +265,8 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
 
     utils.exitIfNeededCheckStderr(
         result, 'cmake error generating Visual Studio build system');
+
+    // The build/{flutter_id} directory should now be set up.
   }
 
   {
@@ -269,35 +286,33 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
         runInShell: true);
 
     utils.exitIfNeededCheckStderr(result, 'cmake error building project');
+
+    // The build/{flutter_id}/runner/Debug/* files should be created,
+    // those files can be copied to the out directory
   }
 
-  // cp -R .\gen_seed\flutter_windows_3.0.1-stable\windows\* .\gen_x\
+  {
+    print('Copying executable files to out directory...');
+    var debug = p.join(paths.platform_windows_build,
+        paths.flutter_id(flutter_sdk), 'runner', 'Debug');
 
-// if gen_seed/{flutter_sdk} does not exists, then create it and:
-//   in monarch/platform/windows/gen_seed/{flutter_sdk}
-// cmd: flutter create . --project-name monarch_windows_app --platforms windows --template app
-// cmd: flutter build windows --debug
-//   now ephemeral and generated source files should be there
+    var result = Process.runSync(
+        'copy', [p.join(debug, 'flutter_windows.dll'), out_ui_flutter_id],
+        runInShell: true);
+    utils.exitIfNeeded(
+        result, 'Error copying flutter_windows.dll to out directory');
 
-// if gen_seed/{flutter_sdk} exists then do nothing, this process is slow thus we
-//   don't want to re-create and re-build it with every build
-//   run clean.dart if you want to re-build gen_seed
+    result = Process.runSync(
+        'copy', [p.join(debug, 'monarch_windows_app.exe'), out_ui_flutter_id],
+        runInShell: true);
+    utils.exitIfNeeded(
+        result, 'Error copying monarch_windows_app.exe to out directory');
 
-// clean gen dir
-// then copy gen_seed/{flutter_sdk}/windows/* to monarch/platform/windows/gen
-
-// then rename gen/runner/main.cpp to main_og.cpp
-
-// edit gen/runner/CMakeList.txt to include our source files from monarch/platform/windows/src,
-// maybe find and replace "main.cpp", include all files in src, no need for manifest
-// file or yaml file pointing at which files we should use, if it is in src, then it
-// should be built
-// cmd: cmake.exe -S gen -B build\{flutter_sdk} -G "Visual Studio 16 2019"
-// the build directory should be created
-
-// cmd: cmake.exe --build build\{flutter_sdk} --config Debug --target INSTALL --verbose
-// NEXT: figure out cmake exit codes or how to detect when it fails
-// NEXT: the build/runner/Debug/*.exe files should be created, those files can be copied to the out directory
+    result = Process.runSync(
+        'copy', [p.join(debug, 'data', 'icudtl.dat'), out_ui_flutter_id],
+        runInShell: true);
+    utils.exitIfNeeded(result, 'Error copying icudtl.dat to out directory');
+  }
 }
 
 /// Returns source files which should be included in CMakeLists.txt
@@ -309,7 +324,6 @@ String _assertAndReplace(String contents, String from, String to) {
   var matches = from.allMatches(contents);
   if (matches.length != 1) {
     print('Expected to find 1 match for $from - got ${matches.length}');
-    // print(contents);
     exit(1);
   }
   return contents.replaceFirst(from, to);
