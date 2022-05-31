@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
+import 'package:yaml/yaml.dart';
 
 import 'paths.dart' as paths;
 import 'utils.dart' as utils;
@@ -135,6 +136,8 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
           'windows',
           '--template',
           'app'
+              '--org',
+          'Dropsource'
         ],
         workingDirectory: gen_seed_dir.path,
         runInShell: true);
@@ -181,6 +184,31 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
   }
 
   {
+    print('Writing version number and app icon in Runner.rc...');
+    var runner_rc = p.join(paths.platform_windows_gen, 'runner', 'Runner.rc');
+    var runner_rc_file = File(runner_rc);
+    var runnerRcContents = runner_rc_file.readAsStringSync();
+    runner_rc_file
+        .renameSync(p.join(runner_rc_file.parent.path, 'Runner_original.rc'));
+
+    var buildSettings =
+        File(p.join(paths.platform_windows, 'build_settings.yaml'))
+            .readAsStringSync();
+    var yaml = loadYaml(buildSettings) as YamlMap;
+    var version = yaml['version'].toString();
+    var versionCsv = version.replaceAll('.', ',');
+
+    runnerRcContents = _assertAndReplace(
+        runnerRcContents, r'resources\\app_icon.ico', yaml['app_icon_path']);
+    runnerRcContents = _assertAndReplace(runnerRcContents,
+        'VERSION_AS_NUMBER 1,0,0', 'VERSION_AS_NUMBER $versionCsv');
+    runnerRcContents = _assertAndReplace(runnerRcContents,
+        'VERSION_AS_STRING "1.0.0"', 'VERSION_AS_STRING "$version"');
+
+    File(runner_rc).writeAsStringSync(runnerRcContents);
+  }
+
+  {
     print('Including src files in CMakeLists.txt...');
     var cmakelists_txt =
         p.join(paths.platform_windows_gen, 'runner', 'CMakeLists.txt');
@@ -200,8 +228,8 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
       buffer.writeln('  "$_path"');
     }
 
-    cmakelistsContents =
-        cmakelistsContents.replaceFirst('"main.cpp"', buffer.toString().trim());
+    cmakelistsContents = _assertAndReplace(
+        cmakelistsContents, '"main.cpp"', buffer.toString().trim());
     File(cmakelists_txt).writeAsStringSync(cmakelistsContents);
   }
 
@@ -275,4 +303,14 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
 /// Returns source files which should be included in CMakeLists.txt
 bool _isSourceFile(FileSystemEntity element) {
   return element is File && p.extension(element.path) == '.cpp';
+}
+
+String _assertAndReplace(String contents, String from, String to) {
+  var matches = from.allMatches(contents);
+  if (matches.length != 1) {
+    print('Expected to find 1 match for $from - got ${matches.length}');
+    // print(contents);
+    exit(1);
+  }
+  return contents.replaceFirst(from, to);
 }
