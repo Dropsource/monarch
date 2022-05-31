@@ -146,8 +146,8 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
           '--platforms',
           'windows',
           '--template',
-          'app'
-              '--org',
+          'app',
+          '--org',
           'Dropsource'
         ],
         workingDirectory: gen_seed_dir.path,

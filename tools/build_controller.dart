@@ -18,6 +18,7 @@ void main() {
 ===============================================================================
 Using flutter sdk at:
   $flutter_sdk
+  Flutter version ${paths.get_flutter_version(flutter_sdk)}, ${paths.get_flutter_channel(flutter_sdk)} channel.
 ''');
 
     var out_ui_flutter_id = paths.out_ui_flutter_id(flutter_sdk);
@@ -37,7 +38,7 @@ Running `flutter pub get` in:
 ''');
       var result = Process.runSync(
           paths.flutter_exe(flutter_sdk), ['pub', 'get'],
-          workingDirectory: paths.controller);
+          workingDirectory: paths.controller, runInShell: Platform.isWindows);
       utils.exitIfNeeded(result, 'Error running `flutter pub get`');
     }
 
@@ -61,7 +62,8 @@ Building monarch controller flutter bundle. Will output to:
             p.join(out_ui_flutter_id_controller, 'flutter_assets'),
             '--verbose'
           ],
-          workingDirectory: paths.controller);
+          workingDirectory: paths.controller,
+          runInShell: Platform.isWindows);
 
       utils.exitIfNeeded(
           result, 'Error building monarch controller flutter bundle');
