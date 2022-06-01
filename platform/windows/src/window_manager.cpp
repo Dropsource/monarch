@@ -23,6 +23,7 @@ WindowManager::WindowManager(std::string controllerBundlePath, std::string previ
 
 	_controllerWindow = nullptr;
 	_previewWindow = nullptr;
+	_channels = nullptr;
 
 	selectedDockSide = DockSide::right;
 }
@@ -34,6 +35,9 @@ WindowManager::~WindowManager()
 
 	auto previewPtr = _previewWindow.release();
 	delete previewPtr;
+
+	auto channelsPtr = _channels.release();
+	delete channelsPtr;
 }
 
 void WindowManager::launchWindows()
@@ -80,6 +84,13 @@ void WindowManager::launchWindows()
 		controllerWindowInfo);
 
 	_controllerWindow->init(_previewWindow->GetHandle());
+	
+	// set up channels
+	_channels = std::make_unique<Channels>(
+		_controllerWindow->messenger(),
+		_previewWindow->messenger(),
+		this);
+	_channels->setUpCallForwarding();
 }
 
 void WindowManager::resizePreviewWindow(MonarchState state)

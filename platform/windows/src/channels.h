@@ -8,6 +8,8 @@
 #include "monarch_state.h"
 #include "channels_utils.h"
 
+class WindowManager;
+
 const std::string controllerChannelName = "monarch.controller";
 const std::string previewChannelName = "monarch.preview";
 

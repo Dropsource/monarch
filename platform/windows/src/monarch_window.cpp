@@ -46,6 +46,11 @@ void MonarchWindow::move(int X, int Y, int nWidth, int nHeight)
 	isMovingProgrammatically = false;
 }
 
+flutter::BinaryMessenger* MonarchWindow::messenger()
+{
+	return flutter_controller_->engine()->messenger();
+}
+
 ControllerWindow::ControllerWindow(
 	const flutter::DartProject& project,
 	WindowManager* windowManager)

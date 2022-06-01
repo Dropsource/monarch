@@ -5,19 +5,15 @@ Channels::Channels(
 	flutter::BinaryMessenger* previewMessenger, 
 	WindowManager* windowManager_)
 {
-	auto _controllerChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+	controllerChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
 		controllerMessenger,
 		controllerChannelName,
 		&flutter::StandardMethodCodec::GetInstance());
 
-	controllerChannel = std::move(_controllerChannel);
-
-	auto _previewChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+	previewChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
 		previewMessenger,
 		previewChannelName,
 		&flutter::StandardMethodCodec::GetInstance());
-
-	previewChannel = std::move(_previewChannel);
 
 	windowManager = windowManager_;
 }
@@ -33,6 +29,15 @@ Channels::~Channels()
 
 void Channels::setUpCallForwarding()
 {
+	previewChannel->SetMethodCallHandler(
+		[=](const auto& call, auto result) {
+			controllerChannel->InvokeMethod(
+				call.method_name(),
+				std::make_unique<EncodableValue>(call.arguments()));
+			result->Success();
+		}
+	);
+
 	controllerChannel->SetMethodCallHandler(
 		[=](const auto& call, auto result) {
 			previewChannel->InvokeMethod(
@@ -69,15 +74,6 @@ void Channels::setUpCallForwarding()
 			//else {
 			//	// no-op
 			//}
-		}
-	);
-
-	previewChannel->SetMethodCallHandler(
-		[=](const auto& call, auto result) {
-			controllerChannel->InvokeMethod(
-				call.method_name(),
-				std::make_unique<EncodableValue>(call.arguments()));
-			result->Success();
 		}
 	);
 }

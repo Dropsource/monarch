@@ -21,6 +21,7 @@ public:
 
 	WindowInfo getWindowInfo();
 	void move(int X, int Y, int nWidth, int nHeight);
+	flutter::BinaryMessenger* messenger();
 
 protected:
 	bool isMovingProgrammatically = false;
