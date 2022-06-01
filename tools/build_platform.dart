@@ -126,16 +126,21 @@ String readWindowsProjectVersion() {
 void buildWindows(out_ui_flutter_id, flutter_sdk) {
   var gen_seed_dir = Directory(
       paths.gen_seed_flutter_id(paths.platform_windows_gen_seed, flutter_sdk));
-  if (gen_seed_dir.existsSync()) {
-    // If gen_seed directory exists, do nothing.
-    // Assume directory is set up correctly which will speed up local builds
-    // since `flutter create` and `flutter build` are slow.
-    // Run clean.dart to clean gen_seed directory.
-    print('gen_seed for this flutter version already created.');
+  if (_isGenSeedDirectoryOk(gen_seed_dir)) {
+    /// Commands `flutter create` and `flutter build` are slow, 
+    /// thus when gen_seed directory is ok, do not re-run those commands.
+    print('gen_seed for this flutter version ok.');
   } else {
-    print('Running `flutter create` in gen_seed...');
-    // run `flutter create` and `flutter build`
+    if (gen_seed_dir.existsSync()) {
+      print('gen_seed found but not ok, will re-generate it.');
+      gen_seed_dir.deleteSync(recursive: true);
+    }
+    else {
+      print('gen_seed for this flutter version not found, will generate it.');
+    }
     gen_seed_dir.createSync(recursive: true);
+    print('Running `flutter create` in gen_seed...');
+    /// Run `flutter create` and `flutter build`
     var result = Process.runSync(
         paths.flutter_exe(flutter_sdk),
         [
@@ -313,6 +318,32 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
         runInShell: true);
     utils.exitIfNeeded(result, 'Error copying icudtl.dat to out directory');
   }
+}
+
+bool _isGenSeedDirectoryOk(Directory gen_seed_dir) {
+  if (!gen_seed_dir.existsSync()) {
+    return false;
+  }
+  
+  var windows_dir = Directory(p.join(gen_seed_dir.path, 'windows'));
+  if (!windows_dir.existsSync()) {
+    return false;
+  }
+
+  var build_dir = Directory(p.join(gen_seed_dir.path, 'build'));
+  if (!build_dir.existsSync()) {
+    return false;
+  }
+
+  if (windows_dir.listSync().isEmpty) {
+    return false;
+  }
+
+  if (build_dir.listSync().isEmpty) {
+    return false;
+  }
+
+  return true;
 }
 
 /// Returns source files which should be included in CMakeLists.txt
