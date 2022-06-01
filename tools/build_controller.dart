@@ -69,6 +69,20 @@ Building monarch controller flutter bundle. Will output to:
           result, 'Error building monarch controller flutter bundle');
     }
 
+    {
+      if (Platform.isWindows) {
+        var result = Process.runSync(
+            'copy',
+            [
+              p.join(flutter_sdk, 'bin', 'cache', 'artifacts', 'engine',
+                  'windows-x64', 'icudtl.dat'),
+              out_ui_flutter_id_controller
+            ],
+            runInShell: true);
+        utils.exitIfNeeded(result, 'Error copying icudtl.dat to monarch_controller directory');
+      }
+    }
+
     print('''
 ===============================================================================
 ''');
