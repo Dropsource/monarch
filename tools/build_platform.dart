@@ -127,19 +127,19 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
   var gen_seed_dir = Directory(
       paths.gen_seed_flutter_id(paths.platform_windows_gen_seed, flutter_sdk));
   if (_isGenSeedDirectoryOk(gen_seed_dir)) {
-    /// Commands `flutter create` and `flutter build` are slow, 
+    /// Commands `flutter create` and `flutter build` are slow,
     /// thus when gen_seed directory is ok, do not re-run those commands.
     print('gen_seed for this flutter version ok.');
   } else {
     if (gen_seed_dir.existsSync()) {
       print('gen_seed found but not ok, will re-generate it.');
       gen_seed_dir.deleteSync(recursive: true);
-    }
-    else {
+    } else {
       print('gen_seed for this flutter version not found, will generate it.');
     }
     gen_seed_dir.createSync(recursive: true);
     print('Running `flutter create` in gen_seed...');
+
     /// Run `flutter create` and `flutter build`
     var result = Process.runSync(
         paths.flutter_exe(flutter_sdk),
@@ -197,35 +197,50 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
   }
 
   {
-    var main_cpp = p.join(paths.platform_windows_gen, 'runner', 'main.cpp');
-    var main_og_file = File(main_cpp);
-    main_og_file
-        .renameSync(p.join(main_og_file.parent.path, 'main_original.cpp'));
-  }
+    print('Editing files in gen directory...');
 
-  {
-    print('Writing version number and app icon in Runner.rc...');
-    var runner_rc = p.join(paths.platform_windows_gen, 'runner', 'Runner.rc');
-    var runner_rc_file = File(runner_rc);
-    var runnerRcContents = runner_rc_file.readAsStringSync();
-    runner_rc_file
-        .renameSync(p.join(runner_rc_file.parent.path, 'Runner_original.rc'));
+    {
+      /// Rename gen/runner/main.cpp to main_original.cpp
+      var main_cpp = p.join(paths.platform_windows_gen, 'runner', 'main.cpp');
+      var main_og_file = File(main_cpp);
+      main_og_file
+          .renameSync(p.join(main_og_file.parent.path, 'main_original.cpp'));
+    }
 
-    var buildSettings =
-        File(p.join(paths.platform_windows, 'build_settings.yaml'))
-            .readAsStringSync();
-    var yaml = loadYaml(buildSettings) as YamlMap;
-    var version = yaml['version'].toString();
-    var versionCsv = version.replaceAll('.', ',');
+    {
+      /// Write version number and app icon in gen/runner/Runner.rc
+      var runner_rc = p.join(paths.platform_windows_gen, 'runner', 'Runner.rc');
+      var runner_rc_file = File(runner_rc);
+      var contents = runner_rc_file.readAsStringSync();
+      runner_rc_file
+          .renameSync(p.join(runner_rc_file.parent.path, 'Runner_original.rc'));
 
-    runnerRcContents = _assertAndReplace(
-        runnerRcContents, r'resources\\app_icon.ico', yaml['app_icon_path']);
-    runnerRcContents = _assertAndReplace(runnerRcContents,
-        'VERSION_AS_NUMBER 1,0,0', 'VERSION_AS_NUMBER $versionCsv');
-    runnerRcContents = _assertAndReplace(runnerRcContents,
-        'VERSION_AS_STRING "1.0.0"', 'VERSION_AS_STRING "$version"');
+      var buildSettings =
+          File(p.join(paths.platform_windows, 'build_settings.yaml'))
+              .readAsStringSync();
+      var yaml = loadYaml(buildSettings) as YamlMap;
+      var version = yaml['version'].toString();
+      var versionCsv = version.replaceAll('.', ',');
 
-    File(runner_rc).writeAsStringSync(runnerRcContents);
+      contents = _assertAndReplace(
+          contents, r'resources\\app_icon.ico', yaml['app_icon_path']);
+      contents = _assertAndReplace(contents,
+          'VERSION_AS_NUMBER 1,0,0', 'VERSION_AS_NUMBER $versionCsv');
+      contents = _assertAndReplace(contents,
+          'VERSION_AS_STRING "1.0.0"', 'VERSION_AS_STRING "$version"');
+
+      File(runner_rc).writeAsStringSync(contents);
+    }
+
+    {
+      /// In gen/runner/flutter_window.h, change private members to protected
+      var flutter_window_h =
+          p.join(paths.platform_windows_gen, 'runner', 'flutter_window.h');
+      var flutter_window_h_file = File(flutter_window_h);
+      var contents = flutter_window_h_file.readAsStringSync();
+      contents = _assertAndReplace(contents, 'private:', 'protected:');
+      flutter_window_h_file.writeAsStringSync(contents);
+    }
   }
 
   {
@@ -324,7 +339,7 @@ bool _isGenSeedDirectoryOk(Directory gen_seed_dir) {
   if (!gen_seed_dir.existsSync()) {
     return false;
   }
-  
+
   var windows_dir = Directory(p.join(gen_seed_dir.path, 'windows'));
   if (!windows_dir.existsSync()) {
     return false;
