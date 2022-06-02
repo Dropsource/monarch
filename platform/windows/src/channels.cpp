@@ -31,18 +31,35 @@ void Channels::setUpCallForwarding()
 {
 	previewChannel->SetMethodCallHandler(
 		[=](const auto& call, auto result) {
-			controllerChannel->InvokeMethod(
-				call.method_name(),
-				std::make_unique<EncodableValue>(call.arguments()));
+			if (std::holds_alternative<std::monostate>(*call.arguments())) {
+				controllerChannel->InvokeMethod(
+					call.method_name(),
+					std::make_unique<EncodableValue>(std::monostate()));
+			}
+			else {	
+				controllerChannel->InvokeMethod(
+					call.method_name(),
+					std::make_unique<EncodableValue>(
+						EncodableValue(std::get<EncodableMap>(*call.arguments()))));
+			}
 			result->Success();
 		}
 	);
 
 	controllerChannel->SetMethodCallHandler(
 		[=](const auto& call, auto result) {
-			previewChannel->InvokeMethod(
-				call.method_name(), 
-				std::make_unique<EncodableValue>(call.arguments()));
+			if (std::holds_alternative<std::monostate>(*call.arguments())) {
+				previewChannel->InvokeMethod(
+					call.method_name(),
+					std::make_unique<EncodableValue>(std::monostate()));
+			}
+			else {
+				previewChannel->InvokeMethod(
+					call.method_name(),
+					std::make_unique<EncodableValue>(
+						EncodableValue(std::get<EncodableMap>(*call.arguments()))));
+			}
+			
 			result->Success();
 
 			//if (call.method_name() == MonarchMethods::setActiveDevice ||
