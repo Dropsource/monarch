@@ -8,3 +8,4 @@
 - To debug or edit the code, open up the visual studio sln file
 - Once the solution is open, make the project monarch_windows_app the startup project (Set as Startup Project)
 - Should I list pre-requisites? Knowledge of C++, CMake and Visual Studio
+- That the version number and app icon are taken from build_settings.yaml
