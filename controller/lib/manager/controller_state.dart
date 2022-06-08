@@ -12,6 +12,7 @@ class ControllerState implements OutboundChannelArgument {
   final bool isReady;
   final String packageName;
   final List<StoryGroup> storyGroups;
+  final Set<String> collapsedGroupKeys;
   final String? activeStoryKey;
 
   final DeviceDefinition currentDevice;
@@ -54,10 +55,12 @@ class ControllerState implements OutboundChannelArgument {
     required this.scaleList,
     required this.textScaleFactor,
     required this.visualDebugFlags,
+    required this.collapsedGroupKeys,
   });
 
   factory ControllerState.init() => ControllerState(
         isReady: false,
+        collapsedGroupKeys: {},
         devices: [defaultDeviceDefinition],
         currentDevice: defaultDeviceDefinition,
         locales: [defs.defaultLocale],
@@ -109,6 +112,7 @@ class ControllerState implements OutboundChannelArgument {
         textScaleFactor: textScaleFactor ?? this.textScaleFactor,
         visualDebugFlags: visualDebugFlags ?? this.visualDebugFlags,
         packageName: packageName ?? this.packageName,
+        collapsedGroupKeys: collapsedGroupKeys,
       );
 
   @override

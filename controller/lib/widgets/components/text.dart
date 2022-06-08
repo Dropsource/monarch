@@ -570,8 +570,7 @@ abstract class TextWidget extends StatelessWidget {
         : text;
     var formattedText =
         _shouldUpperCase ? translatedText.toUpperCase() : translatedText;
-    // var _overflow =
-    // overflow != null ? overflow : DefaultTextStyle.of(context).overflow;
+
     var _styles =
         styles == null ? style(context) : style(context)?.merge(styles);
 

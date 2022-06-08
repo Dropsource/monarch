@@ -28,7 +28,9 @@ class CheckboxGrid extends StatelessWidget {
             final item = devToolsOptions[index];
             return StockholmCheckbox(
               value: item.isEnabled,
-              onChanged: (newValue) => onOptionToggle?.call(item),
+              onChanged: (newValue) {
+                onOptionToggle?.call(item);
+              },
               label: Translations.of(context)!.text(item.label),
             );
           }),

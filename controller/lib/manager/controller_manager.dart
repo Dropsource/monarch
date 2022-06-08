@@ -37,6 +37,7 @@ class ControllerManager {
   }
 
   void onActiveStoryChanged(String key) async {
+    logger.finest('changing active story to $key');
     _update(state.copyWith(activeStoryKey: key));
     channelMethodsSender.loadStory(key);
   }
@@ -196,6 +197,7 @@ class ControllerManager {
     return metaStoriesMap.entries
         .map((group) => StoryGroup(
             groupName: _readStoryGroupName(group.key),
+            groupKey: group.key,
             stories: group.value.storiesNames
                 .map((story) => Story(key: '${group.key}|$story', name: story))
                 .toList()))
@@ -208,5 +210,13 @@ class ControllerManager {
     final firstSlash = key.indexOf('/');
     final firstDot = key.indexOf('.');
     return key.substring(firstSlash + 1, firstDot);
+  }
+
+  void onGroupToggle(String groupKey) {
+    if (state.collapsedGroupKeys.contains(groupKey)) {
+      state.collapsedGroupKeys.remove(groupKey);
+    } else {
+      state.collapsedGroupKeys.add(groupKey);
+    }
   }
 }

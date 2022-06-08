@@ -50,7 +50,6 @@ class UiWindowControllerState extends State<ControllerScreen> {
 
             return SizedBox(
               width: double.infinity,
-              //height: 600,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

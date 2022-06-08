@@ -49,6 +49,7 @@ class ControlPanel extends StatelessWidget {
               values: state.devices,
               toStringFunction: (e) => e.name,
               onChange: manager.onDeviceChanged,
+              skipTraversal: true,
             ),
             controlWidth: controlWidth,
           ),
@@ -60,6 +61,7 @@ class ControlPanel extends StatelessWidget {
             control: DropDown<MetaTheme>(
               currentValue: state.currentTheme,
               values: state.allThemes,
+              skipTraversal: true,
               toStringFunction: (e) => e.name,
               onChange: manager.onThemeChanged,
             ),
@@ -74,6 +76,7 @@ class ControlPanel extends StatelessWidget {
             control: DropDown<String>(
               currentValue: state.currentLocale,
               values: state.locales,
+              skipTraversal: true,
               toStringFunction: (e) => e.toString(),
               onChange: manager.onLocaleChanged,
             ),
@@ -101,6 +104,7 @@ class ControlPanel extends StatelessWidget {
             control: DropDown<StoryScaleDefinition>(
               currentValue: state.currentScale,
               values: state.scaleList.toList(),
+              skipTraversal: true,
               onChange: manager.onScaleChanged,
               toStringFunction: (e) => e.name,
             ),
@@ -114,6 +118,7 @@ class ControlPanel extends StatelessWidget {
             control: DropDown<DockDefinition>(
               currentValue: state.currentDock,
               values: state.dockList.toList(),
+              skipTraversal: true,
               onChange: manager.onDockSettingsChange,
               toStringFunction: (e) => _translations.text(e.name),
             ),

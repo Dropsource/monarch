@@ -14,6 +14,7 @@ class DropDown<T> extends StatelessWidget {
   final double horizontalPadding;
 
   final Map<String, T> stringfiedValues;
+  final bool skipTraversal;
 
   T get(String val) => stringfiedValues[val]!;
 
@@ -24,12 +25,14 @@ class DropDown<T> extends StatelessWidget {
     this.onChange,
     required this.toStringFunction,
     this.horizontalPadding = 16,
+    this.skipTraversal = false,
   })  : stringfiedValues = {for (var e in values) toStringFunction(e): e},
         super(key: key);
 
   @override
   Widget build(BuildContext context) => StockholmDropdownButton<String>(
         key: key,
+        skipTraversal: skipTraversal,
         value: toStringFunction(currentValue),
         icon: const Icon(
           Icons.arrow_drop_down,

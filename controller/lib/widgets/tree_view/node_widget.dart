@@ -12,14 +12,18 @@ class NodeWidget extends StatefulWidget {
   final double? indent;
   final double? iconSize;
   final TreeController state;
+  final VoidCallback? updateRoot;
+  final VoidCallback? onFocus;
 
-  const NodeWidget(
-      {Key? key,
-      required this.treeNode,
-      this.indent,
-      required this.state,
-      this.iconSize})
-      : super(key: key);
+  const NodeWidget({
+    Key? key,
+    required this.treeNode,
+    this.indent,
+    required this.state,
+    this.iconSize,
+    this.updateRoot,
+    this.onFocus,
+  }) : super(key: key);
 
   @override
   _NodeWidgetState createState() => _NodeWidgetState();
@@ -43,39 +47,63 @@ class _NodeWidgetState extends State<NodeWidget> {
             ? Icons.expand_more
             : Icons.chevron_right;
 
-    var onIconPressed = _isLeaf
-        ? null
-        : () => setState(
-            () => widget.state.toggleNodeExpanded(widget.treeNode.key!));
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            if (onIconPressed != null) ...[
-              IconButton(
-                iconSize: widget.iconSize ?? 16.0,
-                splashRadius: 8,
-                padding: const EdgeInsets.all(4),
-                constraints: const BoxConstraints(),
-                icon: Icon(
-                  icon,
-                  size: 16,
+    return InkWell(
+      onTap: _onTap,
+      canRequestFocus: false,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            color: widget.state.isNodeSelected(widget.treeNode.key!)
+                ? widget.state.hasFocus
+                    ? Colors.blue
+                    : Colors.blue.withAlpha(80)
+                : Colors.transparent,
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  constraints: const BoxConstraints(),
+                  child: !_isLeaf
+                      ? Icon(
+                          icon,
+                          size: 16,
+                        )
+                      : const SizedBox(
+                          height: 16,
+                        ),
                 ),
-                onPressed: onIconPressed,
+                Expanded(child: widget.treeNode.content),
+              ],
+            ),
+          ),
+          if (_isExpanded && !_isLeaf)
+            Padding(
+              padding: EdgeInsets.zero,
+              child: buildNodes(
+                widget.treeNode.children!,
+                widget.indent,
+                widget.state,
+                widget.iconSize,
+                widget.updateRoot,
+                widget.onFocus,
               ),
-            ],
-            Expanded(child: widget.treeNode.content),
-          ],
-        ),
-        if (_isExpanded && !_isLeaf)
-          Padding(
-            padding: EdgeInsets.zero, //EdgeInsets.only(left: widget.indent!),
-            child: buildNodes(widget.treeNode.children!, widget.indent,
-                widget.state, widget.iconSize),
-          )
-      ],
+            )
+        ],
+      ),
     );
+  }
+
+  void _onTap() {
+    widget.treeNode.onTap?.call();
+    widget.updateRoot?.call();
+    setState(() {
+      if (!_isLeaf) {
+        widget.state.toggleNodeExpanded(widget.treeNode.key!);
+      }
+
+      widget.onFocus?.call();
+      widget.state.selectKey(widget.treeNode.key!);
+    });
   }
 }

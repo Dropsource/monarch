@@ -52,12 +52,16 @@ void main() {
 }
 
 List<StoryGroup> _testData() => [
-      StoryGroup(groupName: 'first_group', stories: [
-        Story(name: 'first_story', key: 'first_story_key'),
-        Story(name: 'second_story', key: 'second_story_key'),
-        Story(name: 'third_story', key: 'third_story_key'),
-      ]),
       StoryGroup(
+          groupKey: 'first_group_key',
+          groupName: 'first_group',
+          stories: [
+            Story(name: 'first_story', key: 'first_story_key'),
+            Story(name: 'second_story', key: 'second_story_key'),
+            Story(name: 'third_story', key: 'third_story_key'),
+          ]),
+      StoryGroup(
+        groupKey: 'second_group_key',
         groupName: 'second_group',
         stories: [
           Story(
