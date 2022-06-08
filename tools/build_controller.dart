@@ -18,9 +18,10 @@ void main() {
 ===============================================================================
 Using flutter sdk at:
   $flutter_sdk
+  Flutter version ${paths.get_flutter_version(flutter_sdk)}, ${paths.get_flutter_channel(flutter_sdk)} channel.
 ''');
 
-    var out_ui_flutter_id = paths.compute_out_ui_flutter_id(flutter_sdk);
+    var out_ui_flutter_id = paths.out_ui_flutter_id(flutter_sdk);
     utils.createDirectoryIfNeeded(out_ui_flutter_id);
 
     var out_ui_flutter_id_controller =
@@ -37,7 +38,7 @@ Running `flutter pub get` in:
 ''');
       var result = Process.runSync(
           paths.flutter_exe(flutter_sdk), ['pub', 'get'],
-          workingDirectory: paths.controller);
+          workingDirectory: paths.controller, runInShell: Platform.isWindows);
       utils.exitIfNeeded(result, 'Error running `flutter pub get`');
     }
 
@@ -61,10 +62,25 @@ Building monarch controller flutter bundle. Will output to:
             p.join(out_ui_flutter_id_controller, 'flutter_assets'),
             '--verbose'
           ],
-          workingDirectory: paths.controller);
+          workingDirectory: paths.controller,
+          runInShell: Platform.isWindows);
 
       utils.exitIfNeeded(
           result, 'Error building monarch controller flutter bundle');
+    }
+
+    {
+      if (Platform.isWindows) {
+        var result = Process.runSync(
+            'copy',
+            [
+              p.join(flutter_sdk, 'bin', 'cache', 'artifacts', 'engine',
+                  'windows-x64', 'icudtl.dat'),
+              out_ui_flutter_id_controller
+            ],
+            runInShell: true);
+        utils.exitIfNeeded(result, 'Error copying icudtl.dat to monarch_controller directory');
+      }
     }
 
     print('''
