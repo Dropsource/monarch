@@ -62,6 +62,8 @@ void Channels::setUpCallForwarding()
 			
 			result->Success();
 
+			// NEXT: un-comment code below to handle window resizing and docking
+
 			//if (call.method_name() == MonarchMethods::setActiveDevice ||
 			//	call.method_name() == MonarchMethods::setStoryScale) {
 			//	
