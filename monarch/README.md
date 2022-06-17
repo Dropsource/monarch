@@ -1,6 +1,6 @@
 <p style="margin-bottom: 0; padding-bottom: 0">
   <a href="https://monarchapp.io">
-    <img src="https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch-logo-sq.png" alt="Monarch" height="100" />
+    <img src="https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch-logo.png" alt="Monarch" height="80" />
   </a>
 </p>
 
