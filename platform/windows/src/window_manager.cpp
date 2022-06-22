@@ -71,7 +71,9 @@ void WindowManager::launchWindows()
 
 	if (!_previewWindow->CreateAndShow(
 		to_wstring(defaultDeviceDefinition.title()), 
-		Win32Window::Point(controllerWindowInfo.topLeft.x, controllerWindowInfo.topLeft.y),
+		Win32Window::Point(
+			controllerWindowInfo.topLeft.x + controllerWindowInfo.size.width, 
+			controllerWindowInfo.topLeft.y),
 		previewSize)) {
 		throw std::runtime_error{ "Preview window was not created successfully" };
 	}

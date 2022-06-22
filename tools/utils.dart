@@ -72,9 +72,13 @@ void exitIfNeeded(ProcessResult result, String errorMessage,
   }
 }
 
-void exitIfNeededCheckStderr(ProcessResult result, String errorMessage) {
-  if (result.stderr.toString().isNotEmpty) {
+void exitIfNeededCMake(ProcessResult result, String errorMessage) {
+  if (result.stderr.toString().isNotEmpty ||
+      result.stdout.toString().contains('Build FAILED')) {
+    print('');
     print(errorMessage);
+    print('CMake output:');
+    print('');
     print(result.stdout);
     print(result.stderr);
     exit(1);
