@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer' as developer;
+import 'dart:isolate';
 import 'package:vm_service/vm_service.dart' as vm_service;
 import 'package:vm_service/vm_service_io.dart';
 import 'package:monarch_utils/log.dart';
@@ -24,8 +25,7 @@ class VmServiceClient with Log {
 
     _client = await vmServiceConnectUri(webSocketUri, log: VmServiceLog());
     log.fine('Connected to vm service socket $webSocketUri');
-    final vm = await _client.getVM();
-    _isolateId = vm.isolates!.first.id;
+    _isolateId = developer.Service.getIsolateID(Isolate.current);
     log.fine('Got isolateId=$_isolateId');
 
     _onClientDone();
