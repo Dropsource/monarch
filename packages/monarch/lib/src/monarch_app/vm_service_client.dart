@@ -15,6 +15,13 @@ class VmServiceClient with Log {
   late vm_service.VmService _client;
   late String? _isolateId;
 
+  /// Connects to the Dart VM service.
+  /// 
+  /// At runtime, the Dart VM Service has at least two isolates: 
+  /// one for the Monarch Preview and one for the Monarch Controller.
+  /// 
+  /// This method also gets the id of the current isolate, the current 
+  /// isolate runs the code for the Monarch Preview.
   Future<void> connect() async {
     final info = await developer.Service.getInfo();
     final port = info.serverUri!.port;
