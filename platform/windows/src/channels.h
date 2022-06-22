@@ -3,6 +3,7 @@
 #include <string>
 #include <flutter/method_channel.h>
 #include <flutter/standard_method_codec.h>
+#include <flutter/method_result_functions.h>
 
 #include "window_manager.h"
 #include "monarch_state.h"

@@ -62,37 +62,35 @@ void Channels::setUpCallForwarding()
 			
 			result->Success();
 
-			// NEXT: un-comment code below to handle window resizing and docking
+			if (call.method_name() == MonarchMethods::setActiveDevice ||
+				call.method_name() == MonarchMethods::setStoryScale) {
+				
+				auto result_handler = std::make_unique<flutter::MethodResultFunctions<>>(
+					[=](const EncodableValue* success_value) {
+						auto args = std::get<EncodableMap>(*success_value);
+						MonarchState state{ args };
+						windowManager->resizePreviewWindow(state);
+					},
+					nullptr, nullptr);
 
-			//if (call.method_name() == MonarchMethods::setActiveDevice ||
-			//	call.method_name() == MonarchMethods::setStoryScale) {
-			//	
-			//	auto result_handler = std::make_unique<flutter::MethodResult<>>(
-			//		[=](const EncodableValue* success_value) {
-			//			auto args = std::get<EncodableMap>(*success_value);
-			//			MonarchState state{ args };
-			//			windowManager->resizePreviewWindow(state);
-			//		}, 
-			//		nullptr, nullptr);
+				controllerChannel->InvokeMethod(
+					MonarchMethods::getState, nullptr, std::move(result_handler));
+			}
+			else if (call.method_name() == MonarchMethods::setDockSide) {
+				auto result_handler = std::make_unique<flutter::MethodResultFunctions<>>(
+					[=](const EncodableValue* success_value) {
+						auto args = std::get<EncodableMap>(*success_value);
+						MonarchState state{ args };
+						windowManager->setDocking(state);
+					},
+					nullptr, nullptr);
 
-			//	controllerChannel->InvokeMethod(
-			//		MonarchMethods::getState, nullptr, std::move(result_handler));
-			//}
-			//else if (call.method_name() == MonarchMethods::setDockSide) {
-			//	auto result_handler = std::make_unique<flutter::MethodResult<>>(
-			//		[=](const EncodableValue* success_value) {
-			//			auto args = std::get<EncodableMap>(*success_value);
-			//			MonarchState state{ args };
-			//			windowManager->setDocking(state);
-			//		},
-			//		nullptr, nullptr);
-
-			//	controllerChannel->InvokeMethod(
-			//		MonarchMethods::getState, nullptr, std::move(result_handler));
-			//}
-			//else {
-			//	// no-op
-			//}
+				controllerChannel->InvokeMethod(
+					MonarchMethods::getState, nullptr, std::move(result_handler));
+			}
+			else {
+				// no-op
+			}
 		}
 	);
 }
