@@ -283,8 +283,8 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
         workingDirectory: paths.platform_windows,
         runInShell: true);
 
-    utils.exitIfNeededCheckStderr(
-        result, 'cmake error generating Visual Studio build system');
+    utils.exitIfNeededCMake(
+        result, 'CMake error generating Visual Studio build system');
 
     // The build/{flutter_id} directory should now be set up.
   }
@@ -305,7 +305,7 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
         workingDirectory: paths.platform_windows,
         runInShell: true);
 
-    utils.exitIfNeededCheckStderr(result, 'cmake error building project');
+    utils.exitIfNeededCMake(result, 'CMake error building project');
 
     // The build/{flutter_id}/runner/Debug/* files should be created,
     // those files can be copied to the out directory
