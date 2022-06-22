@@ -24,3 +24,4 @@
 - That the version number and app icon are taken from build_settings.yaml
 - To sign commits on windows install gpg4win, which installs Kleopatra (the frontend of gpg)
   which runs the gpg agent, thus make sure Kleopatra is running when signing commits
+- Copy notes from old README, the change app icon notes are important
