@@ -32,7 +32,9 @@ class TextWithHighlight extends StatelessWidget {
               return [const TextSpan(text: '')];
             } else {
               final splitTextSpans = <TextSpan>[];
-              final index = originalText.indexOf(highlightedText);
+              final index = originalText
+                  .toLowerCase()
+                  .indexOf(highlightedText.toLowerCase());
               if (index == -1) {
                 return [const TextSpan(text: '')];
               }
@@ -42,10 +44,13 @@ class TextWithHighlight extends StatelessWidget {
               ];
 
               if (splitTexts.length > 1) {
+                final highlight = originalText.substring(
+                    index, index + highlightedText.length);
+
                 splitTextSpans
                     .add(TextSpan(text: splitTexts.first, style: textStyle));
                 splitTextSpans
-                    .add(TextSpan(text: highlightedText, style: newTextStyle));
+                    .add(TextSpan(text: highlight, style: newTextStyle));
                 splitTexts.removeAt(0);
               }
 

@@ -4,8 +4,9 @@ import 'primitives/key_provider.dart';
 import 'primitives/tree_node.dart';
 
 /// Copies nodes to unmodifiable list, assigning missing keys and checking for duplicates.
-List<TreeNode> copyTreeNodes(List<TreeNode>? nodes) {
-  return _copyNodesRecursively(nodes, KeyProvider())!;
+List<TreeNode> copyTreeNodes(List<TreeNode>? nodes, KeyProvider keyProvider) {
+  keyProvider.clear();
+  return _copyNodesRecursively(nodes, keyProvider)!;
 }
 
 List<TreeNode>? _copyNodesRecursively(
@@ -18,6 +19,8 @@ List<TreeNode>? _copyNodesRecursively(
       key: keyProvider.key(n.key),
       content: n.content,
       children: _copyNodesRecursively(n.children, keyProvider),
+      onTap: n.onTap,
+      updateRoot: n.updateRoot,
     );
   }));
 }
