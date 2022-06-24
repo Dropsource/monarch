@@ -134,7 +134,7 @@ ${metaStoriesImportStatements.join('\n')}
 MonarchData get _monarchData => MonarchData('$packageName', [${metaLocalizationList.join(', ')}], [${metaThemeList.join(', ')}], $metaStoriesMap);
 
 void main() {
-  startMonarch(() => _monarchData);
+  startMonarchPreview(() => _monarchData);
 }
 
 ''';

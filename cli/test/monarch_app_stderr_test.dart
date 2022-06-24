@@ -9,7 +9,7 @@ void main() {
       var message = '''
 [ERROR:flutter/lib/ui/ui_dart_state.cc(186)] Unhandled Exception: some error on stderr
 #0      stderr_ (file:///Users/fertrig/development/scratch/solitude/stories/sample_button_stories.dart:20:45)
-#1      _StoryViewState.build (package:monarch/src/monarch_app/story_view.dart:119:41)
+#1      _StoryViewState.build (package:monarch/src/preview/story_view.dart:119:41)
 #2      StatefulElement.build (package:flutter/src/widgets/framework.dart:4612:27)
 #3      ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:4495:15)
 #4      StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:4667:11)
@@ -43,7 +43,7 @@ void main() {
       expect(logEntries[0].errorDetails, isNull);
       expect(logEntries[0].stackTrace, '''
 #0      stderr_ (file:///Users/fertrig/development/scratch/solitude/stories/sample_button_stories.dart:20:45)
-#1      _StoryViewState.build (package:monarch/src/monarch_app/story_view.dart:119:41)
+#1      _StoryViewState.build (package:monarch/src/preview/story_view.dart:119:41)
 #2      StatefulElement.build (package:flutter/src/widgets/framework.dart:4612:27)
 #3      ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:4495:15)
 #4      StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:4667:11)

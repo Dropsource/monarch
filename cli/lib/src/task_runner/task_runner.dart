@@ -42,7 +42,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   final DevtoolsDiscovery _devtoolsDiscovery;
 
   String get generatedMainFilePath => p.join('.dart_tool', 'build', 'generated',
-      '${config.pubspecProjectName}', 'lib', 'main_monarch.g.dart');
+      config.pubspecProjectName, 'lib', 'main_monarch.g.dart');
 
   String get dotMonarch => '.monarch';
   String get flutterAssetsDirectoryPath => p.join(dotMonarch, 'flutter_assets');
@@ -64,9 +64,9 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         _observatoryDiscovery = ObservatoryDiscovery();
 
   /*
-  /// ### The monarch-stories app
+  /// ### The Monarch Preview
   /// 
-  /// The monarch-stories app is composed of:
+  /// The Monarch Preview is composed of:
   /// - meta source files: meta stories, meta themes, meta localizations
   /// - main file
   /// - monarch package
@@ -75,27 +75,29 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   /// files. The monarch package is imported by the generated main file.
   */
 
-  /// Generates the source files of the monarch-stories app. This process
+  /// Generates the source files of the Monarch Preview. This process
   /// performs a single generation.
   ///
   /// It uses `flutter pub run build_runner build`.
   ProcessTask? _generateStoriesTask;
 
+  /// Builds the Monarch Preview into a bundle, i.e. it builds the Flutter 
+  /// assets directory of the Monarch Preview.
+  /// 
   /// Builds the .monarch/flutter_assets directory using the generated source
-  /// files of the monarch-stories app.
+  /// files of the Monarch Preview.
   ///
   /// The flutter_assets directory contains the snapshots and assets for the
-  /// monarch-stories app.
+  /// Monarch Preview.
   ///
   /// It uses `flutter build bundle`.
-  ProcessTask? _buildStoryAppTask;
+  ProcessTask? _buildPreviewBundleTask;
 
-  /// Launches the Monarch desktop app for the current platform and flutter sdk.
-  /// The desktop app loads the monarch-stories app at .monarch/flutter_assets
-  /// into its own separate window.
+  /// Launches the Monarch desktop app for the current platform and Flutter SDK.
+  /// The desktop app launches the Monarch Controller and Preview.
   ProcessReadyTask? _runMonarchAppTask;
 
-  /// Attaches to the running monarch-stories app. This process allows us to
+  /// Attaches to the running Monarch Preview. This process allows us to
   /// hot reload or hot restart.
   ///
   /// We don't reload the user source files, we reload the generated source files,
@@ -142,7 +144,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   void _terminateTasks() {
     final tasks = [
       _generateStoriesTask,
-      _buildStoryAppTask,
+      _buildPreviewBundleTask,
       _runMonarchAppTask,
       _attachToReloadTask,
       _watchToRegenTask
@@ -171,8 +173,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         analytics: analytics,
         logLevelRegex: RegExp(r'^\[(\w+)\]'));
 
-    _buildStoryAppTask = ProcessTask(
-        taskName: TaskNames.buildStoryAppBundle,
+    _buildPreviewBundleTask = ProcessTask(
+        taskName: TaskNames.buildPreviewBundle,
         executable: config.flutterExecutablePath,
         arguments: [
           'build',
@@ -218,13 +220,13 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
 
     prepping.completedTaskCount++;
 
-    await _buildStoryAppTask!.run();
-    await _buildStoryAppTask!.done();
+    await _buildPreviewBundleTask!.run();
+    await _buildPreviewBundleTask!.done();
     _checkInitialTaskFinalStatus(
-        _buildStoryAppTask!.status,
+        _buildPreviewBundleTask!.status,
         '${prepping.message} (building bundle) failed. Exiting.',
-        TaskRunnerExitCodes.buildStoryAppFailed,
-        TaskRunnerExitCodes.buildStoryAppTerminated);
+        TaskRunnerExitCodes.buildPreviewBundleFailed,
+        TaskRunnerExitCodes.buildPreviewBundleTerminated);
 
     if (hasExited) {
       return;
@@ -276,7 +278,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         arguments: [
           '--controller-bundle',
           monarchBinaries.controllerDirectory(config.flutterSdkId).path,
-          '--project-bundle',
+          '--preview-bundle',
           p.join(projectDirectory.path, dotMonarch),
           '--log-level',
           defaultLogLevel.name

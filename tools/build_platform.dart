@@ -123,6 +123,10 @@ String readWindowsProjectVersion() {
 }
 
 /// Builds the monarch_windows_app for the given [flutter_sdk].
+/// 
+/// For details on how the Monarch Windows build works see:
+/// - file: platform/windows/README.md
+/// - section: How the Monarch Windows build works
 void buildWindows(out_ui_flutter_id, flutter_sdk) {
   var gen_seed_dir = Directory(
       paths.gen_seed_flutter_id(paths.platform_windows_gen_seed, flutter_sdk));
