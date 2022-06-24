@@ -13,20 +13,20 @@ import 'channel_methods_sender.dart';
 import 'channel_methods_receiver.dart';
 import 'standard_themes.dart';
 import 'stories_errors.dart';
-import 'story_app.dart';
+import 'monarch_preview.dart';
 import 'monarch_data.dart';
 import 'vm_service_client.dart';
 import 'monarch_binding.dart';
 
 final _logger = Logger('Start');
 
-void startMonarch(MonarchData Function() getMonarchData) {
+void startMonarchPreview(MonarchData Function() getMonarchData) {
   Chain.capture(() {
-    _startMonarch(getMonarchData);
+    _startMonarchPreview(getMonarchData);
   }, onError: handleUncaughtError);
 }
 
-void _startMonarch(MonarchData Function() getMonarchData) async {
+void _startMonarchPreview(MonarchData Function() getMonarchData) async {
   final monarchBinding = MonarchBinding.ensureInitialized();
 
   _setUpLog();
@@ -40,7 +40,7 @@ void _startMonarch(MonarchData Function() getMonarchData) async {
   };
 
   Timer.run(() {
-    monarchBinding.attachRootWidget(MonarchStoryApp());
+    monarchBinding.attachRootWidget(MonarchPreview());
   });
   monarchBinding.scheduleWarmUpFrame();
 

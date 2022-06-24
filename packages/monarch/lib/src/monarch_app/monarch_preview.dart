@@ -11,22 +11,22 @@ import 'monarch_data_instance.dart';
 import 'ready_signal.dart';
 import 'story_view.dart';
 
-class MonarchStoryApp extends StatefulWidget {
-  MonarchStoryApp();
+class MonarchPreview extends StatefulWidget {
+  MonarchPreview();
 
   @override
   State<StatefulWidget> createState() {
-    return _MonarchStoryAppState();
+    return _MonarchPreviewState();
   }
 }
 
-class _MonarchStoryAppState extends State<MonarchStoryApp> {
+class _MonarchPreviewState extends State<MonarchPreview> {
   late bool _isReady;
   late double _storyScale;
   late Locale? _locale;
   final _streamSubscriptions = <StreamSubscription>[];
 
-  _MonarchStoryAppState();
+  _MonarchPreviewState();
 
   @override
   void initState() {
