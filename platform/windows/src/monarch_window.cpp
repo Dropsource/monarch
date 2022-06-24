@@ -23,9 +23,8 @@ MonarchWindow::~MonarchWindow()
 
 void MonarchWindow::setTitle(std::string title)
 {
-	/*auto wtitle = to_wstring(title);
-	SetWindowText(GetHandle(), &title[0]);*/
-	SetWindowText(GetHandle(), L"TODO");
+	auto wtitle = to_wstring(title);
+	SetWindowText(GetHandle(), &wtitle[0]);
 }
 
 WindowInfo MonarchWindow::getWindowInfo()
@@ -248,18 +247,14 @@ LRESULT PreviewWindow::MessageHandler(
 		resize(deviceSize, state->scale.scale, state->dock,
 			WindowInfo(controllerWindowInfo->topLeft, controllerWindowInfo->size));
 
+		auto title = state->scale.scale == defaultStoryScaleDefinition.scale ?
+			state->device.title() :
+			state->device.title() + " | " + state->scale.name;
+
+		setTitle(title);
+
 		delete controllerWindowInfo;
 		delete state;
-	}
-	break;
-
-	case WM_M_FLUTITLE:
-	{
-		std::string* title = (std::string*)lparam;
-
-		setTitle(*title);
-
-		delete title;
 	}
 	break;
 

@@ -37,6 +37,3 @@ struct WindowInfo
 
 // User selected undock
 #define WM_M_UNDOCK (WM_USER + 53)
-
-// Change flutter window title
-#define WM_M_FLUTITLE (WM_USER + 54)
