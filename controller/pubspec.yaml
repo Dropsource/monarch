@@ -32,7 +32,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
-  monarch: ^2.3.0
+  monarch: any
 
 
 flutter:
