@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:monarch/src/monarch_app/active_locale.dart';
+import 'package:monarch/src/preview/active_locale.dart';
 
 void main() {
   group('parseLocale()', () {
