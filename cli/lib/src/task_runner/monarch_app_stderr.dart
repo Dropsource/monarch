@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:monarch_utils/log.dart';
 
 /// This funcion handles scenarios where the monarch ui app or the generated
-/// flutter app write to stderr.
+/// monarch preview (a flutter app) write to stderr.
 ///
 /// Keep in mind that not all errors are written to stderr. For example,
 /// compile errors and render overflow errors are written to stdout. Errors

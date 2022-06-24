@@ -7,11 +7,11 @@ class TaskRunnerExitCodes {
   static const generateStoriesTerminated = CliExitCode(
       108, 'Stories source code generation terminated (CTRL+C)', false);
 
-  static const buildStoryAppFailed =
-      CliExitCode(109, 'Building story app bundle failed', true);
+  static const buildPreviewBundleFailed =
+      CliExitCode(109, 'Building preview bundle failed', true);
 
-  static const buildStoryAppTerminated =
-      CliExitCode(110, 'Building story app bundle terminated (CTRL+C)', false);
+  static const buildPreviewBundleTerminated =
+      CliExitCode(110, 'Building preview bundle terminated (CTRL+C)', false);
 
   static const monarchAppTerminated =
       CliExitCode(111, 'Monarch app terminated (CMD+Q or ALT+F4)', false);

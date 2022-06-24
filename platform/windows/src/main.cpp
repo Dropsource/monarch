@@ -26,14 +26,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   std::vector<std::string> arguments = GetCommandLineArguments();
 
   std::string controllerBundlePath = "";
-  std::string projectBundlePath = "";
+  std::string previewBundlePath = "";
 
   std::string controllerBundleKeyArg = "--controller-bundle";
-  std::string projectBundleKeyArg = "--project-bundle";
+  std::string previewBundleKeyArg = "--preview-bundle";
   std::string logLevelKeyArg = "--log-level";
 
   if (arguments.size() < 6) {
-    _logger.severe("Expected arguments: " + controllerBundleKeyArg + " " + projectBundleKeyArg + " " + logLevelKeyArg);
+    _logger.severe("Expected arguments: " + controllerBundleKeyArg + " " + previewBundleKeyArg + " " + logLevelKeyArg);
     return EXIT_FAILURE;
   }
 
@@ -53,12 +53,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
     return EXIT_FAILURE;
   }
 
-  if (projectBundleKeyArg.compare(arg2) == 0) {
-    projectBundlePath = arg3;
-    _logger.config(projectBundleKeyArg + "=" + projectBundlePath);
+  if (previewBundleKeyArg.compare(arg2) == 0) {
+    previewBundlePath = arg3;
+    _logger.config(previewBundleKeyArg + "=" + previewBundlePath);
   }
   else {
-    _logger.severe(projectBundleKeyArg + " argument not found");
+    _logger.severe(previewBundleKeyArg + " argument not found");
     return EXIT_FAILURE;
   }
 
@@ -69,7 +69,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
     _logger.config(logLevelKeyArg + "=" + logLevel);
   }
 
-  auto manager = WindowManager(controllerBundlePath, projectBundlePath);
+  auto manager = WindowManager(controllerBundlePath, previewBundlePath);
   manager.launchWindows();
 
   ::MSG msg;

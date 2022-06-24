@@ -32,24 +32,24 @@ class WindowManager {
         logger.fine("arguments \(arguments)");
         
         var controllerBundlePath: String?
-        var projectBundlePath: String?
+        var previewBundlePath: String?
         
         
         if (arguments.count > 2 && arguments[1] == "--controller-bundle") {
             controllerBundlePath = arguments[2]
         }
-        if (arguments.count > 4 && arguments[3] == "--project-bundle") {
-            projectBundlePath = arguments[4]
+        if (arguments.count > 4 && arguments[3] == "--preview-bundle") {
+            previewBundlePath = arguments[4]
         }
         if (arguments.count > 6 && arguments[5] == "--log-level") {
             defaultLogLevel = logLevelFromString(levelString: arguments[6])
         }
         
         if let controllerBundlePath = controllerBundlePath,
-           let projectBundlePath = projectBundlePath {
+           let previewBundlePath = previewBundlePath {
             self._loadWindows(
                 controllerBundlePath: controllerBundlePath,
-                previewBundlePath: projectBundlePath)
+                previewBundlePath: previewBundlePath)
         }
     }
     

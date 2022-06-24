@@ -7,7 +7,7 @@ import 'devtools_discovery.dart.dart';
 import '../utils/standard_output.dart';
 
 /// Scrapes messages written to the stdout stream of the `runMonarchAppTask` process.
-/// Those messages can be from the flutter app or the desktop app.
+/// Those messages can be from the preview app or the monarch desktop app.
 ///
 /// @GOTCHA: The scraping is not trivial and it has gotten complex over time. This
 /// approach won't scale well. If you find yourself adding more markers to do 

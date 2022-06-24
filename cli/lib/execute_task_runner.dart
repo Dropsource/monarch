@@ -197,7 +197,7 @@ bool _isUserCompilerError(LogEntry entry) =>
     // When the isCrashDebug flag is set, user compiler errors
     // will generate crash reports.
     !_isCrashDebug &&
-    (entry.loggerName == TaskNames.buildStoryAppBundle ||
+    (entry.loggerName == TaskNames.buildPreviewBundle ||
         entry.loggerName == TaskNames.attachToHotRestart);
 
 Future<void> _exit(CliExitCode exitCode) async {
