@@ -15,12 +15,14 @@ class VmServiceClient with Log {
   late vm_service.VmService _client;
   late String? _isolateId;
 
+  final Map<String, List<String>> _registeredMethodsForService = {};
+
   /// Connects to the Dart VM service.
-  /// 
-  /// At runtime, the Dart VM Service has at least two isolates: 
+  ///
+  /// At runtime, the Dart VM Service has at least two isolates:
   /// one for the Monarch Preview and one for the Monarch Controller.
-  /// 
-  /// This method also gets the id of the current isolate, the current 
+  ///
+  /// This method also gets the id of the current isolate, the current
   /// isolate runs the code for the Monarch Preview.
   Future<void> connect() async {
     final info = await developer.Service.getInfo();
@@ -37,9 +39,28 @@ class VmServiceClient with Log {
 
     _onClientDone();
 
+    _client.onServiceEvent.listen(handleServiceEvent);
+    await _client.streamListen(vm_service.EventStreams.kService);
+    // _client.onEvent(vm_service.EventStreams.kService).listen(handleServiceEvent);
+
     await _client.streamListen(vm_service.EventStreams.kExtension);
     _client.onExtensionEvent.listen(visual_debug.handleVmServiceExtensionEvent);
   }
+
+  void handleServiceEvent(vm_service.Event e) {
+      if (e.kind == vm_service.EventKind.kServiceRegistered) {
+        log.shout('Registering service ${e.service!} with method ${e.method!}');
+        final serviceName = e.service!;
+        _registeredMethodsForService
+            .putIfAbsent(serviceName, () => [])
+            .add(e.method!);
+      }
+
+      if (e.kind == vm_service.EventKind.kServiceUnregistered) {
+        final serviceName = e.service!;
+        _registeredMethodsForService.remove(serviceName);
+      }
+    }
 
   void _onClientDone() async {
     await _client.onDone;
@@ -76,6 +97,47 @@ class VmServiceClient with Log {
   Future<vm_service.Response> _callServiceExtensionMethod(
           String method, Map<String, dynamic> args) =>
       _client.callServiceExtension(method, isolateId: _isolateId, args: args);
+
+  Future<void> hotReload() async {
+    try {
+      // await _reloadSources(force: false);
+      log.shout('reloadSources...');
+      // await _client.callMethod('reloadSources', isolateId: _isolateId);
+      await callService('reloadSources');
+    } catch (e, s) {
+      log.severe('Error hot reloading', e, s);
+    }
+  }
+
+  Future<void> hotRestart() async {
+    try {
+      // await _reloadSources(force: true);
+      log.shout('hotRestart...');
+      // await _client.callMethod('hotRestart', isolateId: _isolateId);
+      await callService('hotRestart');
+    } catch (e, s) {
+      log.severe('Error hot restarting', e, s);
+    }
+  }
+
+  /// Call a service that is registered by exactly one client.
+  Future<vm_service.Response> callService(
+    String name, {
+    Map<String, dynamic>? args,
+  }) async {
+    final registered = _registeredMethodsForService[name] ?? const [];
+    if (registered.isEmpty) {
+      throw Exception('There are no registered methods for service "$name"');
+    }
+    return _client.callMethod(
+      registered.first,
+      isolateId: _isolateId,
+      args: args,
+    );
+  }
+
+  Future<vm_service.ReloadReport> _reloadSources({required bool force}) =>
+      _client.reloadSources(_isolateId!, force: force);
 }
 
 class VmServiceLog extends vm_service.Log with Log {
