@@ -13,6 +13,7 @@ import 'log_level.dart';
 import 'ready_signal.dart';
 import 'stories_errors.dart';
 import 'visual_debug_flags.dart' as visual_debug;
+import 'vm_service_client.dart';
 
 final logger = Logger('ChannelMethodsReceiver');
 
@@ -78,7 +79,7 @@ Future<dynamic> _handler(MethodCall call) async {
       return;
 
     case MonarchMethods.screenChanged:
-      // foce the monarch binding to recalculate the physical size.
+      // force the monarch binding to recalculate the physical size.
       activeDevice.value = activeDevice.value;
       return;
 
@@ -99,6 +100,10 @@ Future<dynamic> _handler(MethodCall call) async {
       bool isEnabled = args['isEnabled'];
       await visual_debug.toggleFlagViaVmServiceExtension(name, isEnabled);
       return;
+
+    // case MonarchMethods.hotReload:
+    //   await vmServiceClient.hotReload();
+    //   return;
 
     default:
       logger.fine('method ${call.method} not implemented');
