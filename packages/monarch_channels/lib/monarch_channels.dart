@@ -26,6 +26,7 @@ class MonarchMethods {
   static const setStoryScale = 'monarch.setStoryScale';
   static const setDockSide = 'monarch.setDockSide';
   static const getState = 'monarch.getState';
+  static const hotReload = 'monarch.hotReload';
 
   /// Used when the host window has changed screens, i.e. when the user moves
   /// the host window to a different monitor. Sent by the platform code.
