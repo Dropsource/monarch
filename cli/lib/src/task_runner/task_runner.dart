@@ -285,7 +285,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         ],
         workingDirectory: projectDirectory.path,
         analytics: analytics,
-        logLevelRegex: RegExp(r'^\w+: (\w+)'),
+        logLevelRegex: RegExp(r'^[\w :]+ (\w+)'),
         onStdErrMessage: onRunMonarchAppStdErrMessage,
         readyMessage: 'story-flutter-window-ready');
 
