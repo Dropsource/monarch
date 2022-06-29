@@ -20,7 +20,7 @@ curated collection of sample projects which show Monarch working with various
 packages, patterns and tools.
 
 ## Community
-* For announcements about new releases subscribe to our [newsletter](http://eepurl.com/hJ-S0L)
+* For announcements about new releases subscribe to our [newsletter](https://eepurl.com/hJ-S0L)
 * Follow us on Twitter [@monarch_app](https://twitter.com/monarch_app)
 * If you have any questions or run into any issues, please create an issue in this repo.
 
