@@ -14,13 +14,11 @@ class StoryList extends StatefulWidget {
     required this.projectName,
     required this.manager,
     this.activeStoryKey,
-    this.onActiveStoryChange,
   }) : super(key: key);
 
   final List<StoryGroup> stories;
   final String projectName;
   final String? activeStoryKey;
-  final Function(String key)? onActiveStoryChange;
   final ControllerManager manager;
 
   @override

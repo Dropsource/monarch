@@ -81,8 +81,6 @@ class UiWindowControllerState extends State<ControllerScreen> {
                                 stories: state.storyGroups,
                                 activeStoryKey: state.activeStoryKey,
                                 manager: manager,
-                                onActiveStoryChange: (key) =>
-                                    manager.onActiveStoryChanged(key),
                               ),
                             ),
                           ],

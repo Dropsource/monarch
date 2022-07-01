@@ -6,13 +6,13 @@ import '../../../utils/translations.dart';
 import '../../data/visual_debug_flags.dart';
 
 class CheckboxGrid extends StatelessWidget {
-  final List<VisualDebugFlag> devToolsOptions;
-  final Function(VisualDebugFlag)? onOptionToggle;
+  final List<VisualDebugFlag> visualDebugFlags;
+  final Function(VisualDebugFlag)? onFlagToggled;
 
   const CheckboxGrid({
     Key? key,
-    required this.devToolsOptions,
-    this.onOptionToggle,
+    required this.visualDebugFlags,
+    this.onFlagToggled,
   }) : super(key: key);
 
   @override
@@ -23,13 +23,13 @@ class CheckboxGrid extends StatelessWidget {
           crossAxisCount: 2,
           mainAxisSpacing: 4,
           crossAxisSpacing: 4,
-          itemCount: devToolsOptions.length,
+          itemCount: visualDebugFlags.length,
           itemBuilder: (context, index) {
-            final item = devToolsOptions[index];
+            final item = visualDebugFlags[index];
             return StockholmCheckbox(
               value: item.isEnabled,
               onChanged: (newValue) {
-                onOptionToggle?.call(item);
+                onFlagToggled?.call(item);
               },
               label: Translations.of(context)!.text(item.label),
             );

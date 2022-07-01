@@ -53,22 +53,22 @@ Future<dynamic> _handler(MethodCall call) async {
     case MonarchMethods.deviceDefinitions:
       final deviceDefinitions = getDeviceDefinitions(args!);
       manager.onDeviceDefinitionsChanged(deviceDefinitions);
-      break;
+      return;
 
     case MonarchMethods.standardThemes:
       final themes = getStandardThemes(args!);
       manager.onStandardThemesChanged(themes);
-      break;
+      return;
 
     case MonarchMethods.storyScaleDefinitions:
       final scaleDefinitions = getStoryScaleDefinitions(args!);
       manager.onStoryScaleDefinitionsChanged(scaleDefinitions);
-      break;
+      return;
 
     case MonarchMethods.monarchData:
       final monarchData = MonarchData.fromStandardMap(args!);
       manager.onMonarchDataChanged(monarchData);
-      break;
+      return;
 
     case MonarchMethods.toggleVisualDebugFlag:
       final name = args!['name'];

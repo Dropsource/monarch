@@ -42,7 +42,7 @@ class ControllerManager {
     channelMethodsSender.loadStory(key);
   }
 
-  void onDevToolOptionToggled(VisualDebugFlag option) {
+  void onVisualDebugFlagToggled(VisualDebugFlag option) {
     channelMethodsSender
         .sendToggleVisualDebugFlag(option.copyWith(enabled: !option.isEnabled));
   }
@@ -116,12 +116,19 @@ class ControllerManager {
       currentLocale: currentLocale,
     ));
 
-    channelMethodsSender.setActiveLocale(state.currentLocale);
-
-    channelMethodsSender.setActiveTheme(state.currentTheme.id);
+    if (state.activeStoryKey == null) {
+      channelMethodsSender.resetStory();
+    } else {
+      channelMethodsSender.loadStory(state.activeStoryKey!);
+    }
     channelMethodsSender.setActiveDevice(state.currentDevice.id);
+    channelMethodsSender.setActiveTheme(state.currentTheme.id);
+    channelMethodsSender.setActiveLocale(state.currentLocale);
     channelMethodsSender.setTextScaleFactor(state.textScaleFactor);
     channelMethodsSender.setStoryScale(state.currentScale.scale);
+    for (var flag in state.visualDebugFlags) {
+      channelMethodsSender.sendToggleVisualDebugFlag(flag);
+    }
   }
 
   void onDefaultThemeChange(String themeId) {

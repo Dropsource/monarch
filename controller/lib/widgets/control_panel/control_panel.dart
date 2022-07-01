@@ -130,8 +130,8 @@ class ControlPanel extends StatelessWidget {
             color: Colors.white.withAlpha(100),
           ),
           CheckboxGrid(
-            devToolsOptions: state.visualDebugFlags,
-            onOptionToggle: manager.onDevToolOptionToggled,
+            visualDebugFlags: state.visualDebugFlags,
+            onFlagToggled: manager.onVisualDebugFlagToggled,
           ),
           Padding(
             padding: const EdgeInsets.only(
