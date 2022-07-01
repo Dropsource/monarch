@@ -101,9 +101,13 @@ Future<dynamic> _handler(MethodCall call) async {
       await visual_debug.toggleFlagViaVmServiceExtension(name, isEnabled);
       return;
 
-    // case MonarchMethods.hotReload:
-    //   await vmServiceClient.hotReload();
-    //   return;
+    case MonarchMethods.willClosePreview:
+      await vmServiceClient.disconnect();
+      return;
+
+    case MonarchMethods.hotReload:
+      await vmServiceClient.hotReload();
+      return;
 
     default:
       logger.fine('method ${call.method} not implemented');

@@ -9,6 +9,12 @@ import 'visual_debug_flags.dart' as visual_debug;
 const maxReconnectTries = 5;
 int reconnectCount = 0;
 
+// VM Service streams we want to receive events for.
+const vmStreams = [
+  vm_service.EventStreams.kService,
+  vm_service.EventStreams.kExtension,
+];
+
 class VmServiceClient with Log {
   VmServiceClient();
 
@@ -16,6 +22,9 @@ class VmServiceClient with Log {
   late String? _isolateId;
 
   final Map<String, List<String>> _registeredMethodsForService = {};
+
+  final List<StreamSubscription> _streamSubscriptions = [];
+  bool _isDisconnected = false;
 
   /// Connects to the Dart VM service.
   ///
@@ -34,28 +43,48 @@ class VmServiceClient with Log {
 
     _client = await vmServiceConnectUri(webSocketUri, log: VmServiceLog());
     log.fine('Connected to vm service socket $webSocketUri');
+    _isDisconnected = false;
     _isolateId = developer.Service.getIsolateID(Isolate.current);
     log.fine('Got isolateId=$_isolateId');
 
     _onClientDone();
 
-    _client.onServiceEvent.listen(handleServiceEvent);
-    _client.onExtensionEvent.listen(visual_debug.handleVmServiceExtensionEvent);
+    _streamSubscriptions.addAll([
+      _client.onServiceEvent.listen(handleServiceEvent),
+      _client.onExtensionEvent
+          .listen(visual_debug.handleVmServiceExtensionEvent),
+    ]);
 
-    await _client.streamListen(vm_service.EventStreams.kService);
-    await _client.streamListen(vm_service.EventStreams.kExtension);
+    for (var stream in vmStreams) {
+      await _client.streamListen(stream);
+    }
+  }
+
+  Future<void> disconnect() async {
+    _isDisconnected = true;
+    for (var stream in vmStreams) {
+      await _client.streamCancel(stream);
+    }
+    for (var sub in _streamSubscriptions) {
+      await sub.cancel();
+    }
+    await _client.dispose();
   }
 
   void _onClientDone() async {
     await _client.onDone;
-    if (reconnectCount < maxReconnectTries) {
-      log.warning(
-          'Connection to VmService terminated unexpectedly. Reconnecting. Reconnection try $reconnectCount.');
-      reconnectCount++;
-      await connect();
+    if (_isDisconnected) {
+      log.info('Disconnected from VmService.');
     } else {
-      log.warning(
-          'Connection to VmService terminated unexpectedly. Max reconnection tries reached.');
+      if (reconnectCount < maxReconnectTries) {
+        log.warning(
+            'Connection to VmService terminated unexpectedly. Reconnecting. Reconnection try $reconnectCount.');
+        reconnectCount++;
+        await connect();
+      } else {
+        log.warning(
+            'Connection to VmService terminated unexpectedly. Max reconnection tries reached.');
+      }
     }
   }
 
