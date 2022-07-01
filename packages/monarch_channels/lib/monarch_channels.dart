@@ -26,6 +26,7 @@ class MonarchMethods {
   static const setStoryScale = 'monarch.setStoryScale';
   static const setDockSide = 'monarch.setDockSide';
   static const getState = 'monarch.getState';
+  static const willClosePreview = 'monarch.willClosePreview';
   static const hotReload = 'monarch.hotReload';
 
   /// Used when the host window has changed screens, i.e. when the user moves
