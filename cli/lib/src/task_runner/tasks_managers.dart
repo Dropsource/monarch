@@ -142,3 +142,48 @@ class RegenAndHotRestart extends RegenAndReload {
       required ProcessParentReadyTask reloadTask})
       : super(stdout_: stdout_, regenTask: regenTask, reloadTask: reloadTask);
 }
+
+class RegenAndBuildPreviewBundle extends TasksManager {
+  final StandardOutput stdout_;
+  final ProcessParentReadyTask regenTask;
+  final ProcessTask buildPreviewBundleTask;
+
+  RegenAndBuildPreviewBundle(
+      {required this.stdout_,
+      required this.regenTask,
+      required this.buildPreviewBundleTask});
+
+  @override
+  void manage() {
+    final reloadHeartbeat =
+        Heartbeat(kReloadingStoriesHotRestart + 'FOO', stdout_.writeln);
+
+    void rebundle() async {
+      var rebundleHeartbeat = Heartbeat('Re-bundling', stdout_.writeln);
+      rebundleHeartbeat.start();
+      await buildPreviewBundleTask.run();
+      await buildPreviewBundleTask.done();
+      rebundleHeartbeat.complete();
+    }
+
+    regenTask.childTaskStatusStream.listen((childTaskStatus) {
+      switch (childTaskStatus) {
+        case ChildTaskStatus.running:
+          if (!reloadHeartbeat.isActive) {
+            reloadHeartbeat.start();
+          }
+          break;
+
+        case ChildTaskStatus.done:
+          reloadHeartbeat.complete();
+          rebundle();
+          break;
+
+        case ChildTaskStatus.failed:
+          break;
+
+        default:
+      }
+    });
+  }
+}

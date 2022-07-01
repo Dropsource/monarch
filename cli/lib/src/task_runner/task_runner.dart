@@ -113,7 +113,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   ProcessParentReadyTask? _watchToRegenTask;
 
   /// Manages the child tasks of [_watchToRegenTask] and [_attachToReloadTask].
-  RegenAndReload? _regenAndReloadManager;
+  TasksManager? _regenAndReloadManager;
 
   @override
   void didRun() async {
@@ -392,10 +392,13 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
                   stdout_: stdout_default,
                   regenTask: _watchToRegenTask!,
                   reloadTask: _attachToReloadTask!)
-              : RegenAndHotRestart(
-                  stdout_: stdout_default,
-                  regenTask: _watchToRegenTask!,
-                  reloadTask: _attachToReloadTask!);
+              // : RegenAndHotRestart(
+              //     stdout_: stdout_default,
+              //     regenTask: _watchToRegenTask!,
+              //     reloadTask: _attachToReloadTask!);
+              : RegenAndBuildPreviewBundle(stdout_: stdout_default,
+                regenTask: _watchToRegenTask!,
+                buildPreviewBundleTask: _buildPreviewBundleTask!);
 
           _regenAndReloadManager!.manage();
         }
@@ -462,8 +465,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   void _onKeystroke(String keystroke, List<KeyCommand> keyCommands) {
     for (var command in keyCommands) {
       if (command.key == keystroke) {
-        if (_regenAndReloadManager != null &&
-            _regenAndReloadManager!.isRunning) {
+        if (_regenAndReloadManager != null /*&&
+            _regenAndReloadManager!.isRunning*/) {
           stdout_default.writeln('Try "$keystroke" again after reloading.');
           return;
         }
