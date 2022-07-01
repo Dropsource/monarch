@@ -10,7 +10,7 @@ import FlutterMacOS
 
 class Channels {
     let controllerChannel: FlutterMethodChannel
-    let previewChannel: FlutterMethodChannel
+    var previewChannel: FlutterMethodChannel
     let windowManager: WindowManager
     
     init(controllerMessenger: FlutterBinaryMessenger,
@@ -25,6 +25,14 @@ class Channels {
         self.windowManager = windowManager
     }
     
+    func restartPreviewChannel(previewMessenger: FlutterBinaryMessenger) {
+        self.unregisterMethodCallHandlers()
+        self.previewChannel = FlutterMethodChannel(
+            name: "monarch.preview",
+            binaryMessenger: previewMessenger)
+        self.setUpCallForwarding()
+    }
+    
     func setUpCallForwarding() {
         self.controllerChannel.setMethodCallHandler {
             (call: FlutterMethodCall, result: FlutterResult) -> Void in
@@ -35,11 +43,14 @@ class Channels {
                 
             case MonarchMethods.setActiveDevice,
                  MonarchMethods.setStoryScale:
-                self.windowManager.resizePreviewWindow()
+                // @GOTCHA: uncomment
+                //self.windowManager.resizePreviewWindow()
                 break
                 
             case MonarchMethods.setDockSide:
-                self.windowManager.setDocking()
+                // @GOTCHA: uncomment
+                //self.windowManager.setDocking()
+                self.windowManager.restartPreviewWindow()
                 break
                 
             default:
@@ -54,7 +65,12 @@ class Channels {
         }
     }
     
-    func getMonarchState(state:@escaping (MonarchState)->()) {
+    func unregisterMethodCallHandlers() {
+        self.controllerChannel.setMethodCallHandler(nil)
+        self.previewChannel.setMethodCallHandler(nil)
+    }
+    
+    func getMonarchState(state:@escaping (MonarchState) -> Void) {
         self.controllerChannel.invokeMethod(MonarchMethods.getState, arguments: nil) {
             (result) -> Void in
             let logger: Logger = Logger("MonarchState")
@@ -76,6 +92,11 @@ class Channels {
     func sendControllerScreenChanged() {
         self.controllerChannel.invokeMethod(MonarchMethods.screenChanged, arguments: nil)
     }
+    
+    func sendWillClosePreview() {
+        self.previewChannel.invokeMethod(MonarchMethods.willClosePreview, arguments: nil)
+        self.controllerChannel.invokeMethod(MonarchMethods.willClosePreview, arguments: nil)
+    }
 }
 
 class MonarchMethods {
@@ -84,6 +105,7 @@ class MonarchMethods {
     static let setDockSide = "monarch.setDockSide"
     static let getState = "monarch.getState"
     static let screenChanged = "monarch.screenChanged"
+    static let willClosePreview = "monarch.willClosePreview"
 }
 
 protocol ChannelArgument {}

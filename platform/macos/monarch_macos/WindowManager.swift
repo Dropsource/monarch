@@ -14,9 +14,14 @@ import os.log
 
 class WindowManager {
     
-    var previewWindow: NSWindow?
+    var controllerBundlePath: String?
+    var previewBundlePath: String?
+    
     var controllerWindow: NSWindow?
+    var previewWindow: NSWindow?
     var channels: Channels?
+    
+    var observers: [NSObjectProtocol] = []
     
     var selectedDockSide: DockSide = defaultDockSide
     
@@ -31,31 +36,26 @@ class WindowManager {
         
         logger.fine("arguments \(arguments)");
         
-        var controllerBundlePath: String?
-        var previewBundlePath: String?
-        
-        
         if (arguments.count > 2 && arguments[1] == "--controller-bundle") {
             controllerBundlePath = arguments[2]
+        } else {
+            fatalError("Missing argument --controller-bundle")
         }
         if (arguments.count > 4 && arguments[3] == "--preview-bundle") {
             previewBundlePath = arguments[4]
+        } else {
+            fatalError("Missing argument --preview-bundle")
         }
         if (arguments.count > 6 && arguments[5] == "--log-level") {
             defaultLogLevel = logLevelFromString(levelString: arguments[6])
         }
         
-        if let controllerBundlePath = controllerBundlePath,
-           let previewBundlePath = previewBundlePath {
-            self._loadWindows(
-                controllerBundlePath: controllerBundlePath,
-                previewBundlePath: previewBundlePath)
-        }
+        self._loadWindows()
     }
     
-    func _loadWindows(controllerBundlePath: String, previewBundlePath: String) {
-        let controller = _initFlutterViewController(controllerBundlePath)
-        let preview = _initFlutterViewController(previewBundlePath)
+    func _loadWindows() {
+        let controller = _initFlutterViewController(controllerBundlePath!)
+        let preview = _initFlutterViewController(previewBundlePath!)
         
         channels = Channels.init(
             controllerMessenger: controller.engine.binaryMessenger,
@@ -82,25 +82,44 @@ class WindowManager {
         controllerWindow = NSWindow()
         previewWindow = NSWindow()
         
-        guard let controllerWindow = controllerWindow,
-              let previewWindow = previewWindow else { return }
+        _setUpControllerWindow(controllerFVC, controllerWindow!)
+        _setUpPreviewWindow(previewFVC, previewWindow!)
         
+        // bring windows to front
+        NSApp.activate(ignoringOtherApps: true)
+        
+        _setUpObservers(controllerWindow!, previewWindow!)
+    }
+    
+    func restartPreviewWindow() {
+        _tearDownObservers()
+        channels!.sendWillClosePreview()
+        previewWindow!.close()
+        let preview = _initFlutterViewController(previewBundlePath!)
+        channels!.restartPreviewChannel(previewMessenger: preview.engine.binaryMessenger)
+        previewWindow = NSWindow()
+        _setUpPreviewWindow(preview, previewWindow!)
+        _setUpObservers(controllerWindow!, previewWindow!)
+    }
+    
+    func _setUpControllerWindow(_ controllerFVC: FlutterViewController, _ controllerWindow: NSWindow) {
         controllerWindow.contentViewController = controllerFVC
-        previewWindow.contentViewController = previewFVC
-                
         let controllerWindowController = NSWindowController()
-        let previewWindowController = NSWindowController()
-        
         controllerWindowController.contentViewController = controllerWindow.contentViewController
-        previewWindowController.contentViewController = previewWindow.contentViewController
         
         controllerWindow.setContentSize(NSSize(width: 700, height: 830))
         controllerWindow.title = "Monarch"
         controllerWindowController.window = controllerWindow
         controllerWindowController.showWindow(self)
-        
+    }
+    
+    func _setUpPreviewWindow(_ previewFVC: FlutterViewController, _ previewWindow: NSWindow) {
+        previewWindow.contentViewController = previewFVC
+        let previewWindowController = NSWindowController()
+        previewWindowController.contentViewController = previewWindow.contentViewController
+                
         previewWindow.setContentSize(defaultDeviceDefinition.logicalResolution.size)
-        previewWindow.setFrameTopLeftPoint(_getPreviewWindowTopLeft(defaultDockSide))
+        previewWindow.setFrameTopLeftPoint(_getPreviewWindowTopLeft(selectedDockSide))
         previewWindow.title = defaultDeviceDefinition.title
         
         previewWindow.styleMask.insert(.closable)
@@ -108,52 +127,63 @@ class WindowManager {
         
         previewWindowController.window = previewWindow
         previewWindowController.showWindow(self)
+    }
+    
+    func _setUpObservers(_ controllerWindow: NSWindow, _ previewWindow: NSWindow) {
+
+        let queue = OperationQueue.init()
         
-        // bring windows to front
-        NSApp.activate(ignoringOtherApps: true)
-        
-        NotificationCenter.default.addObserver(
-            forName: NSWindow.didMoveNotification,
-            object: controllerWindow,
-            queue: OperationQueue.main,
-            using: { (n: Notification) in
-                previewWindow.setFrameTopLeftPoint(
-                    self._getPreviewWindowTopLeft(self.selectedDockSide))
-            })
-        
-        NotificationCenter.default.addObserver(
-            forName: NSWindow.didResizeNotification,
-            object: controllerWindow,
-            queue: OperationQueue.main,
-            using: { (n: Notification) in
-                previewWindow.setFrameTopLeftPoint(
-                    self._getPreviewWindowTopLeft(self.selectedDockSide))
-            })
-        
-        NotificationCenter.default.addObserver(
-            forName: NSWindow.didMoveNotification,
-            object: previewWindow,
-            queue: OperationQueue.main,
-            using: { (n: Notification) in
-                controllerWindow.setFrameTopLeftPoint(
-                    self._getControllerWindowTopLeft(self.selectedDockSide))
-            })
-        
-        NotificationCenter.default.addObserver(
-            forName: NSWindow.didChangeScreenNotification,
-            object: previewWindow,
-            queue: OperationQueue.main,
-            using: { (n: Notification) in
-                self.channels!.sendPreviewScreenChanged()
-            })
-        
-        NotificationCenter.default.addObserver(
-            forName: NSWindow.didChangeScreenNotification,
-            object: controllerWindow,
-            queue: OperationQueue.main,
-            using: { (n: Notification) in
-                self.channels!.sendControllerScreenChanged()
-            })
+        observers.append(contentsOf: [
+            NotificationCenter.default.addObserver(
+                forName: NSWindow.didMoveNotification,
+                object: controllerWindow,
+                queue: queue,
+                using: { (n: Notification) in
+                    previewWindow.setFrameTopLeftPoint(
+                        self._getPreviewWindowTopLeft(self.selectedDockSide))
+                }),
+            
+            NotificationCenter.default.addObserver(
+                forName: NSWindow.didResizeNotification,
+                object: controllerWindow,
+                queue: queue,
+                using: { (n: Notification) in
+                    previewWindow.setFrameTopLeftPoint(
+                        self._getPreviewWindowTopLeft(self.selectedDockSide))
+                }),
+            
+            NotificationCenter.default.addObserver(
+                forName: NSWindow.didMoveNotification,
+                object: previewWindow,
+                queue: queue,
+                using: { (n: Notification) in
+                    controllerWindow.setFrameTopLeftPoint(
+                        self._getControllerWindowTopLeft(self.selectedDockSide))
+                }),
+            
+            NotificationCenter.default.addObserver(
+                forName: NSWindow.didChangeScreenNotification,
+                object: previewWindow,
+                queue: queue,
+                using: { (n: Notification) in
+                    self.channels!.sendPreviewScreenChanged()
+                }),
+            
+            NotificationCenter.default.addObserver(
+                forName: NSWindow.didChangeScreenNotification,
+                object: controllerWindow,
+                queue: queue,
+                using: { (n: Notification) in
+                    self.channels!.sendControllerScreenChanged()
+                })
+        ])
+    }
+    
+    func _tearDownObservers() {
+        for observer in observers {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        observers.removeAll()
     }
     
     func _getPreviewWindowTopLeft(_ side: DockSide) -> NSPoint {
@@ -219,7 +249,7 @@ class WindowManager {
     }
     
     func setDocking() {
-        channels!.getMonarchState() { (state) -> () in
+        channels!.getMonarchState() { (state) -> Void in
             switch state.dock {
             case .right:
                 self.selectedDockSide = .right
@@ -238,7 +268,7 @@ class WindowManager {
     }
     
     func resizePreviewWindow() {
-        channels!.getMonarchState() { (state) -> () in
+        channels!.getMonarchState() { (state) -> Void in
             let deviceSize = state.device.logicalResolution.size
             let scaledWidth = Double(deviceSize.width) * state.scale.scale
             let scaledHeight = Double(deviceSize.height) * state.scale.scale
