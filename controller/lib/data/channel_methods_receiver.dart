@@ -3,6 +3,7 @@ import 'package:monarch_utils/log.dart';
 import 'package:monarch_channels/monarch_channels.dart';
 import 'package:monarch_controller/data/device_definitions.dart';
 import 'package:monarch_controller/data/story_scale_definitions.dart';
+import 'package:monarch_utils/log_config.dart';
 
 import '../../main.dart';
 import 'channel_methods_sender.dart';
@@ -32,7 +33,7 @@ Future<dynamic> _handler(MethodCall call) async {
 
   switch (call.method) {
     case MonarchMethods.ping:
-      channelMethodsSender.setUpLog(LogLevel.ALL.value);
+      channelMethodsSender.setUpLog(defaultLogLevel.value);
       return;
 
     case MonarchMethods.defaultTheme:
