@@ -31,6 +31,9 @@ class TaskRunnerExitCodes {
   static const observatoryUriNotScraped = CliExitCode(
       116, 'Could not scrape Observatory URI from the log stream', true);
 
-  static const compatibilityNotValid = CliExitCode(
-      117, 'Compatibility is not valid', false);
+  static const compatibilityNotValid =
+      CliExitCode(117, 'Compatibility is not valid', false);
+
+  static const cliGrpcServerStartError =
+      CliExitCode(118, 'cli grpc server start error', true);
 }

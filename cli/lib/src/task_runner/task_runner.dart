@@ -37,6 +37,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   final bool noSoundNullSafety;
   final ReloadOption reloadOption;
   final Analytics analytics;
+  final int cliGrpcServerPort;
 
   final ObservatoryDiscovery _observatoryDiscovery;
   final DevtoolsDiscovery _devtoolsDiscovery;
@@ -59,7 +60,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
       required this.isDeleteConflictingOutputs,
       required this.noSoundNullSafety,
       required this.reloadOption,
-      required this.analytics})
+      required this.analytics,
+      required this.cliGrpcServerPort,})
       : _devtoolsDiscovery = DevtoolsDiscovery(),
         _observatoryDiscovery = ObservatoryDiscovery();
 
@@ -276,12 +278,10 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         executable:
             monarchBinaries.monarchAppExecutableFile(config.flutterSdkId).path,
         arguments: [
-          '--controller-bundle',
-          monarchBinaries.controllerDirectory(config.flutterSdkId).path,
-          '--preview-bundle',
-          p.join(projectDirectory.path, dotMonarch),
-          '--log-level',
-          defaultLogLevel.name
+          monarchBinaries.controllerDirectory(config.flutterSdkId).path, // controller-bundle
+          p.join(projectDirectory.path, dotMonarch), // preview-bundle
+          defaultLogLevel.name, // log-level
+          cliGrpcServerPort.toString(), // cli-grpc-server-port
         ],
         workingDirectory: projectDirectory.path,
         analytics: analytics,

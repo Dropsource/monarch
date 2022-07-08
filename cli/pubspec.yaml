@@ -18,6 +18,8 @@ dependencies:
     path: ../packages/monarch_http
   monarch_io_utils:
     path: ../packages/monarch_io_utils
+  monarch_grpc:
+    path: ../packages/monarch_grpc
 
 dev_dependencies:
   lints: ^1.0.1
