@@ -1,11 +1,16 @@
+import 'package:monarch_cli/src/task_runner/task.dart';
+import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
 
+import 'grpc.dart';
 import 'reload.dart';
 import 'process_task.dart';
 import '../utils/standard_output.dart' show StandardOutput;
+import 'task_count_heartbeat.dart';
 
 abstract class TasksManager {
   void manage();
+  bool get isRunning;
 }
 
 abstract class RegenAndReload implements TasksManager {
@@ -29,6 +34,7 @@ abstract class RegenAndReload implements TasksManager {
       regenTask.childTaskStatus == ChildTaskStatus.running;
   bool get isReloading => reloadTask.childTaskStatus == ChildTaskStatus.running;
 
+  @override
   bool get isRunning => isGeneratingMetaStories || isReloading;
 
   @override
@@ -143,39 +149,40 @@ class RegenAndHotRestart extends RegenAndReload {
       : super(stdout_: stdout_, regenTask: regenTask, reloadTask: reloadTask);
 }
 
-class RegenAndBuildPreviewBundle extends TasksManager {
+class RegenRebundleAndHotRestart extends TasksManager with Log {
   final StandardOutput stdout_;
   final ProcessParentReadyTask regenTask;
   final ProcessTask buildPreviewBundleTask;
+  final ControllerGrpcClient controllerGrpcClient;
 
-  RegenAndBuildPreviewBundle(
-      {required this.stdout_,
-      required this.regenTask,
-      required this.buildPreviewBundleTask});
+  RegenRebundleAndHotRestart({
+    required this.stdout_,
+    required this.regenTask,
+    required this.buildPreviewBundleTask,
+    required this.controllerGrpcClient,
+  });
+
+  @override
+  bool get isRunning =>
+      regenTask.childTaskStatus == ChildTaskStatus.running ||
+      buildPreviewBundleTask.status == TaskStatus.running;
+
+  final reloadHeartbeat =
+      TaskCountHeartbeat(kReloadingStoriesHotRestart, taskCount: 2);
 
   @override
   void manage() {
-    final reloadHeartbeat =
-        Heartbeat(kReloadingStoriesHotRestart + 'FOO', stdout_.writeln);
-
-    void rebundle() async {
-      var rebundleHeartbeat = Heartbeat('Re-bundling', stdout_.writeln);
-      rebundleHeartbeat.start();
-      await buildPreviewBundleTask.run();
-      await buildPreviewBundleTask.done();
-      rebundleHeartbeat.complete();
-    }
-
     regenTask.childTaskStatusStream.listen((childTaskStatus) {
       switch (childTaskStatus) {
         case ChildTaskStatus.running:
           if (!reloadHeartbeat.isActive) {
+            reloadHeartbeat.completedTaskCount = 0;
             reloadHeartbeat.start();
           }
           break;
 
         case ChildTaskStatus.done:
-          reloadHeartbeat.complete();
+          reloadHeartbeat.completedTaskCount = 1;
           rebundle();
           break;
 
@@ -185,5 +192,27 @@ class RegenAndBuildPreviewBundle extends TasksManager {
         default:
       }
     });
+  }
+
+  void rebundle() async {
+    await buildPreviewBundleTask.run();
+    await buildPreviewBundleTask.done();
+    if (buildPreviewBundleTask.status == TaskStatus.failed) {
+      reloadHeartbeat.completeError();
+    }
+    else {
+      restartPreview();
+      reloadHeartbeat.complete();
+    }
+  }
+
+  void restartPreview() async {
+    if (controllerGrpcClient.isClientInitialized) {
+      log.fine('Sending restartPreview request to controller grpc client');
+      controllerGrpcClient.client!.restartPreview(Empty());
+    } else {
+      log.warning(
+          'Unable to hot restart. The controller grpc client is not initialized.');
+    }
   }
 }

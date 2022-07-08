@@ -43,13 +43,14 @@ class Channels {
                 
             case MonarchMethods.setActiveDevice,
                  MonarchMethods.setStoryScale:
-                // @GOTCHA: uncomment
-                //self.windowManager.resizePreviewWindow()
+                self.windowManager.resizePreviewWindow()
                 break
                 
             case MonarchMethods.setDockSide:
-                // @GOTCHA: uncomment
-                //self.windowManager.setDocking()
+                self.windowManager.setDocking()
+                break
+                
+            case MonarchMethods.restartPreview:
                 self.windowManager.restartPreviewWindow()
                 break
                 
@@ -106,6 +107,7 @@ class MonarchMethods {
     static let getState = "monarch.getState"
     static let screenChanged = "monarch.screenChanged"
     static let willClosePreview = "monarch.willClosePreview"
+    static let restartPreview = "monarch.restartPreview"
 }
 
 protocol ChannelArgument {}

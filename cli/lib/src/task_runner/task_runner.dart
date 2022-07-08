@@ -13,6 +13,7 @@ import '../config/monarch_binaries.dart';
 import '../config/project_config.dart';
 import '../utils/cli_exit_code.dart';
 import '../utils/standard_output.dart';
+import 'grpc.dart';
 import 'monarch_app_stdout.dart';
 import 'monarch_app_stderr.dart';
 import 'task.dart';
@@ -38,6 +39,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   final ReloadOption reloadOption;
   final Analytics analytics;
   final int cliGrpcServerPort;
+  final ControllerGrpcClient controllerGrpcClient;
 
   final ObservatoryDiscovery _observatoryDiscovery;
   final DevtoolsDiscovery _devtoolsDiscovery;
@@ -52,17 +54,18 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
 
   bool _isTerminating = false;
 
-  TaskRunner(
-      {required this.projectDirectory,
-      required this.config,
-      required this.monarchBinaries,
-      required this.isVerbose,
-      required this.isDeleteConflictingOutputs,
-      required this.noSoundNullSafety,
-      required this.reloadOption,
-      required this.analytics,
-      required this.cliGrpcServerPort,})
-      : _devtoolsDiscovery = DevtoolsDiscovery(),
+  TaskRunner({
+    required this.projectDirectory,
+    required this.config,
+    required this.monarchBinaries,
+    required this.isVerbose,
+    required this.isDeleteConflictingOutputs,
+    required this.noSoundNullSafety,
+    required this.reloadOption,
+    required this.analytics,
+    required this.cliGrpcServerPort,
+    required this.controllerGrpcClient,
+  })  : _devtoolsDiscovery = DevtoolsDiscovery(),
         _observatoryDiscovery = ObservatoryDiscovery();
 
   /*
@@ -83,9 +86,9 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   /// It uses `flutter pub run build_runner build`.
   ProcessTask? _generateStoriesTask;
 
-  /// Builds the Monarch Preview into a bundle, i.e. it builds the Flutter 
+  /// Builds the Monarch Preview into a bundle, i.e. it builds the Flutter
   /// assets directory of the Monarch Preview.
-  /// 
+  ///
   /// Builds the .monarch/flutter_assets directory using the generated source
   /// files of the Monarch Preview.
   ///
@@ -278,7 +281,9 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         executable:
             monarchBinaries.monarchAppExecutableFile(config.flutterSdkId).path,
         arguments: [
-          monarchBinaries.controllerDirectory(config.flutterSdkId).path, // controller-bundle
+          monarchBinaries
+              .controllerDirectory(config.flutterSdkId)
+              .path, // controller-bundle
           p.join(projectDirectory.path, dotMonarch), // preview-bundle
           defaultLogLevel.name, // log-level
           cliGrpcServerPort.toString(), // cli-grpc-server-port
@@ -391,14 +396,14 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
               ? RegenAndHotReload(
                   stdout_: stdout_default,
                   regenTask: _watchToRegenTask!,
-                  reloadTask: _attachToReloadTask!)
-              // : RegenAndHotRestart(
-              //     stdout_: stdout_default,
-              //     regenTask: _watchToRegenTask!,
-              //     reloadTask: _attachToReloadTask!);
-              : RegenAndBuildPreviewBundle(stdout_: stdout_default,
-                regenTask: _watchToRegenTask!,
-                buildPreviewBundleTask: _buildPreviewBundleTask!);
+                  reloadTask: _attachToReloadTask!,
+                )
+              : RegenRebundleAndHotRestart(
+                  stdout_: stdout_default,
+                  regenTask: _watchToRegenTask!,
+                  buildPreviewBundleTask: _buildPreviewBundleTask!,
+                  controllerGrpcClient: controllerGrpcClient,
+                );
 
           _regenAndReloadManager!.manage();
         }
@@ -456,8 +461,9 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
       stdin_default.keystrokes
           .listen((String keystroke) => _onKeystroke(keystroke, keyCommands));
     } else {
-      stdout_default.writeln('stdin is not attached to an interactive terminal, key commands will not work.');
-      // In an automation context, or when running the cli as part of a test, 
+      stdout_default.writeln(
+          'stdin is not attached to an interactive terminal, key commands will not work.');
+      // In an automation context, or when running the cli as part of a test,
       // stdin may not be attached to a terminal.
     }
   }
@@ -465,8 +471,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   void _onKeystroke(String keystroke, List<KeyCommand> keyCommands) {
     for (var command in keyCommands) {
       if (command.key == keystroke) {
-        if (_regenAndReloadManager != null /*&&
-            _regenAndReloadManager!.isRunning*/) {
+        if (_regenAndReloadManager != null &&
+            _regenAndReloadManager!.isRunning) {
           stdout_default.writeln('Try "$keystroke" again after reloading.');
           return;
         }

@@ -138,7 +138,8 @@ void executeTaskRunner(
       noSoundNullSafety: noSoundNullSafety,
       reloadOption: _getReloadOption(reloadOption),
       analytics: _analytics,
-      cliGrpcServerPort: await cliGrpcServer.port);
+      cliGrpcServerPort: await cliGrpcServer.port,
+      controllerGrpcClient: controllerGrpcClientInstance);
 
   _logger.info('Starting Monarch Task Runner');
   stdout_default.writeln('\nStarting Monarch.');

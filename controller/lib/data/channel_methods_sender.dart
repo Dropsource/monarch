@@ -81,6 +81,11 @@ class ChannelMethodsSender with Log implements AbstractChannelMethodsSender {
   void setDockSide(String dock) {
     _invokeMonarchChannelMethod(MonarchMethods.setDockSide, {'dock': dock});
   }
+  
+  @override
+  void restartPreview() {
+    _invokeMonarchChannelMethod(MonarchMethods.restartPreview);
+  }
 }
 
 final channelMethodsSender = ChannelMethodsSender();

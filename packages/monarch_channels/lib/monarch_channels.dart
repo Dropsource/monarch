@@ -28,6 +28,7 @@ class MonarchMethods {
   static const getState = 'monarch.getState';
   static const willClosePreview = 'monarch.willClosePreview';
   static const hotReload = 'monarch.hotReload';
+  static const restartPreview = 'monarch.restartPreview';
 
   /// Used when the host window has changed screens, i.e. when the user moves
   /// the host window to a different monitor. Sent by the platform code.

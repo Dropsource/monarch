@@ -1,6 +1,7 @@
 import 'package:grpc/grpc.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
+import 'channel_methods_sender.dart';
 
 final _logger = Logger('ControllerGrpc');
 
@@ -10,8 +11,8 @@ void setUpGrpc(int cliServerPort) async {
   var controllerServerPort = server.port!;
   _logger.info('controller grpc server started on port $controllerServerPort');
 
-  cliGrpcClient.initialize(port: cliServerPort);
-  cliGrpcClient.client!
+  cliGrpcClientInstance.initialize(port: cliServerPort);
+  cliGrpcClientInstance.client!
       .controllerGrpcServerStarted(ServerInfo(port: controllerServerPort));
 }
 
@@ -29,12 +30,12 @@ class CliGrpcClient {
   }
 }
 
-final cliGrpcClient = CliGrpcClient();
+final cliGrpcClientInstance = CliGrpcClient();
 
 class ControllerService extends MonarchControllerServiceBase {
   @override
   Future<Empty> restartPreview(ServiceCall call, Empty request) {
-    // TODO: implement restartPreview
-    throw UnimplementedError();
+    channelMethodsSender.restartPreview();
+    return Future.value(Empty());
   }
 }

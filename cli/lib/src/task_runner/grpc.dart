@@ -42,13 +42,13 @@ class ControllerGrpcClient {
   }
 }
 
-class CliService extends MonarchCliServiceBase {
-  final controllerGrpcClient = ControllerGrpcClient();
+final controllerGrpcClientInstance = ControllerGrpcClient();
 
+class CliService extends MonarchCliServiceBase {
   @override
   Future<Empty> controllerGrpcServerStarted(
       ServiceCall call, ServerInfo request) {
-    controllerGrpcClient.initialize(port: request.port);
+    controllerGrpcClientInstance.initialize(port: request.port);
     return Future.value(Empty());
   }
 

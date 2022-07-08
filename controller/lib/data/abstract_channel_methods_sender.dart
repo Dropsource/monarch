@@ -24,4 +24,6 @@ abstract class AbstractChannelMethodsSender {
   void setStoryScale(double scale);
 
   void setDockSide(String dock);
+
+  void restartPreview();
 }
