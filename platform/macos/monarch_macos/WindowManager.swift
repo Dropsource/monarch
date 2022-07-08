@@ -16,6 +16,7 @@ class WindowManager {
     
     var controllerBundlePath: String?
     var previewBundlePath: String?
+    var cliGrpcServerPort: String?
     
     var controllerWindow: NSWindow?
     var previewWindow: NSWindow?
@@ -36,26 +37,29 @@ class WindowManager {
         
         logger.fine("arguments \(arguments)");
         
-        if (arguments.count > 2 && arguments[1] == "--controller-bundle") {
-            controllerBundlePath = arguments[2]
-        } else {
-            fatalError("Missing argument --controller-bundle")
+        if (arguments.count < 5) {
+            fatalError("Expected 5 arguments in this order: executable-path controller-bundle preview-bundle log-level cli-grpc-server-port")
         }
-        if (arguments.count > 4 && arguments[3] == "--preview-bundle") {
-            previewBundlePath = arguments[4]
-        } else {
-            fatalError("Missing argument --preview-bundle")
-        }
-        if (arguments.count > 6 && arguments[5] == "--log-level") {
-            defaultLogLevel = logLevelFromString(levelString: arguments[6])
-        }
+        
+        controllerBundlePath = arguments[1]
+        previewBundlePath = arguments[2]
+        defaultLogLevel = logLevelFromString(levelString: arguments[3])
+        cliGrpcServerPort = arguments[4]
         
         self._loadWindows()
     }
     
     func _loadWindows() {
-        let controller = _initFlutterViewController(controllerBundlePath!)
-        let preview = _initFlutterViewController(previewBundlePath!)
+        let controllerProject = _initDartProject(controllerBundlePath!)
+        let previewProject = _initDartProject(previewBundlePath!)
+        
+        controllerProject.dartEntrypointArguments = [
+            logLevelToString(level: defaultLogLevel), cliGrpcServerPort!]
+        previewProject.dartEntrypointArguments = [
+            logLevelToString(level: defaultLogLevel)]
+        
+        let controller = FlutterViewController.init(project: controllerProject)
+        let preview = FlutterViewController.init(project: previewProject)
         
         channels = Channels.init(
             controllerMessenger: controller.engine.binaryMessenger,
@@ -67,15 +71,14 @@ class WindowManager {
     }
     
     
-    func _initFlutterViewController(_ bundlePath: String) -> FlutterViewController {
+    func _initDartProject(_ bundlePath: String) -> FlutterDartProject {
         let bundleUrl = URL(fileURLWithPath: bundlePath)
         
         logger.fine("Will use bundle at: \(bundleUrl.path)")
         
         let bundle = Bundle.init(path: bundleUrl.path)
         let project = FlutterDartProject.init(precompiledDartBundle: bundle)
-        
-        return FlutterViewController.init(project: project)
+        return project
     }
     
     func _launchFlutterWindows(_ previewFVC: FlutterViewController, _ controllerFVC: FlutterViewController) {
@@ -95,7 +98,10 @@ class WindowManager {
         _tearDownObservers()
         channels!.sendWillClosePreview()
         previewWindow!.close()
-        let preview = _initFlutterViewController(previewBundlePath!)
+        let previewProject = _initDartProject(previewBundlePath!)
+        previewProject.dartEntrypointArguments = [
+            logLevelToString(level: defaultLogLevel)]
+        let preview = FlutterViewController.init(project: previewProject)
         channels!.restartPreviewChannel(previewMessenger: preview.engine.binaryMessenger)
         previewWindow = NSWindow()
         _setUpPreviewWindow(preview, previewWindow!)
