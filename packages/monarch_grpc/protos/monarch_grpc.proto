@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package monarch_grpc;
+
+service MonarchCli {
+    rpc ControllerGrpcServerStarted(ServerInfo) returns (Empty) {}
+    rpc LaunchDevTools(Empty) returns (Empty) {}
+}
+
+service MonarchController {
+    rpc RestartPreview(Empty) returns (Empty) {}
+}
+
+message Empty {}
+
+message ServerInfo {
+    int32 port = 1;
+}
