@@ -25,3 +25,13 @@ const ServerInfo$json = const {
 
 /// Descriptor for `ServerInfo`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List serverInfoDescriptor = $convert.base64Decode('CgpTZXJ2ZXJJbmZvEhIKBHBvcnQYASABKAVSBHBvcnQ=');
+@$core.Deprecated('Use reloadResponseDescriptor instead')
+const ReloadResponse$json = const {
+  '1': 'ReloadResponse',
+  '2': const [
+    const {'1': 'isSuccessful', '3': 1, '4': 1, '5': 8, '10': 'isSuccessful'},
+  ],
+};
+
+/// Descriptor for `ReloadResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List reloadResponseDescriptor = $convert.base64Decode('Cg5SZWxvYWRSZXNwb25zZRIiCgxpc1N1Y2Nlc3NmdWwYASABKAhSDGlzU3VjY2Vzc2Z1bA==');

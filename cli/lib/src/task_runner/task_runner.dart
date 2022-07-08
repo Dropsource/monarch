@@ -396,10 +396,9 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
               ? RegenAndHotReload(
                   stdout_: stdout_default,
                   regenTask: _watchToRegenTask!,
-                  reloadTask: _attachToReloadTask!,
+                  controllerGrpcClient: controllerGrpcClient,
                 )
               : RegenRebundleAndHotRestart(
-                  stdout_: stdout_default,
                   regenTask: _watchToRegenTask!,
                   buildPreviewBundleTask: _buildPreviewBundleTask!,
                   controllerGrpcClient: controllerGrpcClient,

@@ -106,8 +106,8 @@ Future<dynamic> _handler(MethodCall call) async {
       return;
 
     case MonarchMethods.hotReload:
-      await vmServiceClient.hotReload();
-      return;
+      var result = await vmServiceClient.hotReload();
+      return result;
 
     default:
       logger.fine('method ${call.method} not implemented');

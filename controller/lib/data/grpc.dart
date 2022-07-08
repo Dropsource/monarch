@@ -38,4 +38,10 @@ class ControllerService extends MonarchControllerServiceBase {
     channelMethodsSender.restartPreview();
     return Future.value(Empty());
   }
+  
+  @override
+  Future<ReloadResponse> hotReload(ServiceCall call, Empty request) async {
+    var isSuccessful = await channelMethodsSender.hotReload();
+    return ReloadResponse(isSuccessful: isSuccessful);
+  }
 }

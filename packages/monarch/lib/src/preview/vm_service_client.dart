@@ -107,11 +107,15 @@ class VmServiceClient with Log {
     }
   }
 
-  Future<void> hotReload() async {
+  /// Requests a hot reload using the vm service.
+  /// Returns true if successful, otherwise returns false.
+  /// The reload error messages are handled by the cli via the attach process.
+  Future<bool> hotReload() async {
     try {
       await callService('reloadSources');
-    } catch (e, s) {
-      log.severe('Error hot reloading', e, s);
+      return true;
+    } catch (_) {
+      return false;
     }
   }
 

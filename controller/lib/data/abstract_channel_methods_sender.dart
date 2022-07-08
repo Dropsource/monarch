@@ -25,5 +25,7 @@ abstract class AbstractChannelMethodsSender {
 
   void setDockSide(String dock);
 
+  Future<bool> hotReload();
+
   void restartPreview();
 }

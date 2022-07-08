@@ -8,6 +8,7 @@ service MonarchCli {
 }
 
 service MonarchController {
+    rpc HotReload(Empty) returns (ReloadResponse) {}
     rpc RestartPreview(Empty) returns (Empty) {}
 }
 
@@ -15,4 +16,8 @@ message Empty {}
 
 message ServerInfo {
     int32 port = 1;
+}
+
+message ReloadResponse {
+    bool isSuccessful = 1;
 }

@@ -79,6 +79,10 @@ abstract class MonarchCliServiceBase extends $grpc.Service {
 }
 
 class MonarchControllerClient extends $grpc.Client {
+  static final _$hotReload = $grpc.ClientMethod<$0.Empty, $0.ReloadResponse>(
+      '/monarch_grpc.MonarchController/HotReload',
+      ($0.Empty value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.ReloadResponse.fromBuffer(value));
   static final _$restartPreview = $grpc.ClientMethod<$0.Empty, $0.Empty>(
       '/monarch_grpc.MonarchController/RestartPreview',
       ($0.Empty value) => value.writeToBuffer(),
@@ -88,6 +92,11 @@ class MonarchControllerClient extends $grpc.Client {
       {$grpc.CallOptions? options,
       $core.Iterable<$grpc.ClientInterceptor>? interceptors})
       : super(channel, options: options, interceptors: interceptors);
+
+  $grpc.ResponseFuture<$0.ReloadResponse> hotReload($0.Empty request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$hotReload, request, options: options);
+  }
 
   $grpc.ResponseFuture<$0.Empty> restartPreview($0.Empty request,
       {$grpc.CallOptions? options}) {
@@ -99,6 +108,13 @@ abstract class MonarchControllerServiceBase extends $grpc.Service {
   $core.String get $name => 'monarch_grpc.MonarchController';
 
   MonarchControllerServiceBase() {
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.ReloadResponse>(
+        'HotReload',
+        hotReload_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.ReloadResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.Empty, $0.Empty>(
         'RestartPreview',
         restartPreview_Pre,
@@ -108,11 +124,18 @@ abstract class MonarchControllerServiceBase extends $grpc.Service {
         ($0.Empty value) => value.writeToBuffer()));
   }
 
+  $async.Future<$0.ReloadResponse> hotReload_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
+    return hotReload(call, await request);
+  }
+
   $async.Future<$0.Empty> restartPreview_Pre(
       $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
     return restartPreview(call, await request);
   }
 
+  $async.Future<$0.ReloadResponse> hotReload(
+      $grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.Empty> restartPreview(
       $grpc.ServiceCall call, $0.Empty request);
 }

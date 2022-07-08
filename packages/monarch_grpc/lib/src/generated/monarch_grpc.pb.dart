@@ -85,3 +85,50 @@ class ServerInfo extends $pb.GeneratedMessage {
   void clearPort() => clearField(1);
 }
 
+class ReloadResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ReloadResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
+    ..aOB(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isSuccessful', protoName: 'isSuccessful')
+    ..hasRequiredFields = false
+  ;
+
+  ReloadResponse._() : super();
+  factory ReloadResponse({
+    $core.bool? isSuccessful,
+  }) {
+    final _result = create();
+    if (isSuccessful != null) {
+      _result.isSuccessful = isSuccessful;
+    }
+    return _result;
+  }
+  factory ReloadResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ReloadResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ReloadResponse clone() => ReloadResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ReloadResponse copyWith(void Function(ReloadResponse) updates) => super.copyWith((message) => updates(message as ReloadResponse)) as ReloadResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ReloadResponse create() => ReloadResponse._();
+  ReloadResponse createEmptyInstance() => create();
+  static $pb.PbList<ReloadResponse> createRepeated() => $pb.PbList<ReloadResponse>();
+  @$core.pragma('dart2js:noInline')
+  static ReloadResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReloadResponse>(create);
+  static ReloadResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get isSuccessful => $_getBF(0);
+  @$pb.TagNumber(1)
+  set isSuccessful($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasIsSuccessful() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearIsSuccessful() => clearField(1);
+}
+

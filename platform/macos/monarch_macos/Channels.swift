@@ -35,9 +35,11 @@ class Channels {
     
     func setUpCallForwarding() {
         self.controllerChannel.setMethodCallHandler {
-            (call: FlutterMethodCall, result: FlutterResult) -> Void in
-            self.previewChannel.invokeMethod(call.method, arguments: call.arguments)
-            result(nil)
+            (call: FlutterMethodCall, callback:@escaping FlutterResult) -> Void in
+            self.previewChannel.invokeMethod(call.method, arguments: call.arguments) {
+                (result) -> Void in
+                callback(result)
+            }            
             
             switch (call.method) {
                 
@@ -60,9 +62,11 @@ class Channels {
         }
         
         self.previewChannel.setMethodCallHandler {
-            (call: FlutterMethodCall, result: FlutterResult) -> Void in
-            self.controllerChannel.invokeMethod(call.method, arguments: call.arguments)
-            result(nil)
+            (call: FlutterMethodCall, callback:@escaping FlutterResult) -> Void in
+            self.controllerChannel.invokeMethod(call.method, arguments: call.arguments) {
+                (result) -> Void in
+                callback(result)
+            }
         }
     }
     
