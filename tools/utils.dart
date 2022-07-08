@@ -64,7 +64,7 @@ void writeInternalFile(String name, String contents) {
 void exitIfNeeded(ProcessResult result, String errorMessage,
     {List<int>? successExitCodes}) {
   var success = successExitCodes ?? [0];
-  if (!success.contains(exitCode)) {
+  if (!success.contains(result.exitCode)) {
     print(errorMessage);
     print(result.stdout);
     print(result.stderr);
