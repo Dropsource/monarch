@@ -3,7 +3,7 @@ import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
 
 import 'grpc.dart';
-import 'reload.dart';
+import 'reloaders.dart';
 import 'process_task.dart';
 import '../utils/standard_output.dart' show StandardOutput;
 import 'task_count_heartbeat.dart';
@@ -63,21 +63,14 @@ class RegenAndHotReload extends TasksManager {
 
   void reload() async {
     _needsReload = false;
-    if (controllerGrpcClient.isClientInitialized) {
-      log.fine('Sending hotReload request to controller grpc client');
-      _isReloading = true;
-      var response = await controllerGrpcClient.client!.hotReload(Empty());
-      _isReloading = false;
-      heartbeat.complete();
-      if (!response.isSuccessful) {
-        stdout_.writeln(kTryAgainAfterFixing);
-      }
-      if (_needsReload) {
-        reload();
-      }
-    } else {
-      log.warning(
-          'Unable to hot reload. The controller grpc client is not initialized.');
+
+    _isReloading = true;
+    var reloader = HotReloader(controllerGrpcClient, stdout_);
+    await reloader.reload(heartbeat);
+    _isReloading = false;
+
+    if (_needsReload) {
+      reload();
     }
   }
 }
@@ -114,7 +107,7 @@ class RegenRebundleAndHotRestart extends TasksManager {
 
         case ChildTaskStatus.done:
           heartbeat.completedTaskCount = 1;
-          rebundle();
+          reload();
           break;
 
         case ChildTaskStatus.failed:
@@ -128,24 +121,8 @@ class RegenRebundleAndHotRestart extends TasksManager {
     });
   }
 
-  void rebundle() async {
-    await buildPreviewBundleTask.run();
-    await buildPreviewBundleTask.done();
-    if (buildPreviewBundleTask.status == TaskStatus.failed) {
-      heartbeat.completeError();
-    } else {
-      requestRestartPreview();
-      heartbeat.complete();
-    }
-  }
-
-  void requestRestartPreview() async {
-    if (controllerGrpcClient.isClientInitialized) {
-      log.fine('Sending restartPreview request to controller grpc client');
-      controllerGrpcClient.client!.restartPreview(Empty());
-    } else {
-      log.warning(
-          'Unable to hot restart. The controller grpc client is not initialized.');
-    }
+  void reload() async {
+    var reloader = HotRestarter(buildPreviewBundleTask, controllerGrpcClient);
+    reloader.reload(heartbeat);
   }
 }

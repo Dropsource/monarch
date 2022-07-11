@@ -428,12 +428,13 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
     if (isReloadAutomatic) {
       keyCommands.addAll([
         HotReloadKeyCommand(
+            controllerGrpcClient: controllerGrpcClient,
             stdout_: stdout_default,
-            reloadTask: _attachToReloadTask!,
             isDefault: reloadOption == ReloadOption.hotReload),
         HotRestartKeyCommand(
+            bundleTask: _buildPreviewBundleTask!,
+            controllerGrpcClient: controllerGrpcClient,
             stdout_: stdout_default,
-            reloadTask: _attachToReloadTask!,
             isDefault: reloadOption == ReloadOption.hotRestart),
         helpKeyCommand,
         QuitKeyCommand()
@@ -443,11 +444,11 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         GenerateAndHotReloadKeyCommand(
             stdout_: stdout_default,
             generateTask: _generateStoriesTask!,
-            reloadTask: _attachToReloadTask!),
+            controllerGrpcClient: controllerGrpcClient),
         GenerateAndHotRestartKeyCommand(
-            stdout_: stdout_default,
             generateTask: _generateStoriesTask!,
-            reloadTask: _attachToReloadTask!),
+            bundleTask: _buildPreviewBundleTask!,
+            controllerGrpcClient: controllerGrpcClient,),
         helpKeyCommand,
         QuitKeyCommand()
       ]);
