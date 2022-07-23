@@ -1,8 +1,6 @@
 import 'package:monarch_cli/src/task_runner/task.dart';
-import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
 
-import 'attach_task.dart';
 import 'grpc.dart';
 import 'reloaders.dart';
 import 'process_task.dart';
@@ -78,13 +76,11 @@ class RegenAndHotReload extends TasksManager {
 
 class RegenRebundleAndHotRestart extends TasksManager {
   final ProcessParentReadyTask regenTask;
-  final AttachTask attachTask;
   final ProcessTask buildPreviewBundleTask;
   final ControllerGrpcClient controllerGrpcClient;
 
   RegenRebundleAndHotRestart({
     required this.regenTask,
-    required this.attachTask,
     required this.buildPreviewBundleTask,
     required this.controllerGrpcClient,
   });
@@ -125,7 +121,7 @@ class RegenRebundleAndHotRestart extends TasksManager {
   }
 
   void reload() async {
-    var reloader = HotRestarter(buildPreviewBundleTask, attachTask, controllerGrpcClient);
+    var reloader = HotRestarter(buildPreviewBundleTask, controllerGrpcClient);
     reloader.reload(heartbeat);
   }
 }

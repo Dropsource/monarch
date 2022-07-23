@@ -21,7 +21,6 @@ import 'task.dart';
 import 'task_runner_exit_codes.dart';
 import 'process_task.dart';
 import 'observatory_discovery.dart';
-import 'devtools_discovery.dart.dart';
 import 'task_count_heartbeat.dart';
 import 'task_names.dart';
 import 'terminator.dart';
@@ -378,7 +377,6 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
                 )
               : RegenRebundleAndHotRestart(
                   regenTask: _watchToRegenTask!,
-                  attachTask: _attachToReloadTask!,
                   buildPreviewBundleTask: _buildPreviewBundleTask!,
                   controllerGrpcClient: controllerGrpcClient,
                 );
@@ -412,7 +410,6 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
             isDefault: reloadOption == ReloadOption.hotReload),
         HotRestartKeyCommand(
             bundleTask: _buildPreviewBundleTask!,
-            attachTask: _attachToReloadTask!,
             controllerGrpcClient: controllerGrpcClient,
             stdout_: stdout_default,
             isDefault: reloadOption == ReloadOption.hotRestart),
@@ -428,7 +425,6 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         GenerateAndHotRestartKeyCommand(
           generateTask: _generateStoriesTask!,
           bundleTask: _buildPreviewBundleTask!,
-          attachTask: _attachToReloadTask!,
           controllerGrpcClient: controllerGrpcClient,
         ),
         helpKeyCommand,

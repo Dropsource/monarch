@@ -62,13 +62,6 @@ class CliService extends MonarchCliServiceBase {
         port: request.port,
         path: request.path);
 
-    if (taskRunner.isStarting) {
-      return Future.value(Empty());
-    }
-
-    if (taskRunner.attachTask!.task == null || taskRunner.attachTask!.task!.isInFinalState) {
-      taskRunner.attachTask!.attach();
-    }
     return Future.value(Empty());
   }
 }

@@ -2,7 +2,6 @@ import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
 
 import '../utils/standard_output.dart';
-import 'attach_task.dart';
 import 'grpc.dart';
 import 'process_task.dart';
 import 'task.dart';
@@ -45,9 +44,8 @@ class HotReloader extends Reloader {
 class HotRestarter extends Reloader {
   final ControllerGrpcClient controllerGrpcClient;
   final ProcessTask bundleTask;
-  final AttachTask attachTask;
 
-  HotRestarter(this.bundleTask, this.attachTask, this.controllerGrpcClient);
+  HotRestarter(this.bundleTask, this.controllerGrpcClient);
 
   /// It restarts the Monarch Preview. Restarts the Preview by closing the existing
   /// Preview window and opening a new one.
@@ -58,11 +56,8 @@ class HotRestarter extends Reloader {
   /// Restart sequence:
   /// 
   /// - Build the preview bundle
-  /// - Kill the current attach process
   /// - Request the controller to restart the preview window
   /// - The controller in turn sends a message to the window manager to relaunch the preview window
-  /// - The new preview runtime will call the cli grpc service with the new debug uri
-  /// - The cli grpc service will then re-attach
   @override
   Future<void> reload(Heartbeat heartbeat) async {
     await bundleTask.run();
@@ -74,7 +69,6 @@ class HotRestarter extends Reloader {
     } 
 
     if (controllerGrpcClient.isClientInitialized) {
-      attachTask.kill();
       log.fine('Sending restartPreview request to controller grpc client');
       await controllerGrpcClient.client!.restartPreview(Empty());
     } else {
