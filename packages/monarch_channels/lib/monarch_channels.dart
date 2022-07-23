@@ -29,6 +29,7 @@ class MonarchMethods {
   static const willClosePreview = 'monarch.willClosePreview';
   static const hotReload = 'monarch.hotReload';
   static const restartPreview = 'monarch.restartPreview';
+  static const previewVmServerUri = 'monarch.previewVmServerUri';
 
   /// Used when the host window has changed screens, i.e. when the user moves
   /// the host window to a different monitor. Sent by the platform code.

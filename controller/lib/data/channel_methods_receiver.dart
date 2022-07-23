@@ -1,4 +1,6 @@
 import 'package:flutter/services.dart';
+import 'package:monarch_controller/data/grpc.dart';
+import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_channels/monarch_channels.dart';
 import 'package:monarch_controller/data/device_definitions.dart';
@@ -49,6 +51,14 @@ Future<dynamic> _handler(MethodCall call) async {
         manager.onReady();
       }
       channelMethodsSender.sendReadySignalAck();
+      return;
+
+    case MonarchMethods.previewVmServerUri:
+      cliGrpcClientInstance.client!.previewVmServerUriChanged(UriInfo(
+          scheme: args!['scheme'],
+          host: args['host'],
+          port: args['port'],
+          path: args['path']));
       return;
 
     case MonarchMethods.deviceDefinitions:

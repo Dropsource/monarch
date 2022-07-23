@@ -15,6 +15,19 @@ const Empty$json = const {
 
 /// Descriptor for `Empty`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List emptyDescriptor = $convert.base64Decode('CgVFbXB0eQ==');
+@$core.Deprecated('Use uriInfoDescriptor instead')
+const UriInfo$json = const {
+  '1': 'UriInfo',
+  '2': const [
+    const {'1': 'host', '3': 1, '4': 1, '5': 9, '10': 'host'},
+    const {'1': 'port', '3': 2, '4': 1, '5': 5, '10': 'port'},
+    const {'1': 'path', '3': 3, '4': 1, '5': 9, '10': 'path'},
+    const {'1': 'scheme', '3': 4, '4': 1, '5': 9, '10': 'scheme'},
+  ],
+};
+
+/// Descriptor for `UriInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List uriInfoDescriptor = $convert.base64Decode('CgdVcmlJbmZvEhIKBGhvc3QYASABKAlSBGhvc3QSEgoEcG9ydBgCIAEoBVIEcG9ydBISCgRwYXRoGAMgASgJUgRwYXRoEhYKBnNjaGVtZRgEIAEoCVIGc2NoZW1l');
 @$core.Deprecated('Use serverInfoDescriptor instead')
 const ServerInfo$json = const {
   '1': 'ServerInfo',

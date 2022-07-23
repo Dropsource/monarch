@@ -42,6 +42,15 @@ class ChannelMethodsSender with Log {
     return _invokeMonarchChannelMethod(MonarchMethods.readySignal);
   }
 
+  Future sendPreviewVmServerUri(Uri uri) {
+    return _invokeMonarchChannelMethod(MonarchMethods.previewVmServerUri, {
+      'scheme': uri.scheme,
+      'host': uri.host,
+      'port': uri.port,
+      'path': uri.path,
+    });
+  }
+
   Future sendToggleVisualDebugFlag(OutboundChannelArgument visualDebugFlag) {
     return _invokeMonarchChannelMethod(
         MonarchMethods.toggleVisualDebugFlag, visualDebugFlag.toStandardMap());

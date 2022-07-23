@@ -11,6 +11,7 @@ import 'active_text_scale_factor.dart';
 import 'active_story_scale.dart';
 import 'log_level.dart';
 import 'ready_signal.dart';
+import 'start_monarch_preview.dart' as startup;
 import 'stories_errors.dart';
 import 'visual_debug_flags.dart' as visual_debug;
 import 'vm_service_client.dart';
@@ -102,7 +103,7 @@ Future<dynamic> _handler(MethodCall call) async {
       return;
 
     case MonarchMethods.willClosePreview:
-      await vmServiceClient.disconnect();
+      await startup.dispose();
       return;
 
     case MonarchMethods.hotReload:

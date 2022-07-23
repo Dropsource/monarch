@@ -1,32 +1,24 @@
 import 'dart:async';
 
 import 'package:grpc/grpc.dart';
+import 'package:monarch_cli/src/task_runner/task.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
 
+import 'task_runner.dart';
+
 final _logger = Logger('CliGrpc');
 
-const _startError = -1;
-
 class CliGrpcServer {
-  late Completer<int> _completer;
-  Future<int> get port => _completer.future;
+  late final int port;
 
-  Future<void> startServer() async {
-    _completer = Completer();
-    try {
-      var server = Server([CliService()]);
-      _logger.info('Starting cli grpc server');
-      await server.serve(port: 0);
-      _completer.complete(server.port!);
-      _logger.info('cli grpc server started on port ${await port}');
-    } catch (e, s) {
-      _logger.severe('Error while starting cli grpc server', e, s);
-      _completer.complete(_startError);
-    }
+  Future<void> startServer(TaskRunner taskRunner) async {
+    var server = Server([CliService(taskRunner)]);
+    _logger.info('Starting cli grpc server');
+    await server.serve(port: 0);
+    port = server.port!;
+    _logger.info('cli grpc server started on port $port');
   }
-
-  Future<bool> started() async => (await port) != _startError;
 }
 
 class ControllerGrpcClient {
@@ -37,7 +29,8 @@ class ControllerGrpcClient {
     _logger.info('Will use controller grpc server at port $port');
     var channel = ClientChannel('0.0.0.0',
         port: port,
-        options: const ChannelOptions(credentials: ChannelCredentials.insecure()));
+        options:
+            const ChannelOptions(credentials: ChannelCredentials.insecure()));
     client = MonarchControllerClient(channel);
   }
 }
@@ -45,6 +38,9 @@ class ControllerGrpcClient {
 final controllerGrpcClientInstance = ControllerGrpcClient();
 
 class CliService extends MonarchCliServiceBase {
+  final TaskRunner taskRunner;
+  CliService(this.taskRunner);
+
   @override
   Future<Empty> controllerGrpcServerStarted(
       ServiceCall call, ServerInfo request) {
@@ -56,5 +52,23 @@ class CliService extends MonarchCliServiceBase {
   Future<Empty> launchDevTools(ServiceCall call, Empty request) {
     // TODO: implement launchDevTools
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Empty> previewVmServerUriChanged(ServiceCall call, UriInfo request) {
+    taskRunner.attachTask!.debugUri = Uri(
+        scheme: request.scheme,
+        host: request.host,
+        port: request.port,
+        path: request.path);
+
+    if (taskRunner.isStarting) {
+      return Future.value(Empty());
+    }
+
+    if (taskRunner.attachTask!.task == null || taskRunner.attachTask!.task!.isInFinalState) {
+      taskRunner.attachTask!.attach();
+    }
+    return Future.value(Empty());
   }
 }

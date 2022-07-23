@@ -32,7 +32,7 @@ import '../utils/standard_output.dart';
 /// to the gRPC server.
 class MonarchAppStdoutListener {
   final Analytics analytics;
-  final DevtoolsDiscovery devtoolsDiscovery;
+  final DevtoolsDiscovery? devtoolsDiscovery;
 
   MonarchAppStdoutListener(this.analytics, this.devtoolsDiscovery);
 
@@ -127,7 +127,7 @@ class MonarchAppStdoutListener {
   }
 
   void _launchDevtools(_) {
-    switch (devtoolsDiscovery.status) {
+    switch (devtoolsDiscovery!.status) {
       case DiscoveryStatus.initial:
       case DiscoveryStatus.listening:
         stdout_default.writeln();
@@ -137,7 +137,7 @@ class MonarchAppStdoutListener {
       case DiscoveryStatus.found:
         stdout_default.writeln();
         stdout_default.writeln('Launching Flutter DevTools in your browser.');
-        var uri = devtoolsDiscovery.devtoolsUri.toString();
+        var uri = devtoolsDiscovery!.devtoolsUri.toString();
         functionForPlatform(
             macos: () => Process.run('open', [uri]),
             windows: () => Process.run(

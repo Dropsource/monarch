@@ -19,6 +19,8 @@ import 'vm_service_client.dart';
 import 'monarch_binding.dart';
 
 final _logger = Logger('Start');
+StreamSubscription? _willReassembleSubcription;
+StreamSubscription? _serverUriSubscription;
 
 void startMonarchPreview(MonarchData Function() getMonarchData) {
   Chain.capture(() {
@@ -34,10 +36,15 @@ void _startMonarchPreview(MonarchData Function() getMonarchData) async {
   loadMonarchDataInstance(getMonarchData);
   handleFlutterFrameworkErrors();
 
-  monarchBinding.reassembleCallback = () async {
+  // monarchBinding.reassembleCallback = () async {
+  //   loadMonarchDataInstance(getMonarchData);
+  //   await channelMethodsSender.sendMonarchData(monarchDataInstance);
+  // };
+
+  _willReassembleSubcription = monarchBinding.willReassembleStream.listen((event) async { 
     loadMonarchDataInstance(getMonarchData);
     await channelMethodsSender.sendMonarchData(monarchDataInstance);
-  };
+  });
 
   Timer.run(() {
     monarchBinding.attachRootWidget(MonarchPreview());
@@ -57,6 +64,9 @@ void _setUpLog() {
 }
 
 Future<void> _connectToVmService() async {
+  _serverUriSubscription = vmServiceClient.serverUriStream.listen((uri) {
+    channelMethodsSender.sendPreviewVmServerUri(uri);
+  });
   try {
     await vmServiceClient.connect();
   } catch (e, s) {
@@ -74,4 +84,10 @@ Future<void> _sendDefinitions() async {
   await channelMethodsSender.sendDeviceDefinitions(DeviceDefinitions());
   await channelMethodsSender.sendStoryScaleDefinitions(StoryScaleDefinitions());
   await channelMethodsSender.sendStandardThemes(StandardThemes());
+}
+
+Future dispose() async {
+  await _willReassembleSubcription?.cancel();
+  await _serverUriSubscription?.cancel();
+  await vmServiceClient.disconnect();
 }

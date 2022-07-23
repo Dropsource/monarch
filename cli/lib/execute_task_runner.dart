@@ -73,9 +73,6 @@ void executeTaskRunner(
       VersionApi(readUserId: contextInfo.userDeviceIdOrUnknown));
   notificationsReader.read(contextInfo);
 
-  final cliGrpcServer = CliGrpcServer();
-  cliGrpcServer.startServer();
-
   final projectConfig =
       TaskRunnerProjectConfig(projectDirectory, contextInfo.internalInfo);
   await projectConfig.validate();
@@ -123,12 +120,6 @@ void executeTaskRunner(
   final notifications = await notificationsReader.notifications;
   _showNotifications(notifications);
 
-  await cliGrpcServer.port;
-  if (!await cliGrpcServer.started()) {
-    await _exit(TaskRunnerExitCodes.cliGrpcServerStartError);
-    return;
-  }
-
   final taskRunner = TaskRunner(
       projectDirectory: projectDirectory,
       config: projectConfig,
@@ -138,8 +129,17 @@ void executeTaskRunner(
       noSoundNullSafety: noSoundNullSafety,
       reloadOption: _getReloadOption(reloadOption),
       analytics: _analytics,
-      cliGrpcServerPort: await cliGrpcServer.port,
       controllerGrpcClient: controllerGrpcClientInstance);
+
+  final cliGrpcServer = CliGrpcServer();
+  try {
+    await cliGrpcServer.startServer(taskRunner);
+    taskRunner.cliGrpcServerPort = cliGrpcServer.port;
+  }
+  catch (e, s) {
+    await _exit(TaskRunnerExitCodes.cliGrpcServerStartError);
+    return;
+  }
 
   _logger.info('Starting Monarch Task Runner');
   stdout_default.writeln('\nStarting Monarch.');

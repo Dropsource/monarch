@@ -26,6 +26,11 @@ class VmServiceClient with Log {
   final List<StreamSubscription> _streamSubscriptions = [];
   bool _isDisconnected = false;
 
+  Uri? serverUri;
+
+  final _serverUriStreamController = StreamController<Uri>.broadcast();
+  Stream<Uri> get serverUriStream => _serverUriStreamController.stream;
+
   /// Connects to the Dart VM service.
   ///
   /// At runtime, the Dart VM Service has at least two isolates:
@@ -35,6 +40,8 @@ class VmServiceClient with Log {
   /// isolate runs the code for the Monarch Preview.
   Future<void> connect() async {
     final info = await developer.Service.getInfo();
+    serverUri = info.serverUri;
+    _serverUriStreamController.add(serverUri!);
     final port = info.serverUri!.port;
     final host = info.serverUri!.host;
     final path = info.serverUri!.path;

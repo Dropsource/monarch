@@ -36,8 +36,8 @@ void main(List<String> arguments) async {
 
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MonarchControllerApp());
-  receiveChannelMethodCalls();
   setUpGrpc(cliGrpcServerPort);
+  receiveChannelMethodCalls();
 }
 
 void _setUpLog() {

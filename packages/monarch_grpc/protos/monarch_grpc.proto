@@ -3,6 +3,7 @@ syntax = "proto3";
 package monarch_grpc;
 
 service MonarchCli {
+    rpc PreviewVmServerUriChanged(UriInfo) returns (Empty) {}
     rpc ControllerGrpcServerStarted(ServerInfo) returns (Empty) {}
     rpc LaunchDevTools(Empty) returns (Empty) {}
 }
@@ -13,6 +14,13 @@ service MonarchController {
 }
 
 message Empty {}
+
+message UriInfo {
+    string host = 1;
+    int32 port = 2;
+    string path = 3;
+    string scheme = 4;
+}
 
 message ServerInfo {
     int32 port = 1;

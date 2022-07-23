@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:monarch_io_utils/utils.dart';
 import 'package:monarch_utils/log.dart';
 
+import 'attach_task.dart';
 import 'process_task.dart';
 import 'reloaders.dart';
 import '../utils/standard_output.dart' show StandardOutput;
@@ -69,18 +70,20 @@ class HotRestartKeyCommand extends KeyCommand {
     running(() async {
       var heartbeat = Heartbeat(kReloadingStoriesHotRestart, stdout_.writeln);
       heartbeat.start();
-      var reloader = HotRestarter(bundleTask, controllerGrpcClient);
+      var reloader = HotRestarter(bundleTask, attachTask, controllerGrpcClient);
       await reloader.reload(heartbeat);
     });
   }
 
   final ProcessTask bundleTask;
+  final AttachTask attachTask;
   final ControllerGrpcClient controllerGrpcClient;
   final StandardOutput stdout_;
   final bool isDefault;
 
   HotRestartKeyCommand({
     required this.bundleTask,
+    required this.attachTask,
     required this.controllerGrpcClient,
     required this.stdout_,
     required this.isDefault,
@@ -165,11 +168,13 @@ class GenerateAndHotRestartKeyCommand extends KeyCommand {
 
   final ProcessTask generateTask;
   final ProcessTask bundleTask;
+  final AttachTask attachTask;
   final ControllerGrpcClient controllerGrpcClient;
 
   GenerateAndHotRestartKeyCommand({
     required this.generateTask,
     required this.bundleTask,
+    required this.attachTask,
     required this.controllerGrpcClient,
   });
 
@@ -182,7 +187,7 @@ class GenerateAndHotRestartKeyCommand extends KeyCommand {
       await generateTask.run();
       await generateTask.done();
 
-      var reloader = HotRestarter(bundleTask, controllerGrpcClient);
+      var reloader = HotRestarter(bundleTask, attachTask, controllerGrpcClient);
       await reloader.reload(heartbeat);
     });
   }

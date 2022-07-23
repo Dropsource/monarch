@@ -61,7 +61,10 @@ class MonarchBinding extends BindingBase
     window.platformDispatcher.textScaleFactorTestValue = factor;
   }
 
-  late final Future<void> Function() reassembleCallback;
+  // late final Future<void> Function() reassembleCallback; ***
+
+  final _willReassembleStreamController = StreamController<void>.broadcast();
+  Stream<void> get willReassembleStream => _willReassembleStreamController.stream;
 
   @override
   Future<void> performReassemble() async {
@@ -71,7 +74,8 @@ class MonarchBinding extends BindingBase
     /// - The platform app will then compute new user selections based on the
     ///   new monarch data and send those selections back to us.
     /// - Those selections become the new active state.
-    await reassembleCallback();
+    // await reassembleCallback(); ***
+    _willReassembleStreamController.add(null);
 
     /// Second:
     /// - Call [WidgetsBinding.performReassemble] which should rebuild the

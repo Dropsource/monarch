@@ -13,6 +13,7 @@ import '../config/monarch_binaries.dart';
 import '../config/project_config.dart';
 import '../utils/cli_exit_code.dart';
 import '../utils/standard_output.dart';
+import 'attach_task.dart';
 import 'grpc.dart';
 import 'monarch_app_stdout.dart';
 import 'monarch_app_stderr.dart';
@@ -38,11 +39,10 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   final bool noSoundNullSafety;
   final ReloadOption reloadOption;
   final Analytics analytics;
-  final int cliGrpcServerPort;
   final ControllerGrpcClient controllerGrpcClient;
 
+  late final int cliGrpcServerPort;
   final ObservatoryDiscovery _observatoryDiscovery;
-  final DevtoolsDiscovery _devtoolsDiscovery;
 
   String get generatedMainFilePath => p.join('.dart_tool', 'build', 'generated',
       config.pubspecProjectName, 'lib', 'main_monarch.g.dart');
@@ -63,10 +63,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
     required this.noSoundNullSafety,
     required this.reloadOption,
     required this.analytics,
-    required this.cliGrpcServerPort,
     required this.controllerGrpcClient,
-  })  : _devtoolsDiscovery = DevtoolsDiscovery(),
-        _observatoryDiscovery = ObservatoryDiscovery();
+  }) : _observatoryDiscovery = ObservatoryDiscovery();
 
   /*
   /// ### The Monarch Preview
@@ -103,13 +101,14 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   ProcessReadyTask? _runMonarchAppTask;
 
   /// Attaches to the running Monarch Preview. This process allows us to
-  /// hot reload or hot restart.
+  /// hot reload.
   ///
   /// We don't reload the user source files, we reload the generated source files,
-  /// thus the hot reload or hot restart occur after a re-generation has completed.
+  /// thus the hot reload occur after a re-generation has completed.
   ///
   /// It uses `flutter attach`.
-  ProcessParentReadyTask? _attachToReloadTask;
+  AttachTask? _attachToReloadTask;
+  AttachTask? get attachTask => _attachToReloadTask;
 
   /// Watches the user project for source file changes. When it detects a change
   /// it performs a re-generation.
@@ -120,9 +119,14 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   /// Manages the child tasks of [_watchToRegenTask] and [_attachToReloadTask].
   TasksManager? _regenAndReloadManager;
 
+  bool _isStarting = false;
+  bool get isStarting => _isStarting;
+
   @override
   void didRun() async {
-    _runTasks();
+    _isStarting = true;
+    await _runTasks();
+    _isStarting = false;
   }
 
   @override
@@ -134,7 +138,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
     _terminateTasks();
   }
 
-  void _runTasks() async {
+  Future<void> _runTasks() async {
     _createInitialTasks();
     await _runInitialTasks();
 
@@ -151,7 +155,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
       _generateStoriesTask,
       _buildPreviewBundleTask,
       _runMonarchAppTask,
-      _attachToReloadTask,
+      _attachToReloadTask?.task,
       _watchToRegenTask
     ];
 
@@ -294,33 +298,12 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         onStdErrMessage: onRunMonarchAppStdErrMessage,
         readyMessage: 'story-flutter-window-ready');
 
-    _attachToReloadTask = ProcessParentReadyTask(
+    _attachToReloadTask = AttachTask(
         taskName: TaskNames.attachToHotRestart,
-        executable: config.flutterExecutablePath,
-        arguments: [
-          'attach',
-          '--debug',
-          '-d',
-          valueForPlatform(macos: 'macOS', windows: 'Windows'),
-          '-t',
-          generatedMainFilePath,
-
-          /// `--debug-uri` added by function `_processObservatoryUri`
-          ///
-          /// '--isolate-filter=monarch-isolate', // 2020-06-05: did not work when bypassing desktop check on stable channel
-          /// if (isVerbose) '--verbose' // 2020-06-05: attach verbose flag is very noisy. If set, you will have to change the child task messages.
-        ],
-        workingDirectory: projectDirectory.path,
-        analytics: analytics,
-        readyMessage: valueForPlatform(
-            macos: 'An Observatory debugger and profiler on macOS is available',
-            windows:
-                'An Observatory debugger and profiler on Windows is available'),
-        childTaskMessages: ChildTaskMessages(
-            running: RegExp(r'(Performing hot restart|Performing hot reload)'),
-            done: RegExp(
-                r'(Restarted application|Reloaded \d+ of \d+ libraries|Reloaded \d+ libraries)'),
-            failed: 'Try again after fixing the above error(s).'));
+        flutterExecutablePath: config.flutterExecutablePath,
+        generatedMainFilePath: generatedMainFilePath,
+        projectDirectoryPath: projectDirectory.path,
+        analytics: analytics);
 
     _watchToRegenTask = ProcessParentReadyTask(
         taskName: TaskNames.watchToRegenMetaStories,
@@ -359,8 +342,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
           }
         }));
         _observatoryDiscovery.listen(_runMonarchAppTask!.stdout);
-        var monarchAppStdoutListener =
-            MonarchAppStdoutListener(analytics, _devtoolsDiscovery);
+        var monarchAppStdoutListener = MonarchAppStdoutListener(
+            analytics, _attachToReloadTask!.devtoolsDiscovery);
         _runMonarchAppTask!.stdout.listen(monarchAppStdoutListener.listen);
         await _runMonarchAppTask!.ready();
         await _observatoryDiscovery.cancel();
@@ -370,16 +353,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         _addObservatoryUriToAttachArguments();
       },
       () async {
-        var attaching =
-            Heartbeat('Attaching to stories', stdout_default.writeln)..start();
-
-        await _attachToReloadTask!.run();
-        _devtoolsDiscovery.listen(_attachToReloadTask!.stdout);
         await _attachToReloadTask!.ready();
-
-        attaching.complete();
-
-        Future.delayed(Duration(seconds: 10), _devtoolsDiscovery.cancel);
+        await _attachToReloadTask!.attach();
       },
       () async {
         if (isReloadAutomatic) {
@@ -391,7 +366,10 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
           await _watchToRegenTask!.ready();
 
           watching.complete();
-
+        }
+      },
+      () async {
+        if (isReloadAutomatic) {
           _regenAndReloadManager = reloadOption == ReloadOption.hotReload
               ? RegenAndHotReload(
                   stdout_: stdout_default,
@@ -400,6 +378,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
                 )
               : RegenRebundleAndHotRestart(
                   regenTask: _watchToRegenTask!,
+                  attachTask: _attachToReloadTask!,
                   buildPreviewBundleTask: _buildPreviewBundleTask!,
                   controllerGrpcClient: controllerGrpcClient,
                 );
@@ -433,6 +412,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
             isDefault: reloadOption == ReloadOption.hotReload),
         HotRestartKeyCommand(
             bundleTask: _buildPreviewBundleTask!,
+            attachTask: _attachToReloadTask!,
             controllerGrpcClient: controllerGrpcClient,
             stdout_: stdout_default,
             isDefault: reloadOption == ReloadOption.hotRestart),
@@ -446,9 +426,11 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
             generateTask: _generateStoriesTask!,
             controllerGrpcClient: controllerGrpcClient),
         GenerateAndHotRestartKeyCommand(
-            generateTask: _generateStoriesTask!,
-            bundleTask: _buildPreviewBundleTask!,
-            controllerGrpcClient: controllerGrpcClient,),
+          generateTask: _generateStoriesTask!,
+          bundleTask: _buildPreviewBundleTask!,
+          attachTask: _attachToReloadTask!,
+          controllerGrpcClient: controllerGrpcClient,
+        ),
         helpKeyCommand,
         QuitKeyCommand()
       ]);
@@ -522,8 +504,7 @@ $monarchIsReady. Press "r" or "R" to reload project changes.''');
       terminate(TaskRunnerExitCodes.observatoryUriNotScraped);
       return;
     }
-    _attachToReloadTask!.arguments.add('--debug-uri');
-    _attachToReloadTask!.arguments
-        .add(_observatoryDiscovery.observatoryUri.toString());
+    // _attachToReloadTask!.debugUri =
+    //     _observatoryDiscovery.observatoryUri.toString();
   }
 }
