@@ -44,6 +44,12 @@ class MockChannelMethodsSender implements AbstractChannelMethodsSender {
 
   @override
   Future setUpLog(int defaultLogLevelValue) => Future.value();
+
+  @override
+  Future<bool> hotReload() => Future.value(true);
+
+  @override
+  void restartPreview() {}
 }
 
 const deviceDefinitions = [
