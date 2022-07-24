@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:monarch_io_utils/utils.dart';
 import 'package:monarch_utils/log.dart';
@@ -99,5 +100,38 @@ class AttachTask with Log {
 
   void stopScrapingMessages() {
     _task?.stopScrapingMessages();
+  }
+
+  void launchDevtools() {
+    if (devtoolsDiscovery == null) {
+      stdout_default.writeln(
+            'Flutter DevTools is not ready yet. Please retry in a few seconds.');
+      return;
+    }
+    switch (devtoolsDiscovery!.status) {
+      case DiscoveryStatus.initial:
+      case DiscoveryStatus.listening:
+        stdout_default.writeln();
+        stdout_default.writeln(
+            'Flutter DevTools is not ready yet. Please retry in a few seconds.');
+        break;
+      case DiscoveryStatus.found:
+        stdout_default.writeln();
+        stdout_default.writeln('Launching Flutter DevTools in your browser.');
+        var uri = devtoolsDiscovery!.devtoolsUri.toString();
+        functionForPlatform(
+            macos: () => Process.run('open', [uri]),
+            windows: () => Process.run(
+                'rundll32', ['url.dll,FileProtocolHandler', uri],
+                runInShell: true));
+        // `explorer $uri` should work on Windows but it doesn't,
+        // it doesn't work because the uri has a query string
+        break;
+      case DiscoveryStatus.notFound:
+        stdout_default.writeln();
+        stdout_default.writeln('Could not find DevTools URI.');
+        break;
+      default:
+    }
   }
 }

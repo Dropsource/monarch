@@ -50,8 +50,8 @@ class CliService extends MonarchCliServiceBase {
 
   @override
   Future<Empty> launchDevTools(ServiceCall call, Empty request) {
-    // TODO: implement launchDevTools
-    throw UnimplementedError();
+    taskRunner.attachTask!.launchDevtools();
+    return Future.value(Empty());
   }
 
   @override

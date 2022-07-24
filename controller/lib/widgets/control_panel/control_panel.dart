@@ -140,7 +140,7 @@ class ControlPanel extends StatelessWidget {
             child: SizedBox(
               width: 120,
               child: StockholmButton(
-                onPressed: () {},
+                onPressed: manager.launchDevTools,
                 child:
                     const TextBody1('dev_tools.launch', shouldTranslate: true),
               ),

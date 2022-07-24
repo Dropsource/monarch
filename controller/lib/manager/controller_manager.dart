@@ -1,18 +1,20 @@
 import 'dart:async';
 
-import 'package:monarch_controller/data/abstract_channel_methods_sender.dart';
-import 'package:monarch_controller/data/device_definitions.dart';
-import 'package:monarch_controller/data/dock_definition.dart';
-import 'package:monarch_controller/data/stories.dart';
-import 'package:monarch_controller/data/story_scale_definitions.dart';
-import 'package:monarch_controller/data/visual_debug_flags.dart';
-import 'package:monarch_controller/manager/controller_state.dart';
-import 'package:monarch_controller/manager/search_manager.dart';
+import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'controller_state.dart';
+import 'search_manager.dart';
+import '../data/abstract_channel_methods_sender.dart';
+import '../data/device_definitions.dart';
 import '../data/channel_methods_receiver.dart';
+import '../data/dock_definition.dart';
+import '../data/stories.dart';
+import '../data/story_scale_definitions.dart';
+import '../data/visual_debug_flags.dart';
 import '../data/monarch_data.dart';
-import 'package:monarch_controller/data/definitions.dart' as defs;
+import '../data/definitions.dart' as defs;
+import '../data/grpc.dart';
 import '../extensions/iterable_extensions.dart';
 
 class ControllerManager {
@@ -62,6 +64,10 @@ class ControllerManager {
     final list = state.visualDebugFlags
       ..setAll(index, [element.copyWith(enabled: isEnabled)]);
     _update(state.copyWith(visualDebugFlags: list));
+  }
+
+  void launchDevTools()  {
+    cliGrpcClientInstance.client!.launchDevTools(Empty());
   }
 
   void onDeviceChanged(DeviceDefinition deviceDefinition) {

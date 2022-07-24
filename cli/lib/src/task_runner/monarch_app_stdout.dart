@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:monarch_io_utils/utils.dart';
 
 import '../analytics/analytics.dart';
-import 'devtools_discovery.dart.dart';
 import '../utils/standard_output.dart';
 
 /// Scrapes messages written to the stdout stream of the `runMonarchAppTask` process.
@@ -32,9 +29,8 @@ import '../utils/standard_output.dart';
 /// to the gRPC server.
 class MonarchAppStdoutListener {
   final Analytics analytics;
-  final DevtoolsDiscovery? devtoolsDiscovery;
 
-  MonarchAppStdoutListener(this.analytics, this.devtoolsDiscovery);
+  MonarchAppStdoutListener(this.analytics);
 
   void listen(String message) {
     const userLineMarker = 'flutter: ##usr-line##';
@@ -43,7 +39,6 @@ class MonarchAppStdoutListener {
     var platformPrefix =
         valueForPlatform(macos: 'mac_app', windows: 'windows_app');
     var userSelectionMarker = '$platformPrefix: ###user-selection:start###';
-    var launchDevtoolsMarker = '$platformPrefix: ###launch-devtools###';
 
     // Every line we want to process should be prefixed with a marker:
     // - Messages from flutter app are printed one line at a time,
@@ -64,8 +59,6 @@ class MonarchAppStdoutListener {
         _process(line, userLineMarker, stdout_default.writeln);
       } else if (line.startsWith(userSelectionMarker)) {
         _process(line, userSelectionMarker, _recordUserSelection);
-      } else if (line.startsWith(launchDevtoolsMarker)) {
-        _process(line, launchDevtoolsMarker, _launchDevtools);
       } else {
         // no match, nothing to process
       }
@@ -123,34 +116,6 @@ class MonarchAppStdoutListener {
     } catch (_) {
       // log when we have analytics log
       return <String, dynamic>{};
-    }
-  }
-
-  void _launchDevtools(_) {
-    switch (devtoolsDiscovery!.status) {
-      case DiscoveryStatus.initial:
-      case DiscoveryStatus.listening:
-        stdout_default.writeln();
-        stdout_default.writeln(
-            'Flutter DevTools is not ready yet. Please retry in a few seconds.');
-        break;
-      case DiscoveryStatus.found:
-        stdout_default.writeln();
-        stdout_default.writeln('Launching Flutter DevTools in your browser.');
-        var uri = devtoolsDiscovery!.devtoolsUri.toString();
-        functionForPlatform(
-            macos: () => Process.run('open', [uri]),
-            windows: () => Process.run(
-                'rundll32', ['url.dll,FileProtocolHandler', uri],
-                runInShell: true));
-        // `explorer $uri` should work on Windows but it doesn't,
-        // it doesn't work because the uri has a query string
-        break;
-      case DiscoveryStatus.notFound:
-        stdout_default.writeln();
-        stdout_default.writeln('Could not find DevTools URI.');
-        break;
-      default:
     }
   }
 }
