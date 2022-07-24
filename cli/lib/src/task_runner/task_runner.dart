@@ -20,7 +20,6 @@ import 'monarch_app_stderr.dart';
 import 'task.dart';
 import 'task_runner_exit_codes.dart';
 import 'process_task.dart';
-import 'observatory_discovery.dart';
 import 'task_count_heartbeat.dart';
 import 'task_names.dart';
 import 'terminator.dart';
@@ -41,7 +40,6 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   final ControllerGrpcClient controllerGrpcClient;
 
   late final int cliGrpcServerPort;
-  final ObservatoryDiscovery _observatoryDiscovery;
 
   String get generatedMainFilePath => p.join('.dart_tool', 'build', 'generated',
       config.pubspecProjectName, 'lib', 'main_monarch.g.dart');
@@ -63,7 +61,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
     required this.reloadOption,
     required this.analytics,
     required this.controllerGrpcClient,
-  }) : _observatoryDiscovery = ObservatoryDiscovery();
+  });
 
   /*
   /// ### The Monarch Preview
@@ -340,15 +338,11 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
             });
           }
         }));
-        _observatoryDiscovery.listen(_runMonarchAppTask!.stdout);
         var monarchAppStdoutListener = MonarchAppStdoutListener(analytics);
         _runMonarchAppTask!.stdout.listen(monarchAppStdoutListener.listen);
         await _runMonarchAppTask!.ready();
-        await _observatoryDiscovery.cancel();
 
         launching.complete();
-
-        _addObservatoryUriToAttachArguments();
       },
       () async {
         await _attachToReloadTask!.ready();
@@ -490,16 +484,5 @@ $monarchIsReady. Press "r" or "R" to reload project changes.''');
 
       default:
     }
-  }
-
-  void _addObservatoryUriToAttachArguments() {
-    if (_observatoryDiscovery.observatoryUri == null) {
-      stdout_default.writeln(
-          'Could not determine Observatory URI for Monarch Flutter app');
-      terminate(TaskRunnerExitCodes.observatoryUriNotScraped);
-      return;
-    }
-    // _attachToReloadTask!.debugUri =
-    //     _observatoryDiscovery.observatoryUri.toString();
   }
 }
