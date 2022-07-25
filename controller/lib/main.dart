@@ -44,6 +44,7 @@ void _setUpLog() {
   // ignore: avoid_print
   writeLogEntryStream((String line) => print('controller: $line'),
       printTimestamp: false, printLoggerName: true);
+  logCurrentProcessInformation(_logger, LogLevel.FINE);
 }
 
 class MonarchControllerApp extends StatelessWidget {

@@ -158,9 +158,7 @@ class ControllerManager {
 
   void onReady() {
     _update(state.copyWith(isReady: true));
-    //send first load signal
-    channelMethodsSender.sendFirstLoadSignal();
-    logger.info('story-flutter-window-ready');
+    logger.info('monarch-controller-ready');
   }
 
   void onStandardThemesChanged(List<MetaTheme> themes) {

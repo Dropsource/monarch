@@ -36,11 +36,6 @@ void _startMonarchPreview(MonarchData Function() getMonarchData) async {
   loadMonarchDataInstance(getMonarchData);
   handleFlutterFrameworkErrors();
 
-  // monarchBinding.reassembleCallback = () async {
-  //   loadMonarchDataInstance(getMonarchData);
-  //   await channelMethodsSender.sendMonarchData(monarchDataInstance);
-  // };
-
   _willReassembleSubcription = monarchBinding.willReassembleStream.listen((event) async { 
     loadMonarchDataInstance(getMonarchData);
     await channelMethodsSender.sendMonarchData(monarchDataInstance);
@@ -61,6 +56,7 @@ void _startMonarchPreview(MonarchData Function() getMonarchData) async {
 void _setUpLog() {
   writeLogEntryStream((String line) => print('preview: $line'),
       printTimestamp: false, printLoggerName: true);
+  logCurrentProcessInformation(_logger, LogLevel.FINE);
 }
 
 Future<void> _connectToVmService() async {
@@ -79,7 +75,6 @@ Future<void> _connectToVmService() async {
 }
 
 Future<void> _sendDefinitions() async {
-  await channelMethodsSender.sendPing();
   await channelMethodsSender.sendDefaultTheme(activeTheme.defaultMetaTheme.id);
   await channelMethodsSender.sendDeviceDefinitions(DeviceDefinitions());
   await channelMethodsSender.sendStoryScaleDefinitions(StoryScaleDefinitions());

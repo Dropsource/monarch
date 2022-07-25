@@ -293,7 +293,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         analytics: analytics,
         logLevelRegex: RegExp(r'^[\w :]+ (\w+)'),
         onStdErrMessage: onRunMonarchAppStdErrMessage,
-        readyMessage: 'story-flutter-window-ready');
+        readyMessage: 'monarch-window-manager-ready');
 
     _attachToReloadTask = AttachTask(
         taskName: TaskNames.attachToHotRestart,

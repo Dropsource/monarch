@@ -1,11 +1,7 @@
 import 'channel_methods.dart';
 
 abstract class AbstractChannelMethodsSender {
-  Future setUpLog(int defaultLogLevelValue);
-
   Future sendToggleVisualDebugFlag(OutboundChannelArgument visualDebugFlag);
-
-  void sendFirstLoadSignal();
 
   void sendReadySignalAck();
 

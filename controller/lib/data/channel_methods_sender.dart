@@ -16,20 +16,9 @@ class ChannelMethodsSender with Log implements AbstractChannelMethodsSender {
   }
 
   @override
-  Future setUpLog(int defaultLogLevelValue) {
-    return _invokeMonarchChannelMethod(MonarchMethods.setUpLog,
-        {"defaultLogLevelValue": defaultLogLevelValue});
-  }
-
-  @override
   Future sendToggleVisualDebugFlag(OutboundChannelArgument visualDebugFlag) {
     return _invokeMonarchChannelMethod(
         MonarchMethods.toggleVisualDebugFlag, visualDebugFlag.toStandardMap());
-  }
-
-  @override
-  void sendFirstLoadSignal() {
-    _invokeMonarchChannelMethod(MonarchMethods.firstLoadSignal);
   }
 
   @override

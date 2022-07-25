@@ -68,6 +68,7 @@ class WindowManager {
         channels!.setUpCallForwarding()
         
         _launchFlutterWindows(preview, controller)
+        logger.info("monarch-window-manager-ready")
     }
     
     

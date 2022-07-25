@@ -34,20 +34,13 @@ Future<dynamic> _handler(MethodCall call) async {
       call.arguments == null ? null : Map<String, dynamic>.from(call.arguments);
 
   switch (call.method) {
-    case MonarchMethods.ping:
-      channelMethodsSender.setUpLog(defaultLogLevel.value);
-      return;
-
     case MonarchMethods.defaultTheme:
       final String themeId = args!['themeId'];
       manager.onDefaultThemeChange(themeId);
       break;
 
     case MonarchMethods.readySignal:
-      if (manager.state.isReady) {
-        logger.info(
-            'flutter window had been ready, ready signal means potential reload');
-      } else {
+      if (!manager.state.isReady) {
         manager.onReady();
       }
       channelMethodsSender.sendReadySignalAck();

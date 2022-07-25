@@ -6,18 +6,16 @@ class MonarchChannels {
 }
 
 class MonarchMethods {
-  static const ping = 'monarch.ping';
-  static const firstLoadSignal = 'monarch.firstLoadSignal';
+  static const readySignal = 'monarch.readySignal';
   static const readySignalAck = 'monarch.readySignalAck';
+  
   static const monarchData = 'monarch.monarchData';
   static const deviceDefinitions = 'monarch.deviceDefinitions';
   static const storyScaleDefinitions = 'monarch.storyScaleDefinitions';
   static const standardThemes = 'monarch.standardThemes';
   static const defaultTheme = 'monarch.defaultTheme';
-  static const readySignal = 'monarch.readySignal';
   static const loadStory = 'monarch.loadStory';
   static const resetStory = 'monarch.resetStory';
-  static const setUpLog = 'monarch.setUpLog';
   static const setActiveLocale = 'monarch.setActiveLocale';
   static const setActiveTheme = 'monarch.setActiveTheme';
   static const setActiveDevice = 'monarch.setActiveDevice';
