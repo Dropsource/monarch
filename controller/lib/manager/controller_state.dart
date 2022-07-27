@@ -9,7 +9,7 @@ import 'package:monarch_controller/data/visual_debug_flags.dart';
 import '../data/channel_methods.dart';
 
 class ControllerState implements OutboundChannelArgument {
-  final bool isReady;
+  final bool isPreviewReady;
   final String packageName;
   final List<StoryGroup> storyGroups;
   final Set<String> collapsedGroupKeys;
@@ -38,7 +38,7 @@ class ControllerState implements OutboundChannelArgument {
   List<MetaTheme> get allThemes => standardThemes + userThemes;
 
   ControllerState({
-    required this.isReady,
+    required this.isPreviewReady,
     this.packageName = '',
     this.storyGroups = const [],
     this.activeStoryKey,
@@ -59,7 +59,7 @@ class ControllerState implements OutboundChannelArgument {
   });
 
   factory ControllerState.init() => ControllerState(
-        isReady: false,
+        isPreviewReady: false,
         collapsedGroupKeys: {},
         devices: [defaultDeviceDefinition],
         currentDevice: defaultDeviceDefinition,
@@ -97,7 +97,7 @@ class ControllerState implements OutboundChannelArgument {
       ControllerState(
         activeStoryKey: activeStoryKey ?? this.activeStoryKey,
         storyGroups: storyGroups ?? this.storyGroups,
-        isReady: isReady ?? this.isReady,
+        isPreviewReady: isReady ?? this.isPreviewReady,
         devices: devices ?? this.devices,
         currentDevice: currentDevice ?? this.currentDevice,
         locales: locales ?? this.locales,

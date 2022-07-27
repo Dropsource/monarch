@@ -6,7 +6,7 @@ class MonarchChannels {
 }
 
 class MonarchMethods {
-  static const readySignal = 'monarch.readySignal';
+  static const previewReadySignal = 'monarch.previewReadySignal';
   static const readySignalAck = 'monarch.readySignalAck';
   
   static const monarchData = 'monarch.monarchData';

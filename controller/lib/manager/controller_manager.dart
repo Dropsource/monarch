@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:monarch_grpc/monarch_grpc.dart';
+import 'package:monarch_utils/log.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'controller_state.dart';
@@ -17,7 +18,7 @@ import '../data/definitions.dart' as defs;
 import '../data/grpc.dart';
 import '../extensions/iterable_extensions.dart';
 
-class ControllerManager {
+class ControllerManager with Log {
   final BehaviorSubject<ControllerState> _streamController =
       BehaviorSubject<ControllerState>();
 
@@ -39,7 +40,7 @@ class ControllerManager {
   }
 
   void onActiveStoryChanged(String key) async {
-    logger.finest('changing active story to $key');
+    log.finest('changing active story to $key');
     _update(state.copyWith(activeStoryKey: key));
     channelMethodsSender.loadStory(key);
   }
@@ -96,13 +97,13 @@ class ControllerManager {
   }
 
   void onMonarchDataChanged(MonarchData monarchData) {
-    logger.finest(
+    log.finest(
         "monarchData - user localizations count: ${monarchData.metaLocalizations.length}");
-    logger.finest(
+    log.finest(
         "monarchData - user theme count: ${monarchData.metaThemes.length}");
-    logger.finest(
+    log.finest(
         "monarchData - key count in metaStoriesMap: ${monarchData.metaStoriesMap.length}");
-    logger.finest("monarchData - package name: ${monarchData.packageName}");
+    log.finest("monarchData - package name: ${monarchData.packageName}");
 
     final allLocales = monarchData.allLocales.isNotEmpty
         ? monarchData.allLocales
@@ -156,9 +157,8 @@ class ControllerManager {
     _update(state.copyWith(currentTheme: selectedTheme));
   }
 
-  void onReady() {
+  void onPreviewReady() {
     _update(state.copyWith(isReady: true));
-    logger.info('monarch-controller-ready');
   }
 
   void onStandardThemesChanged(List<MetaTheme> themes) {

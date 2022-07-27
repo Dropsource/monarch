@@ -35,7 +35,7 @@ class ChannelMethodsSender with Log {
   }
 
   Future sendReadySignal() {
-    return _invokeMonarchChannelMethod(MonarchMethods.readySignal);
+    return _invokeMonarchChannelMethod(MonarchMethods.previewReadySignal);
   }
 
   Future sendPreviewVmServerUri(Uri uri) {

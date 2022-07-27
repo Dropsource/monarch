@@ -293,7 +293,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         analytics: analytics,
         logLevelRegex: RegExp(r'^[\w :]+ (\w+)'),
         onStdErrMessage: onRunMonarchAppStdErrMessage,
-        readyMessage: 'monarch-window-manager-ready');
+        readyMessage: 'monarch-preview-ready');
 
     _attachToReloadTask = AttachTask(
         taskName: TaskNames.attachToHotRestart,

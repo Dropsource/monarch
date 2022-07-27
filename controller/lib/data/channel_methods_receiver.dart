@@ -11,18 +11,18 @@ import '../../main.dart';
 import 'channel_methods_sender.dart';
 import 'monarch_data.dart';
 
-final logger = Logger('ChannelMethodsReceiver');
+final _logger = Logger('ChannelMethodsReceiver');
 
 void receiveChannelMethodCalls() {
   MonarchChannels.controller.setMethodCallHandler((MethodCall call) async {
-    logger.finest('channel method received: ${call.method}');
+    _logger.finest('channel method received: ${call.method}');
     if (call.arguments != null) {
-      logger.finest('with arguments: ${call.arguments}');
+      _logger.finest('with arguments: ${call.arguments}');
     }
     try {
       return await _handler(call);
     } catch (e, s) {
-      logger.severe(
+      _logger.severe(
           'exception in flutter runtime while handling channel method', e, s);
       return PlatformException(code: '001', message: e.toString());
     }
@@ -39,9 +39,10 @@ Future<dynamic> _handler(MethodCall call) async {
       manager.onDefaultThemeChange(themeId);
       break;
 
-    case MonarchMethods.readySignal:
-      if (!manager.state.isReady) {
-        manager.onReady();
+    case MonarchMethods.previewReadySignal:
+      if (!manager.state.isPreviewReady) {
+        manager.onPreviewReady();
+        _logger.info('monarch-preview-ready');
       }
       channelMethodsSender.sendReadySignalAck();
       return;
@@ -84,7 +85,7 @@ Future<dynamic> _handler(MethodCall call) async {
       return manager.state.toStandardMap();
 
     default:
-      logger.fine('method ${call.method} not implemented');
+      _logger.fine('method ${call.method} not implemented');
       return;
   }
 }
