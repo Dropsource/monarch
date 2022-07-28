@@ -85,18 +85,18 @@ class MonarchMaterialApp extends StatelessWidget {
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             scrollBehavior: MonarchScrollBehavior(),
-            localizationsDelegates:
-                locale == null || monarchDataInstance.metaLocalizations.isEmpty
-                    ? null
-                    : [
-                        ...monarchDataInstance.metaLocalizations
-                            .map((x) => x.delegate!),
-                        ...GlobalMaterialLocalizations.delegates,
-                      ],
+            localizationsDelegates: locale == null ||
+                    monarchDataManager.data!.metaLocalizations.isEmpty
+                ? null
+                : [
+                    ...monarchDataManager.data!.metaLocalizations
+                        .map((x) => x.delegate!),
+                    ...GlobalMaterialLocalizations.delegates,
+                  ],
             supportedLocales:
-                locale == null || monarchDataInstance.allLocales.isEmpty
+                locale == null || monarchDataManager.data!.allLocales.isEmpty
                     ? const <Locale>[Locale('en', 'US')]
-                    : monarchDataInstance.allLocales,
+                    : monarchDataManager.data!.allLocales,
             locale: locale,
             home: home));
   }

@@ -89,7 +89,7 @@ class _MonarchStoryViewState extends State<MonarchStoryView> {
       _storyFunction = null;
     } else {
       final metaStories =
-          monarchDataInstance.metaStoriesMap[activeStoryId.pathKey]!;
+          monarchDataManager.data!.metaStoriesMap[activeStoryId.pathKey]!;
       _storyFunction = metaStories.storiesMap[activeStoryId.name];
     }
   }

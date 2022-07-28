@@ -33,12 +33,13 @@ void _startMonarchPreview(MonarchData Function() getMonarchData) async {
 
   _setUpLog();
   readySignal.loading();
-  loadMonarchDataInstance(getMonarchData);
+  monarchDataManager.load(getMonarchData);
   handleFlutterFrameworkErrors();
 
-  _willReassembleSubcription = monarchBinding.willReassembleStream.listen((event) async { 
-    loadMonarchDataInstance(getMonarchData);
-    await channelMethodsSender.sendMonarchData(monarchDataInstance);
+  _willReassembleSubcription =
+      monarchBinding.willReassembleStream.listen((event) async {
+    monarchDataManager.load(getMonarchData);
+    await monarchDataManager.sendChannelMethods();
   });
 
   Timer.run(() {
@@ -49,7 +50,7 @@ void _startMonarchPreview(MonarchData Function() getMonarchData) async {
   receiveChannelMethodCalls();
   await _connectToVmService();
   await _sendDefinitions();
-  await channelMethodsSender.sendMonarchData(monarchDataInstance);
+  await monarchDataManager.sendChannelMethods();
   await channelMethodsSender.sendReadySignal();
 }
 
