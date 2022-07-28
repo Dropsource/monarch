@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:grpc/grpc.dart';
-import 'package:monarch_cli/src/task_runner/task.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
 
 import 'task_runner.dart';
+import '../utils/standard_output.dart';
 
 final _logger = Logger('CliGrpc');
 
@@ -62,6 +62,12 @@ class CliService extends MonarchCliServiceBase {
         port: request.port,
         path: request.path);
 
+    return Future.value(Empty());
+  }
+  
+  @override
+  Future<Empty> printUserMessage(ServiceCall call, UserMessage request) {
+    stdout_default.writeln(request.message);
     return Future.value(Empty());
   }
 }

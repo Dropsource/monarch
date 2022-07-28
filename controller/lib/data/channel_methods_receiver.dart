@@ -5,7 +5,6 @@ import 'package:monarch_utils/log.dart';
 import 'package:monarch_channels/monarch_channels.dart';
 import 'package:monarch_controller/data/device_definitions.dart';
 import 'package:monarch_controller/data/story_scale_definitions.dart';
-import 'package:monarch_utils/log_config.dart';
 
 import '../../main.dart';
 import 'channel_methods_sender.dart';
@@ -83,6 +82,11 @@ Future<dynamic> _handler(MethodCall call) async {
 
     case MonarchMethods.getState:
       return manager.state.toStandardMap();
+
+    case MonarchMethods.userMessage:
+      cliGrpcClientInstance.client!
+          .printUserMessage(UserMessage(message: args!['message']));
+      return;
 
     default:
       _logger.fine('method ${call.method} not implemented');

@@ -6,6 +6,7 @@ service MonarchCli {
     rpc PreviewVmServerUriChanged(UriInfo) returns (Empty) {}
     rpc ControllerGrpcServerStarted(ServerInfo) returns (Empty) {}
     rpc LaunchDevTools(Empty) returns (Empty) {}
+    rpc PrintUserMessage(UserMessage) returns (Empty) {}
 }
 
 service MonarchController {
@@ -28,4 +29,8 @@ message ServerInfo {
 
 message ReloadResponse {
     bool isSuccessful = 1;
+}
+
+message UserMessage {
+    string message = 1;
 }

@@ -47,6 +47,12 @@ class ChannelMethodsSender with Log {
     });
   }
 
+  Future sendUserMessage(String message) {
+    return _invokeMonarchChannelMethod(MonarchMethods.userMessage, {
+      'message': message
+    });
+  }
+
   Future sendToggleVisualDebugFlag(OutboundChannelArgument visualDebugFlag) {
     return _invokeMonarchChannelMethod(
         MonarchMethods.toggleVisualDebugFlag, visualDebugFlag.toStandardMap());

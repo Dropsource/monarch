@@ -48,3 +48,13 @@ const ReloadResponse$json = const {
 
 /// Descriptor for `ReloadResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List reloadResponseDescriptor = $convert.base64Decode('Cg5SZWxvYWRSZXNwb25zZRIiCgxpc1N1Y2Nlc3NmdWwYASABKAhSDGlzU3VjY2Vzc2Z1bA==');
+@$core.Deprecated('Use userMessageDescriptor instead')
+const UserMessage$json = const {
+  '1': 'UserMessage',
+  '2': const [
+    const {'1': 'message', '3': 1, '4': 1, '5': 9, '10': 'message'},
+  ],
+};
+
+/// Descriptor for `UserMessage`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List userMessageDescriptor = $convert.base64Decode('CgtVc2VyTWVzc2FnZRIYCgdtZXNzYWdlGAEgASgJUgdtZXNzYWdl');

@@ -33,7 +33,6 @@ class MonarchAppStdoutListener {
   MonarchAppStdoutListener(this.analytics);
 
   void listen(String message) {
-    const userLineMarker = 'flutter: ##usr-line##';
     const errLineMarker = 'flutter: ##err-line##';
 
     var platformPrefix =
@@ -55,8 +54,6 @@ class MonarchAppStdoutListener {
     for (var line in lines) {
       if (line.startsWith(errLineMarker)) {
         _process(line, errLineMarker, stdout_default.writeln);
-      } else if (line.startsWith(userLineMarker)) {
-        _process(line, userLineMarker, stdout_default.writeln);
       } else if (line.startsWith(userSelectionMarker)) {
         _process(line, userSelectionMarker, _recordUserSelection);
       } else {
