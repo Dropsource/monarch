@@ -8,7 +8,6 @@ import 'controller_state.dart';
 import 'search_manager.dart';
 import '../data/abstract_channel_methods_sender.dart';
 import '../data/device_definitions.dart';
-import '../data/channel_methods_receiver.dart';
 import '../data/dock_definition.dart';
 import '../data/stories.dart';
 import '../data/story_scale_definitions.dart';
@@ -67,7 +66,7 @@ class ControllerManager with Log {
     _update(state.copyWith(visualDebugFlags: list));
   }
 
-  void launchDevTools()  {
+  void launchDevTools() {
     cliGrpcClientInstance.client!.launchDevTools(Empty());
   }
 
@@ -97,19 +96,13 @@ class ControllerManager with Log {
   }
 
   void onMonarchDataChanged(MonarchData monarchData) {
-    log.finest(
-        "monarchData - user localizations count: ${monarchData.metaLocalizations.length}");
-    log.finest(
-        "monarchData - user theme count: ${monarchData.metaThemes.length}");
-    log.finest(
-        "monarchData - key count in metaStoriesMap: ${monarchData.metaStoriesMap.length}");
-    log.finest("monarchData - package name: ${monarchData.packageName}");
+    log.finest('MonarchData '
+        'meta-localizations=${monarchData.metaLocalizations.length} '
+        'all-locales=${monarchData.allLocales.length} '
+        'meta-themes=${monarchData.metaThemes.length} ');
 
-    final allLocales = monarchData.allLocales.isNotEmpty
-        ? monarchData.allLocales
-        : [defs.defaultLocale];
-
-    final String currentLocale = _checkCurrentLocale(allLocales);
+    var localeHelper = _LocaleHelper(monarchData, state.currentLocale);
+    localeHelper.compute();
 
     final allThemes = state.standardThemes + monarchData.metaThemes;
     final MetaTheme currentTheme = _checkCurrentTheme(allThemes);
@@ -119,23 +112,9 @@ class ControllerManager with Log {
       storyGroups: _translateStories(monarchData.metaStoriesMap),
       userThemes: monarchData.metaThemes,
       currentTheme: currentTheme,
-      locales: allLocales.toList(),
-      currentLocale: currentLocale,
+      locales: localeHelper.computedLocales,
+      currentLocale: localeHelper.computedCurrentLocale,
     ));
-
-    if (state.activeStoryKey == null) {
-      channelMethodsSender.resetStory();
-    } else {
-      channelMethodsSender.loadStory(state.activeStoryKey!);
-    }
-    channelMethodsSender.setActiveDevice(state.currentDevice.id);
-    channelMethodsSender.setActiveTheme(state.currentTheme.id);
-    channelMethodsSender.setActiveLocale(state.currentLocale);
-    channelMethodsSender.setTextScaleFactor(state.textScaleFactor);
-    channelMethodsSender.setStoryScale(state.currentScale.scale);
-    for (var flag in state.visualDebugFlags) {
-      channelMethodsSender.sendToggleVisualDebugFlag(flag);
-    }
   }
 
   void onDefaultThemeChange(String themeId) {
@@ -158,7 +137,7 @@ class ControllerManager with Log {
   }
 
   void onPreviewReady() {
-    _update(state.copyWith(isReady: true));
+    _update(state.copyWith(isPreviewReady: true));
   }
 
   void onStandardThemesChanged(List<MetaTheme> themes) {
@@ -176,18 +155,6 @@ class ControllerManager with Log {
 
   void _update(ControllerState newState) {
     _streamController.sink.add(newState);
-  }
-
-  String _checkCurrentLocale(Iterable<String> allLocales) {
-    if (!allLocales.contains(state.currentLocale)) {
-      if (allLocales.isEmpty) {
-        return defs.defaultLocale;
-      } else {
-        return allLocales.first;
-      }
-    } else {
-      return state.currentLocale;
-    }
   }
 
   MetaTheme _checkCurrentTheme(List<MetaTheme> allThemes) {
@@ -228,6 +195,34 @@ class ControllerManager with Log {
       state.collapsedGroupKeys.remove(groupKey);
     } else {
       state.collapsedGroupKeys.add(groupKey);
+    }
+  }
+}
+
+class _LocaleHelper {
+  final MonarchData data;
+  final String? currentLocale;
+  _LocaleHelper(this.data, this.currentLocale);
+
+  List<String> computedLocales = [];
+  String computedCurrentLocale = defs.defaultLocale;
+
+  void compute() {
+    computedLocales.clear();
+    if (data.allLocales.isEmpty) {
+      computedLocales.add(defs.defaultLocale);
+      computedCurrentLocale = defs.defaultLocale;
+    } else {
+      computedLocales.addAll(data.allLocales);
+      if (currentLocale == null) {
+        computedCurrentLocale = data.allLocales.first;
+      } else {
+        if (data.allLocales.contains(currentLocale!)) {
+          computedCurrentLocale = currentLocale!;
+        } else {
+          computedCurrentLocale = data.allLocales.first;
+        }
+      }
     }
   }
 }

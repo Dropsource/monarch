@@ -80,7 +80,7 @@ class ControllerState implements OutboundChannelArgument {
     String? activeStoryKey,
     String? packageName,
     List<StoryGroup>? storyGroups,
-    bool? isReady,
+    bool? isPreviewReady,
     List<DeviceDefinition>? devices,
     DeviceDefinition? currentDevice,
     String? currentLocale,
@@ -97,7 +97,7 @@ class ControllerState implements OutboundChannelArgument {
       ControllerState(
         activeStoryKey: activeStoryKey ?? this.activeStoryKey,
         storyGroups: storyGroups ?? this.storyGroups,
-        isPreviewReady: isReady ?? this.isPreviewReady,
+        isPreviewReady: isPreviewReady ?? this.isPreviewReady,
         devices: devices ?? this.devices,
         currentDevice: currentDevice ?? this.currentDevice,
         locales: locales ?? this.locales,
@@ -123,7 +123,12 @@ class ControllerState implements OutboundChannelArgument {
     return {
       'device': currentDevice.toStandardMap(),
       'scale': currentScale.toStandardMap(),
-      'dock': currentDock.id
+      'dock': currentDock.id,
+      'activeStoryKey': activeStoryKey,
+      'themeId': currentTheme.id,
+      'locale': currentLocale,
+      'textScaleFactor': textScaleFactor,
+      'visualDebugFlags': visualDebugFlags.map((e) => e.toStandardMap()).toList()
     };
   }
 }
