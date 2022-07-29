@@ -4,7 +4,7 @@ import 'package:stack_trace/stack_trace.dart';
 import 'active_story.dart';
 import 'active_story_error.dart';
 import 'monarch_binding.dart';
-import 'monarch_data_instance.dart';
+import 'monarch_data_manager.dart';
 import 'log_level.dart';
 
 int _uncaughtErrorCount = 0;

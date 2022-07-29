@@ -4,7 +4,7 @@ import 'package:stack_trace/stack_trace.dart';
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';
 
-import 'monarch_data_instance.dart';
+import 'monarch_data_manager.dart';
 import 'ready_signal.dart';
 import 'device_definitions.dart';
 import 'story_scale_definitions.dart';

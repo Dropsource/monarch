@@ -76,6 +76,7 @@ $monarchWarningEnd
     _validationMessages.clear();
 
     await channelMethodsSender.sendMonarchData(_data!);
+    await channelMethodsSender.getState();
   }
 }
 

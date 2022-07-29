@@ -7,7 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'active_locale.dart';
 import 'active_story_scale.dart';
 import 'monarch_binding.dart';
-import 'monarch_data_instance.dart';
+import 'monarch_data_manager.dart';
 import 'ready_signal.dart';
 import 'story_view.dart';
 
