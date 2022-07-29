@@ -50,6 +50,7 @@ class ControllerManager with Log {
   }
 
   void onTextScaleFactorChanged(double val) {
+    _update(state.copyWith(textScaleFactor: val));
     channelMethodsSender.setTextScaleFactor(val);
   }
 
@@ -103,45 +104,51 @@ class ControllerManager with Log {
 
     var localeHelper = _LocaleHelper(monarchData, state.currentLocale);
     localeHelper.compute();
-
-    final allThemes = state.standardThemes + monarchData.metaThemes;
-    final MetaTheme currentTheme = _checkCurrentTheme(allThemes);
+    var themeHelper = _ThemeHelper(
+        standardThemes: state.standardThemes,
+        userThemes: monarchData.metaThemes,
+        defaultThemeId: state.defaultThemeId,
+        currentTheme: state.currentTheme);
+    themeHelper.compute();
 
     _update(state.copyWith(
       packageName: monarchData.packageName,
       storyGroups: _translateStories(monarchData.metaStoriesMap),
       userThemes: monarchData.metaThemes,
-      currentTheme: currentTheme,
+      currentTheme: themeHelper.computedCurrentTheme,
       locales: localeHelper.computedLocales,
       currentLocale: localeHelper.computedCurrentLocale,
     ));
   }
 
+  void onStandardThemesChanged(List<MetaTheme> standardThemes) {
+    var themeHelper = _ThemeHelper(
+        standardThemes: standardThemes,
+        userThemes: state.userThemes,
+        defaultThemeId: state.defaultThemeId,
+        currentTheme: state.currentTheme);
+    themeHelper.compute();
+
+    _update(state.copyWith(
+        standardThemes: standardThemes,
+        currentTheme: themeHelper.computedCurrentTheme));
+  }
+
   void onDefaultThemeChange(String themeId) {
-    MetaTheme? selectedTheme;
-    final allThemes = state.standardThemes + state.userThemes;
-    final currentTheme =
-        allThemes.firstWhereOrNull((element) => element.id == themeId);
+    var themeHelper = _ThemeHelper(
+        standardThemes: state.standardThemes,
+        userThemes: state.userThemes,
+        defaultThemeId: themeId,
+        currentTheme: state.currentTheme);
+    themeHelper.compute();
 
-    if (currentTheme == null) {
-      if (allThemes.isNotEmpty) {
-        selectedTheme = allThemes.first;
-      } else {
-        //standard themes are empty, this should not happen, but just in case we are not selecting anything as currentTheme
-      }
-    } else {
-      selectedTheme = currentTheme;
-    }
-
-    _update(state.copyWith(currentTheme: selectedTheme));
+    _update(state.copyWith(
+        currentTheme: themeHelper.computedCurrentTheme,
+        defaultThemeId: themeId));
   }
 
   void onPreviewReady() {
     _update(state.copyWith(isPreviewReady: true));
-  }
-
-  void onStandardThemesChanged(List<MetaTheme> themes) {
-    _update(state.copyWith(standardThemes: themes));
   }
 
   void onStoryScaleDefinitionsChanged(
@@ -201,7 +208,7 @@ class ControllerManager with Log {
 
 class _LocaleHelper {
   final MonarchData data;
-  final String? currentLocale;
+  final String currentLocale;
   _LocaleHelper(this.data, this.currentLocale);
 
   List<String> computedLocales = [];
@@ -214,15 +221,39 @@ class _LocaleHelper {
       computedCurrentLocale = defs.defaultLocale;
     } else {
       computedLocales.addAll(data.allLocales);
-      if (currentLocale == null) {
-        computedCurrentLocale = data.allLocales.first;
+      if (data.allLocales.contains(currentLocale)) {
+        computedCurrentLocale = currentLocale;
       } else {
-        if (data.allLocales.contains(currentLocale!)) {
-          computedCurrentLocale = currentLocale!;
-        } else {
-          computedCurrentLocale = data.allLocales.first;
-        }
+        computedCurrentLocale = data.allLocales.first;
       }
+    }
+  }
+}
+
+class _ThemeHelper {
+  final List<MetaTheme> standardThemes;
+  final List<MetaTheme> userThemes;
+  final String defaultThemeId;
+  final MetaTheme currentTheme;
+
+  _ThemeHelper(
+      {required this.standardThemes,
+      required this.userThemes,
+      required this.currentTheme,
+      required this.defaultThemeId});
+
+  List<MetaTheme> get allThemes => standardThemes + userThemes;
+  MetaTheme computedCurrentTheme = defs.defaultTheme;
+
+  void compute() {
+    bool listHasCurrent = allThemes.any((x) => x.id == currentTheme.id);
+
+    if (listHasCurrent) {
+      computedCurrentTheme =
+          allThemes.firstWhere((x) => x.id == currentTheme.id);
+    } else {
+      computedCurrentTheme = allThemes.firstWhere((x) => x.id == defaultThemeId,
+          orElse: () => allThemes.first);
     }
   }
 }

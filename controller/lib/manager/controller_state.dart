@@ -21,6 +21,7 @@ class ControllerState implements OutboundChannelArgument {
   final String currentLocale;
   final List<String> locales;
 
+  final String defaultThemeId;
   final MetaTheme currentTheme;
   final List<MetaTheme> standardThemes;
   final List<MetaTheme> userThemes;
@@ -46,6 +47,7 @@ class ControllerState implements OutboundChannelArgument {
     required this.currentDevice,
     required this.locales,
     required this.currentLocale,
+    required this.defaultThemeId,
     required this.standardThemes,
     required this.userThemes,
     required this.currentTheme,
@@ -65,9 +67,10 @@ class ControllerState implements OutboundChannelArgument {
         currentDevice: defaultDeviceDefinition,
         locales: [defs.defaultLocale],
         currentLocale: defs.defaultLocale,
+        defaultThemeId: defs.defaultTheme.id,
+        currentTheme: defs.defaultTheme,
         standardThemes: [defs.defaultTheme],
         userThemes: [],
-        currentTheme: defs.defaultTheme,
         currentDock: defs.defaultDock,
         currentScale: defaultScaleDefinition,
         dockList: defs.dockList,
@@ -85,6 +88,7 @@ class ControllerState implements OutboundChannelArgument {
     DeviceDefinition? currentDevice,
     String? currentLocale,
     List<String>? locales,
+    String? defaultThemeId,
     MetaTheme? currentTheme,
     List<MetaTheme>? standardThemes,
     List<MetaTheme>? userThemes,
@@ -102,9 +106,10 @@ class ControllerState implements OutboundChannelArgument {
         currentDevice: currentDevice ?? this.currentDevice,
         locales: locales ?? this.locales,
         currentLocale: currentLocale ?? this.currentLocale,
+        defaultThemeId: defaultThemeId ?? this.defaultThemeId,
+        currentTheme: currentTheme ?? this.currentTheme,
         standardThemes: standardThemes ?? this.standardThemes,
         userThemes: userThemes ?? this.userThemes,
-        currentTheme: currentTheme ?? this.currentTheme,
         scaleList: scaleList ?? this.scaleList,
         currentScale: currentScale ?? this.currentScale,
         dockList: dockList,
@@ -128,7 +133,8 @@ class ControllerState implements OutboundChannelArgument {
       'themeId': currentTheme.id,
       'locale': currentLocale,
       'textScaleFactor': textScaleFactor,
-      'visualDebugFlags': visualDebugFlags.map((e) => e.toStandardMap()).toList()
+      'visualDebugFlags':
+          visualDebugFlags.map((e) => e.toStandardMap()).toList()
     };
   }
 }
