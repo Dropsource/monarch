@@ -107,6 +107,7 @@ class WindowManager {
         previewWindow = NSWindow()
         _setUpPreviewWindow(preview, previewWindow!)
         _setUpObservers(controllerWindow!, previewWindow!)
+        resizePreviewWindow()
     }
     
     func _setUpControllerWindow(_ controllerFVC: FlutterViewController, _ controllerWindow: NSWindow) {
