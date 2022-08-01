@@ -15,7 +15,6 @@ import '../data/visual_debug_flags.dart';
 import '../data/monarch_data.dart';
 import '../data/definitions.dart' as defs;
 import '../data/grpc.dart';
-import '../extensions/iterable_extensions.dart';
 
 class ControllerManager with Log {
   final BehaviorSubject<ControllerState> _streamController =
@@ -44,11 +43,6 @@ class ControllerManager with Log {
     channelMethodsSender.loadStory(key);
   }
 
-  void onVisualDebugFlagToggled(VisualDebugFlag option) {
-    channelMethodsSender
-        .sendToggleVisualDebugFlag(option.copyWith(enabled: !option.isEnabled));
-  }
-
   void onTextScaleFactorChanged(double val) {
     _update(state.copyWith(textScaleFactor: val));
     channelMethodsSender.setTextScaleFactor(val);
@@ -58,7 +52,21 @@ class ControllerManager with Log {
     return _searchManager.filterStories(stories, query);
   }
 
-  void onVisualFlagToggle(String name, bool isEnabled) {
+  /// Called by UI when the user toggles a visual debug checkbox.
+  /// It will send a message to the preview, which will call the vm service
+  /// extension method for the corresponding flag.
+  /// It doesn't update the controller state. The controller state is updated
+  /// in [onVisualDebugFlagToggleByVmService] which is called after this function.
+  void onVisualDebugFlagToggledByUi(VisualDebugFlag option) {
+    channelMethodsSender
+        .sendToggleVisualDebugFlag(option.copyWith(enabled: !option.isEnabled));
+  }
+
+  /// Called by the preview's vm-service-client via the method channels.
+  /// It gets called after a visual debug flag is set by the UI. Thus, we set 
+  /// the controller state in this function.
+  /// It is also called after the user sets a visual debug flag using DevTools.
+  void onVisualDebugFlagToggleByVmService(String name, bool isEnabled) {
     final element =
         state.visualDebugFlags.firstWhere((element) => element.name == name);
     final index = state.visualDebugFlags.indexOf(element);
@@ -162,14 +170,6 @@ class ControllerManager with Log {
 
   void _update(ControllerState newState) {
     _streamController.sink.add(newState);
-  }
-
-  MetaTheme _checkCurrentTheme(List<MetaTheme> allThemes) {
-    if (!allThemes.contains(state.currentTheme)) {
-      return state.standardThemes.first;
-    } else {
-      return state.currentTheme;
-    }
   }
 
   void dispose() {

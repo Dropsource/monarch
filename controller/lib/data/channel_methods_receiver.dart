@@ -77,7 +77,7 @@ Future<dynamic> _handler(MethodCall call) async {
     case MonarchMethods.toggleVisualDebugFlag:
       final name = args!['name'];
       final isEnabled = args['isEnabled'];
-      manager.onVisualFlagToggle(name, isEnabled);
+      manager.onVisualDebugFlagToggleByVmService(name, isEnabled);
       return;
 
     case MonarchMethods.getState:

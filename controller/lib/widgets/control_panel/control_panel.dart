@@ -131,7 +131,7 @@ class ControlPanel extends StatelessWidget {
           ),
           CheckboxGrid(
             visualDebugFlags: state.visualDebugFlags,
-            onFlagToggled: manager.onVisualDebugFlagToggled,
+            onFlagToggled: manager.onVisualDebugFlagToggledByUi,
           ),
           Padding(
             padding: const EdgeInsets.only(
