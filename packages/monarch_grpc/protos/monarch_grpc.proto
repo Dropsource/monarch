@@ -7,6 +7,7 @@ service MonarchCli {
     rpc ControllerGrpcServerStarted(ServerInfo) returns (Empty) {}
     rpc LaunchDevTools(Empty) returns (Empty) {}
     rpc PrintUserMessage(UserMessage) returns (Empty) {}
+    rpc UserSelection(UserSelectionData) returns (Empty) {}
 }
 
 service MonarchController {
@@ -33,4 +34,20 @@ message ReloadResponse {
 
 message UserMessage {
     string message = 1;
+}
+
+message UserSelectionData {
+    string kind = 1;
+    int32 localeCount = 2;
+    int32 userThemeCount = 3;
+    int32 storyCount = 4;
+    string selectedDevice = 5;
+    double selectedTextScaleFactor = 6;
+    double selectedStoryScale = 7;
+    string selectedDockSide = 8;
+    bool slowAnimationsEnabled = 9;
+    bool showGuidelinesEnabled = 10;
+    bool showBaselinesEnabled = 11;
+    bool highlightRepaintsEnabled = 12;
+    bool highlightOversizedImagesEnabled = 13;
 }

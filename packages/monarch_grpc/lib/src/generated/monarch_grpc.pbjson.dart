@@ -58,3 +58,25 @@ const UserMessage$json = const {
 
 /// Descriptor for `UserMessage`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List userMessageDescriptor = $convert.base64Decode('CgtVc2VyTWVzc2FnZRIYCgdtZXNzYWdlGAEgASgJUgdtZXNzYWdl');
+@$core.Deprecated('Use userSelectionDataDescriptor instead')
+const UserSelectionData$json = const {
+  '1': 'UserSelectionData',
+  '2': const [
+    const {'1': 'kind', '3': 1, '4': 1, '5': 9, '10': 'kind'},
+    const {'1': 'localeCount', '3': 2, '4': 1, '5': 5, '10': 'localeCount'},
+    const {'1': 'userThemeCount', '3': 3, '4': 1, '5': 5, '10': 'userThemeCount'},
+    const {'1': 'storyCount', '3': 4, '4': 1, '5': 5, '10': 'storyCount'},
+    const {'1': 'selectedDevice', '3': 5, '4': 1, '5': 9, '10': 'selectedDevice'},
+    const {'1': 'selectedTextScaleFactor', '3': 6, '4': 1, '5': 1, '10': 'selectedTextScaleFactor'},
+    const {'1': 'selectedStoryScale', '3': 7, '4': 1, '5': 1, '10': 'selectedStoryScale'},
+    const {'1': 'selectedDockSide', '3': 8, '4': 1, '5': 9, '10': 'selectedDockSide'},
+    const {'1': 'slowAnimationsEnabled', '3': 9, '4': 1, '5': 8, '10': 'slowAnimationsEnabled'},
+    const {'1': 'showGuidelinesEnabled', '3': 10, '4': 1, '5': 8, '10': 'showGuidelinesEnabled'},
+    const {'1': 'showBaselinesEnabled', '3': 11, '4': 1, '5': 8, '10': 'showBaselinesEnabled'},
+    const {'1': 'highlightRepaintsEnabled', '3': 12, '4': 1, '5': 8, '10': 'highlightRepaintsEnabled'},
+    const {'1': 'highlightOversizedImagesEnabled', '3': 13, '4': 1, '5': 8, '10': 'highlightOversizedImagesEnabled'},
+  ],
+};
+
+/// Descriptor for `UserSelectionData`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List userSelectionDataDescriptor = $convert.base64Decode('ChFVc2VyU2VsZWN0aW9uRGF0YRISCgRraW5kGAEgASgJUgRraW5kEiAKC2xvY2FsZUNvdW50GAIgASgFUgtsb2NhbGVDb3VudBImCg51c2VyVGhlbWVDb3VudBgDIAEoBVIOdXNlclRoZW1lQ291bnQSHgoKc3RvcnlDb3VudBgEIAEoBVIKc3RvcnlDb3VudBImCg5zZWxlY3RlZERldmljZRgFIAEoCVIOc2VsZWN0ZWREZXZpY2USOAoXc2VsZWN0ZWRUZXh0U2NhbGVGYWN0b3IYBiABKAFSF3NlbGVjdGVkVGV4dFNjYWxlRmFjdG9yEi4KEnNlbGVjdGVkU3RvcnlTY2FsZRgHIAEoAVISc2VsZWN0ZWRTdG9yeVNjYWxlEioKEHNlbGVjdGVkRG9ja1NpZGUYCCABKAlSEHNlbGVjdGVkRG9ja1NpZGUSNAoVc2xvd0FuaW1hdGlvbnNFbmFibGVkGAkgASgIUhVzbG93QW5pbWF0aW9uc0VuYWJsZWQSNAoVc2hvd0d1aWRlbGluZXNFbmFibGVkGAogASgIUhVzaG93R3VpZGVsaW5lc0VuYWJsZWQSMgoUc2hvd0Jhc2VsaW5lc0VuYWJsZWQYCyABKAhSFHNob3dCYXNlbGluZXNFbmFibGVkEjoKGGhpZ2hsaWdodFJlcGFpbnRzRW5hYmxlZBgMIAEoCFIYaGlnaGxpZ2h0UmVwYWludHNFbmFibGVkEkgKH2hpZ2hsaWdodE92ZXJzaXplZEltYWdlc0VuYWJsZWQYDSABKAhSH2hpZ2hsaWdodE92ZXJzaXplZEltYWdlc0VuYWJsZWQ=');

@@ -4,6 +4,7 @@ import 'package:grpc/grpc.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
 
+import '../analytics/analytics.dart';
 import 'task_runner.dart';
 import '../utils/standard_output.dart';
 
@@ -12,8 +13,8 @@ final _logger = Logger('CliGrpc');
 class CliGrpcServer {
   late final int port;
 
-  Future<void> startServer(TaskRunner taskRunner) async {
-    var server = Server([CliService(taskRunner)]);
+  Future<void> startServer(TaskRunner taskRunner, Analytics analytics) async {
+    var server = Server([CliService(taskRunner, analytics)]);
     _logger.info('Starting cli grpc server');
     await server.serve(port: 0);
     port = server.port!;
@@ -39,7 +40,9 @@ final controllerGrpcClientInstance = ControllerGrpcClient();
 
 class CliService extends MonarchCliServiceBase {
   final TaskRunner taskRunner;
-  CliService(this.taskRunner);
+  final Analytics analytics;
+
+  CliService(this.taskRunner, this.analytics);
 
   @override
   Future<Empty> controllerGrpcServerStarted(
@@ -64,10 +67,31 @@ class CliService extends MonarchCliServiceBase {
 
     return Future.value(Empty());
   }
-  
+
   @override
   Future<Empty> printUserMessage(ServiceCall call, UserMessage request) {
     stdout_default.writeln(request.message);
+    return Future.value(Empty());
+  }
+
+  @override
+  Future<Empty> userSelection(ServiceCall call, UserSelectionData request) {
+    analytics.user_selection({
+      'locale_count': request.localeCount,
+      'user_theme_count': request.userThemeCount,
+      'story_count': request.storyCount,
+      'selected_device': request.selectedDevice,
+      'kind': request.kind,
+      'selected_dock_side': request.selectedDockSide,
+      'selected_text_scale_factor': request.selectedTextScaleFactor,
+      'selected_story_scale': request.selectedStoryScale,
+      'slow_animations_enabled': request.slowAnimationsEnabled,
+      'show_guidelines_enabled': request.showGuidelinesEnabled,
+      'show_baselines_enabled': request.showBaselinesEnabled,
+      'highlight_repaints_enabled': request.highlightRepaintsEnabled,
+      'highlight_oversized_images_enabled':
+          request.highlightOversizedImagesEnabled,
+    });
     return Future.value(Empty());
   }
 }

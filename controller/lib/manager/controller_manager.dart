@@ -41,12 +41,31 @@ class ControllerManager with Log {
     log.finest('changing active story to $key');
     _update(state.copyWith(activeStoryKey: key));
     channelMethodsSender.loadStory(key);
+    _userSelection('story_selected');
   }
 
-  void onTextScaleFactorChanged(double val) {
-    _update(state.copyWith(textScaleFactor: val));
-    channelMethodsSender.setTextScaleFactor(val);
+  void _userSelection(String kind) {
+    cliGrpcClientInstance.client!.userSelection(UserSelectionData(
+      kind: kind,
+      localeCount: state.locales.length,
+      userThemeCount: state.userThemes.length,
+      storyCount: state.storyCount,
+      selectedDevice: state.currentDevice.id,
+      selectedTextScaleFactor: state.textScaleFactor,
+      selectedStoryScale: state.currentScale.scale,
+      selectedDockSide: state.currentDock.id,
+      slowAnimationsEnabled: _isEnabled(Flags.slowAnimations),
+      highlightRepaintsEnabled: _isEnabled(Flags.highlightRepaints),
+      showGuidelinesEnabled: _isEnabled(Flags.showGuidelines),
+      highlightOversizedImagesEnabled:
+          _isEnabled(Flags.highlightOversizedImages),
+      showBaselinesEnabled: _isEnabled(Flags.showBaselines),
+    ));
   }
+
+  bool _isEnabled(String flag) => state.visualDebugFlags
+      .firstWhere((element) => element.name == flag)
+      .isEnabled;
 
   Iterable<StoryGroup> filterStories(List<StoryGroup> stories, String query) {
     return _searchManager.filterStories(stories, query);
@@ -60,10 +79,11 @@ class ControllerManager with Log {
   void onVisualDebugFlagToggledByUi(VisualDebugFlag option) {
     channelMethodsSender
         .sendToggleVisualDebugFlag(option.copyWith(enabled: !option.isEnabled));
+    _userSelection(option.toggled);
   }
 
   /// Called by the preview's vm-service-client via the method channels.
-  /// It gets called after a visual debug flag is set by the UI. Thus, we set 
+  /// It gets called after a visual debug flag is set by the UI. Thus, we set
   /// the controller state in this function.
   /// It is also called after the user sets a visual debug flag using DevTools.
   void onVisualDebugFlagToggleByVmService(String name, bool isEnabled) {
@@ -77,31 +97,43 @@ class ControllerManager with Log {
 
   void launchDevTools() {
     cliGrpcClientInstance.client!.launchDevTools(Empty());
+    _userSelection('launch_devtools_clicked');
   }
 
   void onDeviceChanged(DeviceDefinition deviceDefinition) {
     _update(state.copyWith(currentDevice: deviceDefinition));
     channelMethodsSender.setActiveDevice(deviceDefinition.id);
+    _userSelection('device_selected');
   }
 
   void onThemeChanged(MetaTheme theme) {
     _update(state.copyWith(currentTheme: theme));
     channelMethodsSender.setActiveTheme(theme.id);
+    _userSelection('theme_selected');
   }
 
   void onLocaleChanged(String locale) {
     _update(state.copyWith(currentLocale: locale));
     channelMethodsSender.setActiveLocale(locale);
+    _userSelection('locale_selected');
   }
 
   void onScaleChanged(StoryScaleDefinition scaleDefinition) {
     _update(state.copyWith(currentScale: scaleDefinition));
     channelMethodsSender.setStoryScale(scaleDefinition.scale);
+    _userSelection('story_scale_selected');
+  }
+
+  void onTextScaleFactorChanged(double val) {
+    _update(state.copyWith(textScaleFactor: val));
+    channelMethodsSender.setTextScaleFactor(val);
+    _userSelection('text_scale_factor_selected');
   }
 
   void onDockSettingsChange(DockDefinition dockDefinition) {
     _update(state.copyWith(currentDock: dockDefinition));
     channelMethodsSender.setDockSide(dockDefinition.id);
+    _userSelection('dock_side_selected');
   }
 
   void onMonarchDataChanged(MonarchData monarchData) {

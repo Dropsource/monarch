@@ -133,7 +133,7 @@ void executeTaskRunner(
 
   final cliGrpcServer = CliGrpcServer();
   try {
-    await cliGrpcServer.startServer(taskRunner);
+    await cliGrpcServer.startServer(taskRunner, _analytics);
     taskRunner.cliGrpcServerPort = cliGrpcServer.port;
   }
   catch (e, s) {

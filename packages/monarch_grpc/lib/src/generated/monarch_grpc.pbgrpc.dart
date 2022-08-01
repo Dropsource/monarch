@@ -33,6 +33,11 @@ class MonarchCliClient extends $grpc.Client {
           '/monarch_grpc.MonarchCli/PrintUserMessage',
           ($0.UserMessage value) => value.writeToBuffer(),
           ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
+  static final _$userSelection =
+      $grpc.ClientMethod<$0.UserSelectionData, $0.Empty>(
+          '/monarch_grpc.MonarchCli/UserSelection',
+          ($0.UserSelectionData value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
 
   MonarchCliClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -60,6 +65,11 @@ class MonarchCliClient extends $grpc.Client {
   $grpc.ResponseFuture<$0.Empty> printUserMessage($0.UserMessage request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$printUserMessage, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Empty> userSelection($0.UserSelectionData request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$userSelection, request, options: options);
   }
 }
 
@@ -95,6 +105,13 @@ abstract class MonarchCliServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.UserMessage.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.UserSelectionData, $0.Empty>(
+        'UserSelection',
+        userSelection_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.UserSelectionData.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.Empty> previewVmServerUriChanged_Pre(
@@ -117,6 +134,11 @@ abstract class MonarchCliServiceBase extends $grpc.Service {
     return printUserMessage(call, await request);
   }
 
+  $async.Future<$0.Empty> userSelection_Pre($grpc.ServiceCall call,
+      $async.Future<$0.UserSelectionData> request) async {
+    return userSelection(call, await request);
+  }
+
   $async.Future<$0.Empty> previewVmServerUriChanged(
       $grpc.ServiceCall call, $0.UriInfo request);
   $async.Future<$0.Empty> controllerGrpcServerStarted(
@@ -125,6 +147,8 @@ abstract class MonarchCliServiceBase extends $grpc.Service {
       $grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.Empty> printUserMessage(
       $grpc.ServiceCall call, $0.UserMessage request);
+  $async.Future<$0.Empty> userSelection(
+      $grpc.ServiceCall call, $0.UserSelectionData request);
 }
 
 class MonarchControllerClient extends $grpc.Client {

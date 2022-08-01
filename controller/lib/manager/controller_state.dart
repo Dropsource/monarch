@@ -37,6 +37,8 @@ class ControllerState implements OutboundChannelArgument {
   final List<VisualDebugFlag> visualDebugFlags;
 
   List<MetaTheme> get allThemes => standardThemes + userThemes;
+  int get storyCount => storyGroups.fold<int>(
+      0, (previousValue, element) => previousValue + element.stories.length);
 
   ControllerState({
     required this.isPreviewReady,
