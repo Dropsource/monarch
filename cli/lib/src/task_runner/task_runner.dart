@@ -338,7 +338,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
             });
           }
         }));
-        var monarchAppStdoutListener = MonarchAppStdoutListener(analytics);
+        var monarchAppStdoutListener = MonarchAppStdoutListener();
         _runMonarchAppTask!.stdout.listen(monarchAppStdoutListener.listen);
         await _runMonarchAppTask!.ready();
 
