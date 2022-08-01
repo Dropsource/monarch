@@ -13,21 +13,21 @@ Widget state_not_ready() => ControllerScreen(
         manager: ControllerManager(
       channelMethodsSender: mockChannelMethodsSender,
       initialState: ControllerState.init()
-          .copyWith(isReady: false, packageName: 'monarch_demo'),
+          .copyWith(isPreviewReady: false, packageName: 'monarch_demo'),
     ));
 
 Widget empty_story_list() => ControllerScreen(
       manager: ControllerManager(
           channelMethodsSender: mockChannelMethodsSender,
-          initialState:
-              ControllerState.init().copyWith(isReady: true, storyGroups: [])),
+          initialState: ControllerState.init()
+              .copyWith(isPreviewReady: true, storyGroups: [])),
     );
 
 Widget sample_story_list() => ControllerScreen(
         manager: ControllerManager(
       channelMethodsSender: mockChannelMethodsSender,
       initialState: ControllerState.init().copyWith(
-          isReady: true,
+          isPreviewReady: true,
           storyGroups: _longStoryList(),
           packageName: 'monarch_demo'),
     ));
@@ -36,7 +36,7 @@ Widget devices_themes_and_locales_list() => ControllerScreen(
         manager: ControllerManager(
       channelMethodsSender: mockChannelMethodsSender,
       initialState: ControllerState.init().copyWith(
-          isReady: true,
+          isPreviewReady: true,
           storyGroups: _longStoryList(),
           devices: deviceDefinitions,
           locales: [
@@ -53,7 +53,7 @@ Widget all_dev_tools_enabled() => ControllerScreen(
         manager: ControllerManager(
       channelMethodsSender: mockChannelMethodsSender,
       initialState: ControllerState.init().copyWith(
-          isReady: true,
+          isPreviewReady: true,
           storyGroups: _longStoryList(),
           visualDebugFlags: defs.devToolsOptions
               .map((e) => e.copyWith(enabled: true))
