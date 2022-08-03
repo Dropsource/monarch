@@ -36,7 +36,7 @@ Future<dynamic> _handler(MethodCall call) async {
     case MonarchMethods.defaultTheme:
       final String themeId = args!['themeId'];
       manager.onDefaultThemeChange(themeId);
-      break;
+      return;
 
     case MonarchMethods.previewReadySignal:
       if (!manager.state.isPreviewReady) {
