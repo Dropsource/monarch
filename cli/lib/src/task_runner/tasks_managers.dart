@@ -69,6 +69,9 @@ class RegenAndHotReload extends TasksManager {
     _isReloading = false;
 
     if (_needsReload) {
+      if (!heartbeat.isActive) {
+        heartbeat.start();
+      }
       reload();
     }
   }
