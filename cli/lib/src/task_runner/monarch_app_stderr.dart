@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:monarch_utils/log.dart';
 
-/// This funcion handles scenarios where the monarch ui app or the generated
-/// monarch preview (a flutter app) write to stderr.
+/// This funcion handles scenarios where the platform Window Manager,
+/// the Controller or the Preview write to stderr.
 ///
 /// Keep in mind that not all errors are written to stderr. For example,
 /// compile errors and render overflow errors are written to stdout. Errors
-/// in stdout are handled using markers, i.e. `###error-in-story###` marker.
+/// in stdout are handled using markers, i.e. `##err-line##` marker.
 ///
 /// Messages written to stderr have usually come from plugins, like the
 /// Google Font plugin which used to fail like this:
@@ -20,7 +20,7 @@ import 'package:monarch_utils/log.dart';
 ///
 /// This function parses multi-line stderr messages so they are logged adequately.
 ///
-/// This function is also used to ignore messages written to stderr
+/// This function ignores messages written to stderr
 /// that we don't want to surface as errors to the user.
 ///
 /// Around 2021-03-15, the mac app started writing a message like the following
@@ -45,7 +45,7 @@ void onRunMonarchAppStdErrMessage(String message, Logger _logger) {
 
   if (Platform.isMacOS) {
     var cannotFindBundle = RegExp(
-        r'Cannot find executable for CFBundle .* <.*\.monarch> \(not loaded\)');
+        r'Cannot find executable for CFBundle .* <.*(\.monarch|monarch_controller)> \(not loaded\)');
 
     if (cannotFindBundle.hasMatch(message)) {
       _logger.info('**ignored-severe** $message');
