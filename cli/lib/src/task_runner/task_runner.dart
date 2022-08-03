@@ -288,6 +288,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
           p.join(projectDirectory.path, dotMonarch), // preview-bundle
           defaultLogLevel.name, // log-level
           cliGrpcServerPort.toString(), // cli-grpc-server-port
+          config.pubspecProjectName, // project-name
         ],
         workingDirectory: projectDirectory.path,
         analytics: analytics,

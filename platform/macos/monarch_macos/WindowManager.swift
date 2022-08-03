@@ -17,6 +17,7 @@ class WindowManager {
     var controllerBundlePath: String?
     var previewBundlePath: String?
     var cliGrpcServerPort: String?
+    var projectName: String?
     
     var controllerWindow: NSWindow?
     var previewWindow: NSWindow?
@@ -37,14 +38,15 @@ class WindowManager {
         
         logger.fine("arguments \(arguments)");
         
-        if (arguments.count < 5) {
-            fatalError("Expected 5 arguments in this order: executable-path controller-bundle preview-bundle log-level cli-grpc-server-port")
+        if (arguments.count < 6) {
+            fatalError("Expected 6 arguments in this order: executable-path controller-bundle preview-bundle log-level cli-grpc-server-port project-name")
         }
         
         controllerBundlePath = arguments[1]
         previewBundlePath = arguments[2]
         defaultLogLevel = logLevelFromString(levelString: arguments[3])
         cliGrpcServerPort = arguments[4]
+        projectName = arguments[5]
         
         self._loadWindows()
     }
@@ -116,7 +118,7 @@ class WindowManager {
         controllerWindowController.contentViewController = controllerWindow.contentViewController
         
         controllerWindow.setContentSize(NSSize(width: 700, height: 830))
-        controllerWindow.title = "Monarch"
+        controllerWindow.title = projectName! + " - Monarch"
         controllerWindowController.window = controllerWindow
         controllerWindowController.showWindow(self)
     }
