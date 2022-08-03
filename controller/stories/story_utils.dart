@@ -15,9 +15,6 @@ class MockChannelMethodsSender implements AbstractChannelMethodsSender {
   void resetStory() {}
 
   @override
-  void sendFirstLoadSignal() {}
-
-  @override
   void sendReadySignalAck() {}
 
   @override
@@ -43,7 +40,10 @@ class MockChannelMethodsSender implements AbstractChannelMethodsSender {
   void setTextScaleFactor(double scale) {}
 
   @override
-  Future setUpLog(int defaultLogLevelValue) => Future.value();
+  Future<bool> hotReload() => Future.value(true);
+
+  @override
+  void restartPreview() {}
 }
 
 const deviceDefinitions = [

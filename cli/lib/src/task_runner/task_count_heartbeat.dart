@@ -23,3 +23,12 @@ class TaskCountHeartbeat extends Heartbeat {
         '${stopwatch!..stop()} elapsed, $completedTaskCount/$taskCount tasks completed');
   }
 }
+
+class SimpleHeartbeat extends Heartbeat {
+  SimpleHeartbeat(String message, {WriteLineFunction? writeln_})
+      : super(
+            message,
+            (String line) => writeln_ == null
+                ? stdout_default.writeln(line)
+                : writeln_(line));
+}

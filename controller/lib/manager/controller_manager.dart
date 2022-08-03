@@ -1,21 +1,22 @@
 import 'dart:async';
 
-import 'package:monarch_controller/data/abstract_channel_methods_sender.dart';
-import 'package:monarch_controller/data/device_definitions.dart';
-import 'package:monarch_controller/data/dock_definition.dart';
-import 'package:monarch_controller/data/stories.dart';
-import 'package:monarch_controller/data/story_scale_definitions.dart';
-import 'package:monarch_controller/data/visual_debug_flags.dart';
-import 'package:monarch_controller/manager/controller_state.dart';
-import 'package:monarch_controller/manager/search_manager.dart';
+import 'package:monarch_grpc/monarch_grpc.dart';
+import 'package:monarch_utils/log.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../data/channel_methods_receiver.dart';
+import 'controller_state.dart';
+import 'search_manager.dart';
+import '../data/abstract_channel_methods_sender.dart';
+import '../data/device_definitions.dart';
+import '../data/dock_definition.dart';
+import '../data/stories.dart';
+import '../data/story_scale_definitions.dart';
+import '../data/visual_debug_flags.dart';
 import '../data/monarch_data.dart';
-import 'package:monarch_controller/data/definitions.dart' as defs;
-import '../extensions/iterable_extensions.dart';
+import '../data/definitions.dart' as defs;
+import '../data/grpc.dart';
 
-class ControllerManager {
+class ControllerManager with Log {
   final BehaviorSubject<ControllerState> _streamController =
       BehaviorSubject<ControllerState>();
 
@@ -37,25 +38,55 @@ class ControllerManager {
   }
 
   void onActiveStoryChanged(String key) async {
-    logger.finest('changing active story to $key');
+    log.finest('changing active story to $key');
     _update(state.copyWith(activeStoryKey: key));
     channelMethodsSender.loadStory(key);
+    _userSelection('story_selected');
   }
 
-  void onDevToolOptionToggled(VisualDebugFlag option) {
-    channelMethodsSender
-        .sendToggleVisualDebugFlag(option.copyWith(enabled: !option.isEnabled));
+  void _userSelection(String kind) {
+    cliGrpcClientInstance.client!.userSelection(UserSelectionData(
+      kind: kind,
+      localeCount: state.locales.length,
+      userThemeCount: state.userThemes.length,
+      storyCount: state.storyCount,
+      selectedDevice: state.currentDevice.id,
+      selectedTextScaleFactor: state.textScaleFactor,
+      selectedStoryScale: state.currentScale.scale,
+      selectedDockSide: state.currentDock.id,
+      slowAnimationsEnabled: _isEnabled(Flags.slowAnimations),
+      highlightRepaintsEnabled: _isEnabled(Flags.highlightRepaints),
+      showGuidelinesEnabled: _isEnabled(Flags.showGuidelines),
+      highlightOversizedImagesEnabled:
+          _isEnabled(Flags.highlightOversizedImages),
+      showBaselinesEnabled: _isEnabled(Flags.showBaselines),
+    ));
   }
 
-  void onTextScaleFactorChanged(double val) {
-    channelMethodsSender.setTextScaleFactor(val);
-  }
+  bool _isEnabled(String flag) => state.visualDebugFlags
+      .firstWhere((element) => element.name == flag)
+      .isEnabled;
 
   Iterable<StoryGroup> filterStories(List<StoryGroup> stories, String query) {
     return _searchManager.filterStories(stories, query);
   }
 
-  void onVisualFlagToggle(String name, bool isEnabled) {
+  /// Called by UI when the user toggles a visual debug checkbox.
+  /// It will send a message to the preview, which will call the vm service
+  /// extension method for the corresponding flag.
+  /// It doesn't update the controller state. The controller state is updated
+  /// in [onVisualDebugFlagToggleByVmService] which is called after this function.
+  void onVisualDebugFlagToggledByUi(VisualDebugFlag option) {
+    channelMethodsSender
+        .sendToggleVisualDebugFlag(option.copyWith(enabled: !option.isEnabled));
+    _userSelection(option.toggled);
+  }
+
+  /// Called by the preview's vm-service-client via the method channels.
+  /// It gets called after a visual debug flag is set by the UI. Thus, we set
+  /// the controller state in this function.
+  /// It is also called after the user sets a visual debug flag using DevTools.
+  void onVisualDebugFlagToggleByVmService(String name, bool isEnabled) {
     final element =
         state.visualDebugFlags.firstWhere((element) => element.name == name);
     final index = state.visualDebugFlags.indexOf(element);
@@ -64,94 +95,100 @@ class ControllerManager {
     _update(state.copyWith(visualDebugFlags: list));
   }
 
+  void launchDevTools() {
+    cliGrpcClientInstance.client!.launchDevTools(Empty());
+    _userSelection('launch_devtools_clicked');
+  }
+
   void onDeviceChanged(DeviceDefinition deviceDefinition) {
     _update(state.copyWith(currentDevice: deviceDefinition));
     channelMethodsSender.setActiveDevice(deviceDefinition.id);
+    _userSelection('device_selected');
   }
 
   void onThemeChanged(MetaTheme theme) {
     _update(state.copyWith(currentTheme: theme));
     channelMethodsSender.setActiveTheme(theme.id);
+    _userSelection('theme_selected');
   }
 
   void onLocaleChanged(String locale) {
     _update(state.copyWith(currentLocale: locale));
     channelMethodsSender.setActiveLocale(locale);
+    _userSelection('locale_selected');
   }
 
   void onScaleChanged(StoryScaleDefinition scaleDefinition) {
     _update(state.copyWith(currentScale: scaleDefinition));
     channelMethodsSender.setStoryScale(scaleDefinition.scale);
+    _userSelection('story_scale_selected');
+  }
+
+  void onTextScaleFactorChanged(double val) {
+    _update(state.copyWith(textScaleFactor: val));
+    channelMethodsSender.setTextScaleFactor(val);
+    _userSelection('text_scale_factor_selected');
   }
 
   void onDockSettingsChange(DockDefinition dockDefinition) {
     _update(state.copyWith(currentDock: dockDefinition));
     channelMethodsSender.setDockSide(dockDefinition.id);
+    _userSelection('dock_side_selected');
   }
 
   void onMonarchDataChanged(MonarchData monarchData) {
-    logger.finest(
-        "monarchData - user localizations count: ${monarchData.metaLocalizations.length}");
-    logger.finest(
-        "monarchData - user theme count: ${monarchData.metaThemes.length}");
-    logger.finest(
-        "monarchData - key count in metaStoriesMap: ${monarchData.metaStoriesMap.length}");
-    logger.finest("monarchData - package name: ${monarchData.packageName}");
+    log.finest('MonarchData '
+        'meta-localizations=${monarchData.metaLocalizations.length} '
+        'all-locales=${monarchData.allLocales.length} '
+        'meta-themes=${monarchData.metaThemes.length} ');
 
-    final allLocales = monarchData.allLocales.isNotEmpty
-        ? monarchData.allLocales
-        : [defs.defaultLocale];
-
-    final String currentLocale = _checkCurrentLocale(allLocales);
-
-    final allThemes = state.standardThemes + monarchData.metaThemes;
-    final MetaTheme currentTheme = _checkCurrentTheme(allThemes);
+    var localeHelper = _LocaleHelper(monarchData, state.currentLocale);
+    localeHelper.compute();
+    var themeHelper = _ThemeHelper(
+        standardThemes: state.standardThemes,
+        userThemes: monarchData.metaThemes,
+        defaultThemeId: state.defaultThemeId,
+        currentTheme: state.currentTheme);
+    themeHelper.compute();
 
     _update(state.copyWith(
       packageName: monarchData.packageName,
       storyGroups: _translateStories(monarchData.metaStoriesMap),
       userThemes: monarchData.metaThemes,
-      currentTheme: currentTheme,
-      locales: allLocales.toList(),
-      currentLocale: currentLocale,
+      currentTheme: themeHelper.computedCurrentTheme,
+      locales: localeHelper.computedLocales,
+      currentLocale: localeHelper.computedCurrentLocale,
     ));
+  }
 
-    channelMethodsSender.setActiveLocale(state.currentLocale);
+  void onStandardThemesChanged(List<MetaTheme> standardThemes) {
+    var themeHelper = _ThemeHelper(
+        standardThemes: standardThemes,
+        userThemes: state.userThemes,
+        defaultThemeId: state.defaultThemeId,
+        currentTheme: state.currentTheme);
+    themeHelper.compute();
 
-    channelMethodsSender.setActiveTheme(state.currentTheme.id);
-    channelMethodsSender.setActiveDevice(state.currentDevice.id);
-    channelMethodsSender.setTextScaleFactor(state.textScaleFactor);
-    channelMethodsSender.setStoryScale(state.currentScale.scale);
+    _update(state.copyWith(
+        standardThemes: standardThemes,
+        currentTheme: themeHelper.computedCurrentTheme));
   }
 
   void onDefaultThemeChange(String themeId) {
-    MetaTheme? selectedTheme;
-    final allThemes = state.standardThemes + state.userThemes;
-    final currentTheme =
-        allThemes.firstWhereOrNull((element) => element.id == themeId);
+    var themeHelper = _ThemeHelper(
+        standardThemes: state.standardThemes,
+        userThemes: state.userThemes,
+        defaultThemeId: themeId,
+        currentTheme: state.currentTheme);
+    themeHelper.compute();
 
-    if (currentTheme == null) {
-      if (allThemes.isNotEmpty) {
-        selectedTheme = allThemes.first;
-      } else {
-        //standard themes are empty, this should not happen, but just in case we are not selecting anything as currentTheme
-      }
-    } else {
-      selectedTheme = currentTheme;
-    }
-
-    _update(state.copyWith(currentTheme: selectedTheme));
+    _update(state.copyWith(
+        currentTheme: themeHelper.computedCurrentTheme,
+        defaultThemeId: themeId));
   }
 
-  void onReady() {
-    _update(state.copyWith(isReady: true));
-    //send first load signal
-    channelMethodsSender.sendFirstLoadSignal();
-    logger.info('story-flutter-window-ready');
-  }
-
-  void onStandardThemesChanged(List<MetaTheme> themes) {
-    _update(state.copyWith(standardThemes: themes));
+  void onPreviewReady() {
+    _update(state.copyWith(isPreviewReady: true));
   }
 
   void onStoryScaleDefinitionsChanged(
@@ -165,26 +202,6 @@ class ControllerManager {
 
   void _update(ControllerState newState) {
     _streamController.sink.add(newState);
-  }
-
-  String _checkCurrentLocale(Iterable<String> allLocales) {
-    if (!allLocales.contains(state.currentLocale)) {
-      if (allLocales.isEmpty) {
-        return defs.defaultLocale;
-      } else {
-        return allLocales.first;
-      }
-    } else {
-      return state.currentLocale;
-    }
-  }
-
-  MetaTheme _checkCurrentTheme(List<MetaTheme> allThemes) {
-    if (!allThemes.contains(state.currentTheme)) {
-      return state.standardThemes.first;
-    } else {
-      return state.currentTheme;
-    }
   }
 
   void dispose() {
@@ -217,6 +234,58 @@ class ControllerManager {
       state.collapsedGroupKeys.remove(groupKey);
     } else {
       state.collapsedGroupKeys.add(groupKey);
+    }
+  }
+}
+
+class _LocaleHelper {
+  final MonarchData data;
+  final String currentLocale;
+  _LocaleHelper(this.data, this.currentLocale);
+
+  List<String> computedLocales = [];
+  String computedCurrentLocale = defs.defaultLocale;
+
+  void compute() {
+    computedLocales.clear();
+    if (data.allLocales.isEmpty) {
+      computedLocales.add(defs.defaultLocale);
+      computedCurrentLocale = defs.defaultLocale;
+    } else {
+      computedLocales.addAll(data.allLocales);
+      if (data.allLocales.contains(currentLocale)) {
+        computedCurrentLocale = currentLocale;
+      } else {
+        computedCurrentLocale = data.allLocales.first;
+      }
+    }
+  }
+}
+
+class _ThemeHelper {
+  final List<MetaTheme> standardThemes;
+  final List<MetaTheme> userThemes;
+  final String defaultThemeId;
+  final MetaTheme currentTheme;
+
+  _ThemeHelper(
+      {required this.standardThemes,
+      required this.userThemes,
+      required this.currentTheme,
+      required this.defaultThemeId});
+
+  List<MetaTheme> get allThemes => standardThemes + userThemes;
+  MetaTheme computedCurrentTheme = defs.defaultTheme;
+
+  void compute() {
+    bool listHasCurrent = allThemes.any((x) => x.id == currentTheme.id);
+
+    if (listHasCurrent) {
+      computedCurrentTheme =
+          allThemes.firstWhere((x) => x.id == currentTheme.id);
+    } else {
+      computedCurrentTheme = allThemes.firstWhere((x) => x.id == defaultThemeId,
+          orElse: () => allThemes.first);
     }
   }
 }

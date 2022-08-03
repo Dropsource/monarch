@@ -1,3 +1,4 @@
+// ignore_for_file: non_constant_identifier_names
 import 'package:monarch_utils/log.dart';
 
 import 'analytics_api.dart';

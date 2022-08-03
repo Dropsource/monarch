@@ -4,9 +4,14 @@ class VisualDebugFlag implements OutboundChannelArgument {
   final String name;
   final String label;
   final bool isEnabled;
+  final String toggled;
 
-  VisualDebugFlag(
-      {required this.name, this.isEnabled = false, required this.label});
+  VisualDebugFlag({
+    required this.name,
+    this.isEnabled = false,
+    required this.label,
+    required this.toggled,
+  });
 
   @override
   Map<String, dynamic> toStandardMap() {
@@ -15,7 +20,11 @@ class VisualDebugFlag implements OutboundChannelArgument {
 
   VisualDebugFlag copyWith({bool? enabled}) {
     return VisualDebugFlag(
-        name: name, isEnabled: enabled ?? isEnabled, label: label);
+      name: name,
+      isEnabled: enabled ?? isEnabled,
+      label: label,
+      toggled: toggled,
+    );
   }
 }
 

@@ -34,7 +34,7 @@ class UiWindowControllerState extends State<ControllerScreen> {
       body: StreamBuilder<ControllerState>(
           stream: manager.stream,
           builder: (context, snapshot) {
-            if (snapshot.data == null || !snapshot.data!.isReady) {
+            if (snapshot.data == null || !snapshot.data!.isPreviewReady) {
               return const SizedBox(
                 height: 200,
                 child: Center(
@@ -66,13 +66,13 @@ class UiWindowControllerState extends State<ControllerScreen> {
                             'story_list.title',
                             shouldTranslate: true,
                           ),
-                          if (!state.isReady) ...[
+                          if (!state.isPreviewReady) ...[
                             const TextBody1(
                               'story_list.loading',
                               shouldTranslate: true,
                             ),
                           ],
-                          if (state.isReady) ...[
+                          if (state.isPreviewReady) ...[
                             Expanded(
                               child: StoryList(
                                 projectName: state.storyGroups.isEmpty
@@ -81,8 +81,6 @@ class UiWindowControllerState extends State<ControllerScreen> {
                                 stories: state.storyGroups,
                                 activeStoryKey: state.activeStoryKey,
                                 manager: manager,
-                                onActiveStoryChange: (key) =>
-                                    manager.onActiveStoryChanged(key),
                               ),
                             ),
                           ],
@@ -94,7 +92,7 @@ class UiWindowControllerState extends State<ControllerScreen> {
                     width: 1,
                     thickness: 1,
                   ),
-                  if (state.isReady) ...[
+                  if (state.isPreviewReady) ...[
                     ControlPanel(
                       state: state,
                       manager: manager,

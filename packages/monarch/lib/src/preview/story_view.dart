@@ -9,7 +9,7 @@ import 'active_story.dart';
 import 'active_theme.dart';
 import 'active_story_error.dart';
 import 'device_definitions.dart';
-import 'monarch_data_instance.dart';
+import 'monarch_data_manager.dart';
 import 'monarch_data.dart';
 import 'story_error_view.dart';
 
@@ -89,7 +89,7 @@ class _MonarchStoryViewState extends State<MonarchStoryView> {
       _storyFunction = null;
     } else {
       final metaStories =
-          monarchDataInstance.metaStoriesMap[activeStoryId.pathKey]!;
+          monarchDataManager.data!.metaStoriesMap[activeStoryId.pathKey]!;
       _storyFunction = metaStories.storiesMap[activeStoryId.name];
     }
   }

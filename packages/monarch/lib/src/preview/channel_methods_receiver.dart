@@ -9,22 +9,23 @@ import 'active_theme.dart';
 import 'active_locale.dart';
 import 'active_text_scale_factor.dart';
 import 'active_story_scale.dart';
-import 'log_level.dart';
 import 'ready_signal.dart';
+import 'start_monarch_preview.dart' as startup;
 import 'stories_errors.dart';
 import 'visual_debug_flags.dart' as visual_debug;
+import 'vm_service_client.dart';
 
-final logger = Logger('ChannelMethodsReceiver');
+final _logger = Logger('ChannelMethodsReceiver');
 
 void receiveChannelMethodCalls() {
   // logger.level = LogLevel.ALL;
   MonarchChannels.preview.setMethodCallHandler((MethodCall call) async {
-    logger.finest('channel method received: ${call.method}');
+    _logger.finest('channel method received: ${call.method}');
 
     try {
       return await _handler(call);
     } catch (e, s) {
-      logger.severe(
+      _logger.severe(
           'exception in flutter runtime while handling channel method', e, s);
       return PlatformException(code: '001', message: e.toString());
     }
@@ -35,14 +36,6 @@ Future<dynamic> _handler(MethodCall call) async {
   final Map? args = call.arguments;
 
   switch (call.method) {
-    case MonarchMethods.setUpLog:
-      setDefaultLogLevel(args!['defaultLogLevelValue']);
-      logCurrentProcessInformation(logger, LogLevel.FINE);
-      return;
-
-    case MonarchMethods.firstLoadSignal:
-      logEnvironmentInformation(logger, LogLevel.FINE);
-      return;
 
     case MonarchMethods.readySignalAck:
       readySignal.ready();
@@ -78,7 +71,7 @@ Future<dynamic> _handler(MethodCall call) async {
       return;
 
     case MonarchMethods.screenChanged:
-      // foce the monarch binding to recalculate the physical size.
+      // force the monarch binding to recalculate the physical size.
       activeDevice.value = activeDevice.value;
       return;
 
@@ -100,8 +93,16 @@ Future<dynamic> _handler(MethodCall call) async {
       await visual_debug.toggleFlagViaVmServiceExtension(name, isEnabled);
       return;
 
+    case MonarchMethods.willClosePreview:
+      await startup.dispose();
+      return;
+
+    case MonarchMethods.hotReload:
+      var result = await vmServiceClient.hotReload();
+      return result;
+
     default:
-      logger.fine('method ${call.method} not implemented');
+      _logger.fine('method ${call.method} not implemented');
       return;
   }
 }

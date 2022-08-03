@@ -89,7 +89,7 @@ Building $monarch_macos with xcodebuild. Will output to:
   utils.exitIfNeeded(result, 'Error running xcodebuild');
 
   var swiftmodule =
-      Directory(p.join(out_ui_flutter_id, '$monarch_macos.swiftmodule'));
+      Directory(p.join(out_ui_flutter_id, 'Monarch.swiftmodule'));
   if (swiftmodule.existsSync()) swiftmodule.deleteSync(recursive: true);
 }
 

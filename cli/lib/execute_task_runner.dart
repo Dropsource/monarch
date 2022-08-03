@@ -26,6 +26,7 @@ import 'src/utils/standard_output.dart';
 import 'src/config/environment_mutations.dart';
 import 'src/version_api/version_api.dart';
 import 'src/version_api/notification.dart';
+import 'src/task_runner/grpc.dart';
 
 final _logger = Logger('CommandTaskRunner');
 
@@ -127,7 +128,18 @@ void executeTaskRunner(
       isDeleteConflictingOutputs: isDeleteConflictingOutputs,
       noSoundNullSafety: noSoundNullSafety,
       reloadOption: _getReloadOption(reloadOption),
-      analytics: _analytics);
+      analytics: _analytics,
+      controllerGrpcClient: controllerGrpcClientInstance);
+
+  final cliGrpcServer = CliGrpcServer();
+  try {
+    await cliGrpcServer.startServer(taskRunner, _analytics);
+    taskRunner.cliGrpcServerPort = cliGrpcServer.port;
+  }
+  catch (e, s) {
+    await _exit(TaskRunnerExitCodes.cliGrpcServerStartError);
+    return;
+  }
 
   _logger.info('Starting Monarch Task Runner');
   stdout_default.writeln('\nStarting Monarch.');

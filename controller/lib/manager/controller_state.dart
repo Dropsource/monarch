@@ -9,7 +9,7 @@ import 'package:monarch_controller/data/visual_debug_flags.dart';
 import '../data/channel_methods.dart';
 
 class ControllerState implements OutboundChannelArgument {
-  final bool isReady;
+  final bool isPreviewReady;
   final String packageName;
   final List<StoryGroup> storyGroups;
   final Set<String> collapsedGroupKeys;
@@ -21,6 +21,7 @@ class ControllerState implements OutboundChannelArgument {
   final String currentLocale;
   final List<String> locales;
 
+  final String defaultThemeId;
   final MetaTheme currentTheme;
   final List<MetaTheme> standardThemes;
   final List<MetaTheme> userThemes;
@@ -36,9 +37,11 @@ class ControllerState implements OutboundChannelArgument {
   final List<VisualDebugFlag> visualDebugFlags;
 
   List<MetaTheme> get allThemes => standardThemes + userThemes;
+  int get storyCount => storyGroups.fold<int>(
+      0, (previousValue, element) => previousValue + element.stories.length);
 
   ControllerState({
-    required this.isReady,
+    required this.isPreviewReady,
     this.packageName = '',
     this.storyGroups = const [],
     this.activeStoryKey,
@@ -46,6 +49,7 @@ class ControllerState implements OutboundChannelArgument {
     required this.currentDevice,
     required this.locales,
     required this.currentLocale,
+    required this.defaultThemeId,
     required this.standardThemes,
     required this.userThemes,
     required this.currentTheme,
@@ -59,15 +63,16 @@ class ControllerState implements OutboundChannelArgument {
   });
 
   factory ControllerState.init() => ControllerState(
-        isReady: false,
+        isPreviewReady: false,
         collapsedGroupKeys: {},
         devices: [defaultDeviceDefinition],
         currentDevice: defaultDeviceDefinition,
         locales: [defs.defaultLocale],
         currentLocale: defs.defaultLocale,
+        defaultThemeId: defs.defaultTheme.id,
+        currentTheme: defs.defaultTheme,
         standardThemes: [defs.defaultTheme],
         userThemes: [],
-        currentTheme: defs.defaultTheme,
         currentDock: defs.defaultDock,
         currentScale: defaultScaleDefinition,
         dockList: defs.dockList,
@@ -80,11 +85,12 @@ class ControllerState implements OutboundChannelArgument {
     String? activeStoryKey,
     String? packageName,
     List<StoryGroup>? storyGroups,
-    bool? isReady,
+    bool? isPreviewReady,
     List<DeviceDefinition>? devices,
     DeviceDefinition? currentDevice,
     String? currentLocale,
     List<String>? locales,
+    String? defaultThemeId,
     MetaTheme? currentTheme,
     List<MetaTheme>? standardThemes,
     List<MetaTheme>? userThemes,
@@ -97,14 +103,15 @@ class ControllerState implements OutboundChannelArgument {
       ControllerState(
         activeStoryKey: activeStoryKey ?? this.activeStoryKey,
         storyGroups: storyGroups ?? this.storyGroups,
-        isReady: isReady ?? this.isReady,
+        isPreviewReady: isPreviewReady ?? this.isPreviewReady,
         devices: devices ?? this.devices,
         currentDevice: currentDevice ?? this.currentDevice,
         locales: locales ?? this.locales,
         currentLocale: currentLocale ?? this.currentLocale,
+        defaultThemeId: defaultThemeId ?? this.defaultThemeId,
+        currentTheme: currentTheme ?? this.currentTheme,
         standardThemes: standardThemes ?? this.standardThemes,
         userThemes: userThemes ?? this.userThemes,
-        currentTheme: currentTheme ?? this.currentTheme,
         scaleList: scaleList ?? this.scaleList,
         currentScale: currentScale ?? this.currentScale,
         dockList: dockList,
@@ -123,7 +130,13 @@ class ControllerState implements OutboundChannelArgument {
     return {
       'device': currentDevice.toStandardMap(),
       'scale': currentScale.toStandardMap(),
-      'dock': currentDock.id
+      'dock': currentDock.id,
+      'activeStoryKey': activeStoryKey,
+      'themeId': currentTheme.id,
+      'locale': currentLocale,
+      'textScaleFactor': textScaleFactor,
+      'visualDebugFlags':
+          visualDebugFlags.map((e) => e.toStandardMap()).toList()
     };
   }
 }

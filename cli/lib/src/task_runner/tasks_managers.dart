@@ -1,46 +1,39 @@
+import 'package:monarch_cli/src/task_runner/task.dart';
 import 'package:monarch_utils/log.dart';
 
-import 'reload.dart';
+import 'grpc.dart';
+import 'reloaders.dart';
 import 'process_task.dart';
 import '../utils/standard_output.dart' show StandardOutput;
+import 'task_count_heartbeat.dart';
 
-abstract class TasksManager {
+abstract class TasksManager with Log {
   void manage();
+  bool get isRunning;
 }
 
-abstract class RegenAndReload implements TasksManager {
-  String get heartbeatMessage;
-  void requestReload();
-
+class RegenAndHotReload extends TasksManager {
   final StandardOutput stdout_;
-
-  /// The "watch-to-regen-meta-stories" task.
   final ProcessParentReadyTask regenTask;
+  final ControllerGrpcClient controllerGrpcClient;
 
-  /// The "attach-to-hot-restart" task.
-  final ProcessParentReadyTask reloadTask;
+  RegenAndHotReload({
+    required this.stdout_,
+    required this.regenTask,
+    required this.controllerGrpcClient,
+  });
 
-  RegenAndReload(
-      {required this.stdout_,
-      required this.regenTask,
-      required this.reloadTask});
+  bool _isReloading = false;
+  bool _needsReload = false;
 
-  bool get isGeneratingMetaStories =>
-      regenTask.childTaskStatus == ChildTaskStatus.running;
-  bool get isReloading => reloadTask.childTaskStatus == ChildTaskStatus.running;
+  @override
+  bool get isRunning =>
+      regenTask.childTaskStatus == ChildTaskStatus.running || _isReloading;
 
-  bool get isRunning => isGeneratingMetaStories || isReloading;
+  final heartbeat = SimpleHeartbeat(kReloadingStories);
 
   @override
   void manage() {
-    var needsReload = false;
-    final heartbeat = Heartbeat(heartbeatMessage, stdout_.writeln);
-
-    void reload() {
-      requestReload();
-      needsReload = false;
-    }
-
     regenTask.childTaskStatusStream.listen((childTaskStatus) {
       switch (childTaskStatus) {
         case ChildTaskStatus.running:
@@ -50,95 +43,88 @@ abstract class RegenAndReload implements TasksManager {
           break;
 
         case ChildTaskStatus.done:
-          needsReload = true;
-          if (!isReloading) {
+          _needsReload = true;
+          if (!_isReloading) {
             reload();
           }
           break;
 
         case ChildTaskStatus.failed:
-          break;
-
-        default:
-      }
-    });
-
-    reloadTask.childTaskStatusStream.listen((childTaskStatus) {
-      /// Status and messages when hot reloading:
-      ///
-      /// - running: "Performing hot reload"
-      /// - done:    "Reloaded \d+ of \d+ libraries" or "Reloaded \d+ libraries"
-      /// - failed:  "Try again after fixing the above error(s)."
-      ///
-      /// GOTCHA: when hot reload fails, it only emits the failed status, it
-      /// does not emit the done status.
-
-      /// Status and messages when hot restarting:
-      ///
-      /// - running: "Performing hot restart"
-      /// - done:    "Restarted application"
-      /// - failed:  "Try again after fixing the above error(s)."
-      ///
-      /// GOTCHA: when hot restart fails, it emits both the done status
-      /// and the failed status.
-
-      /// If we get a done or failed status, then we complete the heartbeat.
-      /// The guards prevent the heartbeat from being completed again if we
-      /// get another done or failed status. For example, hot restart emits
-      /// the done status and then the failed status.
-      ///
-      /// If the status is failed, then print a message to the user to try
-      /// again.
-      switch (childTaskStatus) {
-        case ChildTaskStatus.running:
-          break;
-
-        case ChildTaskStatus.done:
-        case ChildTaskStatus.failed:
-          if (needsReload) {
-            reload();
-          } else {
-            if (!isGeneratingMetaStories && heartbeat.isActive) {
-              heartbeat.complete();
-            }
+          if (heartbeat.isActive) {
+            heartbeat.completeError();
           }
-
-          if (childTaskStatus == ChildTaskStatus.failed) {
-            stdout_.writeln(kTryAgainAfterFixing);
-          }
-
           break;
 
         default:
       }
     });
   }
+
+  void reload() async {
+    _needsReload = false;
+
+    _isReloading = true;
+    var reloader = HotReloader(controllerGrpcClient, stdout_);
+    await reloader.reload(heartbeat);
+    _isReloading = false;
+
+    if (_needsReload) {
+      if (!heartbeat.isActive) {
+        heartbeat.start();
+      }
+      reload();
+    }
+  }
 }
 
-class RegenAndHotReload extends RegenAndReload {
-  @override
-  String get heartbeatMessage => kReloadingStories;
+class RegenRebundleAndHotRestart extends TasksManager {
+  final ProcessParentReadyTask regenTask;
+  final ProcessTask buildPreviewBundleTask;
+  final ControllerGrpcClient controllerGrpcClient;
+
+  RegenRebundleAndHotRestart({
+    required this.regenTask,
+    required this.buildPreviewBundleTask,
+    required this.controllerGrpcClient,
+  });
 
   @override
-  void requestReload() => requestHotReload(reloadTask);
+  bool get isRunning =>
+      regenTask.childTaskStatus == ChildTaskStatus.running ||
+      buildPreviewBundleTask.status == TaskStatus.running;
 
-  RegenAndHotReload(
-      {required StandardOutput stdout_,
-      required ProcessParentReadyTask regenTask,
-      required ProcessParentReadyTask reloadTask})
-      : super(stdout_: stdout_, regenTask: regenTask, reloadTask: reloadTask);
-}
-
-class RegenAndHotRestart extends RegenAndReload {
-  @override
-  String get heartbeatMessage => kReloadingStoriesHotRestart;
+  final heartbeat =
+      TaskCountHeartbeat(kReloadingStoriesHotRestart, taskCount: 2);
 
   @override
-  void requestReload() => requestHotRestart(reloadTask);
+  void manage() {
+    regenTask.childTaskStatusStream.listen((childTaskStatus) {
+      switch (childTaskStatus) {
+        case ChildTaskStatus.running:
+          if (!heartbeat.isActive) {
+            heartbeat.completedTaskCount = 0;
+            heartbeat.start();
+          }
+          break;
 
-  RegenAndHotRestart(
-      {required StandardOutput stdout_,
-      required ProcessParentReadyTask regenTask,
-      required ProcessParentReadyTask reloadTask})
-      : super(stdout_: stdout_, regenTask: regenTask, reloadTask: reloadTask);
+        case ChildTaskStatus.done:
+          heartbeat.completedTaskCount = 1;
+          reload();
+          break;
+
+        case ChildTaskStatus.failed:
+          if (heartbeat.isActive) {
+            heartbeat.completeError();
+          }
+          break;
+
+        default:
+      }
+    });
+  }
+
+  void reload() async {
+    var reloader = HotRestarter(buildPreviewBundleTask, controllerGrpcClient);
+    reloader.reload(heartbeat);
+  }
 }

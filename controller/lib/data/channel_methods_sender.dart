@@ -16,20 +16,9 @@ class ChannelMethodsSender with Log implements AbstractChannelMethodsSender {
   }
 
   @override
-  Future setUpLog(int defaultLogLevelValue) {
-    return _invokeMonarchChannelMethod(MonarchMethods.setUpLog,
-        {"defaultLogLevelValue": defaultLogLevelValue});
-  }
-
-  @override
   Future sendToggleVisualDebugFlag(OutboundChannelArgument visualDebugFlag) {
     return _invokeMonarchChannelMethod(
         MonarchMethods.toggleVisualDebugFlag, visualDebugFlag.toStandardMap());
-  }
-
-  @override
-  void sendFirstLoadSignal() {
-    _invokeMonarchChannelMethod(MonarchMethods.firstLoadSignal);
   }
 
   @override
@@ -81,6 +70,18 @@ class ChannelMethodsSender with Log implements AbstractChannelMethodsSender {
   void setDockSide(String dock) {
     _invokeMonarchChannelMethod(MonarchMethods.setDockSide, {'dock': dock});
   }
+
+  @override
+  Future<bool> hotReload() async {
+    var result = await _invokeMonarchChannelMethod(MonarchMethods.hotReload);
+    return result;
+  }
+  
+  @override
+  void restartPreview() {
+    _invokeMonarchChannelMethod(MonarchMethods.restartPreview);
+  }
+
 }
 
 final channelMethodsSender = ChannelMethodsSender();

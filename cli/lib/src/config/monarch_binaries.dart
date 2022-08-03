@@ -13,7 +13,7 @@ class MonarchBinaries {
   Directory get monarchDirectory => binDirectory.parent;
 
   String get monarchAppExecutableName => valueForPlatform(
-      macos: p.join('monarch_macos.app', 'Contents', 'MacOS', 'monarch_macos'),
+      macos: p.join('Monarch.app', 'Contents', 'MacOS', 'Monarch'),
       windows: 'monarch_windows_app.exe');
 
   Directory get cacheDirectory => Directory(p.join(binDirectory.path, 'cache'));

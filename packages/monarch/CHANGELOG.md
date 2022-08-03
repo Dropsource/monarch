@@ -1,3 +1,8 @@
+## 2.4.0-pre.2 - 2022-08-03
+- v2 hot reload and hot restart
+- Get state from controller
+- `MonarchDataManager` encapsulates `MonarchData`
+
 ## 2.4.0-pre.1
 - Use package monarch_channels.
 - Support for Monarch v2 architecture.
