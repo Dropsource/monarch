@@ -25,51 +25,29 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
 
   std::vector<std::string> arguments = GetCommandLineArguments();
 
-  std::string controllerBundlePath = "";
-  std::string previewBundlePath = "";
-
-  std::string controllerBundleKeyArg = "--controller-bundle";
-  std::string previewBundleKeyArg = "--preview-bundle";
-  std::string logLevelKeyArg = "--log-level";
-
-  if (arguments.size() < 6) {
-    _logger.severe("Expected arguments: " + controllerBundleKeyArg + " " + previewBundleKeyArg + " " + logLevelKeyArg);
+  if (arguments.size() < 5) {
+    _logger.severe("Expected 5 arguments in this order: controller-bundle preview-bundle log-level cli-grpc-server-port project-name");
     return EXIT_FAILURE;
   }
 
-  std::string arg0 = trim_copy(arguments[0]);
-  std::string arg1 = trim_copy(arguments[1]);
-  std::string arg2 = trim_copy(arguments[2]);
-  std::string arg3 = trim_copy(arguments[3]);
-  std::string arg4 = trim_copy(arguments[4]);
-  std::string arg5 = trim_copy(arguments[5]);
+  std::string controllerBundlePath = trim_copy(arguments[0]);
+  std::string previewBundlePath = trim_copy(arguments[1]);
+  std::string defaultLogLevelString = trim_copy(arguments[2]);
+  std::string cliGrpcServerPort = trim_copy(arguments[3]);
+  std::string projectName = trim_copy(arguments[4]);
 
-  if (controllerBundleKeyArg.compare(arg0) == 0) {
-    controllerBundlePath = arg1;
-    _logger.config(controllerBundleKeyArg + "=" + controllerBundlePath);
-  }
-  else {
-    _logger.severe(controllerBundleKeyArg + " argument not found");
-    return EXIT_FAILURE;
-  }
+  defaultLogLevel = logLevelFromString(defaultLogLevelString);
 
-  if (previewBundleKeyArg.compare(arg2) == 0) {
-    previewBundlePath = arg3;
-    _logger.config(previewBundleKeyArg + "=" + previewBundlePath);
-  }
-  else {
-    _logger.severe(previewBundleKeyArg + " argument not found");
-    return EXIT_FAILURE;
-  }
+  _logger.shout("start sleep");
+  Sleep(10000);
+  _logger.shout("end sleep");
 
-  if (logLevelKeyArg.compare(arg4) == 0)
-  {
-    auto logLevel = arg5;
-    defaultLogLevel = logLevelFromString(logLevel);
-    _logger.config(logLevelKeyArg + "=" + logLevel);
-  }
-
-  auto manager = WindowManager(controllerBundlePath, previewBundlePath);
+  auto manager = WindowManager(
+    controllerBundlePath, 
+    previewBundlePath,
+    defaultLogLevelString,
+    cliGrpcServerPort,
+    projectName);
   manager.launchWindows();
 
   ::MSG msg;

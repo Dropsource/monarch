@@ -16,10 +16,18 @@
 #include "device_definition.h"
 
 
-WindowManager::WindowManager(std::string controllerBundlePath, std::string previewBundlePath)
+WindowManager::WindowManager(
+	std::string controllerBundlePath, 
+	std::string previewBundlePath,
+	std::string defaultLogLevelString,
+	std::string cliGrpcServerPort,
+	std::string projectName)
 {
 	_controllerBundlePath = controllerBundlePath;
 	_previewBundlePath = previewBundlePath;
+	_defaultLogLevelString = defaultLogLevelString;
+	_cliGrpcServerPort = cliGrpcServerPort;
+	_projectName = projectName;
 
 	_controllerWindow = nullptr;
 	_previewWindow = nullptr;
@@ -42,26 +50,29 @@ WindowManager::~WindowManager()
 
 void WindowManager::launchWindows()
 {
-	// launch controller window
 	flutter::DartProject controllerProject(to_wstring(_controllerBundlePath));
+	flutter::DartProject previewProject(to_wstring(_previewBundlePath));
+
+	std::vector<std::string> controllerArguments = { _defaultLogLevelString, _cliGrpcServerPort };
+	controllerProject.set_dart_entrypoint_arguments(controllerArguments);
+	std::vector<std::string> previewArguments = { _defaultLogLevelString };
+	previewProject.set_dart_entrypoint_arguments(previewArguments);
+
 	_controllerWindow = std::make_unique<ControllerWindow>(
 		controllerProject, 
-		this);
-	
+		this);	
+	_previewWindow = std::make_unique<PreviewWindow>(
+		previewProject,
+		this,
+		_controllerWindow->GetHandle());
+
 	if (!_controllerWindow->CreateAndShow(
 		L"Monarch", 
 		Win32Window::Point(200, 200), 
 		Win32Window::Size(600, 700))) {
 		throw std::runtime_error{ "Controller window was not created successfully" };
 	}
-	_controllerWindow->SetQuitOnClose(true);
-
-	// launch preview window
-	flutter::DartProject previewProject(to_wstring(_previewBundlePath));
-	_previewWindow = std::make_unique<PreviewWindow>(
-		previewProject, 
-		this, 
-		_controllerWindow->GetHandle());
+	_controllerWindow->SetQuitOnClose(true);	
 
 	auto controllerWindowInfo = _controllerWindow->getWindowInfo();
 		
@@ -86,13 +97,17 @@ void WindowManager::launchWindows()
 		controllerWindowInfo);
 
 	_controllerWindow->init(_previewWindow->GetHandle());
-	
-	// set up channels
+
+
 	_channels = std::make_unique<Channels>(
 		_controllerWindow->messenger(),
 		_previewWindow->messenger(),
 		this);
 	_channels->setUpCallForwarding();
+	
+
+	Logger _logger{ L"WindowManager" };
+	_logger.info("monarch-window-manager-ready");
 }
 
 void WindowManager::resizePreviewWindow(MonarchState state)

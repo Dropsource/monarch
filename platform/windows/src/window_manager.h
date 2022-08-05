@@ -14,7 +14,12 @@ class Channels;
 class WindowManager
 {
 public:
-	WindowManager(std::string controllerBundlePath, std::string previewBundlePath);
+	WindowManager(
+		std::string controllerBundlePath, 
+		std::string previewBundlePath,
+		std::string defaultLogLevelString,
+		std::string cliGrpcServerPort,
+		std::string projectName);
 	~WindowManager();
 
 	DockSide selectedDockSide;
@@ -26,6 +31,9 @@ public:
 private:
 	std::string _previewBundlePath;
 	std::string _controllerBundlePath;
+	std::string _defaultLogLevelString;
+	std::string _cliGrpcServerPort;
+	std::string _projectName;
 
 	std::unique_ptr<ControllerWindow> _controllerWindow;
 	std::unique_ptr<PreviewWindow> _previewWindow;

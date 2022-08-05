@@ -30,37 +30,84 @@ Channels::~Channels()
 void Channels::setUpCallForwarding()
 {
 	previewChannel->SetMethodCallHandler(
-		[=](const auto& call, auto result) {
+		//[=](const flutter::MethodCall<>& call, std::unique_ptr<flutter::MethodResult<>> callback){
+		[=](const auto& call, auto callback) {
+			
+			
+			//auto _callback = std::move(callback);
+			std::shared_ptr<flutter::MethodResult<>> _callback(callback.release());
+			
+			
+			auto success_handler = [_callback](const EncodableValue* success_value) mutable {
+				if (success_value == nullptr || success_value->IsNull()) {
+					_callback->Success();
+				}
+				else {
+					_callback->Success(success_value);
+				}
+			};
+
+			//auto forward_result_handler = std::make_unique<flutter::MethodResultFunctions<>>(
+				//success_handler,
+				//nullptr,
+				//nullptr);
+
 			if (std::holds_alternative<std::monostate>(*call.arguments())) {
 				controllerChannel->InvokeMethod(
 					call.method_name(),
-					std::make_unique<EncodableValue>(std::monostate()));
+					std::make_unique<EncodableValue>(std::monostate()),
+					std::make_unique<flutter::MethodResultFunctions<>>(
+						success_handler,
+						nullptr,
+						nullptr));
 			}
 			else {	
 				controllerChannel->InvokeMethod(
 					call.method_name(),
 					std::make_unique<EncodableValue>(
-						EncodableValue(std::get<EncodableMap>(*call.arguments()))));
+						EncodableValue(std::get<EncodableMap>(*call.arguments()))),
+					std::make_unique<flutter::MethodResultFunctions<>>(
+						success_handler,
+						nullptr,
+						nullptr));
 			}
-			result->Success();
 		}
 	);
 
 	controllerChannel->SetMethodCallHandler(
-		[=](const auto& call, auto result) {
+		//[=](const flutter::MethodCall<>& call, std::unique_ptr<flutter::MethodResult<>> callback) {
+		[=](const auto& call, auto callback) {
+			//auto _callback = std::move(callback);
+			std::shared_ptr<flutter::MethodResult<>> _callback(callback.release());
+			auto forward_result_handler = std::make_unique<flutter::MethodResultFunctions<>>(
+				[_callback](const EncodableValue* success_value) {
+					//if (success_value == nullptr || std::holds_alternative<std::monostate>(*success_value)) {
+						//callback->Success();
+					//}
+					if (success_value == nullptr || success_value->IsNull()) {
+						_callback->Success();
+					}
+					else {
+						_callback->Success(success_value);
+					}
+				},
+				nullptr,
+				nullptr);
+
 			if (std::holds_alternative<std::monostate>(*call.arguments())) {
 				previewChannel->InvokeMethod(
 					call.method_name(),
-					std::make_unique<EncodableValue>(std::monostate()));
+					std::make_unique<EncodableValue>(std::monostate()),
+					std::move(forward_result_handler));
 			}
 			else {
 				previewChannel->InvokeMethod(
 					call.method_name(),
 					std::make_unique<EncodableValue>(
-						EncodableValue(std::get<EncodableMap>(*call.arguments()))));
+						EncodableValue(std::get<EncodableMap>(*call.arguments()))),
+					std::move(forward_result_handler));
 			}
 			
-			result->Success();
 
 			if (call.method_name() == MonarchMethods::setActiveDevice ||
 				call.method_name() == MonarchMethods::setStoryScale) {

@@ -22,7 +22,7 @@ class CliGrpcClient {
 
   void initialize({required int port}) {
     _logger.info('Will use cli grpc server at port $port');
-    var channel = ClientChannel('0.0.0.0',
+    var channel = ClientChannel('localhost',
         port: port,
         options:
             const ChannelOptions(credentials: ChannelCredentials.insecure()));
