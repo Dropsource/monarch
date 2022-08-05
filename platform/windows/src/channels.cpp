@@ -30,27 +30,32 @@ Channels::~Channels()
 void Channels::setUpCallForwarding()
 {
 	previewChannel->SetMethodCallHandler(
-		//[=](const flutter::MethodCall<>& call, std::unique_ptr<flutter::MethodResult<>> callback){
 		[=](const auto& call, auto callback) {
-			
-			
-			//auto _callback = std::move(callback);
 			std::shared_ptr<flutter::MethodResult<>> _callback(callback.release());
-			
-			
-			auto success_handler = [_callback](const EncodableValue* success_value) mutable {
+			auto success_handler = [_callback](const EncodableValue* success_value) {
 				if (success_value == nullptr || success_value->IsNull()) {
 					_callback->Success();
 				}
 				else {
-					_callback->Success(success_value);
+					_callback->Success(*success_value);
 				}
 			};
 
-			//auto forward_result_handler = std::make_unique<flutter::MethodResultFunctions<>>(
-				//success_handler,
-				//nullptr,
-				//nullptr);
+			auto error_handler = [_callback](
+				const std::string& error_code,
+				const std::string& error_message,
+				const EncodableValue* error_details) {
+					if (error_details == nullptr || error_details->IsNull()) {
+						_callback->Error(error_code, error_message);
+					}
+					else {
+						_callback->Error(error_code, error_message, *error_details);
+					}
+			};
+
+			auto not_implemented_handler = [_callback]() {
+				_callback->NotImplemented();
+			};
 
 			if (std::holds_alternative<std::monostate>(*call.arguments())) {
 				controllerChannel->InvokeMethod(
@@ -58,8 +63,8 @@ void Channels::setUpCallForwarding()
 					std::make_unique<EncodableValue>(std::monostate()),
 					std::make_unique<flutter::MethodResultFunctions<>>(
 						success_handler,
-						nullptr,
-						nullptr));
+						error_handler,
+						not_implemented_handler));
 			}
 			else {	
 				controllerChannel->InvokeMethod(
@@ -68,44 +73,58 @@ void Channels::setUpCallForwarding()
 						EncodableValue(std::get<EncodableMap>(*call.arguments()))),
 					std::make_unique<flutter::MethodResultFunctions<>>(
 						success_handler,
-						nullptr,
-						nullptr));
+						error_handler,
+						not_implemented_handler));
 			}
 		}
 	);
 
 	controllerChannel->SetMethodCallHandler(
-		//[=](const flutter::MethodCall<>& call, std::unique_ptr<flutter::MethodResult<>> callback) {
 		[=](const auto& call, auto callback) {
-			//auto _callback = std::move(callback);
 			std::shared_ptr<flutter::MethodResult<>> _callback(callback.release());
-			auto forward_result_handler = std::make_unique<flutter::MethodResultFunctions<>>(
-				[_callback](const EncodableValue* success_value) {
-					//if (success_value == nullptr || std::holds_alternative<std::monostate>(*success_value)) {
-						//callback->Success();
-					//}
-					if (success_value == nullptr || success_value->IsNull()) {
-						_callback->Success();
+			auto success_handler = [_callback](const EncodableValue* success_value) {
+				if (success_value == nullptr || success_value->IsNull()) {
+					_callback->Success();
+				}
+				else {
+					_callback->Success(*success_value);
+				}
+			};
+
+			auto error_handler = [_callback](
+				const std::string& error_code,
+				const std::string& error_message,
+				const EncodableValue* error_details) {
+					if (error_details == nullptr || error_details->IsNull()) {
+						_callback->Error(error_code, error_message);
 					}
 					else {
-						_callback->Success(success_value);
+						_callback->Error(error_code, error_message, *error_details);
 					}
-				},
-				nullptr,
-				nullptr);
+			};
+
+			auto not_implemented_handler = [_callback]() {
+				_callback->NotImplemented();
+			};
 
 			if (std::holds_alternative<std::monostate>(*call.arguments())) {
 				previewChannel->InvokeMethod(
 					call.method_name(),
 					std::make_unique<EncodableValue>(std::monostate()),
-					std::move(forward_result_handler));
+					std::make_unique<flutter::MethodResultFunctions<>>(
+						success_handler,
+						error_handler,
+						not_implemented_handler));
 			}
 			else {
 				previewChannel->InvokeMethod(
 					call.method_name(),
 					std::make_unique<EncodableValue>(
 						EncodableValue(std::get<EncodableMap>(*call.arguments()))),
-					std::move(forward_result_handler));
+					std::make_unique<flutter::MethodResultFunctions<>>(
+						success_handler,
+						error_handler,
+						not_implemented_handler));
 			}
 			
 
