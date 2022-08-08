@@ -28,6 +28,12 @@ public:
 	std::unique_ptr<flutter::MethodChannel<EncodableValue>> controllerChannel;
 	std::unique_ptr<flutter::MethodChannel<EncodableValue>> previewChannel;
 	WindowManager* windowManager;
+
+private:
+	void _forwardMethodCall(
+		const flutter::MethodCall<EncodableValue>& call,
+		std::unique_ptr<flutter::MethodResult<EncodableValue>>& callback ,
+		std::unique_ptr<flutter::MethodChannel<EncodableValue>>& forwardChannel);
 };
 
 namespace MonarchMethods
