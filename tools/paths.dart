@@ -50,6 +50,9 @@ String out_ui_flutter_id_controller(String flutter_id) =>
 String darwin_flutter_framework(String flutter_sdk) => p.join(flutter_sdk,
     'bin/cache/artifacts/engine/darwin-x64/FlutterMacOS.framework');
 
+String windows_flutter_windows_pdb(String flutter_sdk) => p.join(flutter_sdk,
+    'bin\\cache\\artifacts\\engine\\windows-x64\\flutter_windows.dll.pdb');
+
 String flutter_exe(String flutter_sdk) => p.join(flutter_sdk, 'bin', 'flutter');
 
 const local_settings_yaml = 'local_settings.yaml';

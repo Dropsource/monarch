@@ -88,8 +88,7 @@ Building $monarch_macos with xcodebuild. Will output to:
       workingDirectory: paths.platform_macos);
   utils.exitIfNeeded(result, 'Error running xcodebuild');
 
-  var swiftmodule =
-      Directory(p.join(out_ui_flutter_id, 'Monarch.swiftmodule'));
+  var swiftmodule = Directory(p.join(out_ui_flutter_id, 'Monarch.swiftmodule'));
   if (swiftmodule.existsSync()) swiftmodule.deleteSync(recursive: true);
 }
 
@@ -123,7 +122,7 @@ String readWindowsProjectVersion() {
 }
 
 /// Builds the monarch_windows_app for the given [flutter_sdk].
-/// 
+///
 /// For details on how the Monarch Windows build works see:
 /// - file: platform/windows/README.md
 /// - section: How the Monarch Windows build works
@@ -228,10 +227,10 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
 
       contents = _assertAndReplace(
           contents, r'resources\\app_icon.ico', yaml['app_icon_path']);
-      contents = _assertAndReplace(contents,
-          'VERSION_AS_NUMBER 1,0,0', 'VERSION_AS_NUMBER $versionCsv');
-      contents = _assertAndReplace(contents,
-          'VERSION_AS_STRING "1.0.0"', 'VERSION_AS_STRING "$version"');
+      contents = _assertAndReplace(
+          contents, 'VERSION_AS_NUMBER 1,0,0', 'VERSION_AS_NUMBER $versionCsv');
+      contents = _assertAndReplace(contents, 'VERSION_AS_STRING "1.0.0"',
+          'VERSION_AS_STRING "$version"');
 
       File(runner_rc).writeAsStringSync(contents);
     }
@@ -336,6 +335,12 @@ void buildWindows(out_ui_flutter_id, flutter_sdk) {
         'copy', [p.join(debug, 'data', 'icudtl.dat'), out_ui_flutter_id],
         runInShell: true);
     utils.exitIfNeeded(result, 'Error copying icudtl.dat to out directory');
+
+    result = Process.runSync('copy',
+        [paths.windows_flutter_windows_pdb(flutter_sdk), out_ui_flutter_id],
+        runInShell: true);
+    utils.exitIfNeeded(
+        result, 'Error copying flutter_windows.dll.pdb to out directory');
   }
 }
 

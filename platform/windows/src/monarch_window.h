@@ -37,7 +37,7 @@ public:
 
 	virtual ~ControllerWindow();
 
-	void init(HWND previewHwnd);
+	void setPreviewWindow(HWND previewHwnd);
 
 protected:
 	LRESULT MessageHandler(HWND hwnd, UINT const message, WPARAM const wparam,
@@ -46,7 +46,7 @@ protected:
 private:
 	HWND _previewWindowHandle;
 	Point_ _getTopLeft(WindowInfo previewWindowInfo, DockSide side);
-	bool _didInit();
+	bool _isPreviewWindowSet();
 	void _postMoveMessage();
 };
 

@@ -74,30 +74,7 @@ void WindowManager::launchWindows()
 	}
 	_controllerWindow->SetQuitOnClose(true);	
 
-	auto controllerWindowInfo = _controllerWindow->getWindowInfo();
-		
-	auto previewSize = Win32Window::Size(
-		(long)defaultDeviceDefinition.logicalResolution.width,
-		(long)defaultDeviceDefinition.logicalResolution.height);
-
-	if (!_previewWindow->CreateAndShow(
-		to_wstring(defaultDeviceDefinition.title()), 
-		Win32Window::Point(
-			controllerWindowInfo.topLeft.x + controllerWindowInfo.size.width, 
-			controllerWindowInfo.topLeft.y),
-		previewSize)) {
-		throw std::runtime_error{ "Preview window was not created successfully" };
-	}
-
-	_previewWindow->SetQuitOnClose(true);
-	_previewWindow->disableResizeMinimize();
-	_previewWindow->resizeUsingClientRectOffset(
-		Size_(previewSize.width, previewSize.height),
-		defaultDockSide,
-		controllerWindowInfo);
-
-	_controllerWindow->init(_previewWindow->GetHandle());
-
+	_setUpPreviewWindow();
 
 	_channels = std::make_unique<Channels>(
 		_controllerWindow->messenger(),
@@ -110,20 +87,74 @@ void WindowManager::launchWindows()
 	_logger.info("monarch-window-manager-ready");
 }
 
+void WindowManager::_setUpPreviewWindow()
+{
+	auto controllerWindowInfo = _controllerWindow->getWindowInfo();
+	auto previewSize = Win32Window::Size(
+		(long)defaultDeviceDefinition.logicalResolution.width,
+		(long)defaultDeviceDefinition.logicalResolution.height);
+
+	if (!_previewWindow->CreateAndShow(
+		to_wstring(defaultDeviceDefinition.title()),
+		Win32Window::Point(
+			controllerWindowInfo.topLeft.x + controllerWindowInfo.size.width,
+			controllerWindowInfo.topLeft.y),
+		previewSize)) {
+		throw std::runtime_error{ "Preview window was not created successfully" };
+	}
+
+	_previewWindow->SetQuitOnClose(true);
+	_previewWindow->disableResizeMinimize();
+	_previewWindow->resizeUsingClientRectOffset(
+		Size_(previewSize.width, previewSize.height),
+		defaultDockSide,
+		controllerWindowInfo);
+
+	_controllerWindow->setPreviewWindow(_previewWindow->GetHandle());
+}
+
+void WindowManager::resizePreviewWindow()
+{
+	auto result_handler = std::make_unique<flutter::MethodResultFunctions<>>(
+		[=](const EncodableValue* success_value) {
+			auto args = std::get<EncodableMap>(*success_value);
+			MonarchState state{ args };
+			resizePreviewWindow(state);
+		},
+		nullptr, nullptr);
+
+	_channels->controllerChannel->InvokeMethod(
+		MonarchMethods::getState, nullptr, std::move(result_handler));
+}
+
 void WindowManager::resizePreviewWindow(MonarchState state)
 {
-	_postMesssageStateChange(state);
+	_postMessageStateChange(state);
+}
+
+void WindowManager::setDocking()
+{
+	auto result_handler = std::make_unique<flutter::MethodResultFunctions<>>(
+		[=](const EncodableValue* success_value) {
+			auto args = std::get<EncodableMap>(*success_value);
+			MonarchState state{ args };
+			setDocking(state);
+		},
+		nullptr, nullptr);
+
+	_channels->controllerChannel->InvokeMethod(
+		MonarchMethods::getState, nullptr, std::move(result_handler));
 }
 
 void WindowManager::setDocking(MonarchState state)
 {
 	if (state.dock == DockSide::right) {
 		selectedDockSide = DockSide::right;
-		_postMesssageStateChange(state);
+		_postMessageStateChange(state);
 	}
 	else if (state.dock == DockSide::left) {
 		selectedDockSide = DockSide::left;
-		_postMesssageStateChange(state);
+		_postMessageStateChange(state);
 	}
 	else if (state.dock == DockSide::undock) {
 		selectedDockSide = DockSide::undock;
@@ -131,7 +162,29 @@ void WindowManager::setDocking(MonarchState state)
 	}
 }
 
-void WindowManager::_postMesssageStateChange(MonarchState state_)
+void WindowManager::restartPreviewWindow()
+{
+	_channels->sendWillClosePreview();
+	_channels->unregisterMethodCallHandlers();
+
+	_previewWindow->SetQuitOnClose(false);
+	_previewWindow->Destroy();
+
+	flutter::DartProject previewProject(to_wstring(_previewBundlePath));
+	std::vector<std::string> previewArguments = { _defaultLogLevelString };
+	previewProject.set_dart_entrypoint_arguments(previewArguments);
+
+	_previewWindow = std::make_unique<PreviewWindow>(
+		previewProject,
+		this,
+		_controllerWindow->GetHandle());
+
+	_setUpPreviewWindow();
+	_channels->restartPreviewChannel(_previewWindow->messenger());
+	resizePreviewWindow();
+}
+
+void WindowManager::_postMessageStateChange(MonarchState state_)
 {
 	WindowInfo* windowInfo = new WindowInfo(_controllerWindow->getWindowInfo());
 	MonarchState* state = new MonarchState(state_);

@@ -25,8 +25,11 @@ public:
 	DockSide selectedDockSide;
 
 	void launchWindows();
+	void resizePreviewWindow();
 	void resizePreviewWindow(MonarchState state);
+	void setDocking();
 	void setDocking(MonarchState state);
+	void restartPreviewWindow();
 
 private:
 	std::string _previewBundlePath;
@@ -40,5 +43,6 @@ private:
 
 	std::unique_ptr<Channels> _channels;
 
-	void _postMesssageStateChange(MonarchState state);
+	void _setUpPreviewWindow();
+	void _postMessageStateChange(MonarchState state);
 };

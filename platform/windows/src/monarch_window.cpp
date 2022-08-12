@@ -62,7 +62,7 @@ ControllerWindow::~ControllerWindow()
 {
 }
 
-void ControllerWindow::init(HWND previewHwnd)
+void ControllerWindow::setPreviewWindow(HWND previewHwnd)
 {
 	_previewWindowHandle = previewHwnd;
 }
@@ -75,19 +75,19 @@ LRESULT ControllerWindow::MessageHandler(
 {
 	switch (message) {
 	case WM_MOVE:
-		if (_didInit() && !isMovingProgrammatically) {
+		if (_isPreviewWindowSet() && !isMovingProgrammatically) {
 			_postMoveMessage();
 		}
 		break;
 
 	case WM_SIZE:
-		if (_didInit()) {
+		if (_isPreviewWindowSet()) {
 			_postMoveMessage();
 		}
 		break;
 
 	case WM_M_PREVMOVE:
-		if (_didInit()) {
+		if (_isPreviewWindowSet()) {
 			WindowInfo* previewWindowInfo = (WindowInfo*)wparam;
 			auto point = _getTopLeft(
 				WindowInfo(previewWindowInfo->topLeft, previewWindowInfo->size),
@@ -120,7 +120,7 @@ Point_ ControllerWindow::_getTopLeft(WindowInfo previewWindowInfo, DockSide side
 	}
 }
 
-bool ControllerWindow::_didInit()
+bool ControllerWindow::_isPreviewWindowSet()
 {
 	return _previewWindowHandle != nullptr;
 }
