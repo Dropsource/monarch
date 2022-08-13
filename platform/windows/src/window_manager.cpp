@@ -63,7 +63,7 @@ void WindowManager::launchWindows()
 		this);	
 
 	if (!_controllerWindow->CreateAndShow(
-		L"Monarch", 
+		to_wstring(_projectName) + L" - Monarch",
 		Win32Window::Point(200, 200), 
 		Win32Window::Size(600, 700))) {
 		throw std::runtime_error{ "Controller window was not created successfully" };
