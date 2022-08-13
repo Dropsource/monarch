@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:grpc/grpc.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
+import 'package:monarch_io_utils/utils.dart';
 import 'package:monarch_utils/log.dart';
 
 import '../analytics/analytics.dart';
@@ -28,7 +29,7 @@ class ControllerGrpcClient {
 
   void initialize({required int port}) {
     _logger.info('Will use controller grpc server at port $port');
-    var channel = ClientChannel('localhost',
+    var channel = ClientChannel(valueForPlatform(macos: '0.0.0.0', windows: 'localhost'),
         port: port,
         options:
             const ChannelOptions(credentials: ChannelCredentials.insecure()));
