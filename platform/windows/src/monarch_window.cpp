@@ -274,10 +274,6 @@ LRESULT PreviewWindow::MessageHandler(
 		break;
 
 	case WM_MOVE:
-		// NEXT, CONFIRM: not sure about the isFlutterWindowReady here, the 
-		// !isMovingProgrammatically guard should be enough, while the windows are launching
-		// any resize change calls move, which uses the isMovingProgrammatically flag
-		//if (MonarchChannelMethodsReceiver::isFlutterWindowReady && !isMovingProgrammatically) {
 		if (!isMovingProgrammatically) {
 			WindowInfo* windowInfo = new WindowInfo(getWindowInfo());
 			PostMessage(_controllerWindowHandle, WM_M_PREVMOVE, WPARAM(windowInfo), 0);

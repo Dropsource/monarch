@@ -61,10 +61,6 @@ void WindowManager::launchWindows()
 	_controllerWindow = std::make_unique<ControllerWindow>(
 		controllerProject, 
 		this);	
-	_previewWindow = std::make_unique<PreviewWindow>(
-		previewProject,
-		this,
-		_controllerWindow->GetHandle());
 
 	if (!_controllerWindow->CreateAndShow(
 		L"Monarch", 
@@ -74,6 +70,10 @@ void WindowManager::launchWindows()
 	}
 	_controllerWindow->SetQuitOnClose(true);	
 
+	_previewWindow = std::make_unique<PreviewWindow>(
+		previewProject,
+		this,
+		_controllerWindow->GetHandle());
 	_setUpPreviewWindow();
 
 	_channels = std::make_unique<Channels>(
