@@ -43,6 +43,7 @@ private:
 
 	std::unique_ptr<Channels> _channels;
 
-	void _setUpPreviewWindow();
+	void _showAndSetUpPreviewWindow(WindowInfo windowInfo);
+	void _showAndSetUpControllerWindow(WindowInfo windowInfo);
 	void _postMessageStateChange(MonarchState state);
 };

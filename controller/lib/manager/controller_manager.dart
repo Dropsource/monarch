@@ -23,7 +23,7 @@ class ControllerManager with Log {
   StreamSubscription<ControllerState>? _subscription;
 
   Stream<ControllerState> get stream => _streamController.stream;
-  late ControllerState _state;
+  ControllerState _state = ControllerState.init();
 
   ControllerState get state => _state;
   final _searchManager = SearchManager();

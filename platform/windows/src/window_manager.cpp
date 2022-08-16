@@ -48,6 +48,13 @@ WindowManager::~WindowManager()
 	delete channelsPtr;
 }
 
+// We open the Preview and then the Controller to make sure that DevTools
+// inspects the Preview.
+// Ideally we would want to open the Controller first and then the Preview.
+// However, if we open the Controller first, then DevTools inspects the
+// Controller.
+// We are waiting on the Flutter team to fix this issue:
+// https://github.com/flutter/devtools/issues/4304
 void WindowManager::launchWindows()
 {
 	flutter::DartProject controllerProject(to_wstring(_controllerBundlePath));
@@ -58,23 +65,17 @@ void WindowManager::launchWindows()
 	std::vector<std::string> previewArguments = { _defaultLogLevelString };
 	previewProject.set_dart_entrypoint_arguments(previewArguments);
 
-	_controllerWindow = std::make_unique<ControllerWindow>(
-		controllerProject, 
-		this);	
-
-	if (!_controllerWindow->CreateAndShow(
-		to_wstring(_projectName) + L" - Monarch",
-		Win32Window::Point(200, 200), 
-		Win32Window::Size(600, 700))) {
-		throw std::runtime_error{ "Controller window was not created successfully" };
-	}
-	_controllerWindow->SetQuitOnClose(true);	
+	auto controllerWindowInfo = WindowInfo(Point_(200, 200), Size_(600, 700));
 
 	_previewWindow = std::make_unique<PreviewWindow>(
 		previewProject,
-		this,
-		_controllerWindow->GetHandle());
-	_setUpPreviewWindow();
+		this);
+	_showAndSetUpPreviewWindow(controllerWindowInfo);
+
+	_controllerWindow = std::make_unique<ControllerWindow>(
+		controllerProject,
+		this);
+	_showAndSetUpControllerWindow(controllerWindowInfo);
 
 	_channels = std::make_unique<Channels>(
 		_controllerWindow->messenger(),
@@ -82,14 +83,15 @@ void WindowManager::launchWindows()
 		this);
 	_channels->setUpCallForwarding();
 	
+	_controllerWindow->setPreviewWindow(_previewWindow->GetHandle());
+	_previewWindow->setControllerWindow(_controllerWindow->GetHandle());
 
 	Logger _logger{ L"WindowManager" };
 	_logger.info("monarch-window-manager-ready");
 }
 
-void WindowManager::_setUpPreviewWindow()
+void WindowManager::_showAndSetUpPreviewWindow(WindowInfo controllerWindowInfo)
 {
-	auto controllerWindowInfo = _controllerWindow->getWindowInfo();
 	auto previewSize = Win32Window::Size(
 		(long)defaultDeviceDefinition.logicalResolution.width,
 		(long)defaultDeviceDefinition.logicalResolution.height);
@@ -109,8 +111,17 @@ void WindowManager::_setUpPreviewWindow()
 		Size_(previewSize.width, previewSize.height),
 		defaultDockSide,
 		controllerWindowInfo);
+}
 
-	_controllerWindow->setPreviewWindow(_previewWindow->GetHandle());
+void WindowManager::_showAndSetUpControllerWindow(WindowInfo controllerWindowInfo)
+{
+	if (!_controllerWindow->CreateAndShow(
+		to_wstring(_projectName) + L" - Monarch",
+		Win32Window::Point(controllerWindowInfo.topLeft.x, controllerWindowInfo.topLeft.y),
+		Win32Window::Size(controllerWindowInfo.size.width, controllerWindowInfo.size.height))) {
+		throw std::runtime_error{ "Controller window was not created successfully" };
+	}
+	_controllerWindow->SetQuitOnClose(true);
 }
 
 void WindowManager::resizePreviewWindow()
@@ -176,10 +187,13 @@ void WindowManager::restartPreviewWindow()
 
 	_previewWindow = std::make_unique<PreviewWindow>(
 		previewProject,
-		this,
-		_controllerWindow->GetHandle());
+		this);
 
-	_setUpPreviewWindow();
+	_showAndSetUpPreviewWindow(_controllerWindow->getWindowInfo());
+
+	_controllerWindow->setPreviewWindow(_previewWindow->GetHandle());
+	_previewWindow->setControllerWindow(_controllerWindow->GetHandle());
+
 	_channels->restartPreviewChannel(_previewWindow->messenger());
 	resizePreviewWindow();
 }

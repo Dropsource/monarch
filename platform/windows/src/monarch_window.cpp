@@ -133,15 +133,19 @@ void ControllerWindow::_postMoveMessage()
 
 PreviewWindow::PreviewWindow(
 	const flutter::DartProject& project,
-	WindowManager* windowManager,
-	HWND controllerHwnd)
+	WindowManager* windowManager)
 	: MonarchWindow(project, windowManager)
 {
-	_controllerWindowHandle = controllerHwnd;
+	_controllerWindowHandle = nullptr;
 }
 
 PreviewWindow::~PreviewWindow()
 {
+}
+
+void PreviewWindow::setControllerWindow(HWND controllerHwnd)
+{
+	_controllerWindowHandle = controllerHwnd;
 }
 
 void PreviewWindow::resize(
@@ -310,4 +314,9 @@ Point_ PreviewWindow::_getTopLeft(WindowInfo controllerWindowInfo, DockSide side
 	default:
 		throw std::runtime_error{ "DockSide not valid" };
 	}
+}
+
+bool PreviewWindow::_isControllerWindowSet()
+{
+	return _controllerWindowHandle != nullptr;
 }
