@@ -49,10 +49,6 @@ void Channels::setUpCallForwarding()
 			}
 			else if (call.method_name() == MonarchMethods::restartPreview) {
 				windowManager->restartPreviewWindow();
-				//auto fut = std::async(windowManager->restartPreviewWindow, void);
-
-				// NEXT: send post message instead
-				//auto fut = std::async([=] {return windowManager->restartPreviewWindow(); });
 			}
 			else {
 				// no-op
