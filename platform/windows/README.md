@@ -49,57 +49,32 @@ If the change you need to make is simple, then these workflow may suffice:
 - Test your changes
 
 ## Debugging
-You can use Visual Studio to debug Monarch. To debug with Visual Studio you will need paths
-to a controller bundle and a preview bundle. 
-
-The high-level workflow is:
-
-1. Build your code changes using a single Flutter SDK
-2. Get controller and preview bundle paths
-3. Debug using Visual Studio
-
-### Build your code changes
-To simplify your debugging context and to avoid obscure issues, build the code 
-using one Flutter SDK.
-To do so, go to `tools\local_settings.yaml` and make sure that only one Flutter SDK is 
-declared under `local_flutter_sdks`.
+You can use Visual Studio to debug Monarch. To debug with Visual Studio you will attach
+to a running instance of Monarch.
 
 Run `dart tools\build_platform.dart` to build your changes. 
 This command generates a `platform\windows\build\flutter_windows_*` 
-directory. The `flutter_windows_*` directory will have a `monarch_windows_app.sln` 
+directory, where the `*` represents every flutter version you have declared in `tools\local_settings.yaml`. 
+The `flutter_windows_*` directory will have a `monarch_windows_app.sln` 
 which is the VS solution file we will use to debug.
 
-### Get controller and preview bundle paths
-An easy way to get controller and preview bundles is to run `monarch run -v` on a test 
-project. Once that commands launches Monarch on a test project, you can kill Monarch. Then,
-open the log file it generated and search for `task_command="monarch_windows_app.exe`.
+### Steps to debug
+1. Make your code changes
+2. Run `dart tools\build_platform.dart`
+3. Go to the flutter project you want to use to debug and then run `monarch run -v` on that project
+4. Wait for the Monarch windows to show then go to `platform\windows\build\flutter_windows_*\monarch_windows_app.sln`
+5. From Visual Studio, click Debug > Attach to Process, then search for the `monarch_windows_app.exe` process and click Attach
 
-You should be able to find a log entry of the command which was executed. Copy the arguments 
-of that command. We will use those arguments to debug from Visual Studio. The arguments will 
-look like:
-
-```
-C:\Users\USER\development\monarch\out\monarch\bin\cache\monarch_ui\flutter_windows_3.0.5-stable\monarch_controller C:\Users\USER\development\scratch\some_project\.monarch ALL 56816 some_project"
-```
-
-### Debug using Visual Studio
-Go to the `platform\windows\build\flutter_windows_*` directory which matches the flutter 
-version of the controller and preview bundle you will use. Inside that directory open the 
-VS solution file `monarch_windows_app.sln`.
-
-Once the solution is open:
-
-- Make the project monarch_windows_app the startup project via "Set as Startup Project". 
-- Then go to the menu Debug > monarch_windows_app Debug Properties > Debugging > Command Arguments
-- Then set Command Arguments with the arguments you want to use to debug. It should look like
-```
-path\to\monarch_controller path\to\project\.monarch ALL 56816 some_project
-```
-
-Now you can start debugging (or press F5).
-
+Your breakpoints should now hit as you exercise the Monarch app. 
 Be careful to only edit files that are part of the src directory.
 
+### Debugging the startup
+The process above won't let you debug the Windows startup code which launches the 
+Monarch windows. If you need to debug the startup code, then you can add a timer in the main
+function. There is a commented out piece of code which will put the main thread to sleep
+for 10 seconds (see main.cpp). If you uncomment that piece of code, then when the application 
+starts, it will sleep for 10 seconds, 
+which should give you enough time to attach to the `monarch_windows_app.exe` process.
 
 ## How the Monarch Windows build works
 To use flutter desktop on Windows, a project needs to include Flutter C++ header 
