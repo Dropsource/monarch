@@ -18,29 +18,24 @@ void main() {
   group('MonarchPackageCompatibility', () {
     group('any supported flutter version', () {
       test('is compatible', () {
-        isCompatible(flutter: '2.4.0-4.0.pre', monarch: '2.1.1');
-        isCompatible(flutter: '2.4.1', monarch: '2.1.1');
-        isCompatible(flutter: '2.5.0-1.0.pre', monarch: '2.2.1');
-        isCompatible(flutter: '2.5.0', monarch: '2.2.2');
-        isCompatible(flutter: '2.4.0-4.0.pre', monarch: '2.1.0');
+        isCompatible(flutter: '3.0.5', monarch: '2.4.0-pre.2');
+        isCompatible(flutter: '3.0.2', monarch: '2.4.0-pre.3');
+        isCompatible(flutter: '3.0.1', monarch: '2.4.0');
+        isCompatible(flutter: '2.5.0', monarch: '2.4.0-pre.2');
+        isCompatible(flutter: '3.0.5', monarch: '2.4.1');
       });
 
       test('is incompatible', () {
-        isIncompatible(flutter: '2.5.0-1.0.pre', monarch: '2.0.0-pre.4');
-        isIncompatible(flutter: '2.5.0-1.0.pre', monarch: '2.0.0-pre.2');
-        isIncompatible(flutter: '2.4.0-4.0.pre', monarch: '1.1.0');
-        isIncompatible(flutter: '2.4.0-4.0.pre', monarch: '2.0.0');
-        isIncompatible(flutter: '2.4.1', monarch: '1.1.1');
-        isIncompatible(flutter: '2.5.0-1.0.pre', monarch: '1.1.0-pre.3');
-        isIncompatible(flutter: '2.5.0', monarch: '1.1.0-pre.4');
-        isIncompatible(flutter: '2.5.1', monarch: '0.1.0');
+        isIncompatible(flutter: '3.0.1', monarch: '2.4.0-pre.1');
+        isIncompatible(flutter: '3.0.1', monarch: '2.3.0-pre.2');
+        isIncompatible(flutter: '3.0.5', monarch: '2.3.9');
         isIncompatible(flutter: '2.5.1', monarch: '1.0.2');
       });
 
       test('incompatibilityMessage', () {
         expect(
-            MonarchPackageCompatibility('2.4.0-4.1.pre').incompatibilityMessage,
-            'Use monarch package version ^2.1.0 or greater.');
+            MonarchPackageCompatibility('3.0.5').incompatibilityMessage,
+            'Use monarch package version ^2.4.0-pre.2 or greater.');
       });
     });
   });
