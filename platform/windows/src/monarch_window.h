@@ -37,7 +37,7 @@ public:
 
 	virtual ~ControllerWindow();
 
-	void init(HWND previewHwnd);
+	void setPreviewWindow(HWND previewHwnd);
 
 protected:
 	LRESULT MessageHandler(HWND hwnd, UINT const message, WPARAM const wparam,
@@ -46,7 +46,7 @@ protected:
 private:
 	HWND _previewWindowHandle;
 	Point_ _getTopLeft(WindowInfo previewWindowInfo, DockSide side);
-	bool _didInit();
+	bool _isPreviewWindowSet();
 	void _postMoveMessage();
 };
 
@@ -55,10 +55,11 @@ class PreviewWindow : public MonarchWindow
 public:
 	PreviewWindow(
 		const flutter::DartProject& project,
-		WindowManager* windowManager,
-		HWND controllerHwnd);
+		WindowManager* windowManager);
 
 	virtual ~PreviewWindow();
+
+	void setControllerWindow(HWND controllerHwnd);
 
 	// Resizes this window using the given device dimensions, the scale
 	// and the monitor's DPI scale factor.
@@ -95,4 +96,5 @@ private:
 	HWND _controllerWindowHandle;
 	void _move(DockSide side, WindowInfo controllerWindowInfo);
 	Point_ _getTopLeft(WindowInfo controllerWindowInfo, DockSide side);
+	bool _isControllerWindowSet();
 };

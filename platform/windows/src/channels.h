@@ -24,10 +24,19 @@ public:
 	~Channels();
 
 	void setUpCallForwarding();
+	void sendWillClosePreview();
+	void unregisterMethodCallHandlers();
+	void restartPreviewChannel(flutter::BinaryMessenger* previewMessenger);
 
 	std::unique_ptr<flutter::MethodChannel<EncodableValue>> controllerChannel;
 	std::unique_ptr<flutter::MethodChannel<EncodableValue>> previewChannel;
 	WindowManager* windowManager;
+
+private:
+	void _forwardMethodCall(
+		const flutter::MethodCall<EncodableValue>& call,
+		std::unique_ptr<flutter::MethodResult<EncodableValue>>& callback ,
+		std::unique_ptr<flutter::MethodChannel<EncodableValue>>& forwardChannel);
 };
 
 namespace MonarchMethods
@@ -37,5 +46,7 @@ namespace MonarchMethods
 	const std::string setDockSide = "monarch.setDockSide";
 	const std::string getState = "monarch.getState";
 	const std::string screenChanged = "monarch.screenChanged";
+	const std::string restartPreview = "monarch.restartPreview";
+	const std::string willClosePreview = "monarch.willClosePreview";
 };
 

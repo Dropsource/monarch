@@ -16,10 +16,18 @@
 #include "device_definition.h"
 
 
-WindowManager::WindowManager(std::string controllerBundlePath, std::string previewBundlePath)
+WindowManager::WindowManager(
+	std::string controllerBundlePath, 
+	std::string previewBundlePath,
+	std::string defaultLogLevelString,
+	std::string cliGrpcServerPort,
+	std::string projectName)
 {
 	_controllerBundlePath = controllerBundlePath;
 	_previewBundlePath = previewBundlePath;
+	_defaultLogLevelString = defaultLogLevelString;
+	_cliGrpcServerPort = cliGrpcServerPort;
+	_projectName = projectName;
 
 	_controllerWindow = nullptr;
 	_previewWindow = nullptr;
@@ -40,39 +48,58 @@ WindowManager::~WindowManager()
 	delete channelsPtr;
 }
 
+// We open the Preview and then the Controller to make sure that DevTools
+// inspects the Preview.
+// Ideally we would want to open the Controller first and then the Preview.
+// However, if we open the Controller first, then DevTools inspects the
+// Controller.
+// We are waiting on the Flutter team to fix this issue:
+// https://github.com/flutter/devtools/issues/4304
 void WindowManager::launchWindows()
 {
-	// launch controller window
 	flutter::DartProject controllerProject(to_wstring(_controllerBundlePath));
-	_controllerWindow = std::make_unique<ControllerWindow>(
-		controllerProject, 
-		this);
-	
-	if (!_controllerWindow->CreateAndShow(
-		L"Monarch", 
-		Win32Window::Point(200, 200), 
-		Win32Window::Size(600, 700))) {
-		throw std::runtime_error{ "Controller window was not created successfully" };
-	}
-	_controllerWindow->SetQuitOnClose(true);
-
-	// launch preview window
 	flutter::DartProject previewProject(to_wstring(_previewBundlePath));
-	_previewWindow = std::make_unique<PreviewWindow>(
-		previewProject, 
-		this, 
-		_controllerWindow->GetHandle());
 
-	auto controllerWindowInfo = _controllerWindow->getWindowInfo();
-		
+	std::vector<std::string> controllerArguments = { _defaultLogLevelString, _cliGrpcServerPort };
+	controllerProject.set_dart_entrypoint_arguments(controllerArguments);
+	std::vector<std::string> previewArguments = { _defaultLogLevelString };
+	previewProject.set_dart_entrypoint_arguments(previewArguments);
+
+	auto controllerWindowInfo = WindowInfo(Point_(200, 200), Size_(600, 700));
+
+	_previewWindow = std::make_unique<PreviewWindow>(
+		previewProject,
+		this);
+	_showAndSetUpPreviewWindow(controllerWindowInfo);
+
+	_controllerWindow = std::make_unique<ControllerWindow>(
+		controllerProject,
+		this);
+	_showAndSetUpControllerWindow(controllerWindowInfo);
+
+	_channels = std::make_unique<Channels>(
+		_controllerWindow->messenger(),
+		_previewWindow->messenger(),
+		this);
+	_channels->setUpCallForwarding();
+	
+	_controllerWindow->setPreviewWindow(_previewWindow->GetHandle());
+	_previewWindow->setControllerWindow(_controllerWindow->GetHandle());
+
+	Logger _logger{ L"WindowManager" };
+	_logger.info("monarch-window-manager-ready");
+}
+
+void WindowManager::_showAndSetUpPreviewWindow(WindowInfo controllerWindowInfo)
+{
 	auto previewSize = Win32Window::Size(
 		(long)defaultDeviceDefinition.logicalResolution.width,
 		(long)defaultDeviceDefinition.logicalResolution.height);
 
 	if (!_previewWindow->CreateAndShow(
-		to_wstring(defaultDeviceDefinition.title()), 
+		to_wstring(defaultDeviceDefinition.title()),
 		Win32Window::Point(
-			controllerWindowInfo.topLeft.x + controllerWindowInfo.size.width, 
+			controllerWindowInfo.topLeft.x + controllerWindowInfo.size.width,
 			controllerWindowInfo.topLeft.y),
 		previewSize)) {
 		throw std::runtime_error{ "Preview window was not created successfully" };
@@ -84,31 +111,61 @@ void WindowManager::launchWindows()
 		Size_(previewSize.width, previewSize.height),
 		defaultDockSide,
 		controllerWindowInfo);
+}
 
-	_controllerWindow->init(_previewWindow->GetHandle());
-	
-	// set up channels
-	_channels = std::make_unique<Channels>(
-		_controllerWindow->messenger(),
-		_previewWindow->messenger(),
-		this);
-	_channels->setUpCallForwarding();
+void WindowManager::_showAndSetUpControllerWindow(WindowInfo controllerWindowInfo)
+{
+	if (!_controllerWindow->CreateAndShow(
+		to_wstring(_projectName) + L" - Monarch",
+		Win32Window::Point(controllerWindowInfo.topLeft.x, controllerWindowInfo.topLeft.y),
+		Win32Window::Size(controllerWindowInfo.size.width, controllerWindowInfo.size.height))) {
+		throw std::runtime_error{ "Controller window was not created successfully" };
+	}
+	_controllerWindow->SetQuitOnClose(true);
+}
+
+void WindowManager::resizePreviewWindow()
+{
+	auto result_handler = std::make_unique<flutter::MethodResultFunctions<>>(
+		[=](const EncodableValue* success_value) {
+			auto args = std::get<EncodableMap>(*success_value);
+			MonarchState state{ args };
+			resizePreviewWindow(state);
+		},
+		nullptr, nullptr);
+
+	_channels->controllerChannel->InvokeMethod(
+		MonarchMethods::getState, nullptr, std::move(result_handler));
 }
 
 void WindowManager::resizePreviewWindow(MonarchState state)
 {
-	_postMesssageStateChange(state);
+	_postMessageStateChange(state);
+}
+
+void WindowManager::setDocking()
+{
+	auto result_handler = std::make_unique<flutter::MethodResultFunctions<>>(
+		[=](const EncodableValue* success_value) {
+			auto args = std::get<EncodableMap>(*success_value);
+			MonarchState state{ args };
+			setDocking(state);
+		},
+		nullptr, nullptr);
+
+	_channels->controllerChannel->InvokeMethod(
+		MonarchMethods::getState, nullptr, std::move(result_handler));
 }
 
 void WindowManager::setDocking(MonarchState state)
 {
 	if (state.dock == DockSide::right) {
 		selectedDockSide = DockSide::right;
-		_postMesssageStateChange(state);
+		_postMessageStateChange(state);
 	}
 	else if (state.dock == DockSide::left) {
 		selectedDockSide = DockSide::left;
-		_postMesssageStateChange(state);
+		_postMessageStateChange(state);
 	}
 	else if (state.dock == DockSide::undock) {
 		selectedDockSide = DockSide::undock;
@@ -116,7 +173,32 @@ void WindowManager::setDocking(MonarchState state)
 	}
 }
 
-void WindowManager::_postMesssageStateChange(MonarchState state_)
+void WindowManager::restartPreviewWindow()
+{
+	_channels->sendWillClosePreview();
+	_channels->unregisterMethodCallHandlers();
+
+	_previewWindow->SetQuitOnClose(false);
+	_previewWindow->Destroy();
+
+	flutter::DartProject previewProject(to_wstring(_previewBundlePath));
+	std::vector<std::string> previewArguments = { _defaultLogLevelString };
+	previewProject.set_dart_entrypoint_arguments(previewArguments);
+
+	_previewWindow = std::make_unique<PreviewWindow>(
+		previewProject,
+		this);
+
+	_showAndSetUpPreviewWindow(_controllerWindow->getWindowInfo());
+
+	_controllerWindow->setPreviewWindow(_previewWindow->GetHandle());
+	_previewWindow->setControllerWindow(_controllerWindow->GetHandle());
+
+	_channels->restartPreviewChannel(_previewWindow->messenger());
+	resizePreviewWindow();
+}
+
+void WindowManager::_postMessageStateChange(MonarchState state_)
 {
 	WindowInfo* windowInfo = new WindowInfo(_controllerWindow->getWindowInfo());
 	MonarchState* state = new MonarchState(state_);

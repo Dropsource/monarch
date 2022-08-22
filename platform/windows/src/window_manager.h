@@ -14,23 +14,36 @@ class Channels;
 class WindowManager
 {
 public:
-	WindowManager(std::string controllerBundlePath, std::string previewBundlePath);
+	WindowManager(
+		std::string controllerBundlePath, 
+		std::string previewBundlePath,
+		std::string defaultLogLevelString,
+		std::string cliGrpcServerPort,
+		std::string projectName);
 	~WindowManager();
 
 	DockSide selectedDockSide;
 
 	void launchWindows();
+	void resizePreviewWindow();
 	void resizePreviewWindow(MonarchState state);
+	void setDocking();
 	void setDocking(MonarchState state);
+	void restartPreviewWindow();
 
 private:
 	std::string _previewBundlePath;
 	std::string _controllerBundlePath;
+	std::string _defaultLogLevelString;
+	std::string _cliGrpcServerPort;
+	std::string _projectName;
 
 	std::unique_ptr<ControllerWindow> _controllerWindow;
 	std::unique_ptr<PreviewWindow> _previewWindow;
 
 	std::unique_ptr<Channels> _channels;
 
-	void _postMesssageStateChange(MonarchState state);
+	void _showAndSetUpPreviewWindow(WindowInfo windowInfo);
+	void _showAndSetUpControllerWindow(WindowInfo windowInfo);
+	void _postMessageStateChange(MonarchState state);
 };

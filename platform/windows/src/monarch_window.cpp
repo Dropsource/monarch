@@ -62,7 +62,7 @@ ControllerWindow::~ControllerWindow()
 {
 }
 
-void ControllerWindow::init(HWND previewHwnd)
+void ControllerWindow::setPreviewWindow(HWND previewHwnd)
 {
 	_previewWindowHandle = previewHwnd;
 }
@@ -75,19 +75,19 @@ LRESULT ControllerWindow::MessageHandler(
 {
 	switch (message) {
 	case WM_MOVE:
-		if (_didInit() && !isMovingProgrammatically) {
+		if (_isPreviewWindowSet() && !isMovingProgrammatically) {
 			_postMoveMessage();
 		}
 		break;
 
 	case WM_SIZE:
-		if (_didInit()) {
+		if (_isPreviewWindowSet()) {
 			_postMoveMessage();
 		}
 		break;
 
 	case WM_M_PREVMOVE:
-		if (_didInit()) {
+		if (_isPreviewWindowSet()) {
 			WindowInfo* previewWindowInfo = (WindowInfo*)wparam;
 			auto point = _getTopLeft(
 				WindowInfo(previewWindowInfo->topLeft, previewWindowInfo->size),
@@ -120,7 +120,7 @@ Point_ ControllerWindow::_getTopLeft(WindowInfo previewWindowInfo, DockSide side
 	}
 }
 
-bool ControllerWindow::_didInit()
+bool ControllerWindow::_isPreviewWindowSet()
 {
 	return _previewWindowHandle != nullptr;
 }
@@ -133,15 +133,19 @@ void ControllerWindow::_postMoveMessage()
 
 PreviewWindow::PreviewWindow(
 	const flutter::DartProject& project,
-	WindowManager* windowManager,
-	HWND controllerHwnd)
+	WindowManager* windowManager)
 	: MonarchWindow(project, windowManager)
 {
-	_controllerWindowHandle = controllerHwnd;
+	_controllerWindowHandle = nullptr;
 }
 
 PreviewWindow::~PreviewWindow()
 {
+}
+
+void PreviewWindow::setControllerWindow(HWND controllerHwnd)
+{
+	_controllerWindowHandle = controllerHwnd;
 }
 
 void PreviewWindow::resize(
@@ -274,10 +278,6 @@ LRESULT PreviewWindow::MessageHandler(
 		break;
 
 	case WM_MOVE:
-		// NEXT, CONFIRM: not sure about the isFlutterWindowReady here, the 
-		// !isMovingProgrammatically guard should be enough, while the windows are launching
-		// any resize change calls move, which uses the isMovingProgrammatically flag
-		//if (MonarchChannelMethodsReceiver::isFlutterWindowReady && !isMovingProgrammatically) {
 		if (!isMovingProgrammatically) {
 			WindowInfo* windowInfo = new WindowInfo(getWindowInfo());
 			PostMessage(_controllerWindowHandle, WM_M_PREVMOVE, WPARAM(windowInfo), 0);
@@ -314,4 +314,9 @@ Point_ PreviewWindow::_getTopLeft(WindowInfo controllerWindowInfo, DockSide side
 	default:
 		throw std::runtime_error{ "DockSide not valid" };
 	}
+}
+
+bool PreviewWindow::_isControllerWindowSet()
+{
+	return _controllerWindowHandle != nullptr;
 }

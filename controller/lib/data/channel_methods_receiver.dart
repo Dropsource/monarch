@@ -21,9 +21,8 @@ void receiveChannelMethodCalls() {
     try {
       return await _handler(call);
     } catch (e, s) {
-      _logger.severe(
-          'exception in flutter runtime while handling channel method', e, s);
-      return PlatformException(code: '001', message: e.toString());
+      _logger.severe('Exception while handling channel method', e, s);
+      return Future.error(e);
     }
   });
 }

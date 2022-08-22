@@ -79,7 +79,7 @@ of that command. We will use those arguments to debug from Visual Studio. The ar
 look like:
 
 ```
---controller-bundle C:\Users\USER\development\monarch\out\monarch\bin\cache\monarch_ui\flutter_windows_3.0.1-stable\monarch_controller --preview-bundle C:\Users\USERS\development\scratch\TEST_PROJECT\.monarch --log-level ALL
+C:\Users\USER\development\monarch\out\monarch\bin\cache\monarch_ui\flutter_windows_3.0.5-stable\monarch_controller C:\Users\USER\development\scratch\some_project\.monarch ALL 56816 some_project"
 ```
 
 ### Debug using Visual Studio
@@ -93,7 +93,7 @@ Once the solution is open:
 - Then go to the menu Debug > monarch_windows_app Debug Properties > Debugging > Command Arguments
 - Then set Command Arguments with the arguments you want to use to debug. It should look like
 ```
---controller-bundle path\to\monarch_controller --preview-bundle path\to\project\.monarch --log-level ALL
+path\to\monarch_controller path\to\project\.monarch ALL 56816 some_project
 ```
 
 Now you can start debugging (or press F5).
