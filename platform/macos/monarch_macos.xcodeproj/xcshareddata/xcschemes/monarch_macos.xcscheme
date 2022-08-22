@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C82C966127FB8F0E00DC66AA"
-               BuildableName = "monarch_macos.app"
+               BuildableName = "Monarch.app"
                BlueprintName = "monarch_macos"
                ReferencedContainer = "container:monarch_macos.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C82C966127FB8F0E00DC66AA"
-            BuildableName = "monarch_macos.app"
+            BuildableName = "Monarch.app"
             BlueprintName = "monarch_macos"
             ReferencedContainer = "container:monarch_macos.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C82C966127FB8F0E00DC66AA"
-            BuildableName = "monarch_macos.app"
+            BuildableName = "Monarch.app"
             BlueprintName = "monarch_macos"
             ReferencedContainer = "container:monarch_macos.xcodeproj">
          </BuildableReference>
