@@ -2,6 +2,7 @@
 - Most of the 1.x behavior has moved to the controller
 - The management of native windows remains in this project
 - Forwarding of controller and preview method channels
+- Preview window restart
 
 ## 1.3.2 - 2021-12-14
 - When the flutter window changes screens (i.e. monitors), force the flutter view 

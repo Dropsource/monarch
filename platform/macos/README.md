@@ -1,8 +1,25 @@
 # Monarch macOS
 
+## Debugging
+You can use XCode to debug the Monarch macOS code. To debug with XCode you will 
+attach to a running instance of Monarch.
 
+### Steps to debug
+1. Make your code changes
+2. Run `dart tools\build_platform.dart`
+3. Go to the flutter project you want to use to debug and then run `monarch run -v` on that project
+4. Wait for the Monarch windows to show then go to `platform\macos\monarch_macos.xcodeproj`
+5. From XCode, click Debug > Attach to Process by PID or Name, then set `Monarch` as the  PID or Process Name,
+   then click Attach.
 
-### Editing app icon
+Your breakpoints should now hit as you exercise the Monarch app. 
+
+### Debugging the startup
+The process above may not let you debug the macOS startup project which launches the 
+Monarch windows. You may need to add a sleep timer to the entry function to give you 
+enough time to attach to the Monarch app. 
+
+## Editing app icon
 The Info.plist has a setting pointing to the app icon bundle, which is monarch_app.iconset.
 
 If you need to edit the app icon, open that directory and you will see 10 pngs, one for each resolution
