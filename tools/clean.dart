@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'paths.dart' as paths;
+import 'paths.dart';
 
 void main() {
   print('''
@@ -7,12 +7,12 @@ void main() {
 ### clean.dart
 ''');
 
-  cleanDirectory(paths.out);
+  cleanDirectory(local_out_paths.out);
 
   if (Platform.isWindows) {
-    cleanDirectory(paths.platform_windows_gen_seed);
-    cleanDirectory(paths.platform_windows_gen);
-    cleanDirectory(paths.platform_windows_build);
+    cleanDirectory(local_repo_paths.platform_windows_gen_seed);
+    cleanDirectory(local_repo_paths.platform_windows_gen);
+    cleanDirectory(local_repo_paths.platform_windows_build);
   }
 }
 

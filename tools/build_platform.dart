@@ -6,6 +6,8 @@ import 'paths.dart' as paths;
 import 'utils.dart' as utils;
 import 'package:monarch_io_utils/utils.dart';
 
+/// Builds Monarch Platform binaries for each Flutter SDK
+/// declared in local_settings.yaml.
 void main() {
   print('''
 
@@ -126,7 +128,7 @@ String readWindowsProjectVersion() {
 /// For details on how the Monarch Windows build works see:
 /// - file: platform/windows/README.md
 /// - section: How the Monarch Windows build works
-void buildWindows(out_ui_flutter_id, flutter_sdk) {
+void buildWindows(String out_ui_flutter_id, String flutter_sdk) {
   var gen_seed_dir = Directory(
       paths.gen_seed_flutter_id(paths.platform_windows_gen_seed, flutter_sdk));
   if (_isGenSeedDirectoryOk(gen_seed_dir)) {
