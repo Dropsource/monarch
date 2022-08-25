@@ -5,7 +5,7 @@ import 'utils.dart' as utils;
 import 'utils_local.dart' as local_utils;
 import 'build_controller_args.dart' as build_controller_args;
 
-/// Builds a Monarch Controller for each Flutter SDK
+/// Builds Monarch Controller artifacts for each Flutter SDK
 /// declared in local_settings.yaml.
 void main() {
   print('''
