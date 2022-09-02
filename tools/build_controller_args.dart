@@ -5,10 +5,10 @@ import 'package:path/path.dart' as p;
 import 'paths.dart';
 import 'utils.dart' as utils;
 
-/// Builds a Monarch Controller with these arguments:
+/// Builds Monarch Controller artifacts with these arguments:
 /// - Path to the root of the Monarch repo
 /// - Path to the Flutter SDK to use
-/// - Path to the monarch_ui/flutter_id output directory 
+/// - Path to the monarch_ui/{flutter_id} output directory 
 /// 
 /// This script is used by local builds and by the monarch automation.
 void main(List<String> arguments) {
