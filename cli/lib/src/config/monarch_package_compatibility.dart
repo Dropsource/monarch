@@ -4,7 +4,7 @@ import 'package:pub_semver/pub_semver.dart' as pub;
 
 final monarchPackage_2_1 = pub.Version(2, 1, 0);
 final monarchPackage_2_2 = pub.Version(2, 2, 0);
-final monarchPackage_2_4_pre = pub.Version(2, 4, 0, pre: 'pre.2');
+final monarchPackage_2_4_pre = pub.Version(2, 4, 0, pre: 'pre.3');
 
 final buildRunnerPackage2 = pub.Version(2, 1, 0);
 

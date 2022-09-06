@@ -1,3 +1,10 @@
+## 2.4.0-pre.5 - 2022-09-02
+- Fix `dart analyze` issues
+- Run `dart format .`
+
+## 2.4.0-pre.3 - 2022-09-02
+- Update major versions of analyzer and vm_service dependencies
+
 ## 2.4.0-pre.2 - 2022-08-03
 - v2 hot reload and hot restart
 - Get state from controller

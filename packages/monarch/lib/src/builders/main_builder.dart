@@ -58,9 +58,9 @@ class MainBuilder implements Builder {
     final assetIdMap = <String, AssetId>{};
 
     var index = 0;
-    await for (final _assetId in buildStep.findAssets(Glob(globPattern))) {
+    await for (final assetId in buildStep.findAssets(Glob(globPattern))) {
       final libraryPrefix = '$prefixToken$index';
-      assetIdMap[libraryPrefix] = _assetId;
+      assetIdMap[libraryPrefix] = assetId;
       index++;
     }
 
@@ -94,14 +94,14 @@ class MainBuilder implements Builder {
   }
 
   Map<String, String> _getMetaStoriesMap(Map<String, AssetId> map) {
-    final _map = <String, String>{};
+    final map_ = <String, String>{};
     for (var item in map.entries) {
       final libraryPrefix = item.key;
       final assetId = item.value;
       final key = "'${assetId.package}|${assetId.path}'";
-      _map[key] = '$libraryPrefix.metaStories';
+      map_[key] = '$libraryPrefix.metaStories';
     }
-    return _map;
+    return map_;
   }
 
   String _outputContents(

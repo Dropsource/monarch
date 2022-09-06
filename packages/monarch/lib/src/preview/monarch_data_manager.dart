@@ -27,7 +27,7 @@ class MonarchDataManager with Log {
 
   List<MetaLocalization> _validateAndFilterMetaLocalizations(
       List<MetaLocalization> metaLocalizationList) {
-    final _list = <MetaLocalization>[];
+    final list = <MetaLocalization>[];
     for (var item in metaLocalizationList) {
       if (item.delegate == null) {
         _validationMessages.add('''
@@ -46,14 +46,14 @@ $monarchWarningEnd
         log.fine(
             'Valid localization found on class ${item.delegateClassName} with '
             'annotated locales: ${item.locales.map((e) => e.languageCode).toList()}');
-        _list.add(item);
+        list.add(item);
       }
     }
-    return _list;
+    return list;
   }
 
   List<MetaTheme> _validateAndFilterMetaThemes(List<MetaTheme> metaThemeList) {
-    final _list = <MetaTheme>[];
+    final list = <MetaTheme>[];
     for (var item in metaThemeList) {
       if (item.theme == null) {
         _validationMessages.add('''
@@ -63,10 +63,10 @@ $monarchWarningEnd
 ''');
       } else {
         log.fine('Valid theme found: ${item.name}');
-        _list.add(item);
+        list.add(item);
       }
     }
-    return _list;
+    return list;
   }
 
   Future<void> sendChannelMethods() async {

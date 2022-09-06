@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
 
-import 'paths.dart' as paths;
+import 'paths.dart';
 import 'utils.dart' as utils;
+import 'utils_local.dart' as local_utils;
 
 void main() {
   print('''
@@ -11,8 +12,8 @@ void main() {
 ''');
 
   {
-    utils.createDirectoryIfNeeded(paths.out_bin);
-    var monarch_exe_file = File(paths.out_bin_monarch_exe);
+    utils.createDirectoryIfNeeded(local_out_paths.out_bin);
+    var monarch_exe_file = File(local_out_paths.out_bin_monarch_exe);
     if (monarch_exe_file.existsSync()) monarch_exe_file.deleteSync();
   }
 
@@ -25,29 +26,29 @@ void main() {
   {
     print('''
 Running `dart pub get` in:
-  ${paths.cli}
+  ${local_repo_paths.cli}
 ''');
     var result =
-        Process.runSync('dart', ['pub', 'get'], workingDirectory: paths.cli);
+        Process.runSync('dart', ['pub', 'get'], workingDirectory: local_repo_paths.cli);
     utils.exitIfNeeded(result, 'Error running `dart pub get`');
   }
 
   {
     print('''
 Building monarch_cli executable. Will output to:
-  ${paths.out_bin_monarch_exe}
+  ${local_out_paths.out_bin_monarch_exe}
 ''');
 
     var result = Process.runSync('dart',
-        ['compile', 'exe', 'bin/main.dart', '-o', paths.out_bin_monarch_exe],
-        workingDirectory: paths.cli);
+        ['compile', 'exe', 'bin/main.dart', '-o', local_out_paths.out_bin_monarch_exe],
+        workingDirectory: local_repo_paths.cli);
     utils.exitIfNeeded(result, 'Error building monarch cli');
   }
 
   {
-    var version = utils.readPubspecVersion(p.join(paths.cli, 'pubspec.yaml'));
-    version = utils.getVersionSuffix(version);
-    utils.writeInternalFile('cli_version.txt', version);
+    var version = utils.readPubspecVersion(p.join(local_repo_paths.cli, 'pubspec.yaml'));
+    version = local_utils.getVersionSuffix(version);
+    local_utils.writeInternalFile('cli_version.txt', version);
     print('Monarch CLI build finished. Version $version');
   }
 }

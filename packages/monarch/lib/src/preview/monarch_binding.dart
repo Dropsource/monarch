@@ -62,7 +62,8 @@ class MonarchBinding extends BindingBase
   }
 
   final _willReassembleStreamController = StreamController<void>.broadcast();
-  Stream<void> get willReassembleStream => _willReassembleStreamController.stream;
+  Stream<void> get willReassembleStream =>
+      _willReassembleStreamController.stream;
 
   @override
   Future<void> performReassemble() async {

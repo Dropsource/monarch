@@ -23,9 +23,9 @@ class MetaStoriesGenerator extends Generator {
 
     for (var topLevelElement in library.allElements) {
       if (topLevelElement is FunctionElement) {
-        if (topLevelElement.returnType.element != null) {
+        if (topLevelElement.returnType.element2 != null) {
           if (widgetTypeChecker
-              .isExactly(topLevelElement.returnType.element!)) {
+              .isExactly(topLevelElement.returnType.element2!)) {
             // if (topLevelElement.returnType.element.name == 'Widget') {
             final storyName = topLevelElement.name;
             final storyNameInSingleQuotes = "'$storyName'";

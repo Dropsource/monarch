@@ -155,7 +155,8 @@ String _getActiveStoryErrorMessage() {
 }
 
 String _getRelevantStoryMessage(StoryId activeStoryId) {
-  var metaStories = monarchDataManager.data!.metaStoriesMap[activeStoryId.pathKey];
+  var metaStories =
+      monarchDataManager.data!.metaStoriesMap[activeStoryId.pathKey];
   if (metaStories == null) {
     return 'Unexpected - Could not find meta stories for ${activeStoryId.pathKey}';
   }
