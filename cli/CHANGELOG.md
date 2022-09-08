@@ -1,3 +1,7 @@
+## 2.1.0 - 2022-09-08
+- GRPC implementation
+- Other fixes
+
 ## 2.0.0 - 2022-04-12
 - Prep for orchestration of new Monarch architecture
 - Move to new repo
