@@ -9,7 +9,7 @@ class MonarchMethods {
   static const ping = "monarch.ping";
   static const previewReadySignal = 'monarch.previewReadySignal';
   static const readySignalAck = 'monarch.readySignalAck';
-  
+
   static const monarchData = 'monarch.monarchData';
   static const deviceDefinitions = 'monarch.deviceDefinitions';
   static const storyScaleDefinitions = 'monarch.storyScaleDefinitions';
