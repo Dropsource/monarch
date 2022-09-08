@@ -1,3 +1,6 @@
+### 1.0.2 - 2022-09-08
+- Add method `monarch.ping`
+
 ### 1.0.1 - 2022-08-03
 - Add methods
   - `monarch.previewReadySignal`

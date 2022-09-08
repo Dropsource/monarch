@@ -32,6 +32,9 @@ Future<dynamic> _handler(MethodCall call) async {
       call.arguments == null ? null : Map<String, dynamic>.from(call.arguments);
 
   switch (call.method) {
+    case MonarchMethods.ping:
+      return true;
+      
     case MonarchMethods.defaultTheme:
       final String themeId = args!['themeId'];
       manager.onDefaultThemeChange(themeId);

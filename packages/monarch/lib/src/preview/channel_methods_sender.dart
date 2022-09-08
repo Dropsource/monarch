@@ -17,6 +17,10 @@ class ChannelMethodsSender with Log {
     return MonarchChannels.preview.invokeMethod(method, arguments);
   }
 
+  Future sendPing() {
+    return _invokeMonarchChannelMethod(MonarchMethods.ping);
+  }
+
   Future sendDeviceDefinitions(OutboundChannelArgument definitions) {
     return _invokeMonarchChannelMethod(
         MonarchMethods.deviceDefinitions, definitions.toStandardMap());

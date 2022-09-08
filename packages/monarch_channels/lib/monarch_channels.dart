@@ -6,6 +6,7 @@ class MonarchChannels {
 }
 
 class MonarchMethods {
+  static const ping = "monarch.ping";
   static const previewReadySignal = 'monarch.previewReadySignal';
   static const readySignalAck = 'monarch.readySignalAck';
   

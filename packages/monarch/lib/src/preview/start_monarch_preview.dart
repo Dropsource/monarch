@@ -48,6 +48,7 @@ void _startMonarchPreview(MonarchData Function() getMonarchData) async {
   monarchBinding.scheduleWarmUpFrame();
 
   receiveChannelMethodCalls();
+  await _controllerReady();
   await _connectToVmService();
   await _sendDefinitions();
   await monarchDataManager.sendChannelMethods();
@@ -58,6 +59,28 @@ void _setUpLog() {
   writeLogEntryStream((String line) => print('preview: $line'),
       printTimestamp: false, printLoggerName: true);
   logCurrentProcessInformation(_logger, LogLevel.FINE);
+}
+
+Future<void> _controllerReady() async {
+  const maxRetries = 5;
+
+  Future<bool> canPing() async {
+    try {
+      final result = await channelMethodsSender.sendPing();
+      return result == true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  for (var i = 1; i <= maxRetries; i++) {
+    if (await canPing()) {
+      _logger.fine('Monarch Preview reached Controller after $i attempts.');
+      return;
+    }
+    await Future.delayed(Duration(milliseconds: 50));
+  }
+  _logger.warning('Monarch Preview could not reach Controller after $maxRetries attempts.');
 }
 
 Future<void> _connectToVmService() async {
