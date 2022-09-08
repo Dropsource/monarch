@@ -80,7 +80,8 @@ Future<void> _controllerReady() async {
     }
     await Future.delayed(Duration(milliseconds: 50));
   }
-  _logger.warning('Monarch Preview could not reach Controller after $maxRetries attempts.');
+  _logger.warning(
+      'Monarch Preview could not reach Controller after $maxRetries attempts.');
 }
 
 Future<void> _connectToVmService() async {

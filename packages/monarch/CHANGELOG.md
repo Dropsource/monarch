@@ -1,6 +1,7 @@
-## 2.4.0-pre.5 - 2022-09-02
+## 2.4.0-pre.6 - 2022-09-02
 - Fix `dart analyze` issues
 - Run `dart format .`
+- Use latest version of monarch_channels package
 
 ## 2.4.0-pre.3 - 2022-09-02
 - Update major versions of analyzer and vm_service dependencies
