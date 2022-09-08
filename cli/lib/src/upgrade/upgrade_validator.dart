@@ -21,13 +21,13 @@ class UpgradeValidator extends Validator {
     /// validate:
     /// - monarch/bin/monarch (monarch.exe)
     /// - monarch/bin/cache
-    /// - monarch/versions.txt
+    /// - monarch/bin/internal
 
     errors.addAll(
         validateMonarchExecutablePath(monarchBinaries.monarchExecutablePath));
 
     errors.addAll(await _validateCacheDirectory());
-    errors.addAll(await _validateVersionsTxtFile());
+    errors.addAll(await _validateInternalDirectory());
 
     validationErrors.addAll(errors);
   }
@@ -74,13 +74,11 @@ class UpgradeValidator extends Validator {
     return errors;
   }
 
-  Future<List<String>> _validateVersionsTxtFile() async {
+  Future<List<String>> _validateInternalDirectory() async {
     var errors = <String>[];
-    var versionsTxtFile =
-        File(p.join(monarchBinaries.monarchDirectory.path, 'versions.txt'));
-    if (!await versionsTxtFile.exists()) {
-      var expected = p.join('monarch', 'versions.txt');
-      errors.add('Expected to find $expected');
+    if (!await monarchBinaries.internalDirectory.exists()) {
+      var expected = p.join('monarch', 'bin', 'internal');
+      errors.add('Expected to find directory $expected');
     }
     return errors;
   }
