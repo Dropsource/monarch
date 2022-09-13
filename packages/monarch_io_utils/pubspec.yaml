@@ -1,7 +1,10 @@
 name: monarch_io_utils
-description: Utilities for dart io and other dart sdk packages.
-version: 1.1.0
-publish_to: none
+description: Monarch utilities for dart io and other dart sdk packages.
+version: 1.2.0
+homepage: https://monarchapp.io
+repository: https://github.com/Dropsource/monarch
+issue_tracker: https://github.com/Dropsource/monarch/issues
+documentation: https://monarchapp.io/docs/introduction
 
 environment:
   sdk: '>=2.12.0 <3.0.0'

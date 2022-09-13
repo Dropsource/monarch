@@ -4,7 +4,8 @@ import 'package:meta/meta.dart';
 
 abstract class LongRunningCli<T> {
   late Completer<T> _exitCompleter;
-  late Stopwatch _stopwatch; // dart.core.Stopwatch, not monarch_utils.Stopwatch.
+  late Stopwatch
+      _stopwatch; // dart.core.Stopwatch, not monarch_utils.Stopwatch.
 
   /// Returns a future that completes when the long-running
   /// work has exited.
@@ -31,7 +32,7 @@ abstract class LongRunningCli<T> {
   }
 
   /// Implementations should start work.
-  @protected 
+  @protected
   void didRun();
 
   /// Call this function when the user has requested termination.
@@ -42,7 +43,7 @@ abstract class LongRunningCli<T> {
   }
 
   /// Implementations should terminate any in-progress work.
-  @protected 
+  @protected
   Future<void> willTerminate();
 
   /// Completes the exit future with the provided `exitCode`.
@@ -52,6 +53,4 @@ abstract class LongRunningCli<T> {
       _stopwatch.stop();
     }
   }
-
 }
-

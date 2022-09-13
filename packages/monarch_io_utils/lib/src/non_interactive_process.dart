@@ -4,7 +4,7 @@ import 'process_utils.dart';
 
 /// Runs a process non-interactively to completion. It exposes the process
 /// output through convinience getters.
-/// 
+///
 /// It is ideal to run shell or CLI commands that start and run to completion
 /// without interaction.
 class NonInteractiveProcess {
@@ -14,7 +14,9 @@ class NonInteractiveProcess {
   final Encoding encoding;
 
   NonInteractiveProcess(this.executable, this.arguments,
-      {this.workingDirectory, List<int>? successExitCodes, this.encoding = systemEncoding}) {
+      {this.workingDirectory,
+      List<int>? successExitCodes,
+      this.encoding = systemEncoding}) {
     if (successExitCodes != null) {
       _successExitCodes = successExitCodes;
     }
@@ -39,7 +41,7 @@ class NonInteractiveProcess {
     _result = await Process.run(executable, arguments,
         workingDirectory: workingDirectory,
         runInShell: Platform.isWindows,
-        stdoutEncoding:  encoding,
+        stdoutEncoding: encoding,
         stderrEncoding: encoding);
 
     _stdout = _result.stdout;
@@ -52,7 +54,7 @@ class NonInteractiveProcess {
     _result = Process.runSync(executable, arguments,
         workingDirectory: workingDirectory,
         runInShell: Platform.isWindows,
-        stdoutEncoding:  encoding,
+        stdoutEncoding: encoding,
         stderrEncoding: encoding);
 
     _stdout = _result.stdout;

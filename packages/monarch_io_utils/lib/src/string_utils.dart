@@ -1,6 +1,6 @@
 /// "Hard wraps" the [string] on or after the [lineLength]. It only replaces
-/// white spaces with new lines. 
-/// 
+/// white spaces with new lines.
+///
 /// It can be used to convert a long line into multiple lines where each line
 /// is roughly the same length.
 String hardWrap(String string, {int lineLength = 80}) {
@@ -12,7 +12,7 @@ String hardWrap(String string, {int lineLength = 80}) {
 
   var shouldReplace = false;
   var currentLength = 0;
-  
+
   for (var i = 0; i < string.length; i++) {
     currentLength++;
 
@@ -33,8 +33,7 @@ String hardWrap(String string, {int lineLength = 80}) {
   for (var i = 0; i < string.length; i++) {
     if (linebreaks.contains(i)) {
       buffer.write('\n');
-    }
-    else {
+    } else {
       buffer.write(string[i]);
     }
   }

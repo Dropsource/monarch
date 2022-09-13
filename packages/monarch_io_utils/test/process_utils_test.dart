@@ -8,7 +8,9 @@ void main() {
     expect(getPrettyCommand('/bin/ls', ['-la']), 'ls -la');
     expect(getPrettyCommand('/bin/cp', ['foo.txt', 'bar.txt']),
         'cp foo.txt bar.txt');
-    expect(getPrettyCommand('/path/to/some_exe', ['-a', '--verbose', '/another/path']),
+    expect(
+        getPrettyCommand(
+            '/path/to/some_exe', ['-a', '--verbose', '/another/path']),
         'some_exe -a --verbose /another/path');
   });
 }
