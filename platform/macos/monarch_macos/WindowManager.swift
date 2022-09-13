@@ -122,6 +122,7 @@ class WindowManager {
         
         controllerWindow.styleMask.insert(.closable)
         controllerWindow.styleMask.insert(.miniaturizable)
+        controllerWindow.styleMask.insert(.resizable)
         
         controllerWindowController.window = controllerWindow
         controllerWindowController.showWindow(self)
