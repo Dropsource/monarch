@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 
 void main() {
   test('getPrettyCommand', () {
