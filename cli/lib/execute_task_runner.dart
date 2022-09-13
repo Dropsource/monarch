@@ -27,6 +27,7 @@ import 'src/config/environment_mutations.dart';
 import 'src/version_api/version_api.dart';
 import 'src/version_api/notification.dart';
 import 'src/task_runner/grpc.dart';
+import 'settings.dart' as settings;
 
 final _logger = Logger('CommandTaskRunner');
 
@@ -36,6 +37,7 @@ late final LogStreamCrashReporter _logStreamCrashReporter;
 
 bool _isVerbose = false;
 bool _isCrashDebug = false;
+bool _isLocalDeployment = settings.DEPLOYMENT == 'local';
 
 final _crashReporter = CrashReporterImpl(CrashReportBuilder());
 final _analytics = AnalyticsImpl(AnalyticsEventBuilder());
@@ -70,7 +72,8 @@ void executeTaskRunner(
       isVerbose, _crashReporter.builder, _analytics.builder);
 
   final notificationsReader = NotificationsReader(
-      VersionApi(readUserId: contextInfo.userDeviceIdOrUnknown));
+      VersionApi(readUserId: contextInfo.userDeviceIdOrUnknown),
+      _isLocalDeployment);
   notificationsReader.read(contextInfo);
 
   final projectConfig =
@@ -107,11 +110,19 @@ void executeTaskRunner(
       defaultMonarchBinaries.uiIdDirectory(projectConfig.flutterSdkId);
 
   if (!await monarchUiIdDir.exists()) {
-    var uiFetchExitCode =
-        await _fetchMonarchUi(projectConfig, contextInfo, monarchUiIdDir);
-    if (uiFetchExitCode.code > 0) {
-      await _exit(uiFetchExitCode);
+    if (_isLocalDeployment) {
+      stdout_default.writeln('''
+The monarch_ui directory below is missing. Make sure to add the path to your Flutter SDK to tools/local_settings.yaml
+  ${monarchUiIdDir.path}''');
+      await _exit(TaskRunnerExitCodes.missingFlutterIdDirInLocalDeployment);
       return;
+    } else {
+      var uiFetchExitCode =
+          await _fetchMonarchUi(projectConfig, contextInfo, monarchUiIdDir);
+      if (uiFetchExitCode.code > 0) {
+        await _exit(uiFetchExitCode);
+        return;
+      }
     }
   } else {
     _logger.info('monarch ui id directory found at ${monarchUiIdDir.path}');
@@ -135,8 +146,7 @@ void executeTaskRunner(
   try {
     await cliGrpcServer.startServer(taskRunner, _analytics);
     taskRunner.cliGrpcServerPort = cliGrpcServer.port;
-  }
-  catch (e, s) {
+  } catch (e, s) {
     await _exit(TaskRunnerExitCodes.cliGrpcServerStartError);
     return;
   }

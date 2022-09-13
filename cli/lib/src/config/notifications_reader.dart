@@ -4,19 +4,24 @@ import 'package:monarch_utils/log.dart';
 import '../config/context_info.dart';
 import '../version_api/version_api.dart';
 import '../version_api/notification.dart';
-import '../../settings.dart';
 
 class NotificationsReader with Log {
   final VersionApi api;
+  final bool isLocalDeployment;
 
-  NotificationsReader(this.api);
+  NotificationsReader(this.api, this.isLocalDeployment);
 
   void read(ContextInfo contextInfo) async {
     _completer = Completer();
+
+    if (isLocalDeployment) {
+      log.fine('Notifications fetching skipped during local deployment');
+      _completer.complete([]);
+      return;
+    }
+
     try {
-      var timeLimit = DEPLOYMENT == 'production'
-          ? Duration(seconds: 5)
-          : Duration(seconds: 1);
+      var timeLimit = Duration(seconds: 5);
       var list = await api
           .getNotifications(contextInfo.toPropertiesMap())
           .timeout(timeLimit);
