@@ -24,13 +24,14 @@ void main() {
           discovery.devtoolsUri,
           Uri.parse(
               'http://127.0.0.1:9104?uri=http://127.0.0.1:57081/jI83bb_8TNE=/'));
-      
+
       await discovery.cancel();
       expect(discovery.status, DiscoveryStatus.found);
     });
 
     test('finds devtools uri in multi line string', () async {
-      var stream = Stream.fromIterable(['''
+      var stream = Stream.fromIterable([
+        '''
 Task is ready after 11.0sec
 The Flutter DevTools debugger and profiler on macOS is available at: http://127.0.0.1:9104?uri=http://127.0.0.1:57081/jI83bb_8TNE=/
 '''
@@ -60,7 +61,7 @@ The Flutter DevTools debugger and profiler on macOS is available at: http://127.
           discovery.devtoolsUri,
           Uri.parse(
               'http://127.0.0.1:61188?uri=http%3A%2F%2F127.0.0.1%3A61146%2FdC1cULtWZEQ%3D%2F'));
-      
+
       await discovery.cancel();
       expect(discovery.status, DiscoveryStatus.found);
     });

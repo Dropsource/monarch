@@ -1,10 +1,11 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:test/test.dart';
 import 'package:pub_semver/pub_semver.dart' as pub;
 
 void main() {
   group('pub.Version', () {
     test('comparison with pre release', () {
-
       var version_2_3_0_pre = pub.Version(2, 3, 0, pre: '1.0.pre');
 
       void isMoreThan(String version) {

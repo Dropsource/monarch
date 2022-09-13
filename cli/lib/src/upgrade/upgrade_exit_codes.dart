@@ -24,6 +24,6 @@ class UpgradeExitCodes {
   static const getVersionForUpgradeError =
       CliExitCode(126, 'Get version for upgrade error', true);
 
-  static const validationError = 
+  static const validationError =
       CliExitCode(127, 'Upgrade validation error', false);
 }

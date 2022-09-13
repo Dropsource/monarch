@@ -7,7 +7,7 @@ void main() {
     group('extracts log levels ', () {
       test('from builder log messeges', () {
         final logLevelRegex = RegExp(r'^\[(\w+)\]');
-        var logLevel;
+        LogLevel logLevel;
         var fallbackLogLevel = LogLevel.FINE;
 
         logLevel = parseLogLevel(
@@ -37,7 +37,7 @@ void main() {
 
       test('from mac_app log messages', () {
         final logLevelRegex = RegExp(r'^\w+: (\w+)');
-        var logLevel;
+        LogLevel logLevel;
         var fallbackLogLevel = LogLevel.FINE;
 
         logLevel = parseLogLevel(

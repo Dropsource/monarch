@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:monarch_utils/log.dart';
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 
 import '../utils/grep_exit_codes.dart' as grep_exit_codes;
 

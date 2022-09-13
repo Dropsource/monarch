@@ -22,15 +22,17 @@ final _logger = Logger('ControllerMain');
 void main(List<String> arguments) async {
   _setUpLog();
   if (arguments.length < 2) {
-    _logger.severe('Expected 2 arguments in this order: default-log-level cli-grpc-server-port');
+    _logger.severe(
+        'Expected 2 arguments in this order: default-log-level cli-grpc-server-port');
     exit(1);
   }
 
   defaultLogLevel = LogLevel.fromString(arguments[0], LogLevel.ALL);
   var cliGrpcServerPort = int.tryParse(arguments[1]);
-  
+
   if (cliGrpcServerPort == null) {
-    _logger.severe('Could not parse argument for cli-grpc-server-port to an integer');
+    _logger.severe(
+        'Could not parse argument for cli-grpc-server-port to an integer');
     exit(1);
   }
 

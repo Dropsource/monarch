@@ -13,11 +13,9 @@ dependencies:
   args: ^2.1.0
   yaml_edit: ^2.0.0
   package_config: ^2.0.2
-  monarch_utils: ^1.0.2
-  monarch_http:
-    path: ../packages/monarch_http
-  monarch_io_utils:
-    path: ../packages/monarch_io_utils
+  monarch_utils: ^1.0.4
+  monarch_http: ^1.2.0
+  monarch_io_utils: ^1.2.0
   monarch_grpc:
     path: ../packages/monarch_grpc
 

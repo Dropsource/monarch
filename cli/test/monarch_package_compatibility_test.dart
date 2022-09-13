@@ -32,8 +32,7 @@ void main() {
       });
 
       test('incompatibilityMessage', () {
-        expect(
-            MonarchPackageCompatibility('3.0.5').incompatibilityMessage,
+        expect(MonarchPackageCompatibility('3.0.5').incompatibilityMessage,
             'Use monarch package version ^2.4.0-pre.6 or greater.');
       });
     });

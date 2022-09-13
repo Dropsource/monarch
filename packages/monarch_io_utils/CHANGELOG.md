@@ -1,3 +1,6 @@
+## 1.2.0 - 2022-09-13
+- Publishing to pub.dev
+
 ## 1.1.0 - 2022-04-12
 - Migrate from pedantic to lints
 

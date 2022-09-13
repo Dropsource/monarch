@@ -1,6 +1,6 @@
 import 'package:grpc/grpc.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:monarch_utils/log.dart';
 import 'channel_methods_sender.dart';
 
@@ -23,7 +23,8 @@ class CliGrpcClient {
 
   void initialize({required int port}) {
     _logger.info('Will use cli grpc server at port $port');
-    var channel = ClientChannel(valueForPlatform(macos: '0.0.0.0', windows: 'localhost'),
+    var channel = ClientChannel(
+        valueForPlatform(macos: '0.0.0.0', windows: 'localhost'),
         port: port,
         options:
             const ChannelOptions(credentials: ChannelCredentials.insecure()));
@@ -39,7 +40,7 @@ class ControllerService extends MonarchControllerServiceBase {
     channelMethodsSender.restartPreview();
     return Future.value(Empty());
   }
-  
+
   @override
   Future<ReloadResponse> hotReload(ServiceCall call, Empty request) async {
     var isSuccessful = await channelMethodsSender.hotReload();

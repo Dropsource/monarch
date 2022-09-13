@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:io/io.dart';
 import 'package:monarch_utils/log.dart';
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'standard_output.dart';
 
 /// A process that can be started and terminated. It exposes decoded stdout
@@ -54,8 +54,8 @@ class ManagedProcess {
     _decodedStdout = _stdout.transform(utf8.decoder);
     _decodedStderr = _stderr.transform(utf8.decoder);
 
-    _stdout.listen((_) => null, onDone: () => _isStdoutDone = true);
-    _stderr.listen((_) => null, onDone: () => _isStderrDone = true);
+    _stdout.listen((_) => {}, onDone: () => _isStdoutDone = true);
+    _stderr.listen((_) => {}, onDone: () => _isStderrDone = true);
   }
 
   Future<void> done() async {
@@ -201,7 +201,9 @@ class Unzipper extends ThrowsManagedProcess {
 }
 
 class FlutterPubGet extends ThrowsManagedProcess {
-  FlutterPubGet({required Directory projectDirectory, required String flutterExecutablePath})
+  FlutterPubGet(
+      {required Directory projectDirectory,
+      required String flutterExecutablePath})
       : super(
             loggerName: 'FlutterPubGet',
             executable: flutterExecutablePath,

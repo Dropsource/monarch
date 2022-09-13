@@ -1,12 +1,11 @@
 import 'dart:async';
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:monarch_utils/log.dart';
 
 enum DiscoveryStatus { initial, listening, found, notFound }
 
 /// Scrapes a stream of string lines and finds the devtools uri.
 class DevtoolsDiscovery with Log {
-
   DiscoveryStatus _status = DiscoveryStatus.initial;
   DiscoveryStatus get status => _status;
 

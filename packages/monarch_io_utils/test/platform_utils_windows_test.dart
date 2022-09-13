@@ -2,7 +2,7 @@
 
 import 'package:test/test.dart';
 
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 
 void main() {
   group('platform_utils on Windows', () {
@@ -29,7 +29,8 @@ void main() {
       expect(i, -1);
 
       // when function returns an explicit bool
-      var flag = functionForPlatform<bool>(macos: () => true, windows: () => false);
+      var flag =
+          functionForPlatform<bool>(macos: () => true, windows: () => false);
       expect(flag, isFalse);
     });
 

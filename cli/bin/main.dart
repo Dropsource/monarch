@@ -8,13 +8,13 @@ import 'package:monarch_cli/execute_newsletter.dart';
 import 'package:monarch_cli/execute_task_runner.dart';
 import 'package:monarch_cli/execute_upgrade.dart';
 import 'package:monarch_cli/version_printer.dart';
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 
 const $verbose = 'verbose';
-const $crash_debug = 'crash-debug';
+const $crashDebug = 'crash-debug';
 
 /// @GOTCHA: if you modify the cli commands descriptions, arguments or help text,
-/// then the docs on the website (/docs/cli-usage) need to be updated. 
+/// then the docs on the website (/docs/cli-usage) need to be updated.
 /// See bin/cli_usage_doc.dart
 final runner = CommandRunner(
     'monarch', 'CLI to run Monarch binaries, stories and other related tasks.')
@@ -51,13 +51,13 @@ class InitCommand extends Command {
   String get name => 'init';
 
   InitCommand() {
-    argParser.addFlag($crash_debug, defaultsTo: false, hide: true);
+    argParser.addFlag($crashDebug, defaultsTo: false, hide: true);
   }
 
   @override
   Future<void> run() async {
     final bool isVerbose = globalResults![$verbose];
-    final bool isCrashDebug = argResults![$crash_debug];
+    final bool isCrashDebug = argResults![$crashDebug];
 
     executeInit(isVerbose, isCrashDebug);
   }
@@ -73,7 +73,7 @@ class RunCommand extends Command {
 
   RunCommand() {
     argParser
-      ..addFlag($crash_debug, defaultsTo: false, hide: true)
+      ..addFlag($crashDebug, defaultsTo: false, hide: true)
       ..addSeparator('')
       ..addOption('reload',
           defaultsTo: 'hot-reload',
@@ -104,7 +104,7 @@ class RunCommand extends Command {
   @override
   Future<void> run() async {
     final bool isVerbose = globalResults![$verbose];
-    final bool isCrashDebug = argResults![$crash_debug];
+    final bool isCrashDebug = argResults![$crashDebug];
     final bool isDeleteConflictingOutputs =
         argResults!['delete-conflicting-outputs'];
     final bool noSoundNullSafety = argResults!['no-sound-null-safety'];
@@ -128,7 +128,7 @@ class UpgradeCommand extends Command {
 
   UpgradeCommand() {
     argParser
-      ..addFlag($crash_debug, defaultsTo: false, hide: true)
+      ..addFlag($crashDebug, defaultsTo: false, hide: true)
       ..addFlag('windows-second-pass', defaultsTo: false, hide: true)
       ..addOption('monarch-exe', hide: true);
   }
@@ -136,7 +136,7 @@ class UpgradeCommand extends Command {
   @override
   Future<void> run() async {
     final bool isVerbose = globalResults![$verbose];
-    final bool isCrashDebug = argResults![$crash_debug];
+    final bool isCrashDebug = argResults![$crashDebug];
 
     if (Platform.isWindows) {
       final bool isWindowsSecondPass = argResults!['windows-second-pass'];

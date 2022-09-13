@@ -26,7 +26,8 @@ T functionForPlatform<T>(
 }
 
 Future<T> futureForPlatform<T>(
-    {required Future<T> Function() macos, required Future<T> Function() windows}) {
+    {required Future<T> Function() macos,
+    required Future<T> Function() windows}) {
   if (Platform.isMacOS) {
     return macos();
   } else if (Platform.isWindows) {

@@ -1,4 +1,4 @@
-const DEFAULT_PUMPS = 20;
+const defaultPumps = 20;
 
 /// Returns a [Future] that completes after the [event loop][] has run the given
 /// number of [times] (20 by default).
@@ -7,9 +7,9 @@ const DEFAULT_PUMPS = 20;
 ///
 /// Awaiting this approximates waiting until all asynchronous work (other than
 /// work that's waiting for external resources) completes.
-/// 
+///
 /// Taken from: https://github.com/dart-lang/test/blob/master/pkgs/test_api/lib/src/frontend/utils.dart
-Future pumpEventQueue({int times = DEFAULT_PUMPS}) {
+Future pumpEventQueue({int times = defaultPumps}) {
   if (times == 0) return Future.value();
   // Use [new Future] future to allow microtask events to finish. The [new
   // Future.value] constructor uses scheduleMicrotask itself and would therefore
@@ -20,15 +20,14 @@ Future pumpEventQueue({int times = DEFAULT_PUMPS}) {
 
 /// Returns a [Future] that completes when the function [isTrue] returns false.
 /// If the function [isTrue] returns true, this function will pump the event
-/// queue a number of [times] and then call [isTrue] again. 
-/// 
+/// queue a number of [times] and then call [isTrue] again.
+///
 /// This function is useful to wait on some condition to change.
-Future whileTrue(bool Function() isTrue, {int times = DEFAULT_PUMPS}) async {
+Future whileTrue(bool Function() isTrue, {int times = defaultPumps}) async {
   await pumpEventQueue(times: times);
   if (isTrue()) {
     return whileTrue(isTrue, times: times);
-  }
-  else {
+  } else {
     return Future.value();
   }
 }

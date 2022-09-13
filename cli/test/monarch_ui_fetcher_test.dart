@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:io';
 
 import 'package:monarch_cli/src/monarch_ui/monarch_ui_fetch_exit_codes.dart';
@@ -14,7 +16,7 @@ import 'monarch_ui_fetcher_test.mocks.dart';
 import 'package:monarch_cli/src/config/monarch_binaries.dart';
 import 'package:monarch_cli/src/utils/managed_process.dart';
 import 'package:monarch_cli/src/version_api/version_api.dart';
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:monarch_cli/src/monarch_ui/monarch_ui_fetcher.dart';
 
 import 'test_utils/test_stdout.dart';

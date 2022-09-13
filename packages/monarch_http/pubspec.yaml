@@ -1,14 +1,17 @@
 name: monarch_http
-description: Http utilities.
-version: 1.1.0
-publish_to: none
+description: Http utilities for Monarch. Monarch is a tool for building Flutter widgets in isolation. It makes it easy to build, test and debug complex UIs.
+version: 1.2.0
+homepage: https://monarchapp.io
+repository: https://github.com/Dropsource/monarch
+issue_tracker: https://github.com/Dropsource/monarch/issues
+documentation: https://monarchapp.io/docs/introduction
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   http: ^0.13.1
-  monarch_utils: ^1.0.0
+  monarch_utils: ^1.0.4
 
 dev_dependencies:
   lints: ^1.0.1

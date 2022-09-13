@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 // indexes for crash reports
 const crashes = 'crashes_07';
 

@@ -12,8 +12,7 @@ class Newsletter with Log {
 
   Newsletter(this.analytics);
 
-  Future<void> askToJoin(
-      {required bool checkIfEmailAlreadyCaptured}) async {
+  Future<void> askToJoin({required bool checkIfEmailAlreadyCaptured}) async {
     var isEmailCaptured =
         checkIfEmailAlreadyCaptured && await _isEmailCaptured();
     if (!isEmailCaptured) {

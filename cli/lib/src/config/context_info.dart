@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:io/io.dart';
 import 'package:uuid/uuid.dart';
 import 'package:monarch_utils/log.dart';
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 
 import 'application_support_directory.dart';
 import 'internal_info.dart';
@@ -79,7 +79,8 @@ class ContextInfo with Log {
   String get userDeviceIdOrUnknown =>
       userDeviceId?.id ?? 'user-device-id-unknown';
 
-  ContextInfo(this.isLogVerbose, this.internalInfo) : deployment = settings.DEPLOYMENT;
+  ContextInfo(this.isLogVerbose, this.internalInfo)
+      : deployment = settings.kDeployment;
 
   Map<String, dynamic> toPropertiesMap() => {
         'user_device_id': userDeviceId?.id,
@@ -94,7 +95,8 @@ class ContextInfo with Log {
           'flutter_version': projectConfig?.flutterSdkId.version,
           'flutter_channel': projectConfig?.flutterSdkId.channel,
           'name': projectConfig?.pubspecProjectName,
-          'monarch_package_version': taskRunnerProjectConfig?.monarchPackageVersion.toString(),
+          'monarch_package_version':
+              taskRunnerProjectConfig?.monarchPackageVersion.toString(),
         },
         'dart_version': Platform.version,
         'platform_build_tool_info': {

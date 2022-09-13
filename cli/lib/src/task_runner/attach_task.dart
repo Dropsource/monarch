@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:monarch_utils/log.dart';
 
 import '../analytics/analytics.dart';
@@ -105,7 +105,7 @@ class AttachTask with Log {
   void launchDevtools() {
     if (devtoolsDiscovery == null) {
       stdout_default.writeln(
-            'Flutter DevTools is not ready yet. Please retry in a few seconds.');
+          'Flutter DevTools is not ready yet. Please retry in a few seconds.');
       return;
     }
     switch (devtoolsDiscovery!.status) {

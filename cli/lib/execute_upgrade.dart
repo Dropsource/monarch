@@ -49,8 +49,8 @@ void executeUpgrade(
 }
 
 class _UpgradeExecutor with CommonExecutor {
-  void executeUpgrade(
-      bool _isVerbose, bool _isCrashDebug, String? monarchExecutablePath) async {
+  void executeUpgrade(bool _isVerbose, bool _isCrashDebug,
+      String? monarchExecutablePath) async {
     isVerbose = _isVerbose;
     isCrashDebug = _isCrashDebug;
 

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:monarch_utils/log.dart';
 
 class FlutterVersionParser with Log {
@@ -11,7 +11,8 @@ class FlutterVersionParser with Log {
 
   Future<FlutterSdkId> getFlutterSdkId() async {
     var output = await _getFlutterVersionOutput();
-    return FlutterSdkId.parseFlutterVersionOutput(output, Platform.operatingSystem);
+    return FlutterSdkId.parseFlutterVersionOutput(
+        output, Platform.operatingSystem);
   }
 
   Future<String> _getFlutterVersionOutput() async {

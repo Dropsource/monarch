@@ -5,7 +5,7 @@ import 'package:monarch_cli/src/utils/standard_input.dart';
 import 'package:path/path.dart' as p;
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:pub_semver/pub_semver.dart' as pub;
 
 import '../analytics/analytics.dart';

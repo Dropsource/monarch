@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:monarch_utils/log.dart';
 import 'package:path/path.dart' as p;
 import 'package:pubspec_parse/pubspec_parse.dart';
@@ -19,10 +19,10 @@ const kFlutter = 'flutter';
 
 class LockfilePackagesOfInterest {
   static const monarch = 'monarch';
-  static const monarch_annotations = 'monarch_annotations';
-  static const build_runner = 'build_runner';
+  static const monarchAnnotations = 'monarch_annotations';
+  static const buildRunner = 'build_runner';
 
-  static const list = [build_runner, monarch, monarch_annotations];
+  static const list = [buildRunner, monarch, monarchAnnotations];
 }
 
 class ProjectConfigStateError extends StateError {
@@ -201,7 +201,8 @@ class ProjectConfig extends Validator with Log {
 }
 
 class TaskRunnerProjectConfig extends ProjectConfig {
-  TaskRunnerProjectConfig(Directory projectDirectory, InternalInfo internalInfo) : super(projectDirectory, internalInfo);
+  TaskRunnerProjectConfig(Directory projectDirectory, InternalInfo internalInfo)
+      : super(projectDirectory, internalInfo);
 
   pub.Version? _monarchPackageVersion;
   pub.Version get monarchPackageVersion {
@@ -233,7 +234,7 @@ class TaskRunnerProjectConfig extends ProjectConfig {
       errors.add(
           'Could not find monarch package in pubspec.lock. $monarchInitQuestion');
     } else if (!_lockfileParser.packagesMap
-        .containsKey(LockfilePackagesOfInterest.build_runner)) {
+        .containsKey(LockfilePackagesOfInterest.buildRunner)) {
       errors.add(
           'Could not find build_runner package in pubspec.lock. $monarchInitQuestion');
     }

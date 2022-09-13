@@ -39,7 +39,8 @@ class _InitExecutor with CommonExecutor {
     final contextInfo = await setUpContextAndSession(
         isVerbose, crashReporter.builder, analytics.builder);
 
-    final projectConfig = ProjectConfig(projectDirectory, contextInfo.internalInfo);
+    final projectConfig =
+        ProjectConfig(projectDirectory, contextInfo.internalInfo);
     await projectConfig.validate();
 
     if (projectConfig.isValid) {

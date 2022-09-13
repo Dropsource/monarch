@@ -1,11 +1,11 @@
 import 'main.dart' as m;
 
 /// Prints content for /docs/cli-usage
-/// 
-/// To update the cli-usage docs: run this script, copy its output 
-/// to your clipboard and then replace 
+///
+/// To update the cli-usage docs: run this script, copy its output
+/// to your clipboard and then replace
 /// the contents of docs/cli_usage.mdx in the monarch_site repo.
-/// 
+///
 /// ```
 /// dart cli_usage_doc.dart | pbcopy
 /// ```
