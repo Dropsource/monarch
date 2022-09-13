@@ -19,10 +19,10 @@ const kFlutter = 'flutter';
 
 class LockfilePackagesOfInterest {
   static const monarch = 'monarch';
-  static const monarch_annotations = 'monarch_annotations';
-  static const build_runner = 'build_runner';
+  static const monarchAnnotations = 'monarch_annotations';
+  static const buildRunner = 'build_runner';
 
-  static const list = [build_runner, monarch, monarch_annotations];
+  static const list = [buildRunner, monarch, monarchAnnotations];
 }
 
 class ProjectConfigStateError extends StateError {
@@ -233,7 +233,7 @@ class TaskRunnerProjectConfig extends ProjectConfig {
       errors.add(
           'Could not find monarch package in pubspec.lock. $monarchInitQuestion');
     } else if (!_lockfileParser.packagesMap
-        .containsKey(LockfilePackagesOfInterest.build_runner)) {
+        .containsKey(LockfilePackagesOfInterest.buildRunner)) {
       errors.add(
           'Could not find build_runner package in pubspec.lock. $monarchInitQuestion');
     }

@@ -37,7 +37,7 @@ late final LogStreamCrashReporter _logStreamCrashReporter;
 
 bool _isVerbose = false;
 bool _isCrashDebug = false;
-bool _isLocalDeployment = settings.DEPLOYMENT == 'local';
+bool _isLocalDeployment = settings.kDeployment == 'local';
 
 final _crashReporter = CrashReporterImpl(CrashReportBuilder());
 final _analytics = AnalyticsImpl(AnalyticsEventBuilder());
@@ -146,7 +146,7 @@ The monarch_ui directory below is missing. Make sure to add the path to your Flu
   try {
     await cliGrpcServer.startServer(taskRunner, _analytics);
     taskRunner.cliGrpcServerPort = cliGrpcServer.port;
-  } catch (e, s) {
+  } catch (e) {
     await _exit(TaskRunnerExitCodes.cliGrpcServerStartError);
     return;
   }

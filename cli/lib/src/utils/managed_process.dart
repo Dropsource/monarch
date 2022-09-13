@@ -54,8 +54,8 @@ class ManagedProcess {
     _decodedStdout = _stdout.transform(utf8.decoder);
     _decodedStderr = _stderr.transform(utf8.decoder);
 
-    _stdout.listen((_) => null, onDone: () => _isStdoutDone = true);
-    _stderr.listen((_) => null, onDone: () => _isStderrDone = true);
+    _stdout.listen((_) => {}, onDone: () => _isStdoutDone = true);
+    _stderr.listen((_) => {}, onDone: () => _isStderrDone = true);
   }
 
   Future<void> done() async {

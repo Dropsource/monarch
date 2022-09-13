@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:io';
 
 import 'package:monarch_cli/src/monarch_ui/monarch_ui_fetch_exit_codes.dart';

@@ -14,14 +14,14 @@ class IndexData {
 
 class ElasticsearchApi {
   final _credentials = request_utils.BasicAuth(
-      settings.ELASTICSEARCH_USERNAME, settings.ELASTICSEARCH_PASSWORD);
+      settings.kElasticsearchUsername, settings.kElasticsearchPassword);
 
   Future<bool> indexDocument(String index, Object data, Logger logger) async {
     return _indexDocument(index, data, logger);
   }
 
   Future<bool> _indexDocument(String index, Object data, Logger logger) async {
-    final url = '${settings.ELASTICSEARCH_ENDPOINT}/$index/_doc?op_type=create';
+    final url = '${settings.kElasticsearchEndpoint}/$index/_doc?op_type=create';
     final request = http.Request('POST', Uri.parse(url))
       ..body = convert.jsonEncode(data)
       ..headers['Authorization'] = _credentials.authorizationHeaderValue
@@ -34,7 +34,7 @@ class ElasticsearchApi {
   /// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
   Future<bool> indexDocumentsInBulk(
       Iterable<IndexData> indexDataList, Logger logger) async {
-    final url = '${settings.ELASTICSEARCH_ENDPOINT}/_bulk';
+    final url = '${settings.kElasticsearchEndpoint}/_bulk';
     final request = http.Request('POST', Uri.parse(url))
       ..body = _encodeToNewlineDelimitedJson(indexDataList)
       ..headers['Authorization'] = _credentials.authorizationHeaderValue

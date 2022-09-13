@@ -12,7 +12,7 @@ import 'build_yaml_editor.dart';
 import 'package:path/path.dart' as p;
 import 'init_exit_codes.dart';
 
-const dev_dependencies = 'dev_dependencies';
+const devDependencies = 'dev_dependencies';
 
 class Initializer extends LongRunningCli<CliExitCode> with Log {
   final ProjectConfig projectConfig;
@@ -50,10 +50,10 @@ class Initializer extends LongRunningCli<CliExitCode> with Log {
     } catch (e, s) {
       log.severe('Error adding dev_dependencies', e, s);
       errors.add('''
-Error adding monarch packages to the project\'s pubspec.yaml.
+Error adding monarch packages to the project's pubspec.yaml.
 Please add the following packages manually to your pubspec.yaml dev_dependencies:
 
-$dev_dependencies
+$devDependencies
   monarch: ^${monarchPackageCompatibility.monarchPackageInitVersion}
   build_runner: ^${monarchPackageCompatibility.buildRunnerPackageInitVersion}
 ''');
@@ -150,9 +150,9 @@ $error
     final pubspec = await projectConfig.pubspecFile.readAsString();
 
     final editor = PubspecEditor(pubspec);
-    editor.setPackage(dev_dependencies, 'monarch',
+    editor.setPackage(devDependencies, 'monarch',
         '^${monarchPackageCompatibility.monarchPackageInitVersion}');
-    editor.setPackage(dev_dependencies, 'build_runner',
+    editor.setPackage(devDependencies, 'build_runner',
         '^${monarchPackageCompatibility.buildRunnerPackageInitVersion}');
 
     await projectConfig.pubspecFile.writeAsString(editor.newContents);

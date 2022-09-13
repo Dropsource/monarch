@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:test/test.dart';
 import 'package:pub_semver/pub_semver.dart' as pub;
 

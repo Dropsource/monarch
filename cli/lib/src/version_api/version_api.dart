@@ -33,7 +33,7 @@ class VersionApi with Log implements AbstractVersionApi {
 
   @override
   Future<Version> getLatestVersion(String operatingSystem) async {
-    var url = '${settings.VERSION_API_URL}/version/$operatingSystem/latest';
+    var url = '${settings.kVersionApiUrl}/version/$operatingSystem/latest';
     var response = await _httpGet(url);
     return _processResponse(response, Version.fromJson, 'GET $url');
   }
@@ -42,7 +42,7 @@ class VersionApi with Log implements AbstractVersionApi {
   Future<UpgradeInfo> getUpgradeInfo(
       String operatingSystem, String versionNumber) async {
     var url =
-        '${settings.VERSION_API_URL}/upgrade_info/$operatingSystem/$versionNumber';
+        '${settings.kVersionApiUrl}/upgrade_info/$operatingSystem/$versionNumber';
     var response = await _httpGet(url);
     return _processResponse(response, UpgradeInfo.fromJson, 'GET $url');
   }
@@ -54,7 +54,7 @@ class VersionApi with Log implements AbstractVersionApi {
       required String flutterVersion,
       required String flutterChannel}) async {
     var url =
-        '${settings.VERSION_API_URL}/ui_bundle/$operatingSystem/$versionNumber/flutter/$flutterVersion/$flutterChannel';
+        '${settings.kVersionApiUrl}/ui_bundle/$operatingSystem/$versionNumber/flutter/$flutterVersion/$flutterChannel';
     var response = await _httpGet(url);
     return _processResponse(response, UiBundle.fromJson, 'GET $url');
   }
@@ -62,7 +62,7 @@ class VersionApi with Log implements AbstractVersionApi {
   @override
   Future<List<Notification>> getNotifications(
       Map<String, dynamic> contextInfoJson) async {
-    var url = '${settings.VERSION_API_URL}/notifications_query';
+    var url = '${settings.kVersionApiUrl}/notifications_query';
     var response = await _httpPost(url, contextInfoJson);
     return _processResponse(response, (Map<String, dynamic> json) {
       var notifications = json['notifications'] as List;
@@ -73,7 +73,7 @@ class VersionApi with Log implements AbstractVersionApi {
   @override
   Future<Version> getVersionForUpgrade(
       Map<String, dynamic> contextInfoJson) async {
-    var url = '${settings.VERSION_API_URL}/version/upgrade';
+    var url = '${settings.kVersionApiUrl}/version/upgrade';
     var response = await _httpPost(url, contextInfoJson);
     return _processResponse(response, Version.fromJson, 'POST $url');
   }

@@ -79,7 +79,7 @@ class ContextInfo with Log {
   String get userDeviceIdOrUnknown =>
       userDeviceId?.id ?? 'user-device-id-unknown';
 
-  ContextInfo(this.isLogVerbose, this.internalInfo) : deployment = settings.DEPLOYMENT;
+  ContextInfo(this.isLogVerbose, this.internalInfo) : deployment = settings.kDeployment;
 
   Map<String, dynamic> toPropertiesMap() => {
         'user_device_id': userDeviceId?.id,
