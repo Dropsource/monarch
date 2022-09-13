@@ -1,11 +1,10 @@
 import 'package:http/http.dart' as http;
-import 'package:monarch_http/utils.dart';
 import 'dart:convert' as convert;
 
 import 'package:monarch_utils/log.dart';
 
 import '../../settings.dart' as settings;
-import 'package:monarch_http/utils.dart' as request_utils;
+import 'package:monarch_http/monarch_http.dart' as request_utils;
 import 'version.dart';
 import 'upgrade_info.dart';
 import 'ui_bundle.dart';
@@ -27,10 +26,10 @@ abstract class AbstractVersionApi {
 
 class VersionApi with Log implements AbstractVersionApi {
   final String readUserId;
-  final BasicAuth _credentials;
+  final request_utils.BasicAuth _credentials;
 
   VersionApi({required this.readUserId})
-      : _credentials = BasicAuth(readUserId, '');
+      : _credentials = request_utils.BasicAuth(readUserId, '');
 
   @override
   Future<Version> getLatestVersion(String operatingSystem) async {

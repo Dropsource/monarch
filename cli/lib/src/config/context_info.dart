@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:io/io.dart';
 import 'package:uuid/uuid.dart';
 import 'package:monarch_utils/log.dart';
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 
 import 'application_support_directory.dart';
 import 'internal_info.dart';

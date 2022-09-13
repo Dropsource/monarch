@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:monarch_utils/log.dart';
 
 enum DiscoveryStatus { initial, listening, found, notFound }

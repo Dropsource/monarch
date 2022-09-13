@@ -8,7 +8,7 @@ import 'package:monarch_cli/execute_newsletter.dart';
 import 'package:monarch_cli/execute_task_runner.dart';
 import 'package:monarch_cli/execute_upgrade.dart';
 import 'package:monarch_cli/version_printer.dart';
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 
 const $verbose = 'verbose';
 const $crash_debug = 'crash-debug';

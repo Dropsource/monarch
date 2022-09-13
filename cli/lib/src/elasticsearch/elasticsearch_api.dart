@@ -1,10 +1,9 @@
 import 'package:http/http.dart' as http;
 import 'package:monarch_utils/log.dart';
-import 'package:monarch_http/utils.dart';
 import 'dart:convert' as convert;
 
 import '../../settings.dart' as settings;
-import 'package:monarch_http/utils.dart' as request_utils;
+import 'package:monarch_http/monarch_http.dart' as request_utils;
 
 class IndexData {
   final String index;
@@ -14,7 +13,7 @@ class IndexData {
 }
 
 class ElasticsearchApi {
-  final _credentials = BasicAuth(
+  final _credentials = request_utils.BasicAuth(
       settings.ELASTICSEARCH_USERNAME, settings.ELASTICSEARCH_PASSWORD);
 
   Future<bool> indexDocument(String index, Object data, Logger logger) async {

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 
 import 'paths.dart';
 import 'utils.dart' as utils;

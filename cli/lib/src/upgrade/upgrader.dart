@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:monarch_cli/src/config/context_info.dart';
 import 'package:path/path.dart' as p;
 import 'package:monarch_utils/log.dart';
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 
 import '../config/monarch_binaries.dart';
 import '../utils/cli_exit_code.dart';

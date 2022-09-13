@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:path/path.dart' as p;
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 
 final localRoot = File(Platform.script.toFilePath()).parent.parent.path;
 final os = valueForPlatform(macos: 'macos', windows: 'windows', linux: 'linux');

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:monarch_utils/log.dart';
 import 'package:path/path.dart' as p;
 import 'package:pubspec_parse/pubspec_parse.dart';

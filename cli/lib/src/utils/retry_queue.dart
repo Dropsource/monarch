@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:monarch_io_utils/utils.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 
 abstract class RetryQueue<T> {
   final queue = <T>[];
