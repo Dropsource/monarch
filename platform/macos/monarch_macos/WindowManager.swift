@@ -119,6 +119,10 @@ class WindowManager {
         
         controllerWindow.setContentSize(NSSize(width: 700, height: 830))
         controllerWindow.title = projectName! + " - Monarch"
+        
+        controllerWindow.styleMask.insert(.closable)
+        controllerWindow.styleMask.insert(.miniaturizable)
+        
         controllerWindowController.window = controllerWindow
         controllerWindowController.showWindow(self)
     }
@@ -185,6 +189,22 @@ class WindowManager {
                 queue: queue,
                 using: { (n: Notification) in
                     self.channels!.sendControllerScreenChanged()
+                }),
+            
+            NotificationCenter.default.addObserver(
+                forName: NSWindow.willCloseNotification,
+                object: controllerWindow,
+                queue: queue,
+                using: { (n: Notification) in
+                    previewWindow.close()
+                }),
+            
+            NotificationCenter.default.addObserver(
+                forName: NSWindow.willCloseNotification,
+                object: previewWindow,
+                queue: queue,
+                using: { (n: Notification) in
+                    controllerWindow.close()
                 })
         ])
     }
