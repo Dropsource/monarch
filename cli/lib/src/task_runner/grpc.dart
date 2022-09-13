@@ -29,7 +29,8 @@ class ControllerGrpcClient {
 
   void initialize({required int port}) {
     _logger.info('Will use controller grpc server at port $port');
-    var channel = ClientChannel(valueForPlatform(macos: '0.0.0.0', windows: 'localhost'),
+    var channel = ClientChannel(
+        valueForPlatform(macos: '0.0.0.0', windows: 'localhost'),
         port: port,
         options:
             const ChannelOptions(credentials: ChannelCredentials.insecure()));

@@ -201,7 +201,9 @@ class Unzipper extends ThrowsManagedProcess {
 }
 
 class FlutterPubGet extends ThrowsManagedProcess {
-  FlutterPubGet({required Directory projectDirectory, required String flutterExecutablePath})
+  FlutterPubGet(
+      {required Directory projectDirectory,
+      required String flutterExecutablePath})
       : super(
             loggerName: 'FlutterPubGet',
             executable: flutterExecutablePath,

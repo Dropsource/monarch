@@ -6,7 +6,6 @@ enum DiscoveryStatus { initial, listening, found, notFound }
 
 /// Scrapes a stream of string lines and finds the devtools uri.
 class DevtoolsDiscovery with Log {
-
   DiscoveryStatus _status = DiscoveryStatus.initial;
   DiscoveryStatus get status => _status;
 

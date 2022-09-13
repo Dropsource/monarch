@@ -56,7 +56,8 @@ void main() {
 
     test('monarch path ok', () {
       {
-        var errors = _validate(r'C:\Users\joe\development\monarch\bin\monarch.exe');
+        var errors =
+            _validate(r'C:\Users\joe\development\monarch\bin\monarch.exe');
         expect(errors, isEmpty);
       }
 
@@ -68,8 +69,9 @@ void main() {
 
     test('monarch exe changed', () {
       {
-        var errors = _validate(r'C:\Users\joe\development\monarch\bin\momo.exe');
-         expect(errors, [
+        var errors =
+            _validate(r'C:\Users\joe\development\monarch\bin\momo.exe');
+        expect(errors, [
           r'Expected to find path monarch\bin\monarch.exe, instead found monarch\bin\momo.exe'
         ]);
       }
@@ -77,8 +79,9 @@ void main() {
 
     test('bin changed', () {
       {
-        var errors = _validate(r'C:\Users\joe\development\monarch\binz\momo.exe');
-         expect(errors, [
+        var errors =
+            _validate(r'C:\Users\joe\development\monarch\binz\momo.exe');
+        expect(errors, [
           r'Expected to find path monarch\bin\monarch.exe, instead found monarch\binz\momo.exe'
         ]);
       }

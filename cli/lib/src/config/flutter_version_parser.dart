@@ -11,7 +11,8 @@ class FlutterVersionParser with Log {
 
   Future<FlutterSdkId> getFlutterSdkId() async {
     var output = await _getFlutterVersionOutput();
-    return FlutterSdkId.parseFlutterVersionOutput(output, Platform.operatingSystem);
+    return FlutterSdkId.parseFlutterVersionOutput(
+        output, Platform.operatingSystem);
   }
 
   Future<String> _getFlutterVersionOutput() async {

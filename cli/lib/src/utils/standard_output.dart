@@ -7,13 +7,13 @@ import 'package:monarch_utils/log.dart';
 
 final _logger = Logger('StandardOutput');
 
-/// Prefer to use [stdout_default] over the global [stdout] so we can log and 
+/// Prefer to use [stdout_default] over the global [stdout] so we can log and
 /// redirect output as needed.
 final stdout_default = StandardOutput(stdout);
 
 /// Wraps an IOSink. It logs IOSink.write* calls. It can also be used to redirect
 /// streams from other processes into the wrapped IOSink.
-/// 
+///
 /// Its default instance, [stdout_default], passes this program's [stdout] as the
 /// IOSink. You can pass your own sink from tests, which is useful to verify
 /// the output the user will see.

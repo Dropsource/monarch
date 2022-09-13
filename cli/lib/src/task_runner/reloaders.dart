@@ -49,12 +49,12 @@ class HotRestarter extends Reloader {
 
   /// It restarts the Monarch Preview. Restarts the Preview by closing the existing
   /// Preview window and opening a new one.
-  /// 
-  /// We don't use the vm service restart functionality because it also restarts the 
+  ///
+  /// We don't use the vm service restart functionality because it also restarts the
   /// controller window.
-  /// 
+  ///
   /// Restart sequence:
-  /// 
+  ///
   /// - Build the preview bundle
   /// - Request the controller to restart the preview window
   /// - The controller in turn sends a message to the window manager to relaunch the preview window
@@ -66,7 +66,7 @@ class HotRestarter extends Reloader {
     if (bundleTask.status == TaskStatus.failed) {
       heartbeat.completeError();
       return;
-    } 
+    }
 
     if (controllerGrpcClient.isClientInitialized) {
       log.fine('Sending restartPreview request to controller grpc client');

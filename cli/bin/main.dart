@@ -14,7 +14,7 @@ const $verbose = 'verbose';
 const $crashDebug = 'crash-debug';
 
 /// @GOTCHA: if you modify the cli commands descriptions, arguments or help text,
-/// then the docs on the website (/docs/cli-usage) need to be updated. 
+/// then the docs on the website (/docs/cli-usage) need to be updated.
 /// See bin/cli_usage_doc.dart
 final runner = CommandRunner(
     'monarch', 'CLI to run Monarch binaries, stories and other related tasks.')

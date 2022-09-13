@@ -37,6 +37,6 @@ class TaskRunnerExitCodes {
   static const cliGrpcServerStartError =
       CliExitCode(118, 'cli grpc server start error', true);
 
-  static const missingFlutterIdDirInLocalDeployment = 
-      CliExitCode(119, 'monarch_ui/{flutter_id} directory missing in local deployment', true);
+  static const missingFlutterIdDirInLocalDeployment = CliExitCode(119,
+      'monarch_ui/{flutter_id} directory missing in local deployment', true);
 }

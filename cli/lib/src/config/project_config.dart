@@ -201,7 +201,8 @@ class ProjectConfig extends Validator with Log {
 }
 
 class TaskRunnerProjectConfig extends ProjectConfig {
-  TaskRunnerProjectConfig(Directory projectDirectory, InternalInfo internalInfo) : super(projectDirectory, internalInfo);
+  TaskRunnerProjectConfig(Directory projectDirectory, InternalInfo internalInfo)
+      : super(projectDirectory, internalInfo);
 
   pub.Version? _monarchPackageVersion;
   pub.Version get monarchPackageVersion {

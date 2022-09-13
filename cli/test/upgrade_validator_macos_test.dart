@@ -48,9 +48,8 @@ void main() {
 
       {
         var errors = _validate('');
-        expect(errors, [
-          'Expected to find path monarch/bin/monarch, instead found '
-        ]);
+        expect(errors,
+            ['Expected to find path monarch/bin/monarch, instead found ']);
       }
     });
 
@@ -69,7 +68,7 @@ void main() {
     test('monarch exe changed', () {
       {
         var errors = _validate(r'/Users/joe/development/monarch/bin/momo');
-         expect(errors, [
+        expect(errors, [
           r'Expected to find path monarch/bin/monarch, instead found monarch/bin/momo'
         ]);
       }
@@ -78,7 +77,7 @@ void main() {
     test('bin changed', () {
       {
         var errors = _validate(r'/Users/joe/development/monarch/binz/momo');
-         expect(errors, [
+        expect(errors, [
           r'Expected to find path monarch/bin/monarch, instead found monarch/binz/momo'
         ]);
       }
