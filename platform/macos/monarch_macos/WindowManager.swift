@@ -146,7 +146,7 @@ class WindowManager {
     
     func _setUpObservers(_ controllerWindow: NSWindow, _ previewWindow: NSWindow) {
 
-        let queue = OperationQueue.init()
+        let queue = OperationQueue.main
         
         observers.append(contentsOf: [
             NotificationCenter.default.addObserver(
