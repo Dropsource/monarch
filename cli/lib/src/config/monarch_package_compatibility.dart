@@ -6,7 +6,7 @@ final monarchPackage_2_1 = pub.Version(2, 1, 0);
 final monarchPackage_2_2 = pub.Version(2, 2, 0);
 final monarchPackage_2_4_pre = pub.Version(2, 4, 0, pre: 'pre.6');
 
-final buildRunnerPackage2 = pub.Version(2, 1, 0);
+final buildRunnerPackage2 = pub.Version(2, 1, 11);
 
 class MonarchPackageCompatibility {
   final pub.Version flutterVersion;
