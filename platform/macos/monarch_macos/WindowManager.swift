@@ -118,6 +118,7 @@ class WindowManager {
         controllerWindowController.contentViewController = controllerWindow.contentViewController
         
         controllerWindow.setContentSize(NSSize(width: 700, height: 830))
+        controllerWindow.minSize = NSSize(width: 630, height: 400)
         controllerWindow.title = projectName! + " - Monarch"
         
         controllerWindow.styleMask.insert(.closable)
