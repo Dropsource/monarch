@@ -30,10 +30,11 @@ dependencies:
   syncfusion_flutter_sliders: ^20.1.50
 
 dev_dependencies:
-  build_runner: ^2.1.0
+  build_runner: ^2.1.11
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
+  # monarch: ^2.4.0-pre.6
   monarch: any
 
 

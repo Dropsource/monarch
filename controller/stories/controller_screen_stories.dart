@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:monarch_controller/data/device_definitions.dart';
+import 'package:monarch_controller/data/logical_resolution.dart';
 import 'package:monarch_controller/data/stories.dart';
 import 'package:monarch_controller/manager/controller_manager.dart';
 import 'package:monarch_controller/manager/controller_state.dart';
 import 'package:monarch_controller/screens/controller_screen.dart';
 import 'package:monarch_controller/data/definitions.dart' as defs;
+import 'package:monarch/src/preview/device_definitions.dart' as preview;
 
 import 'story_utils.dart';
 
@@ -46,6 +49,25 @@ Widget devices_themes_and_locales_list() => ControllerScreen(
           ],
           currentLocale: 'en-US',
           standardThemes: standardMetaThemes,
+          packageName: 'monarch_demo'),
+    ));
+
+Widget devices_long_list() => ControllerScreen(
+        manager: ControllerManager(
+      channelMethodsSender: mockChannelMethodsSender,
+      initialState: ControllerState.init().copyWith(
+          isPreviewReady: true,
+          storyGroups: _longStoryList(),
+          devices: preview.deviceDefinitions
+              .map((e) => DeviceDefinition(
+                  id: e.id,
+                  name: e.name,
+                  logicalResolution: LogicalResolution(
+                      height: e.logicalResolution.height,
+                      width: e.logicalResolution.width),
+                  devicePixelRatio: e.devicePixelRatio,
+                  targetPlatform: e.targetPlatform))
+              .toList(),
           packageName: 'monarch_demo'),
     ));
 

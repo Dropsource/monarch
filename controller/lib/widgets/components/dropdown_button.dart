@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stockholm/stockholm.dart';
 
 import 'button.dart' as local;
+import 'menu_items.dart';
 
 ///code credits to stockholm widget library
 ///https://github.com/serverpod/stockholm
@@ -89,7 +90,7 @@ class _StockholmDropdownButtonState<T>
               bounds.left - 9,
               bounds.top - offsetY - 3,
             ),
-            menu: StockholmMenu(
+            menu: ScrollableStockholmMenu(
               items: items,
               width: widget.width,
             ),
