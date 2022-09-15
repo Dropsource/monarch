@@ -433,7 +433,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
 
     if (stdin_default.hasTerminal) {
       stdin_default.singleCharMode = true;
-      var _keystrokeSubscription = stdin_default.keystrokes
+      _keystrokeSubscription = stdin_default.keystrokes
           .listen((String keystroke) => _onKeystroke(keystroke, keyCommands));
     } else {
       stdout_default.writeln(
