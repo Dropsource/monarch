@@ -24,23 +24,23 @@ final devToolsOptions = [
     toggled: 'slow_animations_toggled',
   ),
   VisualDebugFlag(
-    name: Flags.highlightRepaints,
-    label: 'dev_tools.highlight_repaints',
-    toggled: 'highlight_repaints_toggled',
-  ),
-  VisualDebugFlag(
     name: Flags.showGuidelines,
     label: 'dev_tools.show_guideliness',
     toggled: 'show_guidelines_toggled',
   ),
   VisualDebugFlag(
-    name: Flags.highlightOversizedImages,
-    label: 'dev_tools.highlight_oversized_images',
-    toggled: 'highlight_oversized_images_toggled',
-  ),
-  VisualDebugFlag(
     name: Flags.showBaselines,
     label: 'dev_tools.show_baseliness',
     toggled: 'show_baselines_toggled',
+  ),
+  VisualDebugFlag(
+    name: Flags.highlightRepaints,
+    label: 'dev_tools.highlight_repaints',
+    toggled: 'highlight_repaints_toggled',
+  ),
+  VisualDebugFlag(
+    name: Flags.highlightOversizedImages,
+    label: 'dev_tools.highlight_oversized_images',
+    toggled: 'highlight_oversized_images_toggled',
   ),
 ];

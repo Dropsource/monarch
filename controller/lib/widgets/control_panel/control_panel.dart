@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monarch_controller/data/dock_definition.dart';
 import 'package:monarch_controller/data/monarch_data.dart';
 import 'package:monarch_controller/data/story_scale_definitions.dart';
-import 'package:monarch_controller/widgets/components/checkbox_grid.dart';
+import 'package:monarch_controller/widgets/components/checkbox_list.dart';
 import 'package:monarch_controller/widgets/components/dropdown.dart';
 import 'package:monarch_controller/widgets/components/labeled_control.dart';
 import 'package:monarch_controller/widgets/components/numbered_slider.dart';
@@ -129,7 +129,7 @@ class ControlPanel extends StatelessWidget {
             height: dividerHeight,
             color: Colors.white.withAlpha(100),
           ),
-          CheckboxGrid(
+          CheckboxList(
             visualDebugFlags: state.visualDebugFlags,
             onFlagToggled: manager.onVisualDebugFlagToggledByUi,
           ),
@@ -138,7 +138,7 @@ class ControlPanel extends StatelessWidget {
               top: 8,
             ),
             child: SizedBox(
-              width: 120,
+              width: 140,
               child: StockholmButton(
                 onPressed: manager.launchDevTools,
                 child:

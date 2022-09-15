@@ -25,8 +25,10 @@ class ScrollableStockholmMenu extends StockholmMenu {
             border: Border.all(color: Theme.of(context).dividerColor)),
         padding: const EdgeInsets.all(_menuPadding),
         child: SizedBox(
-          width: width,
-          child: ListView(children: items, shrinkWrap: true,)
-        ));
+            width: width,
+            child: ListView(
+              children: items,
+              shrinkWrap: true,
+            )));
   }
 }

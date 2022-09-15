@@ -14,7 +14,6 @@ import 'package:monarch_controller/screens/controller_screen.dart';
 import 'package:monarch_controller/data/channel_methods_receiver.dart';
 import 'data/grpc.dart';
 
-const controlsWidth = 250.0;
 final manager = ControllerManager(channelMethodsSender: channelMethodsSender);
 
 final _logger = Logger('ControllerMain');
