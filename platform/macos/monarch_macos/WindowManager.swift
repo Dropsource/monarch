@@ -118,10 +118,12 @@ class WindowManager {
         controllerWindowController.contentViewController = controllerWindow.contentViewController
         
         controllerWindow.setContentSize(NSSize(width: 700, height: 830))
+        controllerWindow.minSize = NSSize(width: 630, height: 440)
         controllerWindow.title = projectName! + " - Monarch"
         
         controllerWindow.styleMask.insert(.closable)
         controllerWindow.styleMask.insert(.miniaturizable)
+        controllerWindow.styleMask.insert(.resizable)
         
         controllerWindowController.window = controllerWindow
         controllerWindowController.showWindow(self)
@@ -145,7 +147,7 @@ class WindowManager {
     
     func _setUpObservers(_ controllerWindow: NSWindow, _ previewWindow: NSWindow) {
 
-        let queue = OperationQueue.init()
+        let queue = OperationQueue.main
         
         observers.append(contentsOf: [
             NotificationCenter.default.addObserver(

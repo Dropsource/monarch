@@ -116,6 +116,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   /// Manages the child tasks of [_watchToRegenTask] and [_attachToReloadTask].
   TasksManager? _regenAndReloadManager;
 
+  StreamSubscription? _keystrokeSubscription;
+
   bool _isStarting = false;
   bool get isStarting => _isStarting;
 
@@ -132,6 +134,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   @override
   Future<void> willTerminate() async {
     _isTerminating = true;
+    _keystrokeSubscription?.cancel();
     _terminateTasks();
   }
 
@@ -430,7 +433,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
 
     if (stdin_default.hasTerminal) {
       stdin_default.singleCharMode = true;
-      stdin_default.keystrokes
+      _keystrokeSubscription = stdin_default.keystrokes
           .listen((String keystroke) => _onKeystroke(keystroke, keyCommands));
     } else {
       stdout_default.writeln(

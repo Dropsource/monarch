@@ -11,6 +11,7 @@
   "controls.text_scale_factor": "Text Scale Factor",
   "controls.scale": "Scale",
   "controls.dock": "Dock",
+  "controls.visual_debugging": "Visual Debugging",
   "dock_settings.left": "Dock to left",
   "dock_settings.right": "Dock to right",
   "dock_settings.undock": "Undock",

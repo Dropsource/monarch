@@ -16,7 +16,6 @@ dependencies:
   rxdart: ^0.27.3
   flutter_localizations:
     sdk: flutter
-  flutter_staggered_grid_view: 0.6.1
   intl: ^0.17.0
   monarch_channels: ^1.0.2
   monarch_io_utils: ^1.2.0
@@ -30,11 +29,12 @@ dependencies:
   syncfusion_flutter_sliders: ^20.1.50
 
 dev_dependencies:
-  build_runner: ^2.1.0
+  build_runner: ^2.1.11
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
-  monarch: any
+  # monarch: ^2.4.0-pre.6
+  monarch: ^2.4.0-pre.1
 
 
 flutter:

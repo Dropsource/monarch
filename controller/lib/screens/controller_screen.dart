@@ -58,14 +58,10 @@ class UiWindowControllerState extends State<ControllerScreen> {
                       color: darkGrey,
                       constraints: const BoxConstraints(minWidth: 280),
                       padding: const EdgeInsets.only(
-                        top: 16,
+                        top: 0,
                       ),
                       child: Column(
                         children: [
-                          const TextHeadline5(
-                            'story_list.title',
-                            shouldTranslate: true,
-                          ),
                           if (!state.isPreviewReady) ...[
                             const TextBody1(
                               'story_list.loading',

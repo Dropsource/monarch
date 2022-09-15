@@ -63,13 +63,13 @@ ThemeData get theme => StockholmThemeData.dark().copyWith(
           fontFamily: 'San Francisco',
           color: fontPrimaryColor,
           fontWeight: FontWeight.w500,
-          fontSize: 10,
+          fontSize: 12,
         ),
         bodyText2: TextStyle(
           fontFamily: 'San Francisco',
           color: fontPrimaryColor,
           fontWeight: FontWeight.w500,
-          fontSize: 10,
+          fontSize: 12,
         ),
         subtitle1: TextStyle(
           fontFamily: 'San Francisco',
