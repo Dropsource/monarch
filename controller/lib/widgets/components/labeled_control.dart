@@ -15,7 +15,7 @@ class LabeledControl extends Padding {
     required this.label,
     required this.control,
     this.controlWidth = 340,
-    this.labelControlSpacing = 16,
+    this.labelControlSpacing = 10,
     this.verticalPadding = 0,
     this.horizontalPadding = 0,
     this.shouldTranslate = true,
@@ -25,13 +25,16 @@ class LabeledControl extends Padding {
               vertical: verticalPadding, horizontal: horizontalPadding),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Flexible(
-                child: TextBody1(
-                  label,
-                  shouldTranslate: shouldTranslate,
-                  textAlign: TextAlign.end,
-                ),
+                child: Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: TextBody1(
+                      label,
+                      shouldTranslate: shouldTranslate,
+                      textAlign: TextAlign.end,
+                    )),
               ),
               SizedBox(
                 width: labelControlSpacing,

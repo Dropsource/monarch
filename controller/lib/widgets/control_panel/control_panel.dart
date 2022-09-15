@@ -14,10 +14,11 @@ import '../../../utils/translations.dart';
 import '../../data/device_definitions.dart';
 import '../components/text.dart';
 
+const dividerHeight = 24.0;
+
 class ControlPanel extends StatelessWidget {
   final ControllerState state;
   final double width;
-  final dividerHeight = 24.0;
   final ControllerManager manager;
 
   const ControlPanel({
@@ -83,7 +84,7 @@ class ControlPanel extends StatelessWidget {
             controlWidth: controlWidth,
           ),
           const SizedBox(
-            height: 20,
+            height: 15,
           ),
           LabeledControl(
             label: _translations.text("controls.text_scale_factor"),
@@ -94,11 +95,7 @@ class ControlPanel extends StatelessWidget {
             shouldTranslate: false,
             controlWidth: controlWidth,
           ),
-          Divider(
-            thickness: 1.0,
-            height: dividerHeight,
-            color: Colors.white.withAlpha(100),
-          ),
+          const ControlPanelDivider(),
           LabeledControl(
             label: 'controls.scale',
             control: DropDown<StoryScaleDefinition>(
@@ -124,30 +121,46 @@ class ControlPanel extends StatelessWidget {
             ),
             controlWidth: controlWidth,
           ),
-          Divider(
-            thickness: 1.0,
-            height: dividerHeight,
-            color: Colors.white.withAlpha(100),
-          ),
-          CheckboxList(
-            visualDebugFlags: state.visualDebugFlags,
-            onFlagToggled: manager.onVisualDebugFlagToggledByUi,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 8,
+          const ControlPanelDivider(),
+          LabeledControl(
+            label: 'controls.visual_debugging',
+            control: CheckboxList(
+              visualDebugFlags: state.visualDebugFlags,
+              onFlagToggled: manager.onVisualDebugFlagToggledByUi,
             ),
-            child: SizedBox(
-              width: 140,
-              child: StockholmButton(
-                onPressed: manager.launchDevTools,
-                child:
-                    const TextBody1('dev_tools.launch', shouldTranslate: true),
+            controlWidth: controlWidth,
+          ),
+          const ControlPanelDivider(),
+          Row(
+            children: [
+              const SizedBox(
+                width: 87,
               ),
-            ),
-          ),
+              SizedBox(
+                width: 140,
+                child: StockholmButton(
+                  onPressed: manager.launchDevTools,
+                  child: const TextBody1('dev_tools.launch',
+                      shouldTranslate: true),
+                ),
+              )
+            ],
+          )
         ],
       ),
+    );
+  }
+}
+
+class ControlPanelDivider extends StatelessWidget {
+  const ControlPanelDivider({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      thickness: 0.0,
+      height: dividerHeight,
+      color: Colors.white.withAlpha(100),
     );
   }
 }

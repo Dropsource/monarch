@@ -18,33 +18,16 @@ class CheckboxList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: visualDebugFlags
-          .map((item) => StockholmCheckbox(
+          .map((item) => SizedBox(
+              height: 20,
+              child: StockholmCheckbox(
                 value: item.isEnabled,
                 onChanged: (newValue) {
                   onFlagToggled?.call(item);
                 },
                 label: Translations.of(context)!.text(item.label),
-              ))
+              )))
           .toList(),
     );
-
-    // return SizedBox(
-    //   height: 60,
-    //   child: AlignedGridView.count(
-    //       crossAxisCount: 2,
-    //       mainAxisSpacing: 4,
-    //       crossAxisSpacing: 4,
-    //       itemCount: visualDebugFlags.length,
-    //       itemBuilder: (context, index) {
-    //         final item = visualDebugFlags[index];
-    //         return StockholmCheckbox(
-    //           value: item.isEnabled,
-    //           onChanged: (newValue) {
-    //             onFlagToggled?.call(item);
-    //           },
-    //           label: Translations.of(context)!.text(item.label),
-    //         );
-    //       }),
-    // );
   }
 }
