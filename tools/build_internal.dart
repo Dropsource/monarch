@@ -4,7 +4,7 @@ import 'paths.dart';
 
 /// Writes monarch/bin/internal files:
 /// - binaries_version.txt
-/// - binaries_commit.txt
+/// - binaries_revision.txt
 /// - min_flutter_version.txt
 ///
 /// Other build_*.dart scripts write their own internal files.

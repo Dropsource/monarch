@@ -36,11 +36,11 @@ Future<InternalInfo> readInternalFiles(MonarchBinaries monarchBinaries) async {
       platformAppVersion:
           await _readInternalFile('platform_app_version.txt', monarchBinaries));
 
-  _logger.config('commit_hash=${internal.binariesRevision}');
+  _logger.config('binaries_revision=${internal.binariesRevision}');
   _logger.config('monarch binaries:'
       ' version=${internal.binariesVersion}'
       ' cli_version=${internal.cliVersion}'
-      ' controller_verison=${internal.controllerVersion}'
+      ' controller_version=${internal.controllerVersion}'
       ' platform_app_version=${internal.platformAppVersion}');
 
   return internal;

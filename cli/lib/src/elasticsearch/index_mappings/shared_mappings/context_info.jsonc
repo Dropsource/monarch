@@ -59,6 +59,12 @@
                 },
                 "version": {
                     "type": "keyword"
+                },
+                "controller_version": {
+                    "type": "keyword"
+                },
+                "revision": {
+                    "type": "keyword"
                 }
             }
         },
