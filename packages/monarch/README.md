@@ -6,7 +6,9 @@
 
 # Monarch
 
-Build high-quality UIs with ease. Monarch is a tool for building Flutter widgets in isolation. It makes it easy to build, test and debug complex UIs.
+Build high-quality UIs with ease. Monarch is an open source tool for building Flutter widgets in isolation. It makes it easy to build, test and debug complex UIs.
+
+[![Monarch Intro Video](https://img.youtube.com/vi/yblMOMfbZno/0.jpg)](https://www.youtube.com/watch?v=yblMOMfbZno)
 
 ## Documentation
 * [Getting Started](https://monarchapp.io/docs/introduction)
@@ -24,48 +26,56 @@ packages, patterns and tools.
 * Follow us on Twitter [@monarch_app](https://twitter.com/monarch_app)
 * If you have any questions or run into any issues, please create an issue in this repo.
 
+## Contributing
+We welcome pull requests and stars! Read our [contributing guide](CONTRIBUTING.md) to get started.
+
 ## About Monarch
-Monarch is a tool for building Flutter widgets in isolation. It makes it easy to build, test and debug complex UIs.
+Monarch is an open source tool for building Flutter widgets in isolation. It makes it easy to build, test and debug complex UIs.
 
 Monarch is inspired by [Storybook](https://storybook.js.org/). 
 
 ### Build widgets faster
-- Build your widgets in isolation.
-- Isolate your widgets by writing stories.
-- Render stories without worrying about data, emulators, backends or business logic.
-- Browse stories to verify your UI is right.
-- Ditch the emulator for common tasks, free up memory and resources.
+**Write stories**  
+Write stories to isolate your widgets. Then preview stories without running your app or backend.  
+
+**Browse your stories**  
+Monarch lets you verify your UI without an emulator—free up memory and resources.  
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch-build.gif" alt="Build widgets faster with Monarch">
 </p>
 
 ### Find and fix bugs with ease
-- Render edge cases with little effort.
-- From your stories, navigate to your code to find and fix bugs.
-- Monarch renders your fixes much faster than an emulator.
-- Mock dependencies to render visual states that are hard to reproduce.
-- Reuse your stories from your widget tests.
+**Find bugs**  
+Stories render edge cases with little effort. Mock dependencies to render visual states that are hard to reproduce.
+
+**Fix bugs**  
+From your stories, navigate to your code to fix bugs. Monarch renders your fixes faster than an emulator.
+
+**Test your UI**  
+Reuse your stories from your widget tests.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch-fix.gif" alt="Find and fix bugs with ease">
 </p>
 
 ### Build responsive UIs easily
-- See your widgets in different devices and tune them easily with hot reload.
-- Switch between dark mode, light mode or your own custom theme.
-- See your UI under the locales your app supports.
-- Make sure your app remains accessible and usable at large text scale factors.
+**See your widgets in different modes**
+Make sure your UI works across multiple devices, text scales, languages, and themes.
+
+**Hot reload your changes**
+Tune your UI easily with hot reload. Monarch automatically reloads your changes.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch-knobs.gif" alt="Build responsive UIs easily">
 </p>
 
 ### Debug widgets in isolation
-- Fine-tune animations, fix layout issues, align text.
-- Find images using too much memory.
-- Use DevTools.
-- Debug your widgets without running the full app.
+**Visual Debugging**
+Fine-tune animations, fix layout issues, align text. Find images using too much memory.
+
+**Debug in isolation**
+Debug widgets without running your app or backend. And Use DevTools.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Dropsource/monarch/master/_assets/monarch-debug.gif" alt="Build responsive UIs easily">
