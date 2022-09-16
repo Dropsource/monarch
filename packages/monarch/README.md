@@ -8,7 +8,11 @@
 
 Build high-quality UIs with ease. Monarch is an open source tool for building Flutter widgets in isolation. It makes it easy to build, test and debug complex UIs.
 
-[![Monarch Intro Video](https://img.youtube.com/vi/yblMOMfbZno/0.jpg)](https://www.youtube.com/watch?v=yblMOMfbZno)
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=yblMOMfbZno" target="_blank">
+    <img src="https://img.youtube.com/vi/yblMOMfbZno/0.jpg" alt="Monarch Intro Video">
+  </a>
+</p>
 
 ## Documentation
 * [Getting Started](https://monarchapp.io/docs/introduction)
