@@ -1,8 +1,14 @@
-## WIP
+# Contributing to Monarch
 
-After cloning this repo:
+We have worked hard to make the contribution process as painless as possible.
+This repo includes various build scripts which should make it easy to contribute
+to Monarch. The scripts can be run from macOS and Windows.
 
-1. Create a cli/lib/settings.dart file with these contents:
+The steps below will help you set up Monarch in your local environment.
+
+1. Clone this repo to your local environment.
+
+2. Create a cli/lib/settings.dart file with these contents:
 ```
 const DEPLOYMENT = 'local';
 const ELASTICSEARCH_ENDPOINT = '';
@@ -10,10 +16,8 @@ const ELASTICSEARCH_USERNAME = '';
 const ELASTICSEARCH_PASSWORD = '';
 const VERSION_API_URL = '';
 ```
-_Ideally the contributor should not have to create the settings.dart file._
-_After changing usage or analytics requirements, this will probably change._
 
-2. Create a file tools/local_settings.yaml, and populate it with the paths to your 
+3. Create a file tools/local_settings.yaml, and populate it with the paths to your 
    local flutter sdks:
 ```
 local_flutter_sdks:
@@ -21,7 +25,7 @@ local_flutter_sdks:
   - /Users/bob/development/flutter-sdks/stable
 ```
 
-3. Build all the monarch modules:
+4. Build all the monarch modules:
 ```
 $ dart tools/build.dart
 ```
@@ -35,11 +39,18 @@ $ dart tools/build_platform.dart
 
 The build scripts will output the built artifacts to the out directory.
 
-4. Run monarch against an existing or new flutter project:
+5. Run the version of monarch you just built against a new flutter project:
 ```
-// use flutter beta channel for now (or flutter >= 3.0.0)
 $ flutter create my_project
 $ cd my_project
 $ /path/to/out/monarch/bin/monarch init
 $ /path/to/out/monarch/bin/monarch run --verbose
+```
+
+To make things easier, you could add the out/monarch/bin directory to your PATH.
+
+6. If you would like to propose a change please submit a PR. Do not forget
+to run the tests:
+```
+$ dart tools/test.dart
 ```

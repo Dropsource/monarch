@@ -64,10 +64,10 @@ Reuse your stories from your widget tests.
 </p>
 
 ### Build responsive UIs easily
-**See your widgets in different modes**
+**See your widgets in different modes**  
 Make sure your UI works across multiple devices, text scales, languages, and themes.
 
-**Hot reload your changes**
+**Hot reload your changes**  
 Tune your UI easily with hot reload. Monarch automatically reloads your changes.
 
 <p align="center">
@@ -75,10 +75,10 @@ Tune your UI easily with hot reload. Monarch automatically reloads your changes.
 </p>
 
 ### Debug widgets in isolation
-**Visual Debugging**
+**Visual Debugging**  
 Fine-tune animations, fix layout issues, align text. Find images using too much memory.
 
-**Debug in isolation**
+**Debug in isolation**  
 Debug widgets without running your app or backend. And Use DevTools.
 
 <p align="center">
