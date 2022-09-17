@@ -1,2 +1,3 @@
 # monarch_channels
-Channel interfaces for Monarch
+
+Container Flutter Method Channel interfaces for Monarch.

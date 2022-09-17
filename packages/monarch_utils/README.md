@@ -1,3 +1,3 @@
-Contains internal utilities for [`package:monarch`](https://github.com/Dropsource/monarch/tree/master/monarch).
+# monarch_utils
 
-See that package for more information.
+Contains utilities for the various Monarch modules and packages.
