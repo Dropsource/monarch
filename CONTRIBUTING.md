@@ -1,7 +1,7 @@
 # Contributing to Monarch
 
 The Monarch team has worked hard to make the contribution workflow easy. 
-This repo has many build scripts which make it easy to contribute changes 
+This repo has many build scripts which help you contribute changes 
 to Monarch.
 
 The scripts can be run from macOS or Windows. We hope to add Linux support
