@@ -47,7 +47,7 @@ The build scripts will output the built artifacts to the out directory.
 
 5. Run the tests:
 ```sh
-$ dart tools/test.dart
+$ dart tools/run_tests.dart
 ```
 
 6. Run the version of Monarch you just built against a new Flutter project:
