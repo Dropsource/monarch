@@ -134,6 +134,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   @override
   Future<void> willTerminate() async {
     _isTerminating = true;
+    stdin_default.singleCharMode = false;
     _keystrokeSubscription?.cancel();
     _terminateTasks();
   }
