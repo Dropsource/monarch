@@ -2,7 +2,7 @@
 
 # Version of the Monarch Windows app. Avoid pre-releases until
 # we have tested that the Windows build works with pre-releases.
-version: 2.1.0
+version: 2.1.1
 
 # Relative path from gen\runner directory. Use double back-slashes.
 app_icon_path: ..\\..\\src\\resources\\monarch_app_icon.ico

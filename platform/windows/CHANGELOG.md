@@ -1,3 +1,6 @@
+## 2.1.1 - 2022-09-21
+- Minimum size of controller window
+
 ## 2.1.0 - 2022-09-17
 - display project name in controller window title
 - refactor method call forwarding
