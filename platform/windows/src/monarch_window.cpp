@@ -100,7 +100,15 @@ LRESULT ControllerWindow::MessageHandler(
 		}
 		break;
 
+	case WM_GETMINMAXINFO:
+		{
+			LPMINMAXINFO lpMMI = (LPMINMAXINFO)lparam;
+			lpMMI->ptMinTrackSize.x = 575;
+			lpMMI->ptMinTrackSize.y = 500;
+		}
+		break;
 	}
+
 	return MonarchWindow::MessageHandler(hwnd, message, wparam, lparam);
 }
 
