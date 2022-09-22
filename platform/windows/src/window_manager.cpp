@@ -115,6 +115,8 @@ void WindowManager::_showAndSetUpPreviewWindow(WindowInfo controllerWindowInfo)
 
 void WindowManager::_showAndSetUpControllerWindow(WindowInfo controllerWindowInfo)
 {
+	// @GOTCHA: The Monarch CLI kills the controller window using its title.
+	// If you change the title, change the CLI as well.
 	if (!_controllerWindow->CreateAndShow(
 		to_wstring(_projectName) + L" - Monarch",
 		Win32Window::Point(controllerWindowInfo.topLeft.x, controllerWindowInfo.topLeft.y),

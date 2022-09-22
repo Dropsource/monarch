@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:monarch_utils/log.dart';
 
 import 'process_task.dart';
@@ -48,5 +50,41 @@ class Terminator with Log {
         log.warning('Expected task to be terminated: ${task.taskName}');
       }
     }
+  }
+}
+
+class WindowsTerminator {
+  /// On Windows, it kills tasks by window title using the command:
+  /// taskkill /F /FI "WindowTitle eq [windowTitle]" /T
+  ///
+  /// Example:
+  //  taskkill /F /FI "WindowTitle eq my_project - Monarch" /T
+  ///
+  /// Due to a bug, Dart on Windows is not able to kill child processes thus the [Terminator]
+  /// class doest not terminate all the processes Monarch starts.
+  ///
+  /// See Github issues:
+  /// - https://github.com/dart-lang/sdk/issues/49234
+  /// - https://github.com/flutter/flutter/issues/98435
+  /// - https://github.com/dart-lang/sdk/issues/22470
+  ///
+  /// This function kills most of the dart processes that Monarch starts.
+  /// However, there are other processes started by monarch.exe (aka the Monarch CLI) which
+  /// are being left orphan. 
+  /// 
+  /// Once the issues above are fixed, the [Terminator] class should work as 
+  /// expected and we won't need this function anymore.
+  static void killTasksByWindowTitle(String windowTitle) {
+    var _log = Logger('WindowsTerminator');
+    if (!Platform.isWindows) {
+      _log.warning(
+          'The killTasksByWindowTitle function should only be called on the Windows platform');
+    }
+    _log.fine('Terminating tasks whose window title is: $windowTitle');
+    var result = Process.runSync(
+        'taskkill', ['/F', '/FI', 'WindowTitle eq $windowTitle', '/T'],
+        runInShell: true);
+    _log.fine(result.stdout);
+    _log.fine(result.stderr);
   }
 }
