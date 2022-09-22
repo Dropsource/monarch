@@ -1,3 +1,6 @@
+## 2.1.1 - 2022-09-22
+- On windows: kill controller window by title
+
 ## 2.1.0 - 2022-09-08
 - GRPC implementation
 - Other fixes
