@@ -9,7 +9,7 @@
 #include "monarch_state.h"
 #include "channels_utils.h"
 
-class WindowManager;
+class HeadlessWindowManager;
 
 const std::string controllerChannelName = "monarch.controller";
 const std::string previewChannelName = "monarch.preview";
@@ -20,7 +20,7 @@ public:
 	Channels(
 		flutter::BinaryMessenger* controllerMessenger,
 		flutter::BinaryMessenger* previewMessenger,
-		WindowManager* windowManager_);
+		HeadlessWindowManager* windowManager_);
 	~Channels();
 
 	void setUpCallForwarding();
@@ -30,7 +30,7 @@ public:
 
 	std::unique_ptr<flutter::MethodChannel<EncodableValue>> controllerChannel;
 	std::unique_ptr<flutter::MethodChannel<EncodableValue>> previewChannel;
-	WindowManager* windowManager;
+	HeadlessWindowManager* windowManager;
 
 private:
 	void _forwardMethodCall(

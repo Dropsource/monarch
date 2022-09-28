@@ -6,14 +6,14 @@
 #include "dock_side.h"
 #include "window_manager.h"
 
-class WindowManager;
+class HeadlessWindowManager;
 
 class MonarchWindow : public FlutterWindow
 {
 public:
 	MonarchWindow(
 		const flutter::DartProject& project,
-		WindowManager* windowManager_);
+		HeadlessWindowManager* windowManager_);
 
 	virtual ~MonarchWindow();
 
@@ -25,7 +25,7 @@ public:
 
 protected:
 	bool isMovingProgrammatically = false;
-	WindowManager* windowManager;
+	HeadlessWindowManager* windowManager;
 };
 
 class ControllerWindow : public MonarchWindow
@@ -33,7 +33,7 @@ class ControllerWindow : public MonarchWindow
 public:
 	ControllerWindow(
 		const flutter::DartProject& project,
-		WindowManager* windowManager);
+		HeadlessWindowManager* windowManager);
 
 	virtual ~ControllerWindow();
 
@@ -55,7 +55,7 @@ class PreviewWindow : public MonarchWindow
 public:
 	PreviewWindow(
 		const flutter::DartProject& project,
-		WindowManager* windowManager);
+		HeadlessWindowManager* windowManager);
 
 	virtual ~PreviewWindow();
 
@@ -97,4 +97,24 @@ private:
 	void _move(DockSide side, WindowInfo controllerWindowInfo);
 	Point_ _getTopLeft(WindowInfo controllerWindowInfo, DockSide side);
 	bool _isControllerWindowSet();
+};
+
+
+class HeadlessController
+{
+public:
+	HeadlessController(
+		const flutter::DartProject& project,
+		HeadlessWindowManager* windowManager);
+
+	virtual ~HeadlessController();
+
+	void create();
+
+	flutter::FlutterEngine* engine() { return engine_.get(); }
+
+private:
+	flutter::DartProject project_;
+	std::unique_ptr<flutter::FlutterEngine> engine_;
+	HeadlessWindowManager* windowManager;
 };

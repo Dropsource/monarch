@@ -4,7 +4,7 @@
 Channels::Channels(
 	flutter::BinaryMessenger* controllerMessenger, 
 	flutter::BinaryMessenger* previewMessenger, 
-	WindowManager* windowManager_)
+	HeadlessWindowManager* windowManager_)
 {
 	controllerChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
 		controllerMessenger,

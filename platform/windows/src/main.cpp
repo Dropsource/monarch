@@ -38,11 +38,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
 
   defaultLogLevel = logLevelFromString(defaultLogLevelString);
 
-  /*_logger.shout("start sleep");
-  Sleep(10000);
-  _logger.shout("end sleep");*/
+  //_logger.shout("start sleep");
+  //Sleep(10000);
+  //_logger.shout("end sleep");
 
-  auto manager = WindowManager(
+  auto manager = HeadlessWindowManager(
     controllerBundlePath, 
     previewBundlePath,
     defaultLogLevelString,

@@ -12,7 +12,7 @@
 
 MonarchWindow::MonarchWindow(
 	const flutter::DartProject& project,
-	WindowManager* windowManager_)
+	HeadlessWindowManager* windowManager_)
 	: FlutterWindow(project), windowManager(windowManager_)
 {
 }
@@ -52,7 +52,7 @@ flutter::BinaryMessenger* MonarchWindow::messenger()
 
 ControllerWindow::ControllerWindow(
 	const flutter::DartProject& project,
-	WindowManager* windowManager)
+	HeadlessWindowManager* windowManager)
 	: MonarchWindow(project, windowManager)
 {
 	_previewWindowHandle = nullptr;
@@ -141,7 +141,7 @@ void ControllerWindow::_postMoveMessage()
 
 PreviewWindow::PreviewWindow(
 	const flutter::DartProject& project,
-	WindowManager* windowManager)
+	HeadlessWindowManager* windowManager)
 	: MonarchWindow(project, windowManager)
 {
 	_controllerWindowHandle = nullptr;
@@ -327,4 +327,19 @@ Point_ PreviewWindow::_getTopLeft(WindowInfo controllerWindowInfo, DockSide side
 bool PreviewWindow::_isControllerWindowSet()
 {
 	return _controllerWindowHandle != nullptr;
+}
+
+HeadlessController::HeadlessController(const flutter::DartProject& project, HeadlessWindowManager* windowManager)
+	: project_(project), windowManager(windowManager)
+{
+}
+
+HeadlessController::~HeadlessController()
+{
+}
+
+void HeadlessController::create()
+{
+	engine_ = std::make_unique<flutter::FlutterEngine>(project_);
+	engine_->Run();
 }
