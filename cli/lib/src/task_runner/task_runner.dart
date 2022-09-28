@@ -97,6 +97,9 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   /// The desktop app launches the Monarch Controller and Preview.
   ProcessReadyTask? _runMonarchAppTask;
 
+  ProcessReadyTask? _winPreviewWindowTask;
+  ProcessReadyTask? _winControllerWindowTask;
+
   /// Attaches to the running Monarch Preview. This process allows us to
   /// hot reload.
   ///
@@ -161,6 +164,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
       _generateStoriesTask,
       _buildPreviewBundleTask,
       _runMonarchAppTask,
+      _winPreviewWindowTask,
+      _winControllerWindowTask,
       _attachToReloadTask?.task,
       _watchToRegenTask
     ];
@@ -305,6 +310,37 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         onStdErrMessage: onRunMonarchAppStdErrMessage,
         readyMessage: 'monarch-preview-ready');
 
+    _winPreviewWindowTask = ProcessReadyTask(
+        taskName: TaskNames.winPreviewApp,
+        executable:
+            monarchBinaries.monarchAppExecutableFile(config.flutterSdkId).path,
+        arguments: [
+          'preview', // mode
+          monarchBinaries
+              .controllerDirectory(config.flutterSdkId)
+              .path, // preview-server-bundle
+          p.join(projectDirectory.path, dotMonarch), // preview-window-bundle
+          defaultLogLevel.name, // log-level
+          cliGrpcServerPort.toString(), // cli-grpc-server-port
+        ],
+        workingDirectory: projectDirectory.path,
+        analytics: analytics,
+        readyMessage: 'monarch-preview-ready');
+
+    _winControllerWindowTask = ProcessReadyTask(
+        taskName: TaskNames.winControllerapp,
+        executable:
+            monarchBinaries.monarchAppExecutableFile(config.flutterSdkId).path,
+        arguments: [
+          'controller', // mode
+          r'C:\Users\fertrig\temp\controller-window', // controller-window-bundle
+          defaultLogLevel.name, // log-level
+          config.pubspecProjectName, // project-name
+        ],
+        workingDirectory: projectDirectory.path,
+        analytics: analytics,
+        readyMessage: 'monarch-controller-ready');
+
     _attachToReloadTask = AttachTask(
         taskName: TaskNames.attachToHotRestart,
         flutterExecutablePath: config.flutterExecutablePath,
@@ -336,21 +372,26 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         var launching =
             TaskCountHeartbeat('Launching Monarch app', taskCount: 1)..start();
 
-        await _runMonarchAppTask!.run();
-        unawaited(_runMonarchAppTask!.done().whenComplete(() async {
-          if (!_isTerminating) {
-            _watchToRegenTask?.stopScrapingMessages();
-            _attachToReloadTask?.stopScrapingMessages();
-            await Future.delayed(Duration(milliseconds: 50), () {
-              var ctrlC = valueForPlatform(macos: '⌃C', windows: 'Ctrl+C');
-              stdout_default.writeln(
-                  '\nMonarch app terminated. Press $ctrlC to exit CLI.');
-            });
-          }
-        }));
-        var monarchAppStdoutListener = MonarchAppStdoutListener();
-        _runMonarchAppTask!.stdout.listen(monarchAppStdoutListener.listen);
-        await _runMonarchAppTask!.ready();
+        if (Platform.isWindows) {
+          await _winPreviewWindowTask!.run();
+          await _winControllerWindowTask!.run();
+        } else {
+          await _runMonarchAppTask!.run();
+          unawaited(_runMonarchAppTask!.done().whenComplete(() async {
+            if (!_isTerminating) {
+              _watchToRegenTask?.stopScrapingMessages();
+              _attachToReloadTask?.stopScrapingMessages();
+              await Future.delayed(Duration(milliseconds: 50), () {
+                var ctrlC = valueForPlatform(macos: '⌃C', windows: 'Ctrl+C');
+                stdout_default.writeln(
+                    '\nMonarch app terminated. Press $ctrlC to exit CLI.');
+              });
+            }
+          }));
+          var monarchAppStdoutListener = MonarchAppStdoutListener();
+          _runMonarchAppTask!.stdout.listen(monarchAppStdoutListener.listen);
+          await _runMonarchAppTask!.ready();
+        }
 
         launching.complete();
       },

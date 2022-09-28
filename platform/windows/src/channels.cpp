@@ -4,16 +4,16 @@
 Channels::Channels(
 	flutter::BinaryMessenger* controllerMessenger, 
 	flutter::BinaryMessenger* previewMessenger, 
-	HeadlessWindowManager* windowManager_)
+	PreviewWindowManager* windowManager_)
 {
-	controllerChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+	previewServerChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
 		controllerMessenger,
-		controllerChannelName,
+		previewServerChannelName,
 		&flutter::StandardMethodCodec::GetInstance());
 
-	previewChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+	previewWindowChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
 		previewMessenger,
-		previewChannelName,
+		previewWindowChannelName,
 		&flutter::StandardMethodCodec::GetInstance());
 
 	windowManager = windowManager_;
@@ -21,24 +21,24 @@ Channels::Channels(
 
 Channels::~Channels()
 {
-	auto controllerPtr = controllerChannel.release();
+	auto controllerPtr = previewServerChannel.release();
 	delete controllerPtr;
 
-	auto previewPtr = previewChannel.release();
+	auto previewPtr = previewWindowChannel.release();
 	delete previewPtr;
 }
 
 void Channels::setUpCallForwarding()
 {
-	previewChannel->SetMethodCallHandler(
+	previewWindowChannel->SetMethodCallHandler(
 		[=](const auto& call, auto callback) {
-			_forwardMethodCall(call, callback, controllerChannel);
+			_forwardMethodCall(call, callback, previewServerChannel);
 		}
 	);
 
-	controllerChannel->SetMethodCallHandler(
+	previewServerChannel->SetMethodCallHandler(
 		[=](const auto& call, auto callback) {
-			_forwardMethodCall(call, callback, previewChannel);
+			_forwardMethodCall(call, callback, previewWindowChannel);
 
 			if (call.method_name() == MonarchMethods::setActiveDevice ||
 				call.method_name() == MonarchMethods::setStoryScale) {
@@ -111,21 +111,21 @@ void Channels::_forwardMethodCall(
 
 void Channels::sendWillClosePreview()
 {
-	previewChannel->InvokeMethod(MonarchMethods::willClosePreview, nullptr);
-	controllerChannel->InvokeMethod(MonarchMethods::willClosePreview, nullptr);
+	previewWindowChannel->InvokeMethod(MonarchMethods::willClosePreview, nullptr);
+	previewServerChannel->InvokeMethod(MonarchMethods::willClosePreview, nullptr);
 }
 
 void Channels::unregisterMethodCallHandlers()
 {
-	controllerChannel->SetMethodCallHandler(nullptr);
-	previewChannel->SetMethodCallHandler(nullptr);
+	previewServerChannel->SetMethodCallHandler(nullptr);
+	previewWindowChannel->SetMethodCallHandler(nullptr);
 }
 
 void Channels::restartPreviewChannel(flutter::BinaryMessenger* previewMessenger)
 {
-	previewChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+	previewWindowChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
 		previewMessenger,
-		previewChannelName,
+		previewWindowChannelName,
 		&flutter::StandardMethodCodec::GetInstance());
 	setUpCallForwarding();
 }

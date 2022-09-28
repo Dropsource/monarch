@@ -9,60 +9,44 @@
 
 class ControllerWindow;
 class PreviewWindow;
-class HeadlessController;
+class PreviewServer;
 class Channels;
-//
-//class WindowManager
-//{
-//public:
-//	WindowManager(
-//		std::string controllerBundlePath, 
-//		std::string previewBundlePath,
-//		std::string defaultLogLevelString,
-//		std::string cliGrpcServerPort,
-//		std::string projectName);
-//	~WindowManager();
-//
-//	DockSide selectedDockSide;
-//
-//	void launchWindows();
-//	void resizePreviewWindow();
-//	void resizePreviewWindow(MonarchState state);
-//	void setDocking();
-//	void setDocking(MonarchState state);
-//	void restartPreviewWindow();
-//
-//private:
-//	std::string _previewBundlePath;
-//	std::string _controllerBundlePath;
-//	std::string _defaultLogLevelString;
-//	std::string _cliGrpcServerPort;
-//	std::string _projectName;
-//
-//	std::unique_ptr<ControllerWindow> _controllerWindow;
-//	std::unique_ptr<PreviewWindow> _previewWindow;
-//
-//	std::unique_ptr<Channels> _channels;
-//
-//	void _showAndSetUpPreviewWindow(WindowInfo windowInfo);
-//	void _showAndSetUpControllerWindow(WindowInfo windowInfo);
-//	void _postMessageStateChange(MonarchState state);
-//};
 
-class HeadlessWindowManager
+class ControllerWindowManager
 {
 public:
-	HeadlessWindowManager(
-		std::string controllerBundlePath,
-		std::string previewBundlePath,
+	ControllerWindowManager(
+		std::string controllerWindowBundlePath,
 		std::string defaultLogLevelString,
-		std::string cliGrpcServerPort,
 		std::string projectName);
-	~HeadlessWindowManager();
+	~ControllerWindowManager();
+
+	void launchWindow();
+
+private:
+	std::string _controllerWindowBundlePath;
+	std::string _defaultLogLevelString;
+	std::string _projectName;
+
+	std::unique_ptr<ControllerWindow> _controllerWindow;
+	HWND _previewWindowHandle;
+
+	void _showAndSetUpControllerWindow(WindowInfo windowInfo);
+};
+
+class PreviewWindowManager
+{
+public:
+	PreviewWindowManager(
+		std::string previewServerBundlePath,
+		std::string previewWindowBundlePath,
+		std::string defaultLogLevelString,
+		std::string cliGrpcServerPort);
+	~PreviewWindowManager();
 
 	DockSide selectedDockSide;
 
-	void launchWindows();
+	void launchWindow();
 	void resizePreviewWindow();
 	void resizePreviewWindow(MonarchState state);
 	void setDocking();
@@ -70,18 +54,20 @@ public:
 	void restartPreviewWindow();
 
 private:
-	std::string _previewBundlePath;
-	std::string _controllerBundlePath;
+	std::string _previewWindowBundlePath;
+	std::string _previewServerBundlePath;
 	std::string _defaultLogLevelString;
 	std::string _cliGrpcServerPort;
-	std::string _projectName;
 
 	std::unique_ptr<PreviewWindow> _previewWindow;
-	std::unique_ptr<HeadlessController> _headlessController;
+	std::unique_ptr<PreviewServer> _previewServer;
+	HWND _controllerWindowHandle;
 
 	std::unique_ptr<Channels> _channels;
 
 	void _showAndSetUpPreviewWindow(WindowInfo windowInfo);
 	//void _showAndSetUpController(WindowInfo windowInfo);
 	void _postMessageStateChange(MonarchState state);
+	WindowInfo _getControllerWindowInfo();
+	bool _isControllerWindowSet();
 };

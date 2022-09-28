@@ -6,8 +6,17 @@
 #include "../gen/runner/flutter_window.h"
 #include "../gen/runner/utils.h"
 #include "window_manager.h"
+#include "window_messages.h"
 #include "string_utils.h"
 #include "logger.h"
+
+
+LPCSTR MonarchWindowMessages::previewMoveString = "monarch.preview.window.move";
+LPCSTR MonarchWindowMessages::controllerMoveString = "monarch.controller.window.move";
+
+UINT MonarchWindowMessages::previewMoveMessage = 0;
+UINT MonarchWindowMessages::controllerMoveMessage = 0;
+
 
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
                       _In_ wchar_t *command_line, _In_ int show_command) {
@@ -21,42 +30,91 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   // plugins.
   ::CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
 
-  Logger _logger{ L"Main" };
-
-  std::vector<std::string> arguments = GetCommandLineArguments();
-
-  if (arguments.size() < 5) {
-    _logger.severe("Expected 5 arguments in this order: controller-bundle preview-bundle log-level cli-grpc-server-port project-name");
-    return EXIT_FAILURE;
-  }
-
-  std::string controllerBundlePath = trim_copy(arguments[0]);
-  std::string previewBundlePath = trim_copy(arguments[1]);
-  std::string defaultLogLevelString = trim_copy(arguments[2]);
-  std::string cliGrpcServerPort = trim_copy(arguments[3]);
-  std::string projectName = trim_copy(arguments[4]);
-
-  defaultLogLevel = logLevelFromString(defaultLogLevelString);
 
   //_logger.shout("start sleep");
   //Sleep(10000);
   //_logger.shout("end sleep");
 
-  auto manager = HeadlessWindowManager(
-    controllerBundlePath, 
-    previewBundlePath,
-    defaultLogLevelString,
-    cliGrpcServerPort,
-    projectName);
-  manager.launchWindows();
 
-  ::MSG msg;
+  Logger _logger{ L"Main" };
+
+  std::vector<std::string> arguments = GetCommandLineArguments();
+
+  if (arguments.size() == 0) {
+    std::wcout << L"Missing arguments" << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  MonarchWindowMessages::previewMoveMessage = RegisterWindowMessageA(MonarchWindowMessages::previewMoveString);
+  MonarchWindowMessages::controllerMoveMessage = RegisterWindowMessageA(MonarchWindowMessages::controllerMoveString);
+
+  std::string mode = trim_copy(arguments[0]);
+
+  if (mode == "preview") {
+    std::string previewServerBundlePath = trim_copy(arguments[1]);
+    std::string previewWindowBundlePath = trim_copy(arguments[2]);
+    std::string defaultLogLevelString = trim_copy(arguments[3]);
+    std::string cliGrpcServerPort = trim_copy(arguments[4]);
+
+    defaultLogLevel = logLevelFromString(defaultLogLevelString);
+
+    auto manager = PreviewWindowManager(
+      previewServerBundlePath,
+      previewWindowBundlePath,
+      defaultLogLevelString,
+      cliGrpcServerPort);
+    manager.launchWindow();
+
+    ::MSG msg;
+    while (::GetMessage(&msg, nullptr, 0, 0)) {
+      ::TranslateMessage(&msg);
+      ::DispatchMessage(&msg);
+    }
+
+    ::CoUninitialize();
+    return EXIT_SUCCESS;
+  }
+  else if (mode == "controller") {
+    std::string controllerBundlePath = trim_copy(arguments[1]);
+    std::string defaultLogLevelString = trim_copy(arguments[2]);
+    std::string projectName = trim_copy(arguments[3]);
+
+    defaultLogLevel = logLevelFromString(defaultLogLevelString);
+
+    auto manager = ControllerWindowManager(
+      controllerBundlePath,
+      defaultLogLevelString,
+      projectName);
+    manager.launchWindow();
+
+    ::MSG msg;
+    while (::GetMessage(&msg, nullptr, 0, 0)) {
+      ::TranslateMessage(&msg);
+      ::DispatchMessage(&msg);
+    }
+
+    ::CoUninitialize();
+    return EXIT_SUCCESS;
+  }
+  else {
+    std::wcout << L"Unexpected mode, first argument should be controller or preview" << std::endl;
+    return EXIT_FAILURE;
+  }
+
+
+  /*if (arguments.size() < 5) {
+    _logger.severe("Expected 5 arguments in this order: controller-bundle preview-bundle log-level cli-grpc-server-port project-name");
+    return EXIT_FAILURE;
+  }*/
+
+
+  /*::MSG msg;
   while (::GetMessage(&msg, nullptr, 0, 0)) {
     ::TranslateMessage(&msg);
     ::DispatchMessage(&msg);
   }
 
   ::CoUninitialize();
-  return EXIT_SUCCESS;
+  return EXIT_SUCCESS;*/
 }
 

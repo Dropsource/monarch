@@ -11,9 +11,8 @@
 #include "monarch_state.h"
 
 MonarchWindow::MonarchWindow(
-	const flutter::DartProject& project,
-	HeadlessWindowManager* windowManager_)
-	: FlutterWindow(project), windowManager(windowManager_)
+	const flutter::DartProject& project)
+	: FlutterWindow(project)
 {
 }
 
@@ -50,10 +49,11 @@ flutter::BinaryMessenger* MonarchWindow::messenger()
 	return flutter_controller_->engine()->messenger();
 }
 
+WindowInfo ControllerWindow::defaultWindowInfo = WindowInfo(Point_(200, 200), Size_(600, 700));
+
 ControllerWindow::ControllerWindow(
-	const flutter::DartProject& project,
-	HeadlessWindowManager* windowManager)
-	: MonarchWindow(project, windowManager)
+	const flutter::DartProject& project)
+	: MonarchWindow(project)
 {
 	_previewWindowHandle = nullptr;
 }
@@ -86,7 +86,7 @@ LRESULT ControllerWindow::MessageHandler(
 		}
 		break;
 
-	case WM_M_PREVMOVE:
+	/*case WM_M_PREVMOVE:
 		if (_isPreviewWindowSet()) {
 			WindowInfo* previewWindowInfo = (WindowInfo*)wparam;
 			auto point = _getTopLeft(
@@ -98,7 +98,7 @@ LRESULT ControllerWindow::MessageHandler(
 
 			delete previewWindowInfo;
 		}
-		break;
+		break;*/
 
 	case WM_GETMINMAXINFO:
 		{
@@ -107,6 +107,30 @@ LRESULT ControllerWindow::MessageHandler(
 			lpMMI->ptMinTrackSize.y = 500;
 		}
 		break;
+	}
+
+	if (message == MonarchWindowMessages::previewMoveMessage)
+	{
+		// @TODO, @NEXT: do not pass the pointer, instead the controller should have
+		// the preview handle, then it can use the handle to construct its WindowInfo,
+		// see MonarchWindow::GetWindowInfo for an example... now, what is the best way to 
+		// pass the handles, is a handle an integer? or should i send the process id?
+		// int a = (int)_controllerWindowHandle;
+		// int b = _controllerWindowHandle->unused;
+		//WindowInfo* previewWindowInfo = (WindowInfo*)wparam;
+
+		HWND previewHandle = HWND(wparam);
+		auto previewWindowInfo = WindowInfo(
+			WindowHelper::getTopLeftPoint(previewHandle),
+			WindowHelper::getWindowSize(previewHandle));
+
+		// @TODO: get dockside from lparam
+		auto point = _getTopLeft(
+			previewWindowInfo,
+			DockSide::right);
+		auto size = getWindowInfo().size;
+
+		move(point.x, point.y, size.width, size.height);
 	}
 
 	return MonarchWindow::MessageHandler(hwnd, message, wparam, lparam);
@@ -141,8 +165,8 @@ void ControllerWindow::_postMoveMessage()
 
 PreviewWindow::PreviewWindow(
 	const flutter::DartProject& project,
-	HeadlessWindowManager* windowManager)
-	: MonarchWindow(project, windowManager)
+	PreviewWindowManager* windowManager)
+	: MonarchWindow(project), windowManager(windowManager)
 {
 	_controllerWindowHandle = nullptr;
 }
@@ -287,8 +311,12 @@ LRESULT PreviewWindow::MessageHandler(
 
 	case WM_MOVE:
 		if (!isMovingProgrammatically) {
-			WindowInfo* windowInfo = new WindowInfo(getWindowInfo());
-			PostMessage(_controllerWindowHandle, WM_M_PREVMOVE, WPARAM(windowInfo), 0);
+			//WindowInfo* previewWindowInfo = new WindowInfo(getWindowInfo());
+			PostMessage(
+				HWND_BROADCAST,
+				MonarchWindowMessages::previewMoveMessage,
+				WPARAM(GetHandle()), 
+				LPARAM(windowManager->selectedDockSide));
 		}
 		break;
 	}
@@ -329,16 +357,16 @@ bool PreviewWindow::_isControllerWindowSet()
 	return _controllerWindowHandle != nullptr;
 }
 
-HeadlessController::HeadlessController(const flutter::DartProject& project, HeadlessWindowManager* windowManager)
+PreviewServer::PreviewServer(const flutter::DartProject& project, PreviewWindowManager* windowManager)
 	: project_(project), windowManager(windowManager)
 {
 }
 
-HeadlessController::~HeadlessController()
+PreviewServer::~PreviewServer()
 {
 }
 
-void HeadlessController::create()
+void PreviewServer::create()
 {
 	engine_ = std::make_unique<flutter::FlutterEngine>(project_);
 	engine_->Run();

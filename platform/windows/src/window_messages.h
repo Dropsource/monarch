@@ -25,6 +25,15 @@ struct WindowInfo
         : topLeft(topLeft), size(size) {}
 };
 
+struct MonarchWindowMessages
+{
+  static LPCSTR previewMoveString;
+  static LPCSTR controllerMoveString;
+
+  static UINT previewMoveMessage;
+  static UINT controllerMoveMessage;
+};
+
 
 // Preview window moved
 #define WM_M_PREVMOVE (WM_USER + 50)

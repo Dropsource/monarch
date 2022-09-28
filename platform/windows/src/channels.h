@@ -9,18 +9,18 @@
 #include "monarch_state.h"
 #include "channels_utils.h"
 
-class HeadlessWindowManager;
+class PreviewWindowManager;
 
-const std::string controllerChannelName = "monarch.controller";
-const std::string previewChannelName = "monarch.preview";
+const std::string previewServerChannelName = "monarch.controller";
+const std::string previewWindowChannelName = "monarch.preview";
 
 class Channels
 {
 public:
 	Channels(
-		flutter::BinaryMessenger* controllerMessenger,
-		flutter::BinaryMessenger* previewMessenger,
-		HeadlessWindowManager* windowManager_);
+		flutter::BinaryMessenger* previewServerMessenger,
+		flutter::BinaryMessenger* previewWindowMessenger,
+		PreviewWindowManager* windowManager_);
 	~Channels();
 
 	void setUpCallForwarding();
@@ -28,9 +28,9 @@ public:
 	void unregisterMethodCallHandlers();
 	void restartPreviewChannel(flutter::BinaryMessenger* previewMessenger);
 
-	std::unique_ptr<flutter::MethodChannel<EncodableValue>> controllerChannel;
-	std::unique_ptr<flutter::MethodChannel<EncodableValue>> previewChannel;
-	HeadlessWindowManager* windowManager;
+	std::unique_ptr<flutter::MethodChannel<EncodableValue>> previewServerChannel;
+	std::unique_ptr<flutter::MethodChannel<EncodableValue>> previewWindowChannel;
+	PreviewWindowManager* windowManager;
 
 private:
 	void _forwardMethodCall(

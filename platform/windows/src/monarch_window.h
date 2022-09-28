@@ -6,14 +6,13 @@
 #include "dock_side.h"
 #include "window_manager.h"
 
-class HeadlessWindowManager;
+class PreviewWindowManager;
 
 class MonarchWindow : public FlutterWindow
 {
 public:
 	MonarchWindow(
-		const flutter::DartProject& project,
-		HeadlessWindowManager* windowManager_);
+		const flutter::DartProject& project);
 
 	virtual ~MonarchWindow();
 
@@ -25,19 +24,19 @@ public:
 
 protected:
 	bool isMovingProgrammatically = false;
-	HeadlessWindowManager* windowManager;
 };
 
 class ControllerWindow : public MonarchWindow
 {
 public:
 	ControllerWindow(
-		const flutter::DartProject& project,
-		HeadlessWindowManager* windowManager);
+		const flutter::DartProject& project);
 
 	virtual ~ControllerWindow();
 
 	void setPreviewWindow(HWND previewHwnd);
+
+	static WindowInfo defaultWindowInfo;
 
 protected:
 	LRESULT MessageHandler(HWND hwnd, UINT const message, WPARAM const wparam,
@@ -55,7 +54,7 @@ class PreviewWindow : public MonarchWindow
 public:
 	PreviewWindow(
 		const flutter::DartProject& project,
-		HeadlessWindowManager* windowManager);
+		PreviewWindowManager* windowManager);
 
 	virtual ~PreviewWindow();
 
@@ -93,6 +92,7 @@ protected:
 		LPARAM const lparam) noexcept override;
 
 private:
+	PreviewWindowManager* windowManager;
 	HWND _controllerWindowHandle;
 	void _move(DockSide side, WindowInfo controllerWindowInfo);
 	Point_ _getTopLeft(WindowInfo controllerWindowInfo, DockSide side);
@@ -100,14 +100,14 @@ private:
 };
 
 
-class HeadlessController
+class PreviewServer
 {
 public:
-	HeadlessController(
+	PreviewServer(
 		const flutter::DartProject& project,
-		HeadlessWindowManager* windowManager);
+		PreviewWindowManager* windowManager);
 
-	virtual ~HeadlessController();
+	virtual ~PreviewServer();
 
 	void create();
 
@@ -116,5 +116,5 @@ public:
 private:
 	flutter::DartProject project_;
 	std::unique_ptr<flutter::FlutterEngine> engine_;
-	HeadlessWindowManager* windowManager;
+	PreviewWindowManager* windowManager;
 };
