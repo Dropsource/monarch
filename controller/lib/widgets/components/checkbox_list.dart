@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:stockholm/stockholm.dart';
 
 import '../../../utils/translations.dart';
-import '../../data/visual_debug_flags.dart';
+import '../../data/visual_debug_flag_ui.dart';
 
 class CheckboxList extends StatelessWidget {
-  final List<VisualDebugFlag> visualDebugFlags;
-  final Function(VisualDebugFlag)? onFlagToggled;
+  final List<VisualDebugFlagUi> visualDebugFlags;
+  final Function(VisualDebugFlagUi)? onFlagToggled;
 
   const CheckboxList({
     Key? key,

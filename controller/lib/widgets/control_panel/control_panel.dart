@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
+
 import 'package:monarch_controller/data/dock_definition.dart';
-import 'package:monarch_controller/data/monarch_data.dart';
-import 'package:monarch_controller/data/story_scale_definitions.dart';
 import 'package:monarch_controller/widgets/components/checkbox_list.dart';
 import 'package:monarch_controller/widgets/components/dropdown.dart';
 import 'package:monarch_controller/widgets/components/labeled_control.dart';
@@ -11,7 +11,6 @@ import 'package:monarch_controller/manager/controller_state.dart';
 import 'package:stockholm/stockholm.dart';
 
 import '../../../utils/translations.dart';
-import '../../data/device_definitions.dart';
 import '../components/text.dart';
 
 const dividerHeight = 24.0;
@@ -59,7 +58,7 @@ class ControlPanel extends StatelessWidget {
           ),
           LabeledControl(
             label: 'controls.theme',
-            control: DropDown<MetaTheme>(
+            control: DropDown<MetaThemeDefinition>(
               currentValue: state.currentTheme,
               values: state.allThemes,
               skipTraversal: true,

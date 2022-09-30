@@ -2,18 +2,15 @@ import 'dart:async';
 
 import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'controller_state.dart';
 import 'search_manager.dart';
 import '../data/abstract_channel_methods_sender.dart';
-import '../data/device_definitions.dart';
 import '../data/dock_definition.dart';
 import '../data/stories.dart';
-import '../data/story_scale_definitions.dart';
-import '../data/visual_debug_flags.dart';
-import '../data/monarch_data.dart';
-import '../data/definitions.dart' as defs;
+import '../data/visual_debug_flag_ui.dart';
 import '../data/grpc.dart';
 
 class ControllerManager with Log {
@@ -54,12 +51,12 @@ class ControllerManager with Log {
       selectedTextScaleFactor: state.textScaleFactor,
       selectedStoryScale: state.currentScale.scale,
       selectedDockSide: state.currentDock.id,
-      slowAnimationsEnabled: _isEnabled(Flags.slowAnimations),
-      highlightRepaintsEnabled: _isEnabled(Flags.highlightRepaints),
-      showGuidelinesEnabled: _isEnabled(Flags.showGuidelines),
+      slowAnimationsEnabled: _isEnabled(VisualDebugFlags.slowAnimations),
+      highlightRepaintsEnabled: _isEnabled(VisualDebugFlags.highlightRepaints),
+      showGuidelinesEnabled: _isEnabled(VisualDebugFlags.showGuidelines),
       highlightOversizedImagesEnabled:
-          _isEnabled(Flags.highlightOversizedImages),
-      showBaselinesEnabled: _isEnabled(Flags.showBaselines),
+          _isEnabled(VisualDebugFlags.highlightOversizedImages),
+      showBaselinesEnabled: _isEnabled(VisualDebugFlags.showBaselines),
     ));
   }
 
@@ -76,7 +73,7 @@ class ControllerManager with Log {
   /// extension method for the corresponding flag.
   /// It doesn't update the controller state. The controller state is updated
   /// in [onVisualDebugFlagToggleByVmService] which is called after this function.
-  void onVisualDebugFlagToggledByUi(VisualDebugFlag option) {
+  void onVisualDebugFlagToggledByUi(VisualDebugFlagUi option) {
     channelMethodsSender
         .sendToggleVisualDebugFlag(option.copyWith(enabled: !option.isEnabled));
     _userSelection(option.toggled);
@@ -106,7 +103,7 @@ class ControllerManager with Log {
     _userSelection('device_selected');
   }
 
-  void onThemeChanged(MetaTheme theme) {
+  void onThemeChanged(MetaThemeDefinition theme) {
     _update(state.copyWith(currentTheme: theme));
     channelMethodsSender.setActiveTheme(theme.id);
     _userSelection('theme_selected');
@@ -130,38 +127,38 @@ class ControllerManager with Log {
     _userSelection('text_scale_factor_selected');
   }
 
-  void onDockSettingsChange(DockDefinition dockDefinition) {
-    _update(state.copyWith(currentDock: dockDefinition));
-    channelMethodsSender.setDockSide(dockDefinition.id);
+  void onDockSettingsChange(DockDefinition dock) {
+    _update(state.copyWith(currentDock: dock));
+    channelMethodsSender.setDockSide(dock.id);
     _userSelection('dock_side_selected');
   }
 
-  void onMonarchDataChanged(MonarchData monarchData) {
+  void onMonarchDataChanged(MonarchDataDefinition monarchData) {
     log.finest('MonarchData '
-        'meta-localizations=${monarchData.metaLocalizations.length} '
-        'all-locales=${monarchData.allLocales.length} '
-        'meta-themes=${monarchData.metaThemes.length} ');
+        'meta-localizations=${monarchData.metaLocalizationDefinitions.length} '
+        'all-locales=${monarchData.allLocaleLanguageTags.length} '
+        'meta-themes=${monarchData.metaThemeDefinitions.length} ');
 
     var localeHelper = _LocaleHelper(monarchData, state.currentLocale);
     localeHelper.compute();
     var themeHelper = _ThemeHelper(
         standardThemes: state.standardThemes,
-        userThemes: monarchData.metaThemes,
+        userThemes: monarchData.metaThemeDefinitions,
         defaultThemeId: state.defaultThemeId,
         currentTheme: state.currentTheme);
     themeHelper.compute();
 
     _update(state.copyWith(
       packageName: monarchData.packageName,
-      storyGroups: _translateStories(monarchData.metaStoriesMap),
-      userThemes: monarchData.metaThemes,
+      storyGroups: _translateStories(monarchData.metaStoriesDefinitionMap),
+      userThemes: monarchData.metaThemeDefinitions,
       currentTheme: themeHelper.computedCurrentTheme,
       locales: localeHelper.computedLocales,
       currentLocale: localeHelper.computedCurrentLocale,
     ));
   }
 
-  void onStandardThemesChanged(List<MetaTheme> standardThemes) {
+  void onStandardThemesChanged(List<MetaThemeDefinition> standardThemes) {
     var themeHelper = _ThemeHelper(
         standardThemes: standardThemes,
         userThemes: state.userThemes,
@@ -210,7 +207,7 @@ class ControllerManager with Log {
     _streamController.close();
   }
 
-  List<StoryGroup> _translateStories(Map<String, MetaStories> metaStoriesMap) {
+  List<StoryGroup> _translateStories(Map<String, MetaStoriesDefinition> metaStoriesMap) {
     return metaStoriesMap.entries
         .map((group) => StoryGroup(
             groupName: _readStoryGroupName(group.key),
@@ -239,34 +236,34 @@ class ControllerManager with Log {
 }
 
 class _LocaleHelper {
-  final MonarchData data;
+  final MonarchDataDefinition data;
   final String currentLocale;
   _LocaleHelper(this.data, this.currentLocale);
 
   List<String> computedLocales = [];
-  String computedCurrentLocale = defs.defaultLocale;
+  String computedCurrentLocale = defaultLocale;
 
   void compute() {
     computedLocales.clear();
-    if (data.allLocales.isEmpty) {
-      computedLocales.add(defs.defaultLocale);
-      computedCurrentLocale = defs.defaultLocale;
+    if (data.allLocaleLanguageTags.isEmpty) {
+      computedLocales.add(defaultLocale);
+      computedCurrentLocale = defaultLocale;
     } else {
-      computedLocales.addAll(data.allLocales);
-      if (data.allLocales.contains(currentLocale)) {
+      computedLocales.addAll(data.allLocaleLanguageTags);
+      if (data.allLocaleLanguageTags.contains(currentLocale)) {
         computedCurrentLocale = currentLocale;
       } else {
-        computedCurrentLocale = data.allLocales.first;
+        computedCurrentLocale = data.allLocaleLanguageTags.first;
       }
     }
   }
 }
 
 class _ThemeHelper {
-  final List<MetaTheme> standardThemes;
-  final List<MetaTheme> userThemes;
+  final List<MetaThemeDefinition> standardThemes;
+  final List<MetaThemeDefinition> userThemes;
   final String defaultThemeId;
-  final MetaTheme currentTheme;
+  final MetaThemeDefinition currentTheme;
 
   _ThemeHelper(
       {required this.standardThemes,
@@ -274,8 +271,8 @@ class _ThemeHelper {
       required this.currentTheme,
       required this.defaultThemeId});
 
-  List<MetaTheme> get allThemes => standardThemes + userThemes;
-  MetaTheme computedCurrentTheme = defs.defaultTheme;
+  List<MetaThemeDefinition> get allThemes => standardThemes + userThemes;
+  MetaThemeDefinition computedCurrentTheme = defaultTheme;
 
   void compute() {
     bool listHasCurrent = allThemes.any((x) => x.id == currentTheme.id);

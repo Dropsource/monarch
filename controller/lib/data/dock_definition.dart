@@ -7,3 +7,12 @@ class DockDefinition {
     required this.id,
   });
 }
+
+final defaultDockDefinition =
+    DockDefinition(name: 'dock_settings.right', id: 'right');
+    
+final dockDefinitions = [
+  defaultDockDefinition,
+  DockDefinition(name: 'dock_settings.left', id: 'left'),
+  DockDefinition(name: 'dock_settings.undock', id: 'undock'),
+];

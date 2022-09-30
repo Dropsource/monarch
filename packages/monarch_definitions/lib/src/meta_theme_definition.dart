@@ -1,5 +1,11 @@
 import 'standard_mapper.dart';
 
+const defaultTheme = MetaThemeDefinition(
+    id: '__material-light-theme__',
+    name: 'Material Light Theme',
+    isDefault: true);
+
+
 class MetaThemeDefinition {
   final String id;
   final String name;

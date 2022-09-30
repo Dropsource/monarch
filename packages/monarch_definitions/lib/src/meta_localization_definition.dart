@@ -1,5 +1,7 @@
 import 'standard_mapper.dart';
 
+const defaultLocale = 'System Locale';
+
 class MetaLocalizationDefinition {
   final List<String> localeLanguageTags;
   final String delegateClassName;

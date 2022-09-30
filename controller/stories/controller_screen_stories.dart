@@ -5,7 +5,7 @@ import 'package:monarch_controller/data/stories.dart';
 import 'package:monarch_controller/manager/controller_manager.dart';
 import 'package:monarch_controller/manager/controller_state.dart';
 import 'package:monarch_controller/screens/controller_screen.dart';
-import 'package:monarch_controller/data/definitions.dart' as defs;
+import 'package:monarch_controller/data/dock.dart' as defs;
 import 'package:monarch/src/preview/device_definitions.dart' as preview;
 
 import 'story_utils.dart';

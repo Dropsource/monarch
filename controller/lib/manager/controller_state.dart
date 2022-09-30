@@ -1,14 +1,10 @@
-import 'package:monarch_controller/data/device_definitions.dart';
 import 'package:monarch_controller/data/dock_definition.dart';
-import 'package:monarch_controller/data/monarch_data.dart';
-import 'package:monarch_controller/data/definitions.dart' as defs;
 import 'package:monarch_controller/data/stories.dart';
-import 'package:monarch_controller/data/story_scale_definitions.dart';
-import 'package:monarch_controller/data/visual_debug_flags.dart';
+import 'package:monarch_controller/data/visual_debug_flag_ui.dart';
 
-import 'package:monarch_definitions/monarch_channels.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
 
-class ControllerState implements OutboundChannelArgument {
+class ControllerState {
   final bool isPreviewReady;
   final String packageName;
   final List<StoryGroup> storyGroups;
@@ -22,9 +18,9 @@ class ControllerState implements OutboundChannelArgument {
   final List<String> locales;
 
   final String defaultThemeId;
-  final MetaTheme currentTheme;
-  final List<MetaTheme> standardThemes;
-  final List<MetaTheme> userThemes;
+  final MetaThemeDefinition currentTheme;
+  final List<MetaThemeDefinition> standardThemes;
+  final List<MetaThemeDefinition> userThemes;
 
   final StoryScaleDefinition currentScale;
 
@@ -34,9 +30,9 @@ class ControllerState implements OutboundChannelArgument {
   final List<DockDefinition> dockList;
 
   final double textScaleFactor;
-  final List<VisualDebugFlag> visualDebugFlags;
+  final List<VisualDebugFlagUi> visualDebugFlags;
 
-  List<MetaTheme> get allThemes => standardThemes + userThemes;
+  List<MetaThemeDefinition> get allThemes => standardThemes + userThemes;
   int get storyCount => storyGroups.fold<int>(
       0, (previousValue, element) => previousValue + element.stories.length);
 
@@ -67,17 +63,17 @@ class ControllerState implements OutboundChannelArgument {
         collapsedGroupKeys: {},
         devices: [defaultDeviceDefinition],
         currentDevice: defaultDeviceDefinition,
-        locales: [defs.defaultLocale],
-        currentLocale: defs.defaultLocale,
-        defaultThemeId: defs.defaultTheme.id,
-        currentTheme: defs.defaultTheme,
-        standardThemes: [defs.defaultTheme],
+        locales: [defaultLocale],
+        currentLocale: defaultLocale,
+        defaultThemeId: defaultTheme.id,
+        currentTheme: defaultTheme,
+        standardThemes: [defaultTheme],
         userThemes: [],
-        currentDock: defs.defaultDock,
+        currentDock: defaultDockDefinition,
         currentScale: defaultScaleDefinition,
-        dockList: defs.dockList,
+        dockList: dockDefinitions,
         scaleList: [defaultScaleDefinition],
-        visualDebugFlags: defs.devToolsOptions,
+        visualDebugFlags: devToolsOptions,
         textScaleFactor: 1.0,
       );
 
@@ -91,13 +87,13 @@ class ControllerState implements OutboundChannelArgument {
     String? currentLocale,
     List<String>? locales,
     String? defaultThemeId,
-    MetaTheme? currentTheme,
-    List<MetaTheme>? standardThemes,
-    List<MetaTheme>? userThemes,
+    MetaThemeDefinition? currentTheme,
+    List<MetaThemeDefinition>? standardThemes,
+    List<MetaThemeDefinition>? userThemes,
     StoryScaleDefinition? currentScale,
     DockDefinition? currentDock,
     double? textScaleFactor,
-    List<VisualDebugFlag>? visualDebugFlags,
+    List<VisualDebugFlagUi>? visualDebugFlags,
     List<StoryScaleDefinition>? scaleList,
   }) =>
       ControllerState(
@@ -122,18 +118,18 @@ class ControllerState implements OutboundChannelArgument {
         collapsedGroupKeys: collapsedGroupKeys,
       );
 
-  @override
-  Map<String, dynamic> toStandardMap() {
-    return {
-      'device': currentDevice.toStandardMap(),
-      'scale': currentScale.toStandardMap(),
-      'dock': currentDock.id,
-      'activeStoryKey': activeStoryKey,
-      'themeId': currentTheme.id,
-      'locale': currentLocale,
-      'textScaleFactor': textScaleFactor,
-      'visualDebugFlags':
-          visualDebugFlags.map((e) => e.toStandardMap()).toList()
-    };
-  }
+  // @override
+  // Map<String, dynamic> toStandardMap() {
+  //   return {
+  //     'device': currentDevice.toStandardMap(),
+  //     'scale': currentScale.toStandardMap(),
+  //     'dock': currentDock.id,
+  //     'activeStoryKey': activeStoryKey,
+  //     'themeId': currentTheme.id,
+  //     'locale': currentLocale,
+  //     'textScaleFactor': textScaleFactor,
+  //     'visualDebugFlags':
+  //         visualDebugFlags.map((e) => e.toStandardMap()).toList()
+  //   };
+  // }
 }
