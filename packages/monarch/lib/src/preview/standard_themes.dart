@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'channel_methods.dart';
 import 'monarch_data.dart';
 
 final standardMetaThemes = [
@@ -9,13 +8,3 @@ final standardMetaThemes = [
   MetaTheme(
       '__material-dark-theme__', 'Material Dark Theme', ThemeData.dark(), false)
 ];
-
-class StandardThemes implements OutboundChannelArgument {
-  @override
-  Map<String, dynamic> toStandardMap() {
-    return {
-      'standardThemes':
-          standardMetaThemes.map((d) => d.toStandardMap()).toList(),
-    };
-  }
-}

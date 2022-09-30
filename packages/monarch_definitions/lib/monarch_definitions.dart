@@ -7,3 +7,4 @@ export 'src/meta_localization_definition.dart';
 export 'src/meta_stories_definition.dart';
 export 'src/meta_theme_definition.dart';
 export 'src/monarch_data_definition.dart';
+export 'src/visual_debug_flag.dart';

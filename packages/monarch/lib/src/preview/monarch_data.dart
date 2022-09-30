@@ -42,10 +42,19 @@ class MonarchData extends MonarchDataDefinition {
       List<MetaTheme> metaThemes, Map<String, MetaStories> metaStoriesMap)
       : super(
             packageName: packageName,
-            metaLocalizations: metaLocalizations,
-            metaThemes: metaThemes,
-            metaStoriesMap: metaStoriesMap);
+            metaLocalizationDefinitions: metaLocalizations,
+            metaThemeDefinitions: metaThemes,
+            metaStoriesDefinitionMap: metaStoriesMap);
+
+  List<MetaLocalization> get metaLocalizations =>
+      metaLocalizationDefinitions.map((e) => e as MetaLocalization).toList();
+
+  List<MetaTheme> get metaThemes =>
+      metaThemeDefinitions.map((e) => e as MetaTheme).toList();
+
+  Map<String, MetaStories> get metaStoriesMap => metaStoriesDefinitionMap
+      .map((key, value) => MapEntry(key, value as MetaStories));
 
   Iterable<Locale> get allLocales =>
-      metaLocalizations.expand((m) => (m as MetaLocalization).locales);
+      metaLocalizations.expand((element) => element.locales);
 }

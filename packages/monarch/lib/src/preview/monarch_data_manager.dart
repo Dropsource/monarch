@@ -16,7 +16,7 @@ class MonarchDataManager with Log {
     var data = getData();
 
     var validatedMetaLocalizations =
-        _validateAndFilterMetaLocalizations(data.metaLocalizations.map((e) => e as MetaLocalization).toList());
+        _validateAndFilterMetaLocalizations(data.metaLocalizations);
     var validatedMetaThemes = _validateAndFilterMetaThemes(data.metaThemes);
 
     _data = MonarchData(data.packageName, validatedMetaLocalizations,

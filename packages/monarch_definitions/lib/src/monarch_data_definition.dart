@@ -7,23 +7,23 @@ class MonarchDataDefinition {
   final String packageName;
 
   /// List of user-annotated localizations
-  final List<MetaLocalizationDefinition> metaLocalizations;
+  final List<MetaLocalizationDefinition> metaLocalizationDefinitions;
 
   /// List of user-annotated themes
-  final List<MetaThemeDefinition> metaThemes;
+  final List<MetaThemeDefinition> metaThemeDefinitions;
 
   /// It maps generated meta-stories path to its meta-stories object.
   /// As of 2020-04-15, the key looks like `$packageName|$generatedStoriesFilePath`
-  final Map<String, MetaStoriesDefinition> metaStoriesMap;
+  final Map<String, MetaStoriesDefinition> metaStoriesDefinitionMap;
 
   Iterable<String> get allLocaleLanguageTags =>
-      metaLocalizations.expand((m) => m.localeLanguageTags);
+      metaLocalizationDefinitions.expand((m) => m.localeLanguageTags);
 
   MonarchDataDefinition(
       {required this.packageName,
-      required this.metaLocalizations,
-      required this.metaThemes,
-      required this.metaStoriesMap});
+      required this.metaLocalizationDefinitions,
+      required this.metaThemeDefinitions,
+      required this.metaStoriesDefinitionMap});
 }
 
 class MonarchDataDefinitionMapper
@@ -31,39 +31,39 @@ class MonarchDataDefinitionMapper
   @override
   MonarchDataDefinition fromStandardMap(Map<String, dynamic> args) {
     String packageName = args['packageName'];
-    List<MetaLocalizationDefinition> metaLocalizations =
+    List<MetaLocalizationDefinition> metaLocalizationsDefinitions =
         args['metaLocalizations']
             .map<MetaLocalizationDefinition>(
                 (e) => MetaLocalizationDefinitionMapper().fromStandardMap(e))
             .toList();
 
-    List<MetaThemeDefinition> metaThemes = args['metaThemes']
+    List<MetaThemeDefinition> metaThemesDefinitions = args['metaThemes']
         .map<MetaThemeDefinition>(
             (e) => MetaThemeDefinitionMapper().fromStandardMap(e))
         .toList();
 
-    Map<String, MetaStoriesDefinition> metaStoriesMap = args['metaStoriesMap']
+    Map<String, MetaStoriesDefinition> metaStoriesDefinitionMap = args['metaStoriesMap']
         .map<String, MetaStoriesDefinition>((key, value) =>
             MapEntry<String, MetaStoriesDefinition>(
                 key, MetaStoriesDefinitionMapper().fromStandardMap(value)));
 
     return MonarchDataDefinition(
         packageName: packageName,
-        metaLocalizations: metaLocalizations,
-        metaThemes: metaThemes,
-        metaStoriesMap: metaStoriesMap);
+        metaLocalizationDefinitions: metaLocalizationsDefinitions,
+        metaThemeDefinitions: metaThemesDefinitions,
+        metaStoriesDefinitionMap: metaStoriesDefinitionMap);
   }
 
   @override
   Map<String, dynamic> toStandardMap(MonarchDataDefinition obj) => {
         'packageName': obj.packageName,
-        'metaLocalizations': obj.metaLocalizations
+        'metaLocalizations': obj.metaLocalizationDefinitions
             .map((e) => MetaLocalizationDefinitionMapper().toStandardMap(e))
             .toList(),
-        'metaThemes': obj.metaThemes
+        'metaThemes': obj.metaThemeDefinitions
             .map((e) => MetaThemeDefinitionMapper().toStandardMap(e))
             .toList(),
-        'metaStoriesMap': obj.metaStoriesMap.map((key, value) =>
+        'metaStoriesMap': obj.metaStoriesDefinitionMap.map((key, value) =>
             MapEntry(key, MetaStoriesDefinitionMapper().toStandardMap(value)))
       };
 }
