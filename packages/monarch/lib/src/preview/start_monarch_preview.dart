@@ -101,6 +101,8 @@ Future<void> _connectToVmService() async {
 
 Future<void> _sendDefinitions() async {
   await channelMethodsSender.sendDefaultTheme(activeTheme.defaultMetaTheme.id);
+  /// @TODO: device definitions and story scale definitions are referenced data, 
+  /// the preview server will send them to the controller, the preview won't need them anymore
   await channelMethodsSender.sendDeviceDefinitions(DeviceDefinitions());
   await channelMethodsSender.sendStoryScaleDefinitions(StoryScaleDefinitions());
   await channelMethodsSender.sendStandardThemes(StandardThemes());

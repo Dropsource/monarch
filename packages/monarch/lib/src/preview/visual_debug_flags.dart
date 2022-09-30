@@ -1,6 +1,6 @@
 import 'package:monarch_utils/log.dart';
 
-import 'channel_argument.dart';
+import 'channel_methods.dart';
 import 'vm_service_client.dart';
 import 'package:vm_service/vm_service.dart' as vm_service;
 import 'channel_methods_sender.dart';

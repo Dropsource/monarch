@@ -1,8 +1,6 @@
-import 'package:flutter/services.dart';
-
 class MonarchChannels {
-  static const controller = MethodChannel('monarch.controller');
-  static const preview = MethodChannel('monarch.preview');
+  static const controller = 'monarch.controller';
+  static const preview = 'monarch.preview';
 }
 
 class MonarchMethods {

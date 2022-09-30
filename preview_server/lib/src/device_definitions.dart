@@ -1,76 +1,4 @@
-import 'package:flutter/foundation.dart';
-
-import 'channel_argument.dart';
-import 'logical_resolution.dart';
-
-const String _ios = 'ios';
-const String _android = 'android';
-
-String? targetPlatformToString(TargetPlatform platform) {
-  return platform == TargetPlatform.iOS
-      ? _ios
-      : platform == TargetPlatform.android
-          ? _android
-          : null;
-}
-
-class DeviceDefinition implements OutboundChannelArgument {
-  const DeviceDefinition({
-    required this.id,
-    required this.name,
-    required this.logicalResolution,
-    required this.devicePixelRatio,
-    required this.targetPlatform,
-  });
-  final String id, name;
-  final TargetPlatform targetPlatform;
-  final LogicalResolution logicalResolution;
-
-  /// Also called: Retina factor, UIKit Scale factor, etc.
-  final double devicePixelRatio;
-
-  @override
-  Map<String, dynamic> toStandardMap() {
-    return {
-      'id': id,
-      'name': name,
-      'logicalResolution': logicalResolution.toStandardMap(),
-      'devicePixelRatio': devicePixelRatio,
-      'targetPlatform': targetPlatformToString(targetPlatform),
-    };
-  }
-}
-
-class DeviceDefinitions implements OutboundChannelArgument {
-  @override
-  Map<String, dynamic> toStandardMap() {
-    return {
-      'definitions': deviceDefinitions.map((d) => d.toStandardMap()).toList(),
-    };
-  }
-}
-
-const iPhone13DeviceDefinition = DeviceDefinition(
-  id: 'ios-iphone-13',
-  name: 'iPhone 13',
-  logicalResolution: LogicalResolution(
-    height: 844,
-    width: 390,
-  ),
-  devicePixelRatio: 3.0,
-  targetPlatform: TargetPlatform.iOS,
-);
-
-/// @GOTCHA: if you change the [defaultDeviceDefinition] here, make sure to
-/// also change it in:
-/// - controller/lib/window_controller/data/device_definitions.dart
-///
-/// Then, release a new monarch build.
-///
-/// Make sure to not delete a default device that is used in previous versions
-/// of the controller. Otherwise, users running different versions may see
-/// unexpected errors.
-final defaultDeviceDefinition = iPhone13DeviceDefinition;
+import 'package:monarch_definitions/monarch_definitions.dart';
 
 /// iOS logical resolutions can be found here:
 /// - https://www.dimensions.com/collection/apple-ipad
@@ -88,7 +16,7 @@ const deviceDefinitions = [
       width: 375,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-13-pro',
@@ -98,7 +26,7 @@ const deviceDefinitions = [
       width: 390,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-13-pro-max',
@@ -108,7 +36,7 @@ const deviceDefinitions = [
       width: 428,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-12',
@@ -118,7 +46,7 @@ const deviceDefinitions = [
       width: 390,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-12-mini',
@@ -128,7 +56,7 @@ const deviceDefinitions = [
       width: 360,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-12-pro',
@@ -138,7 +66,7 @@ const deviceDefinitions = [
       width: 390,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-12-pro-max',
@@ -148,7 +76,7 @@ const deviceDefinitions = [
       width: 428,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-se-2nd-gen',
@@ -158,7 +86,7 @@ const deviceDefinitions = [
       width: 375,
     ),
     devicePixelRatio: 2.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-11',
@@ -168,7 +96,7 @@ const deviceDefinitions = [
       width: 414,
     ),
     devicePixelRatio: 2.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-11-pro',
@@ -178,7 +106,7 @@ const deviceDefinitions = [
       width: 375,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-11-pro-max',
@@ -188,7 +116,7 @@ const deviceDefinitions = [
       width: 414,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-xr',
@@ -198,7 +126,7 @@ const deviceDefinitions = [
       width: 414,
     ),
     devicePixelRatio: 2.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-x',
@@ -208,7 +136,7 @@ const deviceDefinitions = [
       width: 375,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-8',
@@ -218,7 +146,7 @@ const deviceDefinitions = [
       width: 375,
     ),
     devicePixelRatio: 2.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-8-plus',
@@ -228,7 +156,7 @@ const deviceDefinitions = [
       width: 414,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-ipad-9th-gen',
@@ -238,7 +166,7 @@ const deviceDefinitions = [
       width: 810,
     ),
     devicePixelRatio: 2.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-ipad-pro-5th-gen-12.9in',
@@ -248,7 +176,7 @@ const deviceDefinitions = [
       width: 1024,
     ),
     devicePixelRatio: 2.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-ipad-pro-5th-gen-11in',
@@ -258,7 +186,7 @@ const deviceDefinitions = [
       width: 834,
     ),
     devicePixelRatio: 2.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-ipad-air-4th-gen',
@@ -268,7 +196,7 @@ const deviceDefinitions = [
       width: 820,
     ),
     devicePixelRatio: 2.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-ipad-8th-gen',
@@ -278,7 +206,7 @@ const deviceDefinitions = [
       width: 810,
     ),
     devicePixelRatio: 2.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-ipad-pro-4th-gen',
@@ -288,7 +216,7 @@ const deviceDefinitions = [
       width: 834,
     ),
     devicePixelRatio: 2.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-ipad-7th-gen',
@@ -298,7 +226,7 @@ const deviceDefinitions = [
       width: 810,
     ),
     devicePixelRatio: 2.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-ipad-mini-5th-gen',
@@ -308,7 +236,7 @@ const deviceDefinitions = [
       width: 768,
     ),
     devicePixelRatio: 2.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'android-pixel-5a',
@@ -318,7 +246,7 @@ const deviceDefinitions = [
       width: 416,
     ),
     devicePixelRatio: 2.5,
-    targetPlatform: TargetPlatform.android,
+    targetPlatform: MonarchTargetPlatform.android,
   ),
   DeviceDefinition(
     id: 'android-pixel-5',
@@ -328,7 +256,7 @@ const deviceDefinitions = [
       width: 400,
     ),
     devicePixelRatio: 2.7,
-    targetPlatform: TargetPlatform.android,
+    targetPlatform: MonarchTargetPlatform.android,
   ),
   DeviceDefinition(
     id: 'android-pixel-4a',
@@ -338,7 +266,7 @@ const deviceDefinitions = [
       width: 390,
     ),
     devicePixelRatio: 2.7,
-    targetPlatform: TargetPlatform.android,
+    targetPlatform: MonarchTargetPlatform.android,
   ),
   DeviceDefinition(
     id: 'android-samsung-galaxy-note-20-ultra',
@@ -348,7 +276,7 @@ const deviceDefinitions = [
       width: 465,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.android,
+    targetPlatform: MonarchTargetPlatform.android,
   ),
   DeviceDefinition(
     id: 'android-samsung-galaxy-note-20',
@@ -358,7 +286,7 @@ const deviceDefinitions = [
       width: 439,
     ),
     devicePixelRatio: 2.45,
-    targetPlatform: TargetPlatform.android,
+    targetPlatform: MonarchTargetPlatform.android,
   ),
   DeviceDefinition(
     id: 'android-oneplus-9-pro',
@@ -368,7 +296,7 @@ const deviceDefinitions = [
       width: 439,
     ),
     devicePixelRatio: 3.28,
-    targetPlatform: TargetPlatform.android,
+    targetPlatform: MonarchTargetPlatform.android,
   ),
   DeviceDefinition(
     id: 'android-oneplus-8-pro',
@@ -378,7 +306,7 @@ const deviceDefinitions = [
       width: 449,
     ),
     devicePixelRatio: 3.2,
-    targetPlatform: TargetPlatform.android,
+    targetPlatform: MonarchTargetPlatform.android,
   ),
   DeviceDefinition(
     id: 'android-samsung-galaxy-s21-ultra',
@@ -388,7 +316,7 @@ const deviceDefinitions = [
       width: 447,
     ),
     devicePixelRatio: 3.2,
-    targetPlatform: TargetPlatform.android,
+    targetPlatform: MonarchTargetPlatform.android,
   ),
   DeviceDefinition(
     id: 'android-samsung-galaxy-s21',
@@ -398,7 +326,7 @@ const deviceDefinitions = [
       width: 410,
     ),
     devicePixelRatio: 2.6,
-    targetPlatform: TargetPlatform.android,
+    targetPlatform: MonarchTargetPlatform.android,
   ),
   DeviceDefinition(
     id: 'android-samsung-galaxy-s20-plus',
@@ -408,7 +336,7 @@ const deviceDefinitions = [
       width: 438,
     ),
     devicePixelRatio: 3.28,
-    targetPlatform: TargetPlatform.android,
+    targetPlatform: MonarchTargetPlatform.android,
   ),
   DeviceDefinition(
     id: 'android-moto-g-power-2021',
@@ -418,7 +346,7 @@ const deviceDefinitions = [
       width: 433,
     ),
     devicePixelRatio: 1.66,
-    targetPlatform: TargetPlatform.android,
+    targetPlatform: MonarchTargetPlatform.android,
   ),
   DeviceDefinition(
     id: 'android-moto-g-power',
@@ -428,6 +356,6 @@ const deviceDefinitions = [
       width: 433,
     ),
     devicePixelRatio: 2.49,
-    targetPlatform: TargetPlatform.android,
+    targetPlatform: MonarchTargetPlatform.android,
   ),
 ];

@@ -1,4 +1,4 @@
-import 'channel_methods.dart';
+import 'package:monarch_definitions/monarch_channels.dart';
 
 abstract class AbstractChannelMethodsSender {
   Future sendToggleVisualDebugFlag(OutboundChannelArgument visualDebugFlag);

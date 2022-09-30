@@ -1,4 +1,4 @@
-import 'channel_argument.dart';
+import 'standard_mapper.dart';
 
 /// Flutter uses logical pixels. Also called device-independent or
 /// resolution-independent pixels.
@@ -8,14 +8,19 @@ import 'channel_argument.dart';
 ///
 /// This class represents the logical resolution in terms of logical
 /// [width] and logical [height].
-class LogicalResolution implements OutboundChannelArgument {
+class LogicalResolution {
   final double width;
   final double height;
 
   const LogicalResolution({required this.width, required this.height});
+}
+
+class LogicalResolutionMapper implements StandardMapper<LogicalResolution> {
+  @override
+  LogicalResolution fromStandardMap(Map<String, dynamic> args) =>
+      LogicalResolution(width: args['width'], height: args['height']);
 
   @override
-  Map<String, double> toStandardMap() {
-    return {'width': width, 'height': height};
-  }
+  Map<String, dynamic> toStandardMap(LogicalResolution obj) =>
+      {'width': obj.width, 'height': obj.height};
 }

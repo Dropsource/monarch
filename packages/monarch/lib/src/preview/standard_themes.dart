@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'channel_argument.dart';
+import 'channel_methods.dart';
 import 'monarch_data.dart';
 
 final standardMetaThemes = [

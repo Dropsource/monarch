@@ -1,20 +1,20 @@
 import 'package:monarch/src/preview/stories_errors.dart';
 import 'package:monarch_utils/log.dart';
-import 'package:monarch_channels/monarch_channels.dart';
+import 'package:monarch_definitions/monarch_channels.dart';
 import 'active_device.dart';
 import 'active_locale.dart';
 import 'active_story.dart';
 import 'active_story_scale.dart';
 import 'active_text_scale_factor.dart';
 import 'active_theme.dart';
-import 'channel_argument.dart';
+import 'channel_methods.dart';
 import 'visual_debug_flags.dart' as visual_debug;
 
 class ChannelMethodsSender with Log {
   Future<T?> _invokeMonarchChannelMethod<T>(String method,
       [dynamic arguments]) async {
     log.finest('sending channel method: $method');
-    return MonarchChannels.preview.invokeMethod(method, arguments);
+    return MonarchMethodChannels.preview.invokeMethod(method, arguments);
   }
 
   Future sendPing() {

@@ -1,3 +1,6 @@
+### 1.1.0 - 2022-09-29
+- Package renamed from monarch_channels to monarch_definitions
+
 ### 1.0.2 - 2022-09-08
 - Add method `monarch.ping`
 

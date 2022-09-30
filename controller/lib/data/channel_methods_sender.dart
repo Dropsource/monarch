@@ -1,5 +1,5 @@
 import 'package:monarch_utils/log.dart';
-import 'package:monarch_channels/monarch_channels.dart';
+import 'package:monarch_definitions/monarch_channels.dart';
 
 import 'abstract_channel_methods_sender.dart';
 import 'channel_methods.dart';
@@ -12,7 +12,7 @@ class ChannelMethodsSender with Log implements AbstractChannelMethodsSender {
     if (arguments != null) {
       log.finest('with arguments: $arguments');
     }
-    return MonarchChannels.controller.invokeMethod(method, arguments);
+    return MonarchMethodChannels.controller.invokeMethod(method, arguments);
   }
 
   @override

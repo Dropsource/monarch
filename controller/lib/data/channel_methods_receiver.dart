@@ -2,18 +2,20 @@ import 'package:flutter/services.dart';
 import 'package:monarch_controller/data/grpc.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
-import 'package:monarch_channels/monarch_channels.dart';
-import 'package:monarch_controller/data/device_definitions.dart';
-import 'package:monarch_controller/data/story_scale_definitions.dart';
+import 'package:monarch_definitions/monarch_channels.dart';
+
+import '../data/device_definitions.dart';
+import '../data/story_scale_definitions.dart';
 
 import '../../main.dart';
 import 'channel_methods_sender.dart';
+import 'channel_methods.dart';
 import 'monarch_data.dart';
 
 final _logger = Logger('ChannelMethodsReceiver');
 
 void receiveChannelMethodCalls() {
-  MonarchChannels.controller.setMethodCallHandler((MethodCall call) async {
+  MonarchMethodChannels.controller.setMethodCallHandler((MethodCall call) async {
     _logger.finest('channel method received: ${call.method}');
     if (call.arguments != null) {
       _logger.finest('with arguments: ${call.arguments}');
