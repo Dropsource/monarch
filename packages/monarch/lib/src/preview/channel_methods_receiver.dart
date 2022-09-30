@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_definitions/monarch_channels.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
 
 import 'active_device.dart';
 import 'active_story.dart';
@@ -20,7 +21,7 @@ final _logger = Logger('ChannelMethodsReceiver');
 
 void receiveChannelMethodCalls() {
   // logger.level = LogLevel.ALL;
-  MonarchMethodChannels.preview.setMethodCallHandler((MethodCall call) async {
+  MonarchMethodChannels.previewWindow.setMethodCallHandler((MethodCall call) async {
     _logger.finest('channel method received: ${call.method}');
 
     try {
@@ -33,7 +34,7 @@ void receiveChannelMethodCalls() {
 }
 
 Future<dynamic> _handler(MethodCall call) async {
-  final Map? args = call.arguments;
+  final Map<String, dynamic>? args = call.arguments;
 
   switch (call.method) {
     case MonarchMethods.readySignalAck:
@@ -64,9 +65,8 @@ Future<dynamic> _handler(MethodCall call) async {
       return;
 
     case MonarchMethods.setActiveDevice:
-      String deviceId = args!['deviceId'];
       resetErrors();
-      activeDevice.value = activeDevice.getDeviceDefinition(deviceId);
+      activeDevice.value = DeviceDefinitionMapper().fromStandardMap(args!);
       return;
 
     case MonarchMethods.screenChanged:

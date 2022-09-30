@@ -1,6 +1,6 @@
 class MonarchChannels {
-  static const controller = 'monarch.controller';
-  static const preview = 'monarch.preview';
+  static const previewServer = 'monarch.previewServer';
+  static const previewWindow = 'monarch.previewWindow';
 }
 
 class MonarchMethods {

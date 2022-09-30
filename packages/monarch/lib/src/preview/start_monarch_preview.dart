@@ -56,7 +56,7 @@ void _startMonarchPreview(MonarchData Function() getMonarchData) async {
 }
 
 void _setUpLog() {
-  writeLogEntryStream((String line) => print('preview: $line'),
+  writeLogEntryStream((String line) => print('preview_window: $line'),
       printTimestamp: false, printLoggerName: true);
   logCurrentProcessInformation(_logger, LogLevel.FINE);
 }
@@ -105,6 +105,9 @@ Future<void> _sendDefinitions() async {
   /// the preview server will send them to the controller, the preview won't need them anymore
   await channelMethodsSender.sendDeviceDefinitions(DeviceDefinitions());
   await channelMethodsSender.sendStoryScaleDefinitions(StoryScaleDefinitions());
+  /// @TODO: the preview has the standard themes due to the ThemeData object,
+  /// right now I'm thinking that the preview should send it to the preview server, which
+  /// will then send it to its clients (i.e. the controller)
   await channelMethodsSender.sendStandardThemes(StandardThemes());
 }
 

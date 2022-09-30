@@ -1,3 +1,5 @@
+import 'standard_mapper.dart';
+
 class VisualDebugFlag {
   final String name;
   final bool isEnabled;
@@ -27,14 +29,12 @@ class VisualDebugTimeDilationValues {
   static const enabledValue = 5.0;
 }
 
-// class VisualDebugFlagMapper implements StandardMapper<VisualDebugFlag> {
-//   @override
-//   VisualDebugFlag fromStandardMap(Map<String, dynamic> args) {
-//     // TODO: implement fromStandardMap
-//     throw UnimplementedError();
-//   }
+class VisualDebugFlagMapper implements StandardMapper<VisualDebugFlag> {
+  @override
+  VisualDebugFlag fromStandardMap(Map<String, dynamic> args) =>
+      VisualDebugFlag(name: args['name'], isEnabled: args['isEnabled']);
 
-//   @override
-//   Map<String, dynamic> toStandardMap(VisualDebugFlag obj) =>
-//       {'name': obj.name, 'isEnabled': obj.isEnabled};
-// }
+  @override
+  Map<String, dynamic> toStandardMap(VisualDebugFlag obj) =>
+      {'name': obj.name, 'isEnabled': obj.isEnabled};
+}
