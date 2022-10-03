@@ -1,5 +1,5 @@
-name: preview_server
-description: The Monarch Preview Server
+name: preview_api
+description: The Monarch Preview API
 publish_to: 'none'
 version: 1.0.0
 

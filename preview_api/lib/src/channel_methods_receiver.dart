@@ -37,11 +37,6 @@ Future<dynamic> _handler(MethodCall call) async {
     case MonarchMethods.ping:
       return true;
 
-    case MonarchMethods.defaultTheme:
-      final String themeId = args!['themeId'];
-      manager.onDefaultThemeChange(themeId);
-      return;
-
     case MonarchMethods.previewReadySignal:
       /// @TODO: not sure if this is needed, the controller will be launch after preview,
       /// it may be suspicious. we already have ping. this may be for reloads, see how it flows
@@ -51,6 +46,11 @@ Future<dynamic> _handler(MethodCall call) async {
         _logger.info('monarch-preview-ready');
       }
       channelMethodsSender.sendReadySignalAck();
+      return;
+
+    case MonarchMethods.defaultTheme:
+      final String themeId = args!['themeId'];
+      manager.onDefaultThemeChange(themeId);
       return;
 
     case MonarchMethods.previewVmServerUri:

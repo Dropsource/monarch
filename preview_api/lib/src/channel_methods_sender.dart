@@ -16,23 +16,12 @@ class ChannelMethodsSender with Log implements AbstractChannelMethodsSender {
     return MonarchMethodChannels.previewServer.invokeMethod(method, arguments);
   }
 
-  @override
-  Future sendToggleVisualDebugFlag(VisualDebugFlag visualDebugFlag) {
-    return _invokeMonarchChannelMethod(MonarchMethods.toggleVisualDebugFlag,
-        VisualDebugFlagMapper().toStandardMap(visualDebugFlag));
-  }
-
+  /// @TODO: confirm if the api needs to expose this function or if it is internal
   @override
   void sendReadySignalAck() {
     _invokeMonarchChannelMethod(MonarchMethods.readySignalAck);
   }
-
-  @override
-  void setTextScaleFactor(double scale) {
-    _invokeMonarchChannelMethod(
-        MonarchMethods.setTextScaleFactor, {'factor': scale});
-  }
-
+  
   @override
   void loadStory(String storyKey) {
     _invokeMonarchChannelMethod(
@@ -42,6 +31,12 @@ class ChannelMethodsSender with Log implements AbstractChannelMethodsSender {
   @override
   void resetStory() {
     _invokeMonarchChannelMethod(MonarchMethods.resetStory);
+  }
+
+  @override
+  void setTextScaleFactor(double scale) {
+    _invokeMonarchChannelMethod(
+        MonarchMethods.setTextScaleFactor, {'factor': scale});
   }
 
   @override
@@ -70,6 +65,12 @@ class ChannelMethodsSender with Log implements AbstractChannelMethodsSender {
   @override
   void setDockSide(String dock) {
     _invokeMonarchChannelMethod(MonarchMethods.setDockSide, {'dock': dock});
+  }
+  
+  @override
+  Future sendToggleVisualDebugFlag(VisualDebugFlag visualDebugFlag) {
+    return _invokeMonarchChannelMethod(MonarchMethods.toggleVisualDebugFlag,
+        VisualDebugFlagMapper().toStandardMap(visualDebugFlag));
   }
 
   @override

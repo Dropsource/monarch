@@ -2,20 +2,125 @@ syntax = "proto3";
 
 package monarch_grpc;
 
-service MonarchCli {
-    rpc PreviewVmServerUriChanged(UriInfo) returns (Empty) {}
-    rpc ControllerGrpcServerStarted(ServerInfo) returns (Empty) {}
-    rpc LaunchDevTools(Empty) returns (Empty) {}
-    rpc PrintUserMessage(UserMessage) returns (Empty) {}
-    rpc UserSelection(UserSelectionData) returns (Empty) {}
-}
 
-service MonarchController {
+service MonarchPreviewApi {
+    rpc SetStory(StoryKeyInfo) returns (Empty) {}
+    rpc ResetStory(Empty) returns (Empty) {}
+    rpc SetTextScaleFactor(TextScaleFactorInfo) returns (Empty) {}
+    rpc SetLocale(LocaleInfo) returns (Empty) {}
+    rpc SetTheme(ThemeInfo) returns (Empty) {}
+    rpc SetDevice(DeviceInfo) returns (Empty) {}
+    rpc SetScale(ScaleInfo) returns (Empty) {}
+    rpc SetDockSide(DockSideInfo) returns (Empty) {}
+    rpc ToggleVisualDebugFlag(VisualDebugFlagInfo) returns (Empty) {}
     rpc HotReload(Empty) returns (ReloadResponse) {}
     rpc RestartPreview(Empty) returns (Empty) {}
+    
+    rpc SubscribeNotificationsApi(ServerInfo) returns (Empty) {}
 }
 
+service MonarchPreviewNotificationsApi {
+    rpc DefaultTheme(ThemeInfo) returns (Empty) {}
+    rpc VmServerUri(UriInfo) returns (Empty) {}
+    rpc DeviceDefinitions(DeviceListInfo) returns (Empty) {}
+    rpc StandardThemes(ThemeListInfo) returns (Empty) {}
+    rpc ScaleDefinitions(ScaleListInfo) returns (Empty) {}
+
+    rpc ProjectName(ProjectNameInfo) returns (Empty) {}
+    rpc ProjectStories(StoriesMapInfo) returns (Empty) {}
+    rpc ProjectThemes(ThemeListInfo) returns (Empty) {}
+    rpc ProjectLocales(LocaleListInfo) returns (Empty) {}
+
+    rpc ToggleVisualDebugFlag(VisualDebugFlagInfo) returns (Empty) {}
+    rpc UserMessage(UserMessageInfo) returns (Empty) {}
+    rpc LaunchDevTools(Empty) returns (Empty) {}
+
+    rpc TrackUserSelection(UserSelectionData) returns (Empty) {}
+}
+
+service MonarchDiscoveryApi {
+    rpc RegisterPreviewApi(ServerInfo) returns (Empty) {}
+    rpc RegisterPreviewNotificationsApi(ServerInfo) returns (Empty) {}
+    rpc GetPreviewApi(Empty) returns (ServerInfo) {}
+    rpc GetPreviewNotificationsApiList(Empty) returns (ServerListInfo) {}
+}
+
+
 message Empty {}
+
+message StoryKeyInfo {
+    string storyKey = 1;
+}
+
+message StoriesInfo {
+    string package = 1;
+    string path = 2;
+    repeated string storiesNames = 3;
+}
+
+message StoriesMapInfo {
+    map<string, StoriesInfo> storiesMap = 1;
+}
+
+message ProjectNameInfo {
+    string name = 1;
+}
+
+message TextScaleFactorInfo {
+    double scale = 1;
+}
+
+message LocaleInfo {
+    string languageTag = 1;
+}
+
+message LocaleListInfo {
+    repeated LocaleInfo locales = 1;
+}
+
+message ThemeInfo {
+    string id = 1;
+    string name = 2;
+    bool isDefault = 3;
+}
+
+message ThemeListInfo {
+    repeated ThemeInfo themes = 1;
+}
+
+message LogicalResolutionInfo {
+    double width = 1;
+    double height = 2;
+}
+
+message DeviceInfo {
+    string id = 1;
+    string name = 2;
+    string targetPlatform = 3;
+    LogicalResolutionInfo logicalResolutionInfo = 4;
+    double devicePixelRatio = 5;
+}
+
+message DeviceListInfo {
+    repeated DeviceInfo devices = 1;
+}
+
+message ScaleInfo {
+    double scale = 1;
+}
+
+message ScaleListInfo {
+    repeated ScaleInfo scales = 1;
+}
+
+message DockSideInfo {
+    string dock = 1;
+}
+
+message VisualDebugFlagInfo {
+    string name = 1;
+    bool isEnabled = 2;
+}
 
 message UriInfo {
     string host = 1;
@@ -28,11 +133,15 @@ message ServerInfo {
     int32 port = 1;
 }
 
+message ServerListInfo {
+    repeated ServerInfo servers = 1;
+}
+
 message ReloadResponse {
     bool isSuccessful = 1;
 }
 
-message UserMessage {
+message UserMessageInfo {
     string message = 1;
 }
 
