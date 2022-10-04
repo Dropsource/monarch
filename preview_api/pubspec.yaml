@@ -13,6 +13,9 @@ dependencies:
   monarch_utils: ^1.0.0
   monarch_definitions:
     path: ../packages/monarch_definitions
+  monarch_grpc:
+    path: ../packages/monarch_grpc
+  grpc: ^3.0.2
 
 dev_dependencies:
   flutter_test:

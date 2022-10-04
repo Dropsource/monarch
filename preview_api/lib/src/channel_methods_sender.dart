@@ -13,10 +13,9 @@ class ChannelMethodsSender with Log implements AbstractChannelMethodsSender {
     if (arguments != null) {
       log.finest('with arguments: $arguments');
     }
-    return MonarchMethodChannels.previewServer.invokeMethod(method, arguments);
+    return MonarchMethodChannels.previewApi.invokeMethod(method, arguments);
   }
-
-  /// @TODO: confirm if the api needs to expose this function or if it is internal
+  
   @override
   void sendReadySignalAck() {
     _invokeMonarchChannelMethod(MonarchMethods.readySignalAck);

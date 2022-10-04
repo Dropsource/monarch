@@ -1,8 +1,10 @@
 import 'package:flutter/services.dart';
 import 'package:monarch_controller/data/grpc.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_definitions/monarch_channels.dart';
+import 'package:preview_api/src/preview_notifications_api_clients.dart';
 
 import '../data/device_definitions.dart';
 import '../data/story_scale_definitions.dart';
@@ -15,11 +17,12 @@ import 'monarch_data.dart';
 final _logger = Logger('ChannelMethodsReceiver');
 
 void receiveChannelMethodCalls() {
-  MonarchMethodChannels.previewServer.setMethodCallHandler((MethodCall call) async {
+  MonarchMethodChannels.previewApi
+      .setMethodCallHandler((MethodCall call) async {
     _logger.finest('channel method received: ${call.method}');
-    if (call.arguments != null) {
-      _logger.finest('with arguments: ${call.arguments}');
-    }
+    // if (call.arguments != null) {
+    //   _logger.finest('with arguments: ${call.arguments}');
+    // }
     try {
       return await _handler(call);
     } catch (e, s) {
@@ -29,6 +32,9 @@ void receiveChannelMethodCalls() {
   });
 }
 
+bool _isPreviewReady = false;
+
+/// THIS USED TO BE IN THE CONTROLLLER
 Future<dynamic> _handler(MethodCall call) async {
   final args =
       call.arguments == null ? null : Map<String, dynamic>.from(call.arguments);
@@ -38,50 +44,41 @@ Future<dynamic> _handler(MethodCall call) async {
       return true;
 
     case MonarchMethods.previewReadySignal:
-      /// @TODO: not sure if this is needed, the controller will be launch after preview,
-      /// it may be suspicious. we already have ping. this may be for reloads, see how it flows
-      /// then decide.
-      if (!manager.state.isPreviewReady) {
-        manager.onPreviewReady();
+      if (!_isPreviewReady) {
         _logger.info('monarch-preview-ready');
+        _isPreviewReady = true;
       }
+      previewNotifications.previewReady();
       channelMethodsSender.sendReadySignalAck();
+
+      /// Already moved to controller. The controller is managing its own state. For now
+      /// send preview-ready signal to all clients, preview_api will keep its own state, see how it goes.
+      /// @TODO: remove comment above and commented out code below
+
+      // if (!manager.state.isPreviewReady) {
+      //   manager.onPreviewReady();
+      //   _logger.info('monarch-preview-ready');
+      // }
+      // channelMethodsSender.sendReadySignalAck();
       return;
 
     case MonarchMethods.defaultTheme:
-      final String themeId = args!['themeId'];
-      manager.onDefaultThemeChange(themeId);
+      var theme = MetaThemeDefinitionMapper().fromStandardMap(args!);
+      previewNotifications.defaultTheme(theme);
       return;
 
     case MonarchMethods.previewVmServerUri:
-    /// @TODO: the preview server should send data to all clients, not just the cli,
-    /// it should not depend on the cli grpc client, some clients may choose to do nothing on 
-    /// specific grpc calls
-      cliGrpcClientInstance.client!.previewVmServerUriChanged(UriInfo(
-          scheme: args!['scheme'],
-          host: args['host'],
-          port: args['port'],
-          path: args['path']));
-      return;
-
-    case MonarchMethods.deviceDefinitions:
-      final deviceDefinitions = getDeviceDefinitions(args!);
-      manager.onDeviceDefinitionsChanged(deviceDefinitions);
-      return;
-
-    case MonarchMethods.standardThemes:
-      final themes = getStandardThemes(args!);
-      manager.onStandardThemesChanged(themes);
-      return;
-
-    case MonarchMethods.storyScaleDefinitions:
-      final scaleDefinitions = getStoryScaleDefinitions(args!);
-      manager.onStoryScaleDefinitionsChanged(scaleDefinitions);
+      var uri = UriMapper().fromStandardMap(args!);
+      previewNotifications.vmServerUri(uri);
       return;
 
     case MonarchMethods.monarchData:
-      final monarchData = MonarchData.fromStandardMap(args!);
-      manager.onMonarchDataChanged(monarchData);
+      final monarchData = MonarchDataDefinitionMapper().fromStandardMap(args!);
+      previewNotifications.projectPackage(monarchData.packageName);
+      previewNotifications.projectStories(monarchData.metaStoriesDefinitionMap);
+      previewNotifications.projectThemes(monarchData.metaThemeDefinitions);
+      previewNotifications.projectLocales(monarchData.metaLocalizationDefinitions);
+      // manager.onMonarchDataChanged(monarchData);
       return;
 
     case MonarchMethods.toggleVisualDebugFlag:

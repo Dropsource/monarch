@@ -1,10 +1,20 @@
 import 'standard_mapper.dart';
 
-const defaultTheme = MetaThemeDefinition(
+const materialLightThemeDefinition = MetaThemeDefinition(
     id: '__material-light-theme__',
     name: 'Material Light Theme',
     isDefault: true);
+const materialDarkThemeDefinition = MetaThemeDefinition(
+    id: '__material-dark-theme__',
+    name: 'Material Dark Theme',
+    isDefault: false);
 
+const defaultThemeDefinition = materialLightThemeDefinition;
+
+const standardMetaThemeDefinitions = [
+  materialLightThemeDefinition,
+  materialDarkThemeDefinition
+];
 
 class MetaThemeDefinition {
   final String id;

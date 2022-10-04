@@ -4,6 +4,7 @@ package monarch_grpc;
 
 
 service MonarchPreviewApi {
+    rpc GetReferenceDefinitions(Empty) returns (ReferenceDefinitions) {}
     rpc SetStory(StoryKeyInfo) returns (Empty) {}
     rpc ResetStory(Empty) returns (Empty) {}
     rpc SetTextScaleFactor(TextScaleFactorInfo) returns (Empty) {}
@@ -15,18 +16,14 @@ service MonarchPreviewApi {
     rpc ToggleVisualDebugFlag(VisualDebugFlagInfo) returns (Empty) {}
     rpc HotReload(Empty) returns (ReloadResponse) {}
     rpc RestartPreview(Empty) returns (Empty) {}
-    
-    rpc SubscribeNotificationsApi(ServerInfo) returns (Empty) {}
 }
 
 service MonarchPreviewNotificationsApi {
+    rpc PreviewReady(Empty) returns (Empty) {}
     rpc DefaultTheme(ThemeInfo) returns (Empty) {}
     rpc VmServerUri(UriInfo) returns (Empty) {}
-    rpc DeviceDefinitions(DeviceListInfo) returns (Empty) {}
-    rpc StandardThemes(ThemeListInfo) returns (Empty) {}
-    rpc ScaleDefinitions(ScaleListInfo) returns (Empty) {}
 
-    rpc ProjectName(ProjectNameInfo) returns (Empty) {}
+    rpc ProjectPackage(PackageInfo) returns (Empty) {}
     rpc ProjectStories(StoriesMapInfo) returns (Empty) {}
     rpc ProjectThemes(ThemeListInfo) returns (Empty) {}
     rpc ProjectLocales(LocaleListInfo) returns (Empty) {}
@@ -48,6 +45,12 @@ service MonarchDiscoveryApi {
 
 message Empty {}
 
+message ReferenceDefinitions {
+    repeated DeviceInfo devices = 1;
+    repeated ThemeInfo standardThemes = 2;
+    repeated ScaleInfo scales = 3;
+}
+
 message StoryKeyInfo {
     string storyKey = 1;
 }
@@ -62,7 +65,7 @@ message StoriesMapInfo {
     map<string, StoriesInfo> storiesMap = 1;
 }
 
-message ProjectNameInfo {
+message PackageInfo {
     string name = 1;
 }
 
@@ -101,16 +104,9 @@ message DeviceInfo {
     double devicePixelRatio = 5;
 }
 
-message DeviceListInfo {
-    repeated DeviceInfo devices = 1;
-}
-
 message ScaleInfo {
     double scale = 1;
-}
-
-message ScaleListInfo {
-    repeated ScaleInfo scales = 1;
+    string name = 2;
 }
 
 message DockSideInfo {

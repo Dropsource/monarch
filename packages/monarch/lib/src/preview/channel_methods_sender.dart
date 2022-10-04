@@ -37,9 +37,9 @@ class ChannelMethodsSender with Log {
         StandardThemesMapper().toStandardMap(definitions));
   }
 
-  Future sendDefaultTheme(String id) {
-    return _invokeMonarchChannelMethod(
-        MonarchMethods.defaultTheme, {'themeId': id});
+  Future sendDefaultTheme(MetaThemeDefinition themeDefinition) {
+    return _invokeMonarchChannelMethod(MonarchMethods.defaultTheme,
+        MetaThemeDefinitionMapper().toStandardMap(themeDefinition));
   }
 
   Future sendMonarchData(MonarchDataDefinition monarchData) {
@@ -70,7 +70,8 @@ class ChannelMethodsSender with Log {
     activeStoryScale.value = scale;
     for (var flagArgs in visualDebugFlags) {
       var flag = VisualDebugFlagMapper().fromStandardMap(flagArgs);
-      await visual_debug.toggleFlagViaVmServiceExtension(flag.name, flag.isEnabled);
+      await visual_debug.toggleFlagViaVmServiceExtension(
+          flag.name, flag.isEnabled);
     }
   }
 
@@ -79,12 +80,8 @@ class ChannelMethodsSender with Log {
   }
 
   Future sendPreviewVmServerUri(Uri uri) {
-    return _invokeMonarchChannelMethod(MonarchMethods.previewVmServerUri, {
-      'scheme': uri.scheme,
-      'host': uri.host,
-      'port': uri.port,
-      'path': uri.path,
-    });
+    return _invokeMonarchChannelMethod(
+        MonarchMethods.previewVmServerUri, UriMapper().toStandardMap(uri));
   }
 
   Future sendUserMessage(String message) {

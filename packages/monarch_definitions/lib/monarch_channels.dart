@@ -1,5 +1,5 @@
 class MonarchChannels {
-  static const previewServer = 'monarch.previewServer';
+  static const previewApi = 'monarch.previewApi';
   static const previewWindow = 'monarch.previewWindow';
 }
 
@@ -9,9 +9,6 @@ class MonarchMethods {
   static const readySignalAck = 'monarch.readySignalAck';
 
   static const monarchData = 'monarch.monarchData';
-  static const deviceDefinitions = 'monarch.deviceDefinitions';
-  static const storyScaleDefinitions = 'monarch.storyScaleDefinitions';
-  static const standardThemes = 'monarch.standardThemes';
   static const defaultTheme = 'monarch.defaultTheme';
   static const loadStory = 'monarch.loadStory';
   static const resetStory = 'monarch.resetStory';
