@@ -5,65 +5,72 @@ class PreviewNotifications {
   /// TODO: maybe lazily populated using the Discovery Api hosted by cli
   List<MonarchPreviewNotificationsApiClient> clientList = [];
 
-  void defaultTheme(MetaThemeDefinition theme) {
+  // Future<T> Function(StartHeartbeatFunction) fn
+  void _notifyClients(
+      void Function(MonarchPreviewNotificationsApiClient client)
+          notificationFn) {
     for (var client in clientList) {
-      client.defaultTheme(ThemeInfo(
-          id: theme.id, name: theme.name, isDefault: theme.isDefault));
+      notificationFn(client);
     }
+  }
+
+  void defaultTheme(MetaThemeDefinition theme) {
+    _notifyClients((client) => client.defaultTheme(
+        ThemeInfo(id: theme.id, name: theme.name, isDefault: theme.isDefault)));
   }
 
   void launchDevTools() {
-    // TODO: implement launchDevTools
-    throw UnimplementedError();
+    _notifyClients((client) => client.launchDevTools(Empty()));
   }
 
   void previewReady() {
-    for (var client in clientList) {
-      client.previewReady(Empty());
-    }
+    _notifyClients((client) => client.previewReady(Empty()));
   }
 
-  void projectLocales(List<MetaLocalizationDefinition> locales) {
-    // TODO: implement projectLocales
-    throw UnimplementedError();
+  void projectLocales(List<MetaLocalizationDefinition> localizations) {
+    _notifyClients((client) => client.projectLocalizations(LocalizationListInfo(
+        localizations: localizations.map((e) => LocalizationInfo(
+            localeLanguageTags: e.localeLanguageTags,
+            delegateClassName: e.delegateClassName)))));
   }
 
   void projectPackage(String packageName) {
-    // TODO: implement projectName
-    throw UnimplementedError();
+    _notifyClients(
+        (client) => client.projectPackage(PackageInfo(name: packageName)));
   }
 
   void projectStories(Map<String, MetaStoriesDefinition> metaStoriesMap) {
-    // TODO: implement projectStories
-    throw UnimplementedError();
+    _notifyClients((client) => client.projectStories(StoriesMapInfo(
+        storiesMap: metaStoriesMap.map((key, value) => MapEntry(
+            key,
+            StoriesInfo(
+                package: value.package,
+                path: value.path,
+                storiesNames: value.storiesNames))))));
   }
 
   void projectThemes(List<MetaThemeDefinition> themes) {
-    // TODO: implement projectThemes
-    throw UnimplementedError();
+    _notifyClients((client) => client.projectThemes(ThemeListInfo(
+        themes: themes.map((e) =>
+            ThemeInfo(id: e.id, name: e.name, isDefault: e.isDefault)))));
   }
 
-
-  void toggleVisualDebugFlag(VisualDebugFlagInfo request) {
-    // TODO: implement toggleVisualDebugFlag
-    throw UnimplementedError();
+  void toggleVisualDebugFlag(VisualDebugFlag flag) {
+    _notifyClients((client) => client.toggleVisualDebugFlag(
+        VisualDebugFlagInfo(name: flag.name, isEnabled: flag.isEnabled)));
   }
 
   void trackUserSelection(UserSelectionData request) {
-    // TODO: implement trackUserSelection
-    throw UnimplementedError();
+    _notifyClients((client) => client.trackUserSelection(request));
   }
 
   void userMessage(UserMessageInfo request) {
-    // TODO: implement userMessage
-    throw UnimplementedError();
+    _notifyClients((client) => client.userMessage(request));
   }
 
   void vmServerUri(Uri uri) {
-    for (var client in clientList) {
-      client.vmServerUri(UriInfo(
-          scheme: uri.scheme, host: uri.host, port: uri.port, path: uri.path));
-    }
+    _notifyClients((client) => client.vmServerUri(UriInfo(
+        scheme: uri.scheme, host: uri.host, port: uri.port, path: uri.path)));
   }
 }
 

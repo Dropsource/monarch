@@ -393,45 +393,100 @@ class LocaleInfo extends $pb.GeneratedMessage {
   void clearLanguageTag() => clearField(1);
 }
 
-class LocaleListInfo extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'LocaleListInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
-    ..pc<LocaleInfo>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'locales', $pb.PbFieldType.PM, subBuilder: LocaleInfo.create)
+class LocalizationInfo extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'LocalizationInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
+    ..pPS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'localeLanguageTags', protoName: 'localeLanguageTags')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'delegateClassName', protoName: 'delegateClassName')
     ..hasRequiredFields = false
   ;
 
-  LocaleListInfo._() : super();
-  factory LocaleListInfo({
-    $core.Iterable<LocaleInfo>? locales,
+  LocalizationInfo._() : super();
+  factory LocalizationInfo({
+    $core.Iterable<$core.String>? localeLanguageTags,
+    $core.String? delegateClassName,
   }) {
     final _result = create();
-    if (locales != null) {
-      _result.locales.addAll(locales);
+    if (localeLanguageTags != null) {
+      _result.localeLanguageTags.addAll(localeLanguageTags);
+    }
+    if (delegateClassName != null) {
+      _result.delegateClassName = delegateClassName;
     }
     return _result;
   }
-  factory LocaleListInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory LocaleListInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory LocalizationInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory LocalizationInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  LocaleListInfo clone() => LocaleListInfo()..mergeFromMessage(this);
+  LocalizationInfo clone() => LocalizationInfo()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  LocaleListInfo copyWith(void Function(LocaleListInfo) updates) => super.copyWith((message) => updates(message as LocaleListInfo)) as LocaleListInfo; // ignore: deprecated_member_use
+  LocalizationInfo copyWith(void Function(LocalizationInfo) updates) => super.copyWith((message) => updates(message as LocalizationInfo)) as LocalizationInfo; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static LocaleListInfo create() => LocaleListInfo._();
-  LocaleListInfo createEmptyInstance() => create();
-  static $pb.PbList<LocaleListInfo> createRepeated() => $pb.PbList<LocaleListInfo>();
+  static LocalizationInfo create() => LocalizationInfo._();
+  LocalizationInfo createEmptyInstance() => create();
+  static $pb.PbList<LocalizationInfo> createRepeated() => $pb.PbList<LocalizationInfo>();
   @$core.pragma('dart2js:noInline')
-  static LocaleListInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LocaleListInfo>(create);
-  static LocaleListInfo? _defaultInstance;
+  static LocalizationInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LocalizationInfo>(create);
+  static LocalizationInfo? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<LocaleInfo> get locales => $_getList(0);
+  $core.List<$core.String> get localeLanguageTags => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.String get delegateClassName => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set delegateClassName($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasDelegateClassName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDelegateClassName() => clearField(2);
+}
+
+class LocalizationListInfo extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'LocalizationListInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
+    ..pc<LocalizationInfo>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'localizations', $pb.PbFieldType.PM, subBuilder: LocalizationInfo.create)
+    ..hasRequiredFields = false
+  ;
+
+  LocalizationListInfo._() : super();
+  factory LocalizationListInfo({
+    $core.Iterable<LocalizationInfo>? localizations,
+  }) {
+    final _result = create();
+    if (localizations != null) {
+      _result.localizations.addAll(localizations);
+    }
+    return _result;
+  }
+  factory LocalizationListInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory LocalizationListInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  LocalizationListInfo clone() => LocalizationListInfo()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  LocalizationListInfo copyWith(void Function(LocalizationListInfo) updates) => super.copyWith((message) => updates(message as LocalizationListInfo)) as LocalizationListInfo; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static LocalizationListInfo create() => LocalizationListInfo._();
+  LocalizationListInfo createEmptyInstance() => create();
+  static $pb.PbList<LocalizationListInfo> createRepeated() => $pb.PbList<LocalizationListInfo>();
+  @$core.pragma('dart2js:noInline')
+  static LocalizationListInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LocalizationListInfo>(create);
+  static LocalizationListInfo? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<LocalizationInfo> get localizations => $_getList(0);
 }
 
 class ThemeInfo extends $pb.GeneratedMessage {

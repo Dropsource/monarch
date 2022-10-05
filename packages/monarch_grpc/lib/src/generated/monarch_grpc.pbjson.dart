@@ -100,16 +100,27 @@ const LocaleInfo$json = const {
 
 /// Descriptor for `LocaleInfo`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List localeInfoDescriptor = $convert.base64Decode('CgpMb2NhbGVJbmZvEiAKC2xhbmd1YWdlVGFnGAEgASgJUgtsYW5ndWFnZVRhZw==');
-@$core.Deprecated('Use localeListInfoDescriptor instead')
-const LocaleListInfo$json = const {
-  '1': 'LocaleListInfo',
+@$core.Deprecated('Use localizationInfoDescriptor instead')
+const LocalizationInfo$json = const {
+  '1': 'LocalizationInfo',
   '2': const [
-    const {'1': 'locales', '3': 1, '4': 3, '5': 11, '6': '.monarch_grpc.LocaleInfo', '10': 'locales'},
+    const {'1': 'localeLanguageTags', '3': 1, '4': 3, '5': 9, '10': 'localeLanguageTags'},
+    const {'1': 'delegateClassName', '3': 2, '4': 1, '5': 9, '10': 'delegateClassName'},
   ],
 };
 
-/// Descriptor for `LocaleListInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List localeListInfoDescriptor = $convert.base64Decode('Cg5Mb2NhbGVMaXN0SW5mbxIyCgdsb2NhbGVzGAEgAygLMhgubW9uYXJjaF9ncnBjLkxvY2FsZUluZm9SB2xvY2FsZXM=');
+/// Descriptor for `LocalizationInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List localizationInfoDescriptor = $convert.base64Decode('ChBMb2NhbGl6YXRpb25JbmZvEi4KEmxvY2FsZUxhbmd1YWdlVGFncxgBIAMoCVISbG9jYWxlTGFuZ3VhZ2VUYWdzEiwKEWRlbGVnYXRlQ2xhc3NOYW1lGAIgASgJUhFkZWxlZ2F0ZUNsYXNzTmFtZQ==');
+@$core.Deprecated('Use localizationListInfoDescriptor instead')
+const LocalizationListInfo$json = const {
+  '1': 'LocalizationListInfo',
+  '2': const [
+    const {'1': 'localizations', '3': 1, '4': 3, '5': 11, '6': '.monarch_grpc.LocalizationInfo', '10': 'localizations'},
+  ],
+};
+
+/// Descriptor for `LocalizationListInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List localizationListInfoDescriptor = $convert.base64Decode('ChRMb2NhbGl6YXRpb25MaXN0SW5mbxJECg1sb2NhbGl6YXRpb25zGAEgAygLMh4ubW9uYXJjaF9ncnBjLkxvY2FsaXphdGlvbkluZm9SDWxvY2FsaXphdGlvbnM=');
 @$core.Deprecated('Use themeInfoDescriptor instead')
 const ThemeInfo$json = const {
   '1': 'ThemeInfo',

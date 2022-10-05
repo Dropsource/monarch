@@ -15,7 +15,9 @@ service MonarchPreviewApi {
     rpc SetDockSide(DockSideInfo) returns (Empty) {}
     rpc ToggleVisualDebugFlag(VisualDebugFlagInfo) returns (Empty) {}
     rpc HotReload(Empty) returns (ReloadResponse) {}
-    rpc RestartPreview(Empty) returns (Empty) {}
+    rpc RestartPreview(Empty) returns (Empty) {} 
+    rpc LaunchDevTools(Empty) returns (Empty) {}
+    rpc TrackUserSelection(UserSelectionData) returns (Empty) {}
 }
 
 service MonarchPreviewNotificationsApi {
@@ -26,7 +28,7 @@ service MonarchPreviewNotificationsApi {
     rpc ProjectPackage(PackageInfo) returns (Empty) {}
     rpc ProjectStories(StoriesMapInfo) returns (Empty) {}
     rpc ProjectThemes(ThemeListInfo) returns (Empty) {}
-    rpc ProjectLocales(LocaleListInfo) returns (Empty) {}
+    rpc ProjectLocalizations(LocalizationListInfo) returns (Empty) {}
 
     rpc ToggleVisualDebugFlag(VisualDebugFlagInfo) returns (Empty) {}
     rpc UserMessage(UserMessageInfo) returns (Empty) {}
@@ -77,8 +79,13 @@ message LocaleInfo {
     string languageTag = 1;
 }
 
-message LocaleListInfo {
-    repeated LocaleInfo locales = 1;
+message LocalizationInfo {
+    repeated string localeLanguageTags = 1;
+    string delegateClassName = 2;
+}
+
+message LocalizationListInfo {
+    repeated LocalizationInfo localizations = 1;
 }
 
 message ThemeInfo {

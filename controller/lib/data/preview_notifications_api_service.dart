@@ -28,12 +28,6 @@ class PreviewNotificationsApiService
   // }
 
   @override
-  Future<Empty> launchDevTools(ServiceCall call, Empty request) {
-    // TODO: implement launchDevTools
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Empty> previewReady(ServiceCall call, Empty request) {
     if (!manager.state.isPreviewReady) {
       manager.onPreviewReady();
@@ -42,33 +36,48 @@ class PreviewNotificationsApiService
   }
 
   @override
-  Future<Empty> projectLocales(ServiceCall call, LocaleListInfo request) {
-    // TODO: implement projectLocales
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Empty> projectName(ServiceCall call, ProjectNameInfo request) {
-    // TODO: implement projectName
-    throw UnimplementedError();
+  Future<Empty> projectPackage(ServiceCall call, PackageInfo request) {
+    manager.onPackageNameChanged(request.name);
+    return Future.value(Empty());
   }
 
   @override
   Future<Empty> projectStories(ServiceCall call, StoriesMapInfo request) {
-    // TODO: implement projectStories
-    throw UnimplementedError();
+    manager.onProjectStoriesChanged(request.storiesMap.map((key, value) =>
+        MapEntry(
+            key,
+            MetaStoriesDefinition(
+                package: value.package,
+                path: value.path,
+                storiesNames: value.storiesNames))));
+    return Future.value(Empty());
   }
 
   @override
   Future<Empty> projectThemes(ServiceCall call, ThemeListInfo request) {
-    // TODO: implement projectThemes
+    manager.onProjectThemesChanged(request.themes
+        .map((e) =>
+            MetaThemeDefinition(id: e.id, name: e.name, isDefault: e.isDefault))
+        .toList());
+    return Future.value(Empty());
+  }
+
+  @override
+  Future<Empty> projectLocalizations(
+      ServiceCall call, LocalizationListInfo request) {
+    manager.onProjectLocalesChanged(request.localizations
+        .map((e) => MetaLocalizationDefinition(
+            localeLanguageTags: e.localeLanguageTags,
+            delegateClassName: e.delegateClassName))
+        .toList());
     throw UnimplementedError();
   }
 
   // @override
   // Future<Empty> scaleDefinitions(ServiceCall call, ScaleListInfo request) {
+  //  manager.onStoryScaleDefinitionsChanged(scaleDefinitions);
   //   // TODO: implement scaleDefinitions
-  //   throw UnimplementedError();
+  //   return Future.value(Empty());
   // }
 
   // @override
@@ -83,25 +92,31 @@ class PreviewNotificationsApiService
   @override
   Future<Empty> toggleVisualDebugFlag(
       ServiceCall call, VisualDebugFlagInfo request) {
-    // TODO: implement toggleVisualDebugFlag
-    throw UnimplementedError();
+    manager.onVisualDebugFlagToggleByVmService(request.name, request.isEnabled);
+    return Future.value(Empty());
   }
 
   @override
   Future<Empty> trackUserSelection(
       ServiceCall call, UserSelectionData request) {
-    // TODO: implement trackUserSelection
-    throw UnimplementedError();
+    // do nothing
+    return Future.value(Empty());
   }
 
   @override
   Future<Empty> userMessage(ServiceCall call, UserMessageInfo request) {
-    // TODO: implement userMessage
-    throw UnimplementedError();
+    // do nothing
+    return Future.value(Empty());
   }
 
   @override
   Future<Empty> vmServerUri(ServiceCall call, UriInfo request) {
+    // do nothing
+    return Future.value(Empty());
+  }
+
+  @override
+  Future<Empty> launchDevTools(ServiceCall call, Empty request) {
     // do nothing
     return Future.value(Empty());
   }

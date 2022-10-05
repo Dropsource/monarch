@@ -34,7 +34,6 @@ void receiveChannelMethodCalls() {
 
 bool _isPreviewReady = false;
 
-/// THIS USED TO BE IN THE CONTROLLLER
 Future<dynamic> _handler(MethodCall call) async {
   final args =
       call.arguments == null ? null : Map<String, dynamic>.from(call.arguments);
@@ -78,22 +77,19 @@ Future<dynamic> _handler(MethodCall call) async {
       previewNotifications.projectStories(monarchData.metaStoriesDefinitionMap);
       previewNotifications.projectThemes(monarchData.metaThemeDefinitions);
       previewNotifications.projectLocales(monarchData.metaLocalizationDefinitions);
-      // manager.onMonarchDataChanged(monarchData);
       return;
 
     case MonarchMethods.toggleVisualDebugFlag:
-      final name = args!['name'];
-      final isEnabled = args['isEnabled'];
-      manager.onVisualDebugFlagToggleByVmService(name, isEnabled);
+      var flag = VisualDebugFlagMapper().fromStandardMap(args!);
+      previewNotifications.toggleVisualDebugFlag(flag);
+      return;
+
+    case MonarchMethods.userMessage:
+      previewNotifications.userMessage(UserMessageInfo(message: args!['message']));
       return;
 
     case MonarchMethods.getState:
       return manager.state.toStandardMap();
-
-    case MonarchMethods.userMessage:
-      cliGrpcClientInstance.client!
-          .printUserMessage(UserMessage(message: args!['message']));
-      return;
 
     default:
       _logger.fine('method ${call.method} not implemented');

@@ -69,7 +69,7 @@ class ControllerManager with Log {
   }
 
   /// Called by UI when the user toggles a visual debug checkbox.
-  /// It will send a message to the preview, which will call the vm service
+  /// It will send a message to the preview api, which will call the vm service
   /// extension method for the corresponding flag.
   /// It doesn't update the controller state. The controller state is updated
   /// in [onVisualDebugFlagToggleByVmService] which is called after this function.
@@ -79,7 +79,7 @@ class ControllerManager with Log {
     _userSelection(option.toggled);
   }
 
-  /// Called by the preview's vm-service-client via the method channels.
+  /// Called by the preview's vm-service-client via the method channels and notifications api.
   /// It gets called after a visual debug flag is set by the UI. Thus, we set
   /// the controller state in this function.
   /// It is also called after the user sets a visual debug flag using DevTools.
@@ -133,30 +133,66 @@ class ControllerManager with Log {
     _userSelection('dock_side_selected');
   }
 
-  void onMonarchDataChanged(MonarchDataDefinition monarchData) {
-    log.finest('MonarchData '
-        'meta-localizations=${monarchData.metaLocalizationDefinitions.length} '
-        'all-locales=${monarchData.allLocaleLanguageTags.length} '
-        'meta-themes=${monarchData.metaThemeDefinitions.length} ');
+  void onPackageNameChanged(String packageName) {
+    _update(state.copyWith(packageName: packageName));
+  }
 
-    var localeHelper = _LocaleHelper(monarchData, state.currentLocale);
-    localeHelper.compute();
+  void onProjectStoriesChanged(Map<String, MetaStoriesDefinition> storiesMap) {
+    _update(state.copyWith(
+      storyGroups: _translateStories(storiesMap),
+    ));
+  }
+
+  void onProjectThemesChanged(List<MetaThemeDefinition> themes) {
     var themeHelper = _ThemeHelper(
         standardThemes: state.standardThemes,
-        userThemes: monarchData.metaThemeDefinitions,
+        userThemes: themes,
         defaultThemeId: state.defaultThemeId,
         currentTheme: state.currentTheme);
     themeHelper.compute();
 
     _update(state.copyWith(
-      packageName: monarchData.packageName,
-      storyGroups: _translateStories(monarchData.metaStoriesDefinitionMap),
-      userThemes: monarchData.metaThemeDefinitions,
+      userThemes: themes,
       currentTheme: themeHelper.computedCurrentTheme,
+    ));
+  }
+
+  void onProjectLocalesChanged(List<MetaLocalizationDefinition> localizations) {
+    var allLocaleLanguageTags = localizations.expand((m) => m.localeLanguageTags);
+    var localeHelper = _LocaleHelper(allLocaleLanguageTags, state.currentLocale);
+    localeHelper.compute();
+
+    _update(state.copyWith(
       locales: localeHelper.computedLocales,
       currentLocale: localeHelper.computedCurrentLocale,
     ));
   }
+
+  /// @TODO: remove
+  // void onMonarchDataChanged(MonarchDataDefinition monarchData) {
+  //   log.finest('MonarchData '
+  //       'meta-localizations=${monarchData.metaLocalizationDefinitions.length} '
+  //       'all-locales=${monarchData.allLocaleLanguageTags.length} '
+  //       'meta-themes=${monarchData.metaThemeDefinitions.length} ');
+
+  //   var localeHelper = _LocaleHelper(monarchData, state.currentLocale);
+  //   localeHelper.compute();
+  //   var themeHelper = _ThemeHelper(
+  //       standardThemes: state.standardThemes,
+  //       userThemes: monarchData.metaThemeDefinitions,
+  //       defaultThemeId: state.defaultThemeId,
+  //       currentTheme: state.currentTheme);
+  //   themeHelper.compute();
+
+  //   _update(state.copyWith(
+  //     packageName: monarchData.packageName,
+  //     storyGroups: _translateStories(monarchData.metaStoriesDefinitionMap),
+  //     userThemes: monarchData.metaThemeDefinitions,
+  //     currentTheme: themeHelper.computedCurrentTheme,
+  //     locales: localeHelper.computedLocales,
+  //     currentLocale: localeHelper.computedCurrentLocale,
+  //   ));
+  // }
 
   void onStandardThemesChanged(List<MetaThemeDefinition> standardThemes) {
     var themeHelper = _ThemeHelper(
@@ -236,24 +272,24 @@ class ControllerManager with Log {
 }
 
 class _LocaleHelper {
-  final MonarchDataDefinition data;
+  final Iterable<String> allLocaleLanguageTags;
   final String currentLocale;
-  _LocaleHelper(this.data, this.currentLocale);
+  _LocaleHelper(this.allLocaleLanguageTags, this.currentLocale);
 
   List<String> computedLocales = [];
   String computedCurrentLocale = defaultLocale;
 
   void compute() {
     computedLocales.clear();
-    if (data.allLocaleLanguageTags.isEmpty) {
+    if (allLocaleLanguageTags.isEmpty) {
       computedLocales.add(defaultLocale);
       computedCurrentLocale = defaultLocale;
     } else {
-      computedLocales.addAll(data.allLocaleLanguageTags);
-      if (data.allLocaleLanguageTags.contains(currentLocale)) {
+      computedLocales.addAll(allLocaleLanguageTags);
+      if (allLocaleLanguageTags.contains(currentLocale)) {
         computedCurrentLocale = currentLocale;
       } else {
-        computedCurrentLocale = data.allLocaleLanguageTags.first;
+        computedCurrentLocale = allLocaleLanguageTags.first;
       }
     }
   }

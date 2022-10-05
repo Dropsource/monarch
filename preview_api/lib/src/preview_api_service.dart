@@ -3,6 +3,7 @@ import 'package:monarch_definitions/monarch_definitions.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
 import 'channel_methods_sender.dart';
 import 'device_definitions.dart';
+import 'preview_notifications_api_clients.dart';
 import 'story_scale_definitions.dart';
 
 class PreviewApiService extends MonarchPreviewApiServiceBase {
@@ -98,4 +99,22 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
               (e) => ThemeInfo(id: e.id, name: e.name, isDefault: e.isDefault)),
           scales: storyScaleDefinitions
               .map((e) => ScaleInfo(scale: e.scale, name: e.name))));
+
+  @override
+  Future<Empty> launchDevTools(ServiceCall call, Empty request) {
+    // DevTools are launched from the cli process since it needs the attach process information.
+    // The Preview API forwards this request to all the notification clients. The controller client
+    // should do nothing. The cli client should launch DevTools.
+    previewNotifications.launchDevTools();
+    return Future.value(Empty());
+  }
+
+  @override
+  Future<Empty> trackUserSelection(
+      ServiceCall call, UserSelectionData request) {
+    // The Preview API forwards this request to all the notification clients. The controller client
+    // should do nothing. The cli client should handle this request.
+    previewNotifications.trackUserSelection(request);
+    return Future.value(Empty());
+  }
 }

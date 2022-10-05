@@ -66,6 +66,15 @@ class MonarchPreviewApiClient extends $grpc.Client {
       '/monarch_grpc.MonarchPreviewApi/RestartPreview',
       ($0.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
+  static final _$launchDevTools = $grpc.ClientMethod<$0.Empty, $0.Empty>(
+      '/monarch_grpc.MonarchPreviewApi/LaunchDevTools',
+      ($0.Empty value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
+  static final _$trackUserSelection =
+      $grpc.ClientMethod<$0.UserSelectionData, $0.Empty>(
+          '/monarch_grpc.MonarchPreviewApi/TrackUserSelection',
+          ($0.UserSelectionData value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
 
   MonarchPreviewApiClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -134,6 +143,17 @@ class MonarchPreviewApiClient extends $grpc.Client {
   $grpc.ResponseFuture<$0.Empty> restartPreview($0.Empty request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$restartPreview, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Empty> launchDevTools($0.Empty request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$launchDevTools, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Empty> trackUserSelection(
+      $0.UserSelectionData request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$trackUserSelection, request, options: options);
   }
 }
 
@@ -227,6 +247,20 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.Empty>(
+        'LaunchDevTools',
+        launchDevTools_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.UserSelectionData, $0.Empty>(
+        'TrackUserSelection',
+        trackUserSelection_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.UserSelectionData.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.ReferenceDefinitions> getReferenceDefinitions_Pre(
@@ -289,6 +323,16 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
     return restartPreview(call, await request);
   }
 
+  $async.Future<$0.Empty> launchDevTools_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
+    return launchDevTools(call, await request);
+  }
+
+  $async.Future<$0.Empty> trackUserSelection_Pre($grpc.ServiceCall call,
+      $async.Future<$0.UserSelectionData> request) async {
+    return trackUserSelection(call, await request);
+  }
+
   $async.Future<$0.ReferenceDefinitions> getReferenceDefinitions(
       $grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.Empty> setStory(
@@ -312,6 +356,10 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
       $grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.Empty> restartPreview(
       $grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$0.Empty> launchDevTools(
+      $grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$0.Empty> trackUserSelection(
+      $grpc.ServiceCall call, $0.UserSelectionData request);
 }
 
 class MonarchPreviewNotificationsApiClient extends $grpc.Client {
@@ -340,10 +388,10 @@ class MonarchPreviewNotificationsApiClient extends $grpc.Client {
       '/monarch_grpc.MonarchPreviewNotificationsApi/ProjectThemes',
       ($0.ThemeListInfo value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
-  static final _$projectLocales =
-      $grpc.ClientMethod<$0.LocaleListInfo, $0.Empty>(
-          '/monarch_grpc.MonarchPreviewNotificationsApi/ProjectLocales',
-          ($0.LocaleListInfo value) => value.writeToBuffer(),
+  static final _$projectLocalizations =
+      $grpc.ClientMethod<$0.LocalizationListInfo, $0.Empty>(
+          '/monarch_grpc.MonarchPreviewNotificationsApi/ProjectLocalizations',
+          ($0.LocalizationListInfo value) => value.writeToBuffer(),
           ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
   static final _$toggleVisualDebugFlag =
       $grpc.ClientMethod<$0.VisualDebugFlagInfo, $0.Empty>(
@@ -399,9 +447,10 @@ class MonarchPreviewNotificationsApiClient extends $grpc.Client {
     return $createUnaryCall(_$projectThemes, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.Empty> projectLocales($0.LocaleListInfo request,
+  $grpc.ResponseFuture<$0.Empty> projectLocalizations(
+      $0.LocalizationListInfo request,
       {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$projectLocales, request, options: options);
+    return $createUnaryCall(_$projectLocalizations, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.Empty> toggleVisualDebugFlag(
@@ -473,12 +522,13 @@ abstract class MonarchPreviewNotificationsApiServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.ThemeListInfo.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.LocaleListInfo, $0.Empty>(
-        'ProjectLocales',
-        projectLocales_Pre,
+    $addMethod($grpc.ServiceMethod<$0.LocalizationListInfo, $0.Empty>(
+        'ProjectLocalizations',
+        projectLocalizations_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.LocaleListInfo.fromBuffer(value),
+        ($core.List<$core.int> value) =>
+            $0.LocalizationListInfo.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.VisualDebugFlagInfo, $0.Empty>(
         'ToggleVisualDebugFlag',
@@ -541,9 +591,9 @@ abstract class MonarchPreviewNotificationsApiServiceBase extends $grpc.Service {
     return projectThemes(call, await request);
   }
 
-  $async.Future<$0.Empty> projectLocales_Pre(
-      $grpc.ServiceCall call, $async.Future<$0.LocaleListInfo> request) async {
-    return projectLocales(call, await request);
+  $async.Future<$0.Empty> projectLocalizations_Pre($grpc.ServiceCall call,
+      $async.Future<$0.LocalizationListInfo> request) async {
+    return projectLocalizations(call, await request);
   }
 
   $async.Future<$0.Empty> toggleVisualDebugFlag_Pre($grpc.ServiceCall call,
@@ -578,8 +628,8 @@ abstract class MonarchPreviewNotificationsApiServiceBase extends $grpc.Service {
       $grpc.ServiceCall call, $0.StoriesMapInfo request);
   $async.Future<$0.Empty> projectThemes(
       $grpc.ServiceCall call, $0.ThemeListInfo request);
-  $async.Future<$0.Empty> projectLocales(
-      $grpc.ServiceCall call, $0.LocaleListInfo request);
+  $async.Future<$0.Empty> projectLocalizations(
+      $grpc.ServiceCall call, $0.LocalizationListInfo request);
   $async.Future<$0.Empty> toggleVisualDebugFlag(
       $grpc.ServiceCall call, $0.VisualDebugFlagInfo request);
   $async.Future<$0.Empty> userMessage(
