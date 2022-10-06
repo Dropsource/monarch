@@ -14,12 +14,24 @@ import 'monarch_grpc.pb.dart' as $0;
 export 'monarch_grpc.pb.dart';
 
 class MonarchPreviewApiClient extends $grpc.Client {
-  static final _$getReferenceDefinitions =
-      $grpc.ClientMethod<$0.Empty, $0.ReferenceDefinitions>(
-          '/monarch_grpc.MonarchPreviewApi/GetReferenceDefinitions',
+  static final _$getReferenceData =
+      $grpc.ClientMethod<$0.Empty, $0.ReferenceDataInfo>(
+          '/monarch_grpc.MonarchPreviewApi/GetReferenceData',
           ($0.Empty value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
-              $0.ReferenceDefinitions.fromBuffer(value));
+              $0.ReferenceDataInfo.fromBuffer(value));
+  static final _$getProjectData =
+      $grpc.ClientMethod<$0.Empty, $0.ProjectDataInfo>(
+          '/monarch_grpc.MonarchPreviewApi/GetProjectData',
+          ($0.Empty value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.ProjectDataInfo.fromBuffer(value));
+  static final _$getSelectionsState =
+      $grpc.ClientMethod<$0.Empty, $0.SelectionsStateInfo>(
+          '/monarch_grpc.MonarchPreviewApi/GetSelectionsState',
+          ($0.Empty value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.SelectionsStateInfo.fromBuffer(value));
   static final _$setStory = $grpc.ClientMethod<$0.StoryKeyInfo, $0.Empty>(
       '/monarch_grpc.MonarchPreviewApi/SetStory',
       ($0.StoryKeyInfo value) => value.writeToBuffer(),
@@ -49,9 +61,9 @@ class MonarchPreviewApiClient extends $grpc.Client {
       '/monarch_grpc.MonarchPreviewApi/SetScale',
       ($0.ScaleInfo value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
-  static final _$setDockSide = $grpc.ClientMethod<$0.DockSideInfo, $0.Empty>(
-      '/monarch_grpc.MonarchPreviewApi/SetDockSide',
-      ($0.DockSideInfo value) => value.writeToBuffer(),
+  static final _$setDock = $grpc.ClientMethod<$0.DockInfo, $0.Empty>(
+      '/monarch_grpc.MonarchPreviewApi/SetDock',
+      ($0.DockInfo value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
   static final _$toggleVisualDebugFlag =
       $grpc.ClientMethod<$0.VisualDebugFlagInfo, $0.Empty>(
@@ -81,11 +93,20 @@ class MonarchPreviewApiClient extends $grpc.Client {
       $core.Iterable<$grpc.ClientInterceptor>? interceptors})
       : super(channel, options: options, interceptors: interceptors);
 
-  $grpc.ResponseFuture<$0.ReferenceDefinitions> getReferenceDefinitions(
+  $grpc.ResponseFuture<$0.ReferenceDataInfo> getReferenceData($0.Empty request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getReferenceData, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.ProjectDataInfo> getProjectData($0.Empty request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getProjectData, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.SelectionsStateInfo> getSelectionsState(
       $0.Empty request,
       {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$getReferenceDefinitions, request,
-        options: options);
+    return $createUnaryCall(_$getSelectionsState, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.Empty> setStory($0.StoryKeyInfo request,
@@ -124,9 +145,9 @@ class MonarchPreviewApiClient extends $grpc.Client {
     return $createUnaryCall(_$setScale, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.Empty> setDockSide($0.DockSideInfo request,
+  $grpc.ResponseFuture<$0.Empty> setDock($0.DockInfo request,
       {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$setDockSide, request, options: options);
+    return $createUnaryCall(_$setDock, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.Empty> toggleVisualDebugFlag(
@@ -161,13 +182,27 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
   $core.String get $name => 'monarch_grpc.MonarchPreviewApi';
 
   MonarchPreviewApiServiceBase() {
-    $addMethod($grpc.ServiceMethod<$0.Empty, $0.ReferenceDefinitions>(
-        'GetReferenceDefinitions',
-        getReferenceDefinitions_Pre,
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.ReferenceDataInfo>(
+        'GetReferenceData',
+        getReferenceData_Pre,
         false,
         false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
-        ($0.ReferenceDefinitions value) => value.writeToBuffer()));
+        ($0.ReferenceDataInfo value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.ProjectDataInfo>(
+        'GetProjectData',
+        getProjectData_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.ProjectDataInfo value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.SelectionsStateInfo>(
+        'GetSelectionsState',
+        getSelectionsState_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.SelectionsStateInfo value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.StoryKeyInfo, $0.Empty>(
         'SetStory',
         setStory_Pre,
@@ -218,12 +253,12 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.ScaleInfo.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.DockSideInfo, $0.Empty>(
-        'SetDockSide',
-        setDockSide_Pre,
+    $addMethod($grpc.ServiceMethod<$0.DockInfo, $0.Empty>(
+        'SetDock',
+        setDock_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.DockSideInfo.fromBuffer(value),
+        ($core.List<$core.int> value) => $0.DockInfo.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.VisualDebugFlagInfo, $0.Empty>(
         'ToggleVisualDebugFlag',
@@ -263,9 +298,19 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
         ($0.Empty value) => value.writeToBuffer()));
   }
 
-  $async.Future<$0.ReferenceDefinitions> getReferenceDefinitions_Pre(
+  $async.Future<$0.ReferenceDataInfo> getReferenceData_Pre(
       $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
-    return getReferenceDefinitions(call, await request);
+    return getReferenceData(call, await request);
+  }
+
+  $async.Future<$0.ProjectDataInfo> getProjectData_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
+    return getProjectData(call, await request);
+  }
+
+  $async.Future<$0.SelectionsStateInfo> getSelectionsState_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
+    return getSelectionsState(call, await request);
   }
 
   $async.Future<$0.Empty> setStory_Pre(
@@ -303,9 +348,9 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
     return setScale(call, await request);
   }
 
-  $async.Future<$0.Empty> setDockSide_Pre(
-      $grpc.ServiceCall call, $async.Future<$0.DockSideInfo> request) async {
-    return setDockSide(call, await request);
+  $async.Future<$0.Empty> setDock_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.DockInfo> request) async {
+    return setDock(call, await request);
   }
 
   $async.Future<$0.Empty> toggleVisualDebugFlag_Pre($grpc.ServiceCall call,
@@ -333,7 +378,11 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
     return trackUserSelection(call, await request);
   }
 
-  $async.Future<$0.ReferenceDefinitions> getReferenceDefinitions(
+  $async.Future<$0.ReferenceDataInfo> getReferenceData(
+      $grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$0.ProjectDataInfo> getProjectData(
+      $grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$0.SelectionsStateInfo> getSelectionsState(
       $grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.Empty> setStory(
       $grpc.ServiceCall call, $0.StoryKeyInfo request);
@@ -348,8 +397,7 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
       $grpc.ServiceCall call, $0.DeviceInfo request);
   $async.Future<$0.Empty> setScale(
       $grpc.ServiceCall call, $0.ScaleInfo request);
-  $async.Future<$0.Empty> setDockSide(
-      $grpc.ServiceCall call, $0.DockSideInfo request);
+  $async.Future<$0.Empty> setDock($grpc.ServiceCall call, $0.DockInfo request);
   $async.Future<$0.Empty> toggleVisualDebugFlag(
       $grpc.ServiceCall call, $0.VisualDebugFlagInfo request);
   $async.Future<$0.ReloadResponse> hotReload(
@@ -367,36 +415,19 @@ class MonarchPreviewNotificationsApiClient extends $grpc.Client {
       '/monarch_grpc.MonarchPreviewNotificationsApi/PreviewReady',
       ($0.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
-  static final _$defaultTheme = $grpc.ClientMethod<$0.ThemeInfo, $0.Empty>(
-      '/monarch_grpc.MonarchPreviewNotificationsApi/DefaultTheme',
-      ($0.ThemeInfo value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
   static final _$vmServerUri = $grpc.ClientMethod<$0.UriInfo, $0.Empty>(
       '/monarch_grpc.MonarchPreviewNotificationsApi/VmServerUri',
       ($0.UriInfo value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
-  static final _$projectPackage = $grpc.ClientMethod<$0.PackageInfo, $0.Empty>(
-      '/monarch_grpc.MonarchPreviewNotificationsApi/ProjectPackage',
-      ($0.PackageInfo value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
-  static final _$projectStories =
-      $grpc.ClientMethod<$0.StoriesMapInfo, $0.Empty>(
-          '/monarch_grpc.MonarchPreviewNotificationsApi/ProjectStories',
-          ($0.StoriesMapInfo value) => value.writeToBuffer(),
+  static final _$projectDataChanged =
+      $grpc.ClientMethod<$0.ProjectDataInfo, $0.Empty>(
+          '/monarch_grpc.MonarchPreviewNotificationsApi/ProjectDataChanged',
+          ($0.ProjectDataInfo value) => value.writeToBuffer(),
           ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
-  static final _$projectThemes = $grpc.ClientMethod<$0.ThemeListInfo, $0.Empty>(
-      '/monarch_grpc.MonarchPreviewNotificationsApi/ProjectThemes',
-      ($0.ThemeListInfo value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
-  static final _$projectLocalizations =
-      $grpc.ClientMethod<$0.LocalizationListInfo, $0.Empty>(
-          '/monarch_grpc.MonarchPreviewNotificationsApi/ProjectLocalizations',
-          ($0.LocalizationListInfo value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
-  static final _$toggleVisualDebugFlag =
-      $grpc.ClientMethod<$0.VisualDebugFlagInfo, $0.Empty>(
-          '/monarch_grpc.MonarchPreviewNotificationsApi/ToggleVisualDebugFlag',
-          ($0.VisualDebugFlagInfo value) => value.writeToBuffer(),
+  static final _$selectionsStateChanged =
+      $grpc.ClientMethod<$0.SelectionsStateInfo, $0.Empty>(
+          '/monarch_grpc.MonarchPreviewNotificationsApi/SelectionsStateChanged',
+          ($0.SelectionsStateInfo value) => value.writeToBuffer(),
           ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
   static final _$userMessage = $grpc.ClientMethod<$0.UserMessageInfo, $0.Empty>(
       '/monarch_grpc.MonarchPreviewNotificationsApi/UserMessage',
@@ -422,41 +453,21 @@ class MonarchPreviewNotificationsApiClient extends $grpc.Client {
     return $createUnaryCall(_$previewReady, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.Empty> defaultTheme($0.ThemeInfo request,
-      {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$defaultTheme, request, options: options);
-  }
-
   $grpc.ResponseFuture<$0.Empty> vmServerUri($0.UriInfo request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$vmServerUri, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.Empty> projectPackage($0.PackageInfo request,
+  $grpc.ResponseFuture<$0.Empty> projectDataChanged($0.ProjectDataInfo request,
       {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$projectPackage, request, options: options);
+    return $createUnaryCall(_$projectDataChanged, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.Empty> projectStories($0.StoriesMapInfo request,
+  $grpc.ResponseFuture<$0.Empty> selectionsStateChanged(
+      $0.SelectionsStateInfo request,
       {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$projectStories, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.Empty> projectThemes($0.ThemeListInfo request,
-      {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$projectThemes, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.Empty> projectLocalizations(
-      $0.LocalizationListInfo request,
-      {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$projectLocalizations, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.Empty> toggleVisualDebugFlag(
-      $0.VisualDebugFlagInfo request,
-      {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$toggleVisualDebugFlag, request, options: options);
+    return $createUnaryCall(_$selectionsStateChanged, request,
+        options: options);
   }
 
   $grpc.ResponseFuture<$0.Empty> userMessage($0.UserMessageInfo request,
@@ -487,13 +498,6 @@ abstract class MonarchPreviewNotificationsApiServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.ThemeInfo, $0.Empty>(
-        'DefaultTheme',
-        defaultTheme_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.ThemeInfo.fromBuffer(value),
-        ($0.Empty value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.UriInfo, $0.Empty>(
         'VmServerUri',
         vmServerUri_Pre,
@@ -501,42 +505,20 @@ abstract class MonarchPreviewNotificationsApiServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.UriInfo.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.PackageInfo, $0.Empty>(
-        'ProjectPackage',
-        projectPackage_Pre,
+    $addMethod($grpc.ServiceMethod<$0.ProjectDataInfo, $0.Empty>(
+        'ProjectDataChanged',
+        projectDataChanged_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.PackageInfo.fromBuffer(value),
+        ($core.List<$core.int> value) => $0.ProjectDataInfo.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.StoriesMapInfo, $0.Empty>(
-        'ProjectStories',
-        projectStories_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.StoriesMapInfo.fromBuffer(value),
-        ($0.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.ThemeListInfo, $0.Empty>(
-        'ProjectThemes',
-        projectThemes_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.ThemeListInfo.fromBuffer(value),
-        ($0.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.LocalizationListInfo, $0.Empty>(
-        'ProjectLocalizations',
-        projectLocalizations_Pre,
+    $addMethod($grpc.ServiceMethod<$0.SelectionsStateInfo, $0.Empty>(
+        'SelectionsStateChanged',
+        selectionsStateChanged_Pre,
         false,
         false,
         ($core.List<$core.int> value) =>
-            $0.LocalizationListInfo.fromBuffer(value),
-        ($0.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.VisualDebugFlagInfo, $0.Empty>(
-        'ToggleVisualDebugFlag',
-        toggleVisualDebugFlag_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) =>
-            $0.VisualDebugFlagInfo.fromBuffer(value),
+            $0.SelectionsStateInfo.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.UserMessageInfo, $0.Empty>(
         'UserMessage',
@@ -566,39 +548,19 @@ abstract class MonarchPreviewNotificationsApiServiceBase extends $grpc.Service {
     return previewReady(call, await request);
   }
 
-  $async.Future<$0.Empty> defaultTheme_Pre(
-      $grpc.ServiceCall call, $async.Future<$0.ThemeInfo> request) async {
-    return defaultTheme(call, await request);
-  }
-
   $async.Future<$0.Empty> vmServerUri_Pre(
       $grpc.ServiceCall call, $async.Future<$0.UriInfo> request) async {
     return vmServerUri(call, await request);
   }
 
-  $async.Future<$0.Empty> projectPackage_Pre(
-      $grpc.ServiceCall call, $async.Future<$0.PackageInfo> request) async {
-    return projectPackage(call, await request);
+  $async.Future<$0.Empty> projectDataChanged_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.ProjectDataInfo> request) async {
+    return projectDataChanged(call, await request);
   }
 
-  $async.Future<$0.Empty> projectStories_Pre(
-      $grpc.ServiceCall call, $async.Future<$0.StoriesMapInfo> request) async {
-    return projectStories(call, await request);
-  }
-
-  $async.Future<$0.Empty> projectThemes_Pre(
-      $grpc.ServiceCall call, $async.Future<$0.ThemeListInfo> request) async {
-    return projectThemes(call, await request);
-  }
-
-  $async.Future<$0.Empty> projectLocalizations_Pre($grpc.ServiceCall call,
-      $async.Future<$0.LocalizationListInfo> request) async {
-    return projectLocalizations(call, await request);
-  }
-
-  $async.Future<$0.Empty> toggleVisualDebugFlag_Pre($grpc.ServiceCall call,
-      $async.Future<$0.VisualDebugFlagInfo> request) async {
-    return toggleVisualDebugFlag(call, await request);
+  $async.Future<$0.Empty> selectionsStateChanged_Pre($grpc.ServiceCall call,
+      $async.Future<$0.SelectionsStateInfo> request) async {
+    return selectionsStateChanged(call, await request);
   }
 
   $async.Future<$0.Empty> userMessage_Pre(
@@ -618,20 +580,12 @@ abstract class MonarchPreviewNotificationsApiServiceBase extends $grpc.Service {
 
   $async.Future<$0.Empty> previewReady(
       $grpc.ServiceCall call, $0.Empty request);
-  $async.Future<$0.Empty> defaultTheme(
-      $grpc.ServiceCall call, $0.ThemeInfo request);
   $async.Future<$0.Empty> vmServerUri(
       $grpc.ServiceCall call, $0.UriInfo request);
-  $async.Future<$0.Empty> projectPackage(
-      $grpc.ServiceCall call, $0.PackageInfo request);
-  $async.Future<$0.Empty> projectStories(
-      $grpc.ServiceCall call, $0.StoriesMapInfo request);
-  $async.Future<$0.Empty> projectThemes(
-      $grpc.ServiceCall call, $0.ThemeListInfo request);
-  $async.Future<$0.Empty> projectLocalizations(
-      $grpc.ServiceCall call, $0.LocalizationListInfo request);
-  $async.Future<$0.Empty> toggleVisualDebugFlag(
-      $grpc.ServiceCall call, $0.VisualDebugFlagInfo request);
+  $async.Future<$0.Empty> projectDataChanged(
+      $grpc.ServiceCall call, $0.ProjectDataInfo request);
+  $async.Future<$0.Empty> selectionsStateChanged(
+      $grpc.ServiceCall call, $0.SelectionsStateInfo request);
   $async.Future<$0.Empty> userMessage(
       $grpc.ServiceCall call, $0.UserMessageInfo request);
   $async.Future<$0.Empty> launchDevTools(

@@ -9,3 +9,4 @@ export 'src/meta_theme_definition.dart';
 export 'src/monarch_data_definition.dart';
 export 'src/visual_debug_flag.dart';
 export 'src/uri_mapper.dart';
+export 'src/dock_definition.dart';

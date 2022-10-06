@@ -15,12 +15,12 @@ class ChannelMethodsSender with Log implements AbstractChannelMethodsSender {
     }
     return MonarchMethodChannels.previewApi.invokeMethod(method, arguments);
   }
-  
+
   @override
   void sendReadySignalAck() {
     _invokeMonarchChannelMethod(MonarchMethods.readySignalAck);
   }
-  
+
   @override
   void loadStory(String storyKey) {
     _invokeMonarchChannelMethod(
@@ -65,7 +65,7 @@ class ChannelMethodsSender with Log implements AbstractChannelMethodsSender {
   void setDockSide(String dock) {
     _invokeMonarchChannelMethod(MonarchMethods.setDockSide, {'dock': dock});
   }
-  
+
   @override
   Future sendToggleVisualDebugFlag(VisualDebugFlag visualDebugFlag) {
     return _invokeMonarchChannelMethod(MonarchMethods.toggleVisualDebugFlag,
@@ -83,5 +83,3 @@ class ChannelMethodsSender with Log implements AbstractChannelMethodsSender {
     _invokeMonarchChannelMethod(MonarchMethods.restartPreview);
   }
 }
-
-final channelMethodsSender = ChannelMethodsSender();

@@ -38,16 +38,16 @@ class Empty extends $pb.GeneratedMessage {
   static Empty? _defaultInstance;
 }
 
-class ReferenceDefinitions extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ReferenceDefinitions', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
+class ReferenceDataInfo extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ReferenceDataInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
     ..pc<DeviceInfo>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'devices', $pb.PbFieldType.PM, subBuilder: DeviceInfo.create)
     ..pc<ThemeInfo>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'standardThemes', $pb.PbFieldType.PM, protoName: 'standardThemes', subBuilder: ThemeInfo.create)
     ..pc<ScaleInfo>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'scales', $pb.PbFieldType.PM, subBuilder: ScaleInfo.create)
     ..hasRequiredFields = false
   ;
 
-  ReferenceDefinitions._() : super();
-  factory ReferenceDefinitions({
+  ReferenceDataInfo._() : super();
+  factory ReferenceDataInfo({
     $core.Iterable<DeviceInfo>? devices,
     $core.Iterable<ThemeInfo>? standardThemes,
     $core.Iterable<ScaleInfo>? scales,
@@ -64,26 +64,26 @@ class ReferenceDefinitions extends $pb.GeneratedMessage {
     }
     return _result;
   }
-  factory ReferenceDefinitions.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ReferenceDefinitions.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory ReferenceDataInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ReferenceDataInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  ReferenceDefinitions clone() => ReferenceDefinitions()..mergeFromMessage(this);
+  ReferenceDataInfo clone() => ReferenceDataInfo()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ReferenceDefinitions copyWith(void Function(ReferenceDefinitions) updates) => super.copyWith((message) => updates(message as ReferenceDefinitions)) as ReferenceDefinitions; // ignore: deprecated_member_use
+  ReferenceDataInfo copyWith(void Function(ReferenceDataInfo) updates) => super.copyWith((message) => updates(message as ReferenceDataInfo)) as ReferenceDataInfo; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static ReferenceDefinitions create() => ReferenceDefinitions._();
-  ReferenceDefinitions createEmptyInstance() => create();
-  static $pb.PbList<ReferenceDefinitions> createRepeated() => $pb.PbList<ReferenceDefinitions>();
+  static ReferenceDataInfo create() => ReferenceDataInfo._();
+  ReferenceDataInfo createEmptyInstance() => create();
+  static $pb.PbList<ReferenceDataInfo> createRepeated() => $pb.PbList<ReferenceDataInfo>();
   @$core.pragma('dart2js:noInline')
-  static ReferenceDefinitions getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReferenceDefinitions>(create);
-  static ReferenceDefinitions? _defaultInstance;
+  static ReferenceDataInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReferenceDataInfo>(create);
+  static ReferenceDataInfo? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<DeviceInfo> get devices => $_getList(0);
@@ -93,6 +93,226 @@ class ReferenceDefinitions extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.List<ScaleInfo> get scales => $_getList(2);
+}
+
+class ProjectDataInfo extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ProjectDataInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'packageName', protoName: 'packageName')
+    ..m<$core.String, StoriesInfo>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'storiesMap', protoName: 'storiesMap', entryClassName: 'ProjectDataInfo.StoriesMapEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OM, valueCreator: StoriesInfo.create, packageName: const $pb.PackageName('monarch_grpc'))
+    ..pc<ThemeInfo>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'projectThemes', $pb.PbFieldType.PM, protoName: 'projectThemes', subBuilder: ThemeInfo.create)
+    ..pc<LocalizationInfo>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'localizations', $pb.PbFieldType.PM, subBuilder: LocalizationInfo.create)
+    ..hasRequiredFields = false
+  ;
+
+  ProjectDataInfo._() : super();
+  factory ProjectDataInfo({
+    $core.String? packageName,
+    $core.Map<$core.String, StoriesInfo>? storiesMap,
+    $core.Iterable<ThemeInfo>? projectThemes,
+    $core.Iterable<LocalizationInfo>? localizations,
+  }) {
+    final _result = create();
+    if (packageName != null) {
+      _result.packageName = packageName;
+    }
+    if (storiesMap != null) {
+      _result.storiesMap.addAll(storiesMap);
+    }
+    if (projectThemes != null) {
+      _result.projectThemes.addAll(projectThemes);
+    }
+    if (localizations != null) {
+      _result.localizations.addAll(localizations);
+    }
+    return _result;
+  }
+  factory ProjectDataInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ProjectDataInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ProjectDataInfo clone() => ProjectDataInfo()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ProjectDataInfo copyWith(void Function(ProjectDataInfo) updates) => super.copyWith((message) => updates(message as ProjectDataInfo)) as ProjectDataInfo; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ProjectDataInfo create() => ProjectDataInfo._();
+  ProjectDataInfo createEmptyInstance() => create();
+  static $pb.PbList<ProjectDataInfo> createRepeated() => $pb.PbList<ProjectDataInfo>();
+  @$core.pragma('dart2js:noInline')
+  static ProjectDataInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ProjectDataInfo>(create);
+  static ProjectDataInfo? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get packageName => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set packageName($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasPackageName() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPackageName() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.Map<$core.String, StoriesInfo> get storiesMap => $_getMap(1);
+
+  @$pb.TagNumber(3)
+  $core.List<ThemeInfo> get projectThemes => $_getList(2);
+
+  @$pb.TagNumber(4)
+  $core.List<LocalizationInfo> get localizations => $_getList(3);
+}
+
+class SelectionsStateInfo extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'SelectionsStateInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'storyKey', protoName: 'storyKey')
+    ..aOM<DeviceInfo>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'device', subBuilder: DeviceInfo.create)
+    ..aOM<ThemeInfo>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'theme', subBuilder: ThemeInfo.create)
+    ..aOM<LocaleInfo>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'locale', subBuilder: LocaleInfo.create)
+    ..a<$core.double>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'textScaleFactor', $pb.PbFieldType.OD, protoName: 'textScaleFactor')
+    ..aOM<ScaleInfo>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'scale', subBuilder: ScaleInfo.create)
+    ..aOM<DockInfo>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dock', subBuilder: DockInfo.create)
+    ..m<$core.String, $core.bool>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'visualDebugFlags', protoName: 'visualDebugFlags', entryClassName: 'SelectionsStateInfo.VisualDebugFlagsEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OB, packageName: const $pb.PackageName('monarch_grpc'))
+    ..hasRequiredFields = false
+  ;
+
+  SelectionsStateInfo._() : super();
+  factory SelectionsStateInfo({
+    $core.String? storyKey,
+    DeviceInfo? device,
+    ThemeInfo? theme,
+    LocaleInfo? locale,
+    $core.double? textScaleFactor,
+    ScaleInfo? scale,
+    DockInfo? dock,
+    $core.Map<$core.String, $core.bool>? visualDebugFlags,
+  }) {
+    final _result = create();
+    if (storyKey != null) {
+      _result.storyKey = storyKey;
+    }
+    if (device != null) {
+      _result.device = device;
+    }
+    if (theme != null) {
+      _result.theme = theme;
+    }
+    if (locale != null) {
+      _result.locale = locale;
+    }
+    if (textScaleFactor != null) {
+      _result.textScaleFactor = textScaleFactor;
+    }
+    if (scale != null) {
+      _result.scale = scale;
+    }
+    if (dock != null) {
+      _result.dock = dock;
+    }
+    if (visualDebugFlags != null) {
+      _result.visualDebugFlags.addAll(visualDebugFlags);
+    }
+    return _result;
+  }
+  factory SelectionsStateInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory SelectionsStateInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  SelectionsStateInfo clone() => SelectionsStateInfo()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  SelectionsStateInfo copyWith(void Function(SelectionsStateInfo) updates) => super.copyWith((message) => updates(message as SelectionsStateInfo)) as SelectionsStateInfo; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static SelectionsStateInfo create() => SelectionsStateInfo._();
+  SelectionsStateInfo createEmptyInstance() => create();
+  static $pb.PbList<SelectionsStateInfo> createRepeated() => $pb.PbList<SelectionsStateInfo>();
+  @$core.pragma('dart2js:noInline')
+  static SelectionsStateInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SelectionsStateInfo>(create);
+  static SelectionsStateInfo? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get storyKey => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set storyKey($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStoryKey() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStoryKey() => clearField(1);
+
+  @$pb.TagNumber(2)
+  DeviceInfo get device => $_getN(1);
+  @$pb.TagNumber(2)
+  set device(DeviceInfo v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasDevice() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDevice() => clearField(2);
+  @$pb.TagNumber(2)
+  DeviceInfo ensureDevice() => $_ensure(1);
+
+  @$pb.TagNumber(3)
+  ThemeInfo get theme => $_getN(2);
+  @$pb.TagNumber(3)
+  set theme(ThemeInfo v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasTheme() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearTheme() => clearField(3);
+  @$pb.TagNumber(3)
+  ThemeInfo ensureTheme() => $_ensure(2);
+
+  @$pb.TagNumber(4)
+  LocaleInfo get locale => $_getN(3);
+  @$pb.TagNumber(4)
+  set locale(LocaleInfo v) { setField(4, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasLocale() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearLocale() => clearField(4);
+  @$pb.TagNumber(4)
+  LocaleInfo ensureLocale() => $_ensure(3);
+
+  @$pb.TagNumber(5)
+  $core.double get textScaleFactor => $_getN(4);
+  @$pb.TagNumber(5)
+  set textScaleFactor($core.double v) { $_setDouble(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasTextScaleFactor() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearTextScaleFactor() => clearField(5);
+
+  @$pb.TagNumber(6)
+  ScaleInfo get scale => $_getN(5);
+  @$pb.TagNumber(6)
+  set scale(ScaleInfo v) { setField(6, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasScale() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearScale() => clearField(6);
+  @$pb.TagNumber(6)
+  ScaleInfo ensureScale() => $_ensure(5);
+
+  @$pb.TagNumber(7)
+  DockInfo get dock => $_getN(6);
+  @$pb.TagNumber(7)
+  set dock(DockInfo v) { setField(7, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasDock() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearDock() => clearField(7);
+  @$pb.TagNumber(7)
+  DockInfo ensureDock() => $_ensure(6);
+
+  @$pb.TagNumber(8)
+  $core.Map<$core.String, $core.bool> get visualDebugFlags => $_getMap(7);
 }
 
 class StoryKeyInfo extends $pb.GeneratedMessage {
@@ -209,94 +429,6 @@ class StoriesInfo extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(3)
   $core.List<$core.String> get storiesNames => $_getList(2);
-}
-
-class StoriesMapInfo extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'StoriesMapInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
-    ..m<$core.String, StoriesInfo>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'storiesMap', protoName: 'storiesMap', entryClassName: 'StoriesMapInfo.StoriesMapEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OM, valueCreator: StoriesInfo.create, packageName: const $pb.PackageName('monarch_grpc'))
-    ..hasRequiredFields = false
-  ;
-
-  StoriesMapInfo._() : super();
-  factory StoriesMapInfo({
-    $core.Map<$core.String, StoriesInfo>? storiesMap,
-  }) {
-    final _result = create();
-    if (storiesMap != null) {
-      _result.storiesMap.addAll(storiesMap);
-    }
-    return _result;
-  }
-  factory StoriesMapInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory StoriesMapInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  StoriesMapInfo clone() => StoriesMapInfo()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  StoriesMapInfo copyWith(void Function(StoriesMapInfo) updates) => super.copyWith((message) => updates(message as StoriesMapInfo)) as StoriesMapInfo; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static StoriesMapInfo create() => StoriesMapInfo._();
-  StoriesMapInfo createEmptyInstance() => create();
-  static $pb.PbList<StoriesMapInfo> createRepeated() => $pb.PbList<StoriesMapInfo>();
-  @$core.pragma('dart2js:noInline')
-  static StoriesMapInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StoriesMapInfo>(create);
-  static StoriesMapInfo? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.Map<$core.String, StoriesInfo> get storiesMap => $_getMap(0);
-}
-
-class PackageInfo extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'PackageInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
-    ..hasRequiredFields = false
-  ;
-
-  PackageInfo._() : super();
-  factory PackageInfo({
-    $core.String? name,
-  }) {
-    final _result = create();
-    if (name != null) {
-      _result.name = name;
-    }
-    return _result;
-  }
-  factory PackageInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory PackageInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  PackageInfo clone() => PackageInfo()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  PackageInfo copyWith(void Function(PackageInfo) updates) => super.copyWith((message) => updates(message as PackageInfo)) as PackageInfo; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static PackageInfo create() => PackageInfo._();
-  PackageInfo createEmptyInstance() => create();
-  static $pb.PbList<PackageInfo> createRepeated() => $pb.PbList<PackageInfo>();
-  @$core.pragma('dart2js:noInline')
-  static PackageInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PackageInfo>(create);
-  static PackageInfo? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get name => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set name($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasName() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearName() => clearField(1);
 }
 
 class TextScaleFactorInfo extends $pb.GeneratedMessage {
@@ -448,47 +580,6 @@ class LocalizationInfo extends $pb.GeneratedMessage {
   void clearDelegateClassName() => clearField(2);
 }
 
-class LocalizationListInfo extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'LocalizationListInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
-    ..pc<LocalizationInfo>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'localizations', $pb.PbFieldType.PM, subBuilder: LocalizationInfo.create)
-    ..hasRequiredFields = false
-  ;
-
-  LocalizationListInfo._() : super();
-  factory LocalizationListInfo({
-    $core.Iterable<LocalizationInfo>? localizations,
-  }) {
-    final _result = create();
-    if (localizations != null) {
-      _result.localizations.addAll(localizations);
-    }
-    return _result;
-  }
-  factory LocalizationListInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory LocalizationListInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  LocalizationListInfo clone() => LocalizationListInfo()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  LocalizationListInfo copyWith(void Function(LocalizationListInfo) updates) => super.copyWith((message) => updates(message as LocalizationListInfo)) as LocalizationListInfo; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static LocalizationListInfo create() => LocalizationListInfo._();
-  LocalizationListInfo createEmptyInstance() => create();
-  static $pb.PbList<LocalizationListInfo> createRepeated() => $pb.PbList<LocalizationListInfo>();
-  @$core.pragma('dart2js:noInline')
-  static LocalizationListInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LocalizationListInfo>(create);
-  static LocalizationListInfo? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.List<LocalizationInfo> get localizations => $_getList(0);
-}
-
 class ThemeInfo extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ThemeInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
@@ -562,47 +653,6 @@ class ThemeInfo extends $pb.GeneratedMessage {
   $core.bool hasIsDefault() => $_has(2);
   @$pb.TagNumber(3)
   void clearIsDefault() => clearField(3);
-}
-
-class ThemeListInfo extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ThemeListInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
-    ..pc<ThemeInfo>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'themes', $pb.PbFieldType.PM, subBuilder: ThemeInfo.create)
-    ..hasRequiredFields = false
-  ;
-
-  ThemeListInfo._() : super();
-  factory ThemeListInfo({
-    $core.Iterable<ThemeInfo>? themes,
-  }) {
-    final _result = create();
-    if (themes != null) {
-      _result.themes.addAll(themes);
-    }
-    return _result;
-  }
-  factory ThemeListInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ThemeListInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  ThemeListInfo clone() => ThemeListInfo()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  ThemeListInfo copyWith(void Function(ThemeListInfo) updates) => super.copyWith((message) => updates(message as ThemeListInfo)) as ThemeListInfo; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static ThemeListInfo create() => ThemeListInfo._();
-  ThemeListInfo createEmptyInstance() => create();
-  static $pb.PbList<ThemeListInfo> createRepeated() => $pb.PbList<ThemeListInfo>();
-  @$core.pragma('dart2js:noInline')
-  static ThemeListInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ThemeListInfo>(create);
-  static ThemeListInfo? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.List<ThemeInfo> get themes => $_getList(0);
 }
 
 class LogicalResolutionInfo extends $pb.GeneratedMessage {
@@ -832,51 +882,65 @@ class ScaleInfo extends $pb.GeneratedMessage {
   void clearName() => clearField(2);
 }
 
-class DockSideInfo extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DockSideInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'dock')
+class DockInfo extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DockInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
     ..hasRequiredFields = false
   ;
 
-  DockSideInfo._() : super();
-  factory DockSideInfo({
-    $core.String? dock,
+  DockInfo._() : super();
+  factory DockInfo({
+    $core.String? id,
+    $core.String? name,
   }) {
     final _result = create();
-    if (dock != null) {
-      _result.dock = dock;
+    if (id != null) {
+      _result.id = id;
+    }
+    if (name != null) {
+      _result.name = name;
     }
     return _result;
   }
-  factory DockSideInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory DockSideInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory DockInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DockInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  DockSideInfo clone() => DockSideInfo()..mergeFromMessage(this);
+  DockInfo clone() => DockInfo()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  DockSideInfo copyWith(void Function(DockSideInfo) updates) => super.copyWith((message) => updates(message as DockSideInfo)) as DockSideInfo; // ignore: deprecated_member_use
+  DockInfo copyWith(void Function(DockInfo) updates) => super.copyWith((message) => updates(message as DockInfo)) as DockInfo; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static DockSideInfo create() => DockSideInfo._();
-  DockSideInfo createEmptyInstance() => create();
-  static $pb.PbList<DockSideInfo> createRepeated() => $pb.PbList<DockSideInfo>();
+  static DockInfo create() => DockInfo._();
+  DockInfo createEmptyInstance() => create();
+  static $pb.PbList<DockInfo> createRepeated() => $pb.PbList<DockInfo>();
   @$core.pragma('dart2js:noInline')
-  static DockSideInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DockSideInfo>(create);
-  static DockSideInfo? _defaultInstance;
+  static DockInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DockInfo>(create);
+  static DockInfo? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get dock => $_getSZ(0);
+  $core.String get id => $_getSZ(0);
   @$pb.TagNumber(1)
-  set dock($core.String v) { $_setString(0, v); }
+  set id($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasDock() => $_has(0);
+  $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearDock() => clearField(1);
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearName() => clearField(2);
 }
 
 class VisualDebugFlagInfo extends $pb.GeneratedMessage {

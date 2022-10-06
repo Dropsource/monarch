@@ -4,7 +4,7 @@ class VisualDebugFlag {
   final String name;
   final bool isEnabled;
 
-  VisualDebugFlag({required this.name, required this.isEnabled});
+  const VisualDebugFlag({required this.name, required this.isEnabled});
 }
 
 class VisualDebugFlags {
@@ -14,6 +14,14 @@ class VisualDebugFlags {
   static const highlightRepaints = 'highlightRepaints';
   static const highlightOversizedImages = 'highlightOversizedImages';
 }
+
+const defaultVisualDebugFlags = <String, bool>{
+  VisualDebugFlags.slowAnimations: false,
+  VisualDebugFlags.showGuidelines: false,
+  VisualDebugFlags.showBaselines: false,
+  VisualDebugFlags.highlightRepaints: false,
+  VisualDebugFlags.highlightOversizedImages: false,
+};
 
 class VisualDebugExtensionMethods {
   static const timeDilation = 'ext.flutter.timeDilation';

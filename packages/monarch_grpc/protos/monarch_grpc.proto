@@ -4,7 +4,10 @@ package monarch_grpc;
 
 
 service MonarchPreviewApi {
-    rpc GetReferenceDefinitions(Empty) returns (ReferenceDefinitions) {}
+    rpc GetReferenceData(Empty) returns (ReferenceDataInfo) {}
+    rpc GetProjectData(Empty) returns (ProjectDataInfo) {}
+    rpc GetSelectionsState(Empty) returns (SelectionsStateInfo) {}
+
     rpc SetStory(StoryKeyInfo) returns (Empty) {}
     rpc ResetStory(Empty) returns (Empty) {}
     rpc SetTextScaleFactor(TextScaleFactorInfo) returns (Empty) {}
@@ -12,8 +15,9 @@ service MonarchPreviewApi {
     rpc SetTheme(ThemeInfo) returns (Empty) {}
     rpc SetDevice(DeviceInfo) returns (Empty) {}
     rpc SetScale(ScaleInfo) returns (Empty) {}
-    rpc SetDockSide(DockSideInfo) returns (Empty) {}
+    rpc SetDock(DockInfo) returns (Empty) {}
     rpc ToggleVisualDebugFlag(VisualDebugFlagInfo) returns (Empty) {}
+
     rpc HotReload(Empty) returns (ReloadResponse) {}
     rpc RestartPreview(Empty) returns (Empty) {} 
     rpc LaunchDevTools(Empty) returns (Empty) {}
@@ -22,18 +26,13 @@ service MonarchPreviewApi {
 
 service MonarchPreviewNotificationsApi {
     rpc PreviewReady(Empty) returns (Empty) {}
-    rpc DefaultTheme(ThemeInfo) returns (Empty) {}
     rpc VmServerUri(UriInfo) returns (Empty) {}
 
-    rpc ProjectPackage(PackageInfo) returns (Empty) {}
-    rpc ProjectStories(StoriesMapInfo) returns (Empty) {}
-    rpc ProjectThemes(ThemeListInfo) returns (Empty) {}
-    rpc ProjectLocalizations(LocalizationListInfo) returns (Empty) {}
+    rpc ProjectDataChanged(ProjectDataInfo) returns (Empty) {}
+    rpc SelectionsStateChanged(SelectionsStateInfo) returns (Empty) {}
 
-    rpc ToggleVisualDebugFlag(VisualDebugFlagInfo) returns (Empty) {}
     rpc UserMessage(UserMessageInfo) returns (Empty) {}
     rpc LaunchDevTools(Empty) returns (Empty) {}
-
     rpc TrackUserSelection(UserSelectionData) returns (Empty) {}
 }
 
@@ -47,10 +46,28 @@ service MonarchDiscoveryApi {
 
 message Empty {}
 
-message ReferenceDefinitions {
+message ReferenceDataInfo {
     repeated DeviceInfo devices = 1;
     repeated ThemeInfo standardThemes = 2;
     repeated ScaleInfo scales = 3;
+}
+
+message ProjectDataInfo {
+    string packageName = 1;
+    map<string, StoriesInfo> storiesMap = 2;
+    repeated ThemeInfo projectThemes = 3;
+    repeated LocalizationInfo localizations = 4;
+}
+
+message SelectionsStateInfo {
+    string storyKey = 1;
+    DeviceInfo device = 2;
+    ThemeInfo theme = 3;
+    LocaleInfo locale = 4;
+    double textScaleFactor = 5;
+    ScaleInfo scale = 6;
+    DockInfo dock = 7;
+    map<string, bool> visualDebugFlags = 8;
 }
 
 message StoryKeyInfo {
@@ -61,14 +78,6 @@ message StoriesInfo {
     string package = 1;
     string path = 2;
     repeated string storiesNames = 3;
-}
-
-message StoriesMapInfo {
-    map<string, StoriesInfo> storiesMap = 1;
-}
-
-message PackageInfo {
-    string name = 1;
 }
 
 message TextScaleFactorInfo {
@@ -84,18 +93,11 @@ message LocalizationInfo {
     string delegateClassName = 2;
 }
 
-message LocalizationListInfo {
-    repeated LocalizationInfo localizations = 1;
-}
 
 message ThemeInfo {
     string id = 1;
     string name = 2;
     bool isDefault = 3;
-}
-
-message ThemeListInfo {
-    repeated ThemeInfo themes = 1;
 }
 
 message LogicalResolutionInfo {
@@ -116,8 +118,9 @@ message ScaleInfo {
     string name = 2;
 }
 
-message DockSideInfo {
-    string dock = 1;
+message DockInfo {
+    string id = 1;
+    string name = 2;
 }
 
 message VisualDebugFlagInfo {

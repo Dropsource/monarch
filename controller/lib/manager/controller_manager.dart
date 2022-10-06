@@ -98,6 +98,10 @@ class ControllerManager with Log {
   }
 
   void onDeviceChanged(DeviceDefinition deviceDefinition) {
+    /// this would be like:
+    /// previewApi.setDevice(deviceDefinition);
+    /// the api will then call the notifications api with the new state
+    /// the api could do the _userSelection analytics call too
     _update(state.copyWith(currentDevice: deviceDefinition));
     channelMethodsSender.setActiveDevice(deviceDefinition.id);
     _userSelection('device_selected');

@@ -1,0 +1,60 @@
+import 'dart:io';
+import 'package:grpc/grpc.dart';
+import 'package:monarch_grpc/monarch_grpc.dart';
+import 'package:monarch_utils/log.dart';
+
+import 'package:monarch_utils/log_config.dart';
+
+import 'src/channel_methods_receiver.dart';
+import 'src/channel_methods_sender.dart';
+import 'src/preview_api_service.dart';
+import 'src/preview_notifications.dart';
+
+final _logger = Logger('PreviewApiMain');
+
+void main(List<String> arguments) async {
+  _setUpLog();
+  if (arguments.length < 2) {
+    _logger.severe(
+        'Expected 2 arguments in this order: default-log-level cli-grpc-server-port');
+    exit(1);
+  }
+
+  defaultLogLevel = LogLevel.fromString(arguments[0], LogLevel.ALL);
+  var cliGrpcServerPort = int.tryParse(arguments[1]);
+
+  if (cliGrpcServerPort == null) {
+    _logger.severe(
+        'Could not parse argument for cli-grpc-server-port to an integer');
+    exit(1);
+  }
+
+  setUpChannels(cliGrpcServerPort);
+}
+
+void _setUpLog() {
+  // ignore: avoid_print
+  writeLogEntryStream((String line) => print('preview_api: $line'),
+      printTimestamp: false, printLoggerName: true);
+  logCurrentProcessInformation(_logger, LogLevel.FINE);
+}
+
+void setUpChannels(int cliServerPort) async {
+  _logger.info(
+      'Will use cli grpc server (discovery service) at port $cliServerPort');
+  var channel = constructClientChannel(cliServerPort);
+  var discoveryClient = MonarchDiscoveryApiClient(channel);
+
+  var previewNotifications = PreviewNotifications(discoveryClient);
+  var channelMethodsSender = ChannelMethodsSender();
+
+  var server = Server([PreviewApiService(previewNotifications, channelMethodsSender)]);
+  await server.serve(port: 0);
+  var previewApiPort = server.port!;
+  _logger.info(
+      'preview_api grpc server (preview api service) started on port $previewApiPort');
+  discoveryClient.registerPreviewApi(ServerInfo(port: previewApiPort));
+
+  var channelMethodsReceiver = ChannelMethodsReceiver(previewNotifications, channelMethodsSender);
+  channelMethodsReceiver.setUp();
+}

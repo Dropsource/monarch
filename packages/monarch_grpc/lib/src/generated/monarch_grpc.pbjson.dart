@@ -15,9 +15,9 @@ const Empty$json = const {
 
 /// Descriptor for `Empty`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List emptyDescriptor = $convert.base64Decode('CgVFbXB0eQ==');
-@$core.Deprecated('Use referenceDefinitionsDescriptor instead')
-const ReferenceDefinitions$json = const {
-  '1': 'ReferenceDefinitions',
+@$core.Deprecated('Use referenceDataInfoDescriptor instead')
+const ReferenceDataInfo$json = const {
+  '1': 'ReferenceDataInfo',
   '2': const [
     const {'1': 'devices', '3': 1, '4': 3, '5': 11, '6': '.monarch_grpc.DeviceInfo', '10': 'devices'},
     const {'1': 'standardThemes', '3': 2, '4': 3, '5': 11, '6': '.monarch_grpc.ThemeInfo', '10': 'standardThemes'},
@@ -25,8 +25,60 @@ const ReferenceDefinitions$json = const {
   ],
 };
 
-/// Descriptor for `ReferenceDefinitions`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List referenceDefinitionsDescriptor = $convert.base64Decode('ChRSZWZlcmVuY2VEZWZpbml0aW9ucxIyCgdkZXZpY2VzGAEgAygLMhgubW9uYXJjaF9ncnBjLkRldmljZUluZm9SB2RldmljZXMSPwoOc3RhbmRhcmRUaGVtZXMYAiADKAsyFy5tb25hcmNoX2dycGMuVGhlbWVJbmZvUg5zdGFuZGFyZFRoZW1lcxIvCgZzY2FsZXMYAyADKAsyFy5tb25hcmNoX2dycGMuU2NhbGVJbmZvUgZzY2FsZXM=');
+/// Descriptor for `ReferenceDataInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List referenceDataInfoDescriptor = $convert.base64Decode('ChFSZWZlcmVuY2VEYXRhSW5mbxIyCgdkZXZpY2VzGAEgAygLMhgubW9uYXJjaF9ncnBjLkRldmljZUluZm9SB2RldmljZXMSPwoOc3RhbmRhcmRUaGVtZXMYAiADKAsyFy5tb25hcmNoX2dycGMuVGhlbWVJbmZvUg5zdGFuZGFyZFRoZW1lcxIvCgZzY2FsZXMYAyADKAsyFy5tb25hcmNoX2dycGMuU2NhbGVJbmZvUgZzY2FsZXM=');
+@$core.Deprecated('Use projectDataInfoDescriptor instead')
+const ProjectDataInfo$json = const {
+  '1': 'ProjectDataInfo',
+  '2': const [
+    const {'1': 'packageName', '3': 1, '4': 1, '5': 9, '10': 'packageName'},
+    const {'1': 'storiesMap', '3': 2, '4': 3, '5': 11, '6': '.monarch_grpc.ProjectDataInfo.StoriesMapEntry', '10': 'storiesMap'},
+    const {'1': 'projectThemes', '3': 3, '4': 3, '5': 11, '6': '.monarch_grpc.ThemeInfo', '10': 'projectThemes'},
+    const {'1': 'localizations', '3': 4, '4': 3, '5': 11, '6': '.monarch_grpc.LocalizationInfo', '10': 'localizations'},
+  ],
+  '3': const [ProjectDataInfo_StoriesMapEntry$json],
+};
+
+@$core.Deprecated('Use projectDataInfoDescriptor instead')
+const ProjectDataInfo_StoriesMapEntry$json = const {
+  '1': 'StoriesMapEntry',
+  '2': const [
+    const {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
+    const {'1': 'value', '3': 2, '4': 1, '5': 11, '6': '.monarch_grpc.StoriesInfo', '10': 'value'},
+  ],
+  '7': const {'7': true},
+};
+
+/// Descriptor for `ProjectDataInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List projectDataInfoDescriptor = $convert.base64Decode('Cg9Qcm9qZWN0RGF0YUluZm8SIAoLcGFja2FnZU5hbWUYASABKAlSC3BhY2thZ2VOYW1lEk0KCnN0b3JpZXNNYXAYAiADKAsyLS5tb25hcmNoX2dycGMuUHJvamVjdERhdGFJbmZvLlN0b3JpZXNNYXBFbnRyeVIKc3Rvcmllc01hcBI9Cg1wcm9qZWN0VGhlbWVzGAMgAygLMhcubW9uYXJjaF9ncnBjLlRoZW1lSW5mb1INcHJvamVjdFRoZW1lcxJECg1sb2NhbGl6YXRpb25zGAQgAygLMh4ubW9uYXJjaF9ncnBjLkxvY2FsaXphdGlvbkluZm9SDWxvY2FsaXphdGlvbnMaWAoPU3Rvcmllc01hcEVudHJ5EhAKA2tleRgBIAEoCVIDa2V5Ei8KBXZhbHVlGAIgASgLMhkubW9uYXJjaF9ncnBjLlN0b3JpZXNJbmZvUgV2YWx1ZToCOAE=');
+@$core.Deprecated('Use selectionsStateInfoDescriptor instead')
+const SelectionsStateInfo$json = const {
+  '1': 'SelectionsStateInfo',
+  '2': const [
+    const {'1': 'storyKey', '3': 1, '4': 1, '5': 9, '10': 'storyKey'},
+    const {'1': 'device', '3': 2, '4': 1, '5': 11, '6': '.monarch_grpc.DeviceInfo', '10': 'device'},
+    const {'1': 'theme', '3': 3, '4': 1, '5': 11, '6': '.monarch_grpc.ThemeInfo', '10': 'theme'},
+    const {'1': 'locale', '3': 4, '4': 1, '5': 11, '6': '.monarch_grpc.LocaleInfo', '10': 'locale'},
+    const {'1': 'textScaleFactor', '3': 5, '4': 1, '5': 1, '10': 'textScaleFactor'},
+    const {'1': 'scale', '3': 6, '4': 1, '5': 11, '6': '.monarch_grpc.ScaleInfo', '10': 'scale'},
+    const {'1': 'dock', '3': 7, '4': 1, '5': 11, '6': '.monarch_grpc.DockInfo', '10': 'dock'},
+    const {'1': 'visualDebugFlags', '3': 8, '4': 3, '5': 11, '6': '.monarch_grpc.SelectionsStateInfo.VisualDebugFlagsEntry', '10': 'visualDebugFlags'},
+  ],
+  '3': const [SelectionsStateInfo_VisualDebugFlagsEntry$json],
+};
+
+@$core.Deprecated('Use selectionsStateInfoDescriptor instead')
+const SelectionsStateInfo_VisualDebugFlagsEntry$json = const {
+  '1': 'VisualDebugFlagsEntry',
+  '2': const [
+    const {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
+    const {'1': 'value', '3': 2, '4': 1, '5': 8, '10': 'value'},
+  ],
+  '7': const {'7': true},
+};
+
+/// Descriptor for `SelectionsStateInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List selectionsStateInfoDescriptor = $convert.base64Decode('ChNTZWxlY3Rpb25zU3RhdGVJbmZvEhoKCHN0b3J5S2V5GAEgASgJUghzdG9yeUtleRIwCgZkZXZpY2UYAiABKAsyGC5tb25hcmNoX2dycGMuRGV2aWNlSW5mb1IGZGV2aWNlEi0KBXRoZW1lGAMgASgLMhcubW9uYXJjaF9ncnBjLlRoZW1lSW5mb1IFdGhlbWUSMAoGbG9jYWxlGAQgASgLMhgubW9uYXJjaF9ncnBjLkxvY2FsZUluZm9SBmxvY2FsZRIoCg90ZXh0U2NhbGVGYWN0b3IYBSABKAFSD3RleHRTY2FsZUZhY3RvchItCgVzY2FsZRgGIAEoCzIXLm1vbmFyY2hfZ3JwYy5TY2FsZUluZm9SBXNjYWxlEioKBGRvY2sYByABKAsyFi5tb25hcmNoX2dycGMuRG9ja0luZm9SBGRvY2sSYwoQdmlzdWFsRGVidWdGbGFncxgIIAMoCzI3Lm1vbmFyY2hfZ3JwYy5TZWxlY3Rpb25zU3RhdGVJbmZvLlZpc3VhbERlYnVnRmxhZ3NFbnRyeVIQdmlzdWFsRGVidWdGbGFncxpDChVWaXN1YWxEZWJ1Z0ZsYWdzRW50cnkSEAoDa2V5GAEgASgJUgNrZXkSFAoFdmFsdWUYAiABKAhSBXZhbHVlOgI4AQ==');
 @$core.Deprecated('Use storyKeyInfoDescriptor instead')
 const StoryKeyInfo$json = const {
   '1': 'StoryKeyInfo',
@@ -49,37 +101,6 @@ const StoriesInfo$json = const {
 
 /// Descriptor for `StoriesInfo`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List storiesInfoDescriptor = $convert.base64Decode('CgtTdG9yaWVzSW5mbxIYCgdwYWNrYWdlGAEgASgJUgdwYWNrYWdlEhIKBHBhdGgYAiABKAlSBHBhdGgSIgoMc3Rvcmllc05hbWVzGAMgAygJUgxzdG9yaWVzTmFtZXM=');
-@$core.Deprecated('Use storiesMapInfoDescriptor instead')
-const StoriesMapInfo$json = const {
-  '1': 'StoriesMapInfo',
-  '2': const [
-    const {'1': 'storiesMap', '3': 1, '4': 3, '5': 11, '6': '.monarch_grpc.StoriesMapInfo.StoriesMapEntry', '10': 'storiesMap'},
-  ],
-  '3': const [StoriesMapInfo_StoriesMapEntry$json],
-};
-
-@$core.Deprecated('Use storiesMapInfoDescriptor instead')
-const StoriesMapInfo_StoriesMapEntry$json = const {
-  '1': 'StoriesMapEntry',
-  '2': const [
-    const {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
-    const {'1': 'value', '3': 2, '4': 1, '5': 11, '6': '.monarch_grpc.StoriesInfo', '10': 'value'},
-  ],
-  '7': const {'7': true},
-};
-
-/// Descriptor for `StoriesMapInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List storiesMapInfoDescriptor = $convert.base64Decode('Cg5TdG9yaWVzTWFwSW5mbxJMCgpzdG9yaWVzTWFwGAEgAygLMiwubW9uYXJjaF9ncnBjLlN0b3JpZXNNYXBJbmZvLlN0b3JpZXNNYXBFbnRyeVIKc3Rvcmllc01hcBpYCg9TdG9yaWVzTWFwRW50cnkSEAoDa2V5GAEgASgJUgNrZXkSLwoFdmFsdWUYAiABKAsyGS5tb25hcmNoX2dycGMuU3Rvcmllc0luZm9SBXZhbHVlOgI4AQ==');
-@$core.Deprecated('Use packageInfoDescriptor instead')
-const PackageInfo$json = const {
-  '1': 'PackageInfo',
-  '2': const [
-    const {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
-  ],
-};
-
-/// Descriptor for `PackageInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List packageInfoDescriptor = $convert.base64Decode('CgtQYWNrYWdlSW5mbxISCgRuYW1lGAEgASgJUgRuYW1l');
 @$core.Deprecated('Use textScaleFactorInfoDescriptor instead')
 const TextScaleFactorInfo$json = const {
   '1': 'TextScaleFactorInfo',
@@ -111,16 +132,6 @@ const LocalizationInfo$json = const {
 
 /// Descriptor for `LocalizationInfo`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List localizationInfoDescriptor = $convert.base64Decode('ChBMb2NhbGl6YXRpb25JbmZvEi4KEmxvY2FsZUxhbmd1YWdlVGFncxgBIAMoCVISbG9jYWxlTGFuZ3VhZ2VUYWdzEiwKEWRlbGVnYXRlQ2xhc3NOYW1lGAIgASgJUhFkZWxlZ2F0ZUNsYXNzTmFtZQ==');
-@$core.Deprecated('Use localizationListInfoDescriptor instead')
-const LocalizationListInfo$json = const {
-  '1': 'LocalizationListInfo',
-  '2': const [
-    const {'1': 'localizations', '3': 1, '4': 3, '5': 11, '6': '.monarch_grpc.LocalizationInfo', '10': 'localizations'},
-  ],
-};
-
-/// Descriptor for `LocalizationListInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List localizationListInfoDescriptor = $convert.base64Decode('ChRMb2NhbGl6YXRpb25MaXN0SW5mbxJECg1sb2NhbGl6YXRpb25zGAEgAygLMh4ubW9uYXJjaF9ncnBjLkxvY2FsaXphdGlvbkluZm9SDWxvY2FsaXphdGlvbnM=');
 @$core.Deprecated('Use themeInfoDescriptor instead')
 const ThemeInfo$json = const {
   '1': 'ThemeInfo',
@@ -133,16 +144,6 @@ const ThemeInfo$json = const {
 
 /// Descriptor for `ThemeInfo`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List themeInfoDescriptor = $convert.base64Decode('CglUaGVtZUluZm8SDgoCaWQYASABKAlSAmlkEhIKBG5hbWUYAiABKAlSBG5hbWUSHAoJaXNEZWZhdWx0GAMgASgIUglpc0RlZmF1bHQ=');
-@$core.Deprecated('Use themeListInfoDescriptor instead')
-const ThemeListInfo$json = const {
-  '1': 'ThemeListInfo',
-  '2': const [
-    const {'1': 'themes', '3': 1, '4': 3, '5': 11, '6': '.monarch_grpc.ThemeInfo', '10': 'themes'},
-  ],
-};
-
-/// Descriptor for `ThemeListInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List themeListInfoDescriptor = $convert.base64Decode('Cg1UaGVtZUxpc3RJbmZvEi8KBnRoZW1lcxgBIAMoCzIXLm1vbmFyY2hfZ3JwYy5UaGVtZUluZm9SBnRoZW1lcw==');
 @$core.Deprecated('Use logicalResolutionInfoDescriptor instead')
 const LogicalResolutionInfo$json = const {
   '1': 'LogicalResolutionInfo',
@@ -179,16 +180,17 @@ const ScaleInfo$json = const {
 
 /// Descriptor for `ScaleInfo`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List scaleInfoDescriptor = $convert.base64Decode('CglTY2FsZUluZm8SFAoFc2NhbGUYASABKAFSBXNjYWxlEhIKBG5hbWUYAiABKAlSBG5hbWU=');
-@$core.Deprecated('Use dockSideInfoDescriptor instead')
-const DockSideInfo$json = const {
-  '1': 'DockSideInfo',
+@$core.Deprecated('Use dockInfoDescriptor instead')
+const DockInfo$json = const {
+  '1': 'DockInfo',
   '2': const [
-    const {'1': 'dock', '3': 1, '4': 1, '5': 9, '10': 'dock'},
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
   ],
 };
 
-/// Descriptor for `DockSideInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List dockSideInfoDescriptor = $convert.base64Decode('CgxEb2NrU2lkZUluZm8SEgoEZG9jaxgBIAEoCVIEZG9jaw==');
+/// Descriptor for `DockInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List dockInfoDescriptor = $convert.base64Decode('CghEb2NrSW5mbxIOCgJpZBgBIAEoCVICaWQSEgoEbmFtZRgCIAEoCVIEbmFtZQ==');
 @$core.Deprecated('Use visualDebugFlagInfoDescriptor instead')
 const VisualDebugFlagInfo$json = const {
   '1': 'VisualDebugFlagInfo',
