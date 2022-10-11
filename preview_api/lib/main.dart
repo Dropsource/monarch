@@ -9,8 +9,13 @@ import 'src/channel_methods_receiver.dart';
 import 'src/channel_methods_sender.dart';
 import 'src/preview_api_service.dart';
 import 'src/preview_notifications.dart';
+import 'src/project_data.dart';
+import 'src/selections_state.dart';
 
 final _logger = Logger('PreviewApiMain');
+
+final projectDataManager = ProjectDataManager();
+final selectionsStateManager = SelectionsStateManager(projectDataManager);
 
 void main(List<String> arguments) async {
   _setUpLog();
@@ -45,16 +50,21 @@ void setUpChannels(int cliServerPort) async {
   var channel = constructClientChannel(cliServerPort);
   var discoveryClient = MonarchDiscoveryApiClient(channel);
 
-  var previewNotifications = PreviewNotifications(discoveryClient);
+  var previewNotifications = PreviewNotifications(
+      discoveryClient, projectDataManager, selectionsStateManager);
   var channelMethodsSender = ChannelMethodsSender();
 
-  var server = Server([PreviewApiService(previewNotifications, channelMethodsSender)]);
+  var server = Server([
+    PreviewApiService(projectDataManager, selectionsStateManager,
+        previewNotifications, channelMethodsSender)
+  ]);
   await server.serve(port: 0);
   var previewApiPort = server.port!;
   _logger.info(
       'preview_api grpc server (preview api service) started on port $previewApiPort');
   discoveryClient.registerPreviewApi(ServerInfo(port: previewApiPort));
 
-  var channelMethodsReceiver = ChannelMethodsReceiver(previewNotifications, channelMethodsSender);
+  var channelMethodsReceiver = ChannelMethodsReceiver(projectDataManager,
+      selectionsStateManager, previewNotifications, channelMethodsSender);
   channelMethodsReceiver.setUp();
 }

@@ -36,7 +36,7 @@ void main(List<String> arguments) async {
   }
 
   WidgetsFlutterBinding.ensureInitialized();
-  // runApp(const MonarchControllerApp());
+  runApp(const MonarchControllerApp());
   setUpGrpc(cliGrpcServerPort);
   receiveChannelMethodCalls();
 }
@@ -53,6 +53,19 @@ class MonarchControllerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// @TODO: this should be stateful, first show a Loading screen
+    /// then poll the discovery api until we get a preview api port
+    /// then, hmm... maybe get rid of the `previewReady` flag, it is really just 
+    /// waiting on the project data, which the controller can work with if it gets
+    /// empty project data, figure out the ready signals later once i see it working?
+    /// i will also register the notification api thus it will start getting data
+    /// ok.... so the preview api might need to be nullable inside the manager
+    /// it has default data, the previewReady flag might not work since we may 
+    /// miss the notification, but there is nothing the user can do until the preview api
+    /// is accessible, so let the manager work with just the notifications api
+    /// and when we have a preview api we let the ui fly, the manager can have a nullable preview api
+    /// the polling instantiates it, we set the manager with it, and then the ui is let loose, 
+    /// something like that
     return MaterialApp(
         title: 'Monarch Controller',
         theme: theme.theme,

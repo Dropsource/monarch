@@ -1,8 +1,5 @@
-import 'package:monarch_controller/data/dock_definition.dart';
-import 'package:monarch_controller/data/stories.dart';
-import 'package:monarch_controller/data/visual_debug_flag_ui.dart';
-
 import 'package:monarch_definitions/monarch_definitions.dart';
+import '../data/stories.dart';
 
 class ControllerState {
   final bool isPreviewReady;
@@ -17,7 +14,6 @@ class ControllerState {
   final String currentLocale;
   final List<String> locales;
 
-  final String defaultThemeId;
   final MetaThemeDefinition currentTheme;
   final List<MetaThemeDefinition> standardThemes;
   final List<MetaThemeDefinition> userThemes;
@@ -30,7 +26,7 @@ class ControllerState {
   final List<DockDefinition> dockList;
 
   final double textScaleFactor;
-  final List<VisualDebugFlagUi> visualDebugFlags;
+  final Map<String, bool> visualDebugFlags;
 
   List<MetaThemeDefinition> get allThemes => standardThemes + userThemes;
   int get storyCount => storyGroups.fold<int>(
@@ -45,7 +41,6 @@ class ControllerState {
     required this.currentDevice,
     required this.locales,
     required this.currentLocale,
-    required this.defaultThemeId,
     required this.standardThemes,
     required this.userThemes,
     required this.currentTheme,
@@ -65,15 +60,14 @@ class ControllerState {
         currentDevice: defaultDeviceDefinition,
         locales: [defaultLocale],
         currentLocale: defaultLocale,
-        defaultThemeId: defaultTheme.id,
-        currentTheme: defaultTheme,
-        standardThemes: [defaultTheme],
+        currentTheme: defaultThemeDefinition,
+        standardThemes: [defaultThemeDefinition],
         userThemes: [],
         currentDock: defaultDockDefinition,
         currentScale: defaultScaleDefinition,
         dockList: dockDefinitions,
         scaleList: [defaultScaleDefinition],
-        visualDebugFlags: devToolsOptions,
+        visualDebugFlags: defaultVisualDebugFlags,
         textScaleFactor: 1.0,
       );
 
@@ -86,14 +80,13 @@ class ControllerState {
     DeviceDefinition? currentDevice,
     String? currentLocale,
     List<String>? locales,
-    String? defaultThemeId,
     MetaThemeDefinition? currentTheme,
     List<MetaThemeDefinition>? standardThemes,
     List<MetaThemeDefinition>? userThemes,
     StoryScaleDefinition? currentScale,
     DockDefinition? currentDock,
     double? textScaleFactor,
-    List<VisualDebugFlagUi>? visualDebugFlags,
+    Map<String, bool>? visualDebugFlags,
     List<StoryScaleDefinition>? scaleList,
   }) =>
       ControllerState(
@@ -104,7 +97,6 @@ class ControllerState {
         currentDevice: currentDevice ?? this.currentDevice,
         locales: locales ?? this.locales,
         currentLocale: currentLocale ?? this.currentLocale,
-        defaultThemeId: defaultThemeId ?? this.defaultThemeId,
         currentTheme: currentTheme ?? this.currentTheme,
         standardThemes: standardThemes ?? this.standardThemes,
         userThemes: userThemes ?? this.userThemes,
@@ -117,19 +109,4 @@ class ControllerState {
         packageName: packageName ?? this.packageName,
         collapsedGroupKeys: collapsedGroupKeys,
       );
-
-  // @override
-  // Map<String, dynamic> toStandardMap() {
-  //   return {
-  //     'device': currentDevice.toStandardMap(),
-  //     'scale': currentScale.toStandardMap(),
-  //     'dock': currentDock.id,
-  //     'activeStoryKey': activeStoryKey,
-  //     'themeId': currentTheme.id,
-  //     'locale': currentLocale,
-  //     'textScaleFactor': textScaleFactor,
-  //     'visualDebugFlags':
-  //         visualDebugFlags.map((e) => e.toStandardMap()).toList()
-  //   };
-  // }
 }

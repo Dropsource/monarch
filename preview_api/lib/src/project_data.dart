@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:monarch_definitions/monarch_definitions.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
 
@@ -35,9 +37,15 @@ class ProjectDataManager {
   ProjectData _projectData = ProjectData.init();
   ProjectData get projectData => _projectData;
 
+  final _controller = StreamController<ProjectData>.broadcast();
+  Stream<ProjectData> get stream => _controller.stream;
+
   void update(ProjectData data) {
     _projectData = data;
+    _controller.add(_projectData);
+  }
+
+  void close() {
+    _controller.close();
   }
 }
-
-final projectDataManager = ProjectDataManager();

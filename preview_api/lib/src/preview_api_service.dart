@@ -9,10 +9,18 @@ import 'story_scale_definitions.dart';
 import 'project_data.dart';
 
 class PreviewApiService extends MonarchPreviewApiServiceBase {
+  final ProjectDataManager projectDataManager;
+  final SelectionsStateManager selectionsStateManager;
   final PreviewNotifications previewNotifications;
   final ChannelMethodsSender channelMethodsSender;
 
-  PreviewApiService(this.previewNotifications, this.channelMethodsSender);
+  PreviewApiService(
+    this.projectDataManager,
+    this.selectionsStateManager,
+    this.previewNotifications,
+    this.channelMethodsSender,
+  );
+
   @override
   Future<ReferenceDataInfo> getReferenceData(ServiceCall call, Empty request) =>
       Future.value(ReferenceDataInfo(
@@ -47,6 +55,7 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
   @override
   Future<Empty> resetStory(ServiceCall call, Empty request) {
     channelMethodsSender.resetStory();
+    selectionsStateManager.update((state) => state.copyWith(storyKey: null));
     return Future.value(Empty());
   }
 
@@ -58,14 +67,9 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
 
   @override
   Future<Empty> setDevice(ServiceCall call, DeviceInfo request) {
-    channelMethodsSender.setActiveDevice(DeviceDefinition(
-        id: request.id,
-        name: request.name,
-        logicalResolution: LogicalResolution(
-            height: request.logicalResolutionInfo.height,
-            width: request.logicalResolutionInfo.width),
-        devicePixelRatio: request.devicePixelRatio,
-        targetPlatform: targetPlatformFromString(request.targetPlatform)));
+    var device = DeviceInfoMapper().fromInfo(request);
+    channelMethodsSender.setActiveDevice(device);
+    selectionsStateManager.update((state) => state.copyWith(device: device));
     return Future.value(Empty());
   }
 

@@ -3,17 +3,25 @@ import 'package:monarch_definitions/monarch_definitions.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_definitions/monarch_channels.dart';
-import 'package:preview_api/src/preview_notifications.dart';
 
+import 'preview_notifications.dart';
+import 'project_data.dart';
 import 'channel_methods_sender.dart';
 import 'channel_methods.dart';
 import 'selections_state.dart';
 
 class ChannelMethodsReceiver with Log {
+  final ProjectDataManager projectDataManager;
+  final SelectionsStateManager selectionsStateManager;
   final PreviewNotifications previewNotifications;
   final ChannelMethodsSender channelMethodsSender;
 
-  ChannelMethodsReceiver(this.previewNotifications, this.channelMethodsSender);
+  ChannelMethodsReceiver(
+    this.projectDataManager,
+    this.selectionsStateManager,
+    this.previewNotifications,
+    this.channelMethodsSender,
+  );
 
   void setUp() {
     MonarchMethodChannels.previewApi
@@ -75,7 +83,11 @@ class ChannelMethodsReceiver with Log {
       case MonarchMethods.monarchData:
         final monarchData =
             MonarchDataDefinitionMapper().fromStandardMap(args!);
-        previewNotifications.projectDataChanged(monarchData);
+        projectDataManager.update(ProjectData(
+            packageName: monarchData.packageName,
+            storiesMap: monarchData.metaStoriesDefinitionMap,
+            projectThemes: monarchData.metaThemeDefinitions,
+            localizations: monarchData.metaLocalizationDefinitions));
         return;
 
       /// Sent by the preview's vm-service-client via the method channels.

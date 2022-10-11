@@ -82,11 +82,11 @@ class SelectionsState {
 }
 
 class SelectionsStateManager {
-  final _controller = StreamController<SelectionsState>.broadcast();
-  Stream<SelectionsState> get stream => _controller.stream;
-
   SelectionsState _state = SelectionsState.init();
   SelectionsState get state => _state;
+  
+  final _controller = StreamController<SelectionsState>.broadcast();
+  Stream<SelectionsState> get stream => _controller.stream;
 
   void update(SelectionsState Function(SelectionsState state) fn) {
     _state = fn(_state);
@@ -97,5 +97,3 @@ class SelectionsStateManager {
     _controller.close();
   }
 }
-
-final selectionsStateManager = SelectionsStateManager();

@@ -1,11 +1,20 @@
-import 'package:monarch_definitions/monarch_definitions.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
 
+import 'project_data.dart';
 import 'selections_state.dart';
 
 class PreviewNotifications {
   final MonarchDiscoveryApiClient discoveryClient;
-  PreviewNotifications(this.discoveryClient);
+  final ProjectDataManager projectDataManager;
+  final SelectionsStateManager selectionsStateManager;
+
+  PreviewNotifications(this.discoveryClient, this.projectDataManager,
+      this.selectionsStateManager) {
+    selectionsStateManager.stream
+        .listen((state) => selectionsStateChanged(state));
+    projectDataManager.stream
+        .listen((data) => projectDataChanged(data));
+  }
 
   List<MonarchPreviewNotificationsApiClient> clientList = [];
 
@@ -42,9 +51,8 @@ class PreviewNotifications {
     _notifyClients((client) => client.previewReady(Empty()));
   }
 
-  void projectDataChanged(MonarchDataDefinition monarchDataDefinition) {
-    _notifyClients((client) => client.projectDataChanged(
-        ProjectDataInfoMapper().toInfo(monarchDataDefinition)));
+  void projectDataChanged(ProjectData projectData) {
+    _notifyClients((client) => client.projectDataChanged(projectData.toInfo()));
   }
 
   void selectionsStateChanged(SelectionsState selectionsState) {

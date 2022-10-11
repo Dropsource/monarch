@@ -6,11 +6,11 @@ class StoryId {
   /// The generated stories path. As of 2020-05-08, this path is
   /// relative to the stories directory.
   /// It looks like 'stories/foo_stories.g.dart'.
-  final String path;
+  final String generatedPath;
 
   final String name;
 
-  const StoryId(this.package, this.path, this.name);
+  const StoryId(this.package, this.generatedPath, this.name);
 
   factory StoryId.fromNodeKey(String key) {
     ArgumentError.checkNotNull(key, 'key');
@@ -22,8 +22,8 @@ class StoryId {
     return StoryId(segments[0], segments[1], segments[2]);
   }
 
-  String get pathKey => '$package|$path';
-  String get storyKey => '$package|$path|$name';
+  String get pathKey => '$package|$generatedPath';
+  String get storyKey => '$package|$generatedPath|$name';
 
   @override
   String toString() => storyKey;
