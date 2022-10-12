@@ -14,7 +14,6 @@ import '../config/project_config.dart';
 import '../utils/cli_exit_code.dart';
 import '../utils/standard_output.dart';
 import 'attach_task.dart';
-import 'grpc.dart';
 import 'monarch_app_stdout.dart';
 import 'monarch_app_stderr.dart';
 import 'task.dart';
@@ -37,9 +36,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   final bool noSoundNullSafety;
   final ReloadOption reloadOption;
   final Analytics analytics;
-  final ControllerGrpcClient controllerGrpcClient;
-
-  late final int cliGrpcServerPort;
+  final int discoveryServerPort;
 
   String get generatedMainFilePath => p.join('.dart_tool', 'build', 'generated',
       config.pubspecProjectName, 'lib', 'main_monarch.g.dart');
@@ -60,7 +57,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
     required this.noSoundNullSafety,
     required this.reloadOption,
     required this.analytics,
-    required this.controllerGrpcClient,
+    required this.discoveryServerPort,
   });
 
   /*
@@ -301,7 +298,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
               .path, // controller-bundle
           p.join(projectDirectory.path, dotMonarch), // preview-bundle
           defaultLogLevel.name, // log-level
-          cliGrpcServerPort.toString(), // cli-grpc-server-port
+          discoveryServerPort.toString(), // discovery-server-port
           config.pubspecProjectName, // project-name
         ],
         workingDirectory: projectDirectory.path,
@@ -321,7 +318,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
               .path, // preview-server-bundle
           p.join(projectDirectory.path, dotMonarch), // preview-window-bundle
           defaultLogLevel.name, // log-level
-          cliGrpcServerPort.toString(), // cli-grpc-server-port
+          discoveryServerPort.toString(), // discovery-server-port
         ],
         workingDirectory: projectDirectory.path,
         analytics: analytics,
@@ -417,7 +414,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
               ? RegenAndHotReload(
                   stdout_: stdout_default,
                   regenTask: _watchToRegenTask!,
-                  controllerGrpcClient: controllerGrpcClient,
+                  controllerGrpcClient: controllerGrpcClient, //NEXT: pass a client intance to all these contructors?
                 )
               : RegenRebundleAndHotRestart(
                   regenTask: _watchToRegenTask!,

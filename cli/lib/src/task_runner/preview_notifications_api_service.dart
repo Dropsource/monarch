@@ -56,46 +56,21 @@ class PreviewNotificationsApiService extends MonarchPreviewNotificationsApiServi
   }
 
   @override
-  Future<Empty> defaultTheme(ServiceCall call, ThemeInfo request) {
-    // do nothing
-    return Future.value(Empty());
-  }
-
-
-  @override
   Future<Empty> previewReady(ServiceCall call, Empty request) {
     // do nothing
     return Future.value(Empty()); 
   }
-
+  
   @override
-  Future<Empty> projectStories(ServiceCall call, StoriesMapInfo request) {
+  Future<Empty> projectDataChanged(ServiceCall call, ProjectDataInfo request) {
     // do nothing
-    return Future.value(Empty());
-  }
-
-  @override
-  Future<Empty> projectThemes(ServiceCall call, ThemeListInfo request) {
-    // do nothing
-    return Future.value(Empty());
-  }
-
-   @override
-  Future<Empty> projectLocalizations(ServiceCall call, LocalizationListInfo request) {
-    // do nothing
-    return Future.value(Empty());
+    return Future.value(Empty()); 
   }
   
   @override
-  Future<Empty> projectPackage(ServiceCall call, PackageInfo request) {
+  Future<Empty> selectionsStateChanged(ServiceCall call, SelectionsStateInfo request) {
     // do nothing
-    return Future.value(Empty());
-  }
-
-  @override
-  Future<Empty> toggleVisualDebugFlag(ServiceCall call, VisualDebugFlagInfo request) {
-    // do nothing
-    return Future.value(Empty());
+    return Future.value(Empty()); 
   }
   
 }

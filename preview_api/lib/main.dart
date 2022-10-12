@@ -21,20 +21,20 @@ void main(List<String> arguments) async {
   _setUpLog();
   if (arguments.length < 2) {
     _logger.severe(
-        'Expected 2 arguments in this order: default-log-level cli-grpc-server-port');
+        'Expected 2 arguments in this order: default-log-level discovery-server-port');
     exit(1);
   }
 
   defaultLogLevel = LogLevel.fromString(arguments[0], LogLevel.ALL);
-  var cliGrpcServerPort = int.tryParse(arguments[1]);
+  var discoveryServerPort = int.tryParse(arguments[1]);
 
-  if (cliGrpcServerPort == null) {
+  if (discoveryServerPort == null) {
     _logger.severe(
-        'Could not parse argument for cli-grpc-server-port to an integer');
+        'Could not parse argument for discovery-server-port to an integer');
     exit(1);
   }
 
-  setUpChannels(cliGrpcServerPort);
+  setUpChannels(discoveryServerPort);
 }
 
 void _setUpLog() {
@@ -44,10 +44,10 @@ void _setUpLog() {
   logCurrentProcessInformation(_logger, LogLevel.FINE);
 }
 
-void setUpChannels(int cliServerPort) async {
+void setUpChannels(int discoveryServerPort) async {
   _logger.info(
-      'Will use cli grpc server (discovery service) at port $cliServerPort');
-  var channel = constructClientChannel(cliServerPort);
+      'Will use discovery server at port $discoveryServerPort');
+  var channel = constructClientChannel(discoveryServerPort);
   var discoveryClient = MonarchDiscoveryApiClient(channel);
 
   var previewNotifications = PreviewNotifications(discoveryClient);
