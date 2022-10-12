@@ -19,10 +19,12 @@
 ControllerWindowManager::ControllerWindowManager(
 	std::string controllerWindowBundlePath,
 	std::string defaultLogLevelString,
+	std::string cliGrpcServerPort,
 	std::string projectName)
 {
 	_controllerWindowBundlePath = controllerWindowBundlePath;
 	_defaultLogLevelString = defaultLogLevelString;
+	_cliGrpcServerPort = cliGrpcServerPort;
 	_projectName = projectName;
 
 	_controllerWindow = nullptr;
@@ -38,8 +40,7 @@ void ControllerWindowManager::launchWindow()
 {
 	flutter::DartProject controllerProject(to_wstring(_controllerWindowBundlePath));
 
-	// @TODO: remove grpc port but make sure controller dart code doesn't expect it anymore
-	std::vector<std::string> controllerArguments = { _defaultLogLevelString, "33445" };
+	std::vector<std::string> controllerArguments = { _defaultLogLevelString, _cliGrpcServerPort };
 	controllerProject.set_dart_entrypoint_arguments(controllerArguments);
 
 	_controllerWindow = std::make_unique<ControllerWindow>(controllerProject);

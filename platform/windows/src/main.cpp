@@ -77,13 +77,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   else if (mode == "controller") {
     std::string controllerBundlePath = trim_copy(arguments[1]);
     std::string defaultLogLevelString = trim_copy(arguments[2]);
-    std::string projectName = trim_copy(arguments[3]);
+    std::string cliGrpcServerPort = trim_copy(arguments[3]);
+    std::string projectName = trim_copy(arguments[4]);
 
     defaultLogLevel = logLevelFromString(defaultLogLevelString);
 
     auto manager = ControllerWindowManager(
       controllerBundlePath,
       defaultLogLevelString,
+      cliGrpcServerPort,
       projectName);
     manager.launchWindow();
 

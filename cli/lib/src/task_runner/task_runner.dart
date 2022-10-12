@@ -318,8 +318,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         arguments: [
           'preview', // mode
           monarchBinaries
-              .controllerDirectory(config.flutterSdkId)
-              .path, // preview-server-bundle
+              .previewApiDirectory(config.flutterSdkId)
+              .path, // preview-api-bundle
           p.join(projectDirectory.path, dotMonarch), // preview-window-bundle
           defaultLogLevel.name, // log-level
           discoveryServerPort.toString(), // discovery-server-port
@@ -334,8 +334,11 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
             monarchBinaries.monarchAppExecutableFile(config.flutterSdkId).path,
         arguments: [
           'controller', // mode
-          r'C:\Users\fertrig\temp\controller-window', // controller-window-bundle
+          monarchBinaries
+              .controllerDirectory(config.flutterSdkId)
+              .path, // controller-window-bundle
           defaultLogLevel.name, // log-level
+          discoveryServerPort.toString(), // discovery-server-port
           config.pubspecProjectName, // project-name
         ],
         workingDirectory: projectDirectory.path,

@@ -51,7 +51,7 @@ void _setUpLog() {
 
 void setUpChannels(int discoveryServerPort) async {
   _logger.info(
-      'Will use cli grpc server (discovery service) at port $discoveryServerPort');
+      'Will use discovery server at port $discoveryServerPort');
   var channel = constructClientChannel(discoveryServerPort);
   var discoveryClient = MonarchDiscoveryApiClient(channel);
 

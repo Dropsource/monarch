@@ -15,6 +15,7 @@ class RepoPaths {
 
   String get cli => p.join(root, 'cli');
   String get controller => p.join(root, 'controller');
+  String get preview_api => p.join(root, 'preview_api');
   String get packages => p.join(root, 'packages');
   String get platform => p.join(root, 'platform');
   String get tools => p.join(root, 'tools');

@@ -11,8 +11,8 @@
 
 class PreviewWindowManager;
 
-const std::string previewServerChannelName = "monarch.controller";
-const std::string previewWindowChannelName = "monarch.preview";
+const std::string previewServerChannelName = "monarch.previewApi";
+const std::string previewWindowChannelName = "monarch.previewWindow";
 
 class Channels
 {

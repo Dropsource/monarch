@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
@@ -34,6 +35,7 @@ void main(List<String> arguments) async {
     exit(1);
   }
 
+  WidgetsFlutterBinding.ensureInitialized();
   setUpChannels(discoveryServerPort);
 }
 

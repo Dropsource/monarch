@@ -18,6 +18,7 @@ public:
 	ControllerWindowManager(
 		std::string controllerWindowBundlePath,
 		std::string defaultLogLevelString,
+		std::string cliGrpcServerPort,
 		std::string projectName);
 	~ControllerWindowManager();
 
@@ -26,6 +27,7 @@ public:
 private:
 	std::string _controllerWindowBundlePath;
 	std::string _defaultLogLevelString;
+	std::string _cliGrpcServerPort;
 	std::string _projectName;
 
 	std::unique_ptr<ControllerWindow> _controllerWindow;
