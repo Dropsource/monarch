@@ -1,8 +1,7 @@
-import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
 
 import '../utils/standard_output.dart';
-import 'grpc.dart';
+import 'preview_api.dart';
 import 'process_task.dart';
 import 'task.dart';
 
@@ -15,10 +14,10 @@ abstract class Reloader with Log {
 }
 
 class HotReloader extends Reloader {
-  final ControllerGrpcClient controllerGrpcClient;
+  final PreviewApi previewApi;
   final StandardOutput stdout_;
   HotReloader(
-    this.controllerGrpcClient,
+    this.previewApi,
     this.stdout_,
   );
 
@@ -27,25 +26,24 @@ class HotReloader extends Reloader {
   /// It does not regen or rebundle.
   @override
   Future<void> reload(Heartbeat heartbeat) async {
-    if (controllerGrpcClient.isClientInitialized) {
+    if (await previewApi.isClientInitialized()) {
       log.fine('Sending hotReload request to controller grpc client');
-      var response = await controllerGrpcClient.client!.hotReload(Empty());
+      var isSuccessful = await previewApi.hotReload();
       heartbeat.complete();
-      if (!response.isSuccessful) {
+      if (!isSuccessful) {
         stdout_.writeln(kTryAgainAfterFixing);
       }
     } else {
-      log.warning(
-          'Unable to hot reload. The controller grpc client is not initialized.');
+      log.warning('Unable to hot reload. The preview_api is not available.');
     }
   }
 }
 
 class HotRestarter extends Reloader {
-  final ControllerGrpcClient controllerGrpcClient;
+  final PreviewApi previewApi;
   final ProcessTask bundleTask;
 
-  HotRestarter(this.bundleTask, this.controllerGrpcClient);
+  HotRestarter(this.bundleTask, this.previewApi);
 
   /// It restarts the Monarch Preview. Restarts the Preview by closing the existing
   /// Preview window and opening a new one.
@@ -68,12 +66,11 @@ class HotRestarter extends Reloader {
       return;
     }
 
-    if (controllerGrpcClient.isClientInitialized) {
+    if (await previewApi.isClientInitialized()) {
       log.fine('Sending restartPreview request to controller grpc client');
-      await controllerGrpcClient.client!.restartPreview(Empty());
+      await previewApi.restartPreview();
     } else {
-      log.warning(
-          'Unable to hot restart. The controller grpc client is not initialized.');
+      log.warning('Unable to hot restart. The preview_api is not available.');
     }
     heartbeat.complete();
   }

@@ -4,10 +4,10 @@ import 'package:meta/meta.dart';
 import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:monarch_utils/log.dart';
 
+import 'preview_api.dart';
 import 'process_task.dart';
 import 'reloaders.dart';
 import '../utils/standard_output.dart' show StandardOutput;
-import 'grpc.dart';
 import 'task_count_heartbeat.dart';
 
 abstract class KeyCommand {
@@ -40,17 +40,17 @@ class HotReloadKeyCommand extends KeyCommand {
     running(() async {
       var heartbeat = Heartbeat(kReloadingStories, stdout_.writeln);
       heartbeat.start();
-      var reloader = HotReloader(controllerGrpcClient, stdout_);
+      var reloader = HotReloader(previewApi, stdout_);
       await reloader.reload(heartbeat);
     });
   }
 
-  final ControllerGrpcClient controllerGrpcClient;
+  final PreviewApi previewApi;
   final StandardOutput stdout_;
   final bool isDefault;
 
   HotReloadKeyCommand({
-    required this.controllerGrpcClient,
+    required this.previewApi,
     required this.stdout_,
     required this.isDefault,
   });
@@ -69,19 +69,19 @@ class HotRestartKeyCommand extends KeyCommand {
     running(() async {
       var heartbeat = Heartbeat(kReloadingStoriesHotRestart, stdout_.writeln);
       heartbeat.start();
-      var reloader = HotRestarter(bundleTask, controllerGrpcClient);
+      var reloader = HotRestarter(bundleTask, previewApi);
       await reloader.reload(heartbeat);
     });
   }
 
   final ProcessTask bundleTask;
-  final ControllerGrpcClient controllerGrpcClient;
+  final PreviewApi previewApi;
   final StandardOutput stdout_;
   final bool isDefault;
 
   HotRestartKeyCommand({
     required this.bundleTask,
-    required this.controllerGrpcClient,
+    required this.previewApi,
     required this.stdout_,
     required this.isDefault,
   });
@@ -133,12 +133,12 @@ class GenerateAndHotReloadKeyCommand extends KeyCommand {
 
   final StandardOutput stdout_;
   final ProcessTask generateTask;
-  final ControllerGrpcClient controllerGrpcClient;
+  final PreviewApi previewApi;
 
   GenerateAndHotReloadKeyCommand({
     required this.stdout_,
     required this.generateTask,
-    required this.controllerGrpcClient,
+    required this.previewApi,
   });
 
   @override
@@ -150,7 +150,7 @@ class GenerateAndHotReloadKeyCommand extends KeyCommand {
       await generateTask.run();
       await generateTask.done();
 
-      var reloader = HotReloader(controllerGrpcClient, stdout_);
+      var reloader = HotReloader(previewApi, stdout_);
       await reloader.reload(heartbeat);
     });
   }
@@ -165,12 +165,12 @@ class GenerateAndHotRestartKeyCommand extends KeyCommand {
 
   final ProcessTask generateTask;
   final ProcessTask bundleTask;
-  final ControllerGrpcClient controllerGrpcClient;
+  final PreviewApi previewApi;
 
   GenerateAndHotRestartKeyCommand({
     required this.generateTask,
     required this.bundleTask,
-    required this.controllerGrpcClient,
+    required this.previewApi,
   });
 
   @override
@@ -182,7 +182,7 @@ class GenerateAndHotRestartKeyCommand extends KeyCommand {
       await generateTask.run();
       await generateTask.done();
 
-      var reloader = HotRestarter(bundleTask, controllerGrpcClient);
+      var reloader = HotRestarter(bundleTask, previewApi);
       await reloader.reload(heartbeat);
     });
   }

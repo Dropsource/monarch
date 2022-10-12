@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:monarch_cli/src/task_runner/preview_api.dart';
 import 'package:monarch_cli/src/utils/standard_input.dart';
+import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:path/path.dart' as p;
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';
@@ -37,6 +39,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   final ReloadOption reloadOption;
   final Analytics analytics;
   final int discoveryServerPort;
+  final PreviewApi previewApi;
 
   String get generatedMainFilePath => p.join('.dart_tool', 'build', 'generated',
       config.pubspecProjectName, 'lib', 'main_monarch.g.dart');
@@ -58,6 +61,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
     required this.reloadOption,
     required this.analytics,
     required this.discoveryServerPort,
+    required this.previewApi,
   });
 
   /*
@@ -414,12 +418,12 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
               ? RegenAndHotReload(
                   stdout_: stdout_default,
                   regenTask: _watchToRegenTask!,
-                  controllerGrpcClient: controllerGrpcClient, //NEXT: pass a client intance to all these contructors?
+                  previewApi: previewApi,
                 )
               : RegenRebundleAndHotRestart(
                   regenTask: _watchToRegenTask!,
                   buildPreviewBundleTask: _buildPreviewBundleTask!,
-                  controllerGrpcClient: controllerGrpcClient,
+                  previewApi: previewApi,
                 );
 
           _regenAndReloadManager!.manage();
@@ -446,12 +450,12 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
     if (isReloadAutomatic) {
       keyCommands.addAll([
         HotReloadKeyCommand(
-            controllerGrpcClient: controllerGrpcClient,
+            previewApi: previewApi,
             stdout_: stdout_default,
             isDefault: reloadOption == ReloadOption.hotReload),
         HotRestartKeyCommand(
             bundleTask: _buildPreviewBundleTask!,
-            controllerGrpcClient: controllerGrpcClient,
+            previewApi: previewApi,
             stdout_: stdout_default,
             isDefault: reloadOption == ReloadOption.hotRestart),
         helpKeyCommand,
@@ -462,11 +466,11 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         GenerateAndHotReloadKeyCommand(
             stdout_: stdout_default,
             generateTask: _generateStoriesTask!,
-            controllerGrpcClient: controllerGrpcClient),
+            previewApi: previewApi),
         GenerateAndHotRestartKeyCommand(
           generateTask: _generateStoriesTask!,
           bundleTask: _buildPreviewBundleTask!,
-          controllerGrpcClient: controllerGrpcClient,
+          previewApi: previewApi,
         ),
         helpKeyCommand,
         QuitKeyCommand()

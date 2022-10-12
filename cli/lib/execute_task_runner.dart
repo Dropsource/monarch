@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:monarch_cli/src/config/context_info.dart';
+import 'package:monarch_cli/src/task_runner/preview_api.dart';
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';
 import 'package:monarch_io_utils/monarch_io_utils.dart';
@@ -131,6 +132,17 @@ The monarch_ui directory below is missing. Make sure to add the path to your Flu
   final notifications = await notificationsReader.notifications;
   _showNotifications(notifications);
 
+  late int discoveryServerPort;
+  try {
+    discoveryServerPort = await setUpDiscoveryApiServer();
+  } catch (e) {
+    await _exit(TaskRunnerExitCodes.cliGrpcServerStartError);
+    return;
+  }
+
+  final discoveryApi = getDiscoveryApiClient(discoveryServerPort);
+  final previewApi = PreviewApi(discoveryApi);
+
   final taskRunner = TaskRunner(
       projectDirectory: projectDirectory,
       config: projectConfig,
@@ -140,12 +152,11 @@ The monarch_ui directory below is missing. Make sure to add the path to your Flu
       noSoundNullSafety: noSoundNullSafety,
       reloadOption: _getReloadOption(reloadOption),
       analytics: _analytics,
-      controllerGrpcClient: controllerGrpcClientInstance);
+      discoveryServerPort: discoveryServerPort,
+      previewApi: previewApi);
 
-  final cliGrpcServer = CliGrpcServer();
   try {
-    await cliGrpcServer.startServer(taskRunner, _analytics);
-    taskRunner.cliGrpcServerPort = cliGrpcServer.port;
+    await setUpNotificationsApiServer(discoveryApi, taskRunner, _analytics);
   } catch (e) {
     await _exit(TaskRunnerExitCodes.cliGrpcServerStartError);
     return;

@@ -4,9 +4,9 @@ import 'project_data.dart';
 import 'selections_state.dart';
 
 class PreviewNotifications {
-  final MonarchDiscoveryApiClient discoveryClient;
+  final MonarchDiscoveryApiClient discoveryApi;
 
-  PreviewNotifications(this.discoveryClient);
+  PreviewNotifications(this.discoveryApi);
 
   List<MonarchPreviewNotificationsApiClient> clientList = [];
 
@@ -27,7 +27,7 @@ class PreviewNotifications {
       return;
     }
 
-    var list = await discoveryClient.getPreviewNotificationsApiList(Empty());
+    var list = await discoveryApi.getPreviewNotificationsApiList(Empty());
     clientList.clear();
     for (var serverInfo in list.servers) {
       var channel = constructClientChannel(serverInfo.port);
