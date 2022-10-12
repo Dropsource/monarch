@@ -154,3 +154,19 @@ class ProjectDataInfoMapper
       storiesMap: def.metaStoriesDefinitionMap.map(
           (key, value) => MapEntry(key, StoriesInfoMapper().toInfo(value))));
 }
+
+class StoryIdInfoMapper implements InfoMapper<StoryIdInfo, StoryId> {
+  @override
+  StoryId fromInfo(StoryIdInfo info) => StoryId(
+      storiesMapKey: info.storiesMapKey,
+      package: info.package,
+      path: info.path,
+      storyName: info.storyName);
+
+  @override
+  StoryIdInfo toInfo(StoryId def) => StoryIdInfo(
+      storiesMapKey: def.storiesMapKey,
+      package: def.package,
+      path: def.path,
+      storyName: def.storyName);
+}

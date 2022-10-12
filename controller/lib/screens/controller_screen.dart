@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:monarch_controller/default_theme.dart';
-import 'package:monarch_controller/widgets/components/text.dart';
-import 'package:monarch_controller/widgets/story_list/story_list.dart';
-import 'package:monarch_controller/manager/controller_manager.dart';
-import 'package:monarch_controller/manager/controller_state.dart';
 
+import '../default_theme.dart';
+import '../widgets/components/text.dart';
+import '../widgets/story_list/story_list.dart';
+import '../manager/controller_manager.dart';
+import '../manager/controller_state.dart';
 import '../widgets/control_panel/control_panel.dart';
 
 class ControllerScreen extends StatefulWidget {
@@ -34,7 +34,7 @@ class UiWindowControllerState extends State<ControllerScreen> {
       body: StreamBuilder<ControllerState>(
           stream: manager.stream,
           builder: (context, snapshot) {
-            if (snapshot.data == null || !snapshot.data!.isPreviewReady) {
+            if (snapshot.data == null || !snapshot.data!.isReady) {
               return const SizedBox(
                 height: 200,
                 child: Center(
@@ -62,20 +62,20 @@ class UiWindowControllerState extends State<ControllerScreen> {
                       ),
                       child: Column(
                         children: [
-                          if (!state.isPreviewReady) ...[
+                          if (!state.isReady) ...[
                             const TextBody1(
                               'story_list.loading',
                               shouldTranslate: true,
                             ),
                           ],
-                          if (state.isPreviewReady) ...[
+                          if (state.isReady) ...[
                             Expanded(
                               child: StoryList(
                                 projectName: state.storyGroups.isEmpty
                                     ? ''
                                     : state.packageName,
                                 stories: state.storyGroups,
-                                activeStoryKey: state.activeStoryKey,
+                                activeStoryId: state.currentStoryId,
                                 manager: manager,
                               ),
                             ),
@@ -88,9 +88,8 @@ class UiWindowControllerState extends State<ControllerScreen> {
                     width: 1,
                     thickness: 1,
                   ),
-                  if (state.isPreviewReady) ...[
+                  if (state.isReady) ...[
                     ControlPanel(
-                      state: state,
                       manager: manager,
                     ),
                   ],

@@ -5,16 +5,8 @@ import 'selections_state.dart';
 
 class PreviewNotifications {
   final MonarchDiscoveryApiClient discoveryClient;
-  final ProjectDataManager projectDataManager;
-  final SelectionsStateManager selectionsStateManager;
 
-  PreviewNotifications(this.discoveryClient, this.projectDataManager,
-      this.selectionsStateManager) {
-    selectionsStateManager.stream
-        .listen((state) => selectionsStateChanged(state));
-    projectDataManager.stream
-        .listen((data) => projectDataChanged(data));
-  }
+  PreviewNotifications(this.discoveryClient);
 
   List<MonarchPreviewNotificationsApiClient> clientList = [];
 

@@ -19,23 +19,64 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
     this.selectionsStateManager,
     this.previewNotifications,
     this.channelMethodsSender,
-  );
+  ) {
+    selectionsStateManager.stream
+        .listen((state) => previewNotifications.selectionsStateChanged(state));
+
+    projectDataManager.stream.listen((projectData) {
+      previewNotifications.projectDataChanged(projectData);
+      var state = selectionsStateManager.state;
+
+      void checkStory() {
+        if (state.storyId != null && !projectData.hasStory(state.storyId!)) {
+          _resetStory();
+        }
+      }
+
+      void checkTheme() {
+        var themes = standardMetaThemeDefinitions + projectData.projectThemes;
+        if (!themes.any(
+            (element) => element.id == state.theme.id)) {
+          for (var theme in projectData.projectThemes) {
+            if (theme.isDefault) {
+              _setTheme(theme);
+              return;
+            }
+          }
+          for (var theme in standardMetaThemeDefinitions) {
+            if (theme.isDefault) {
+              _setTheme(theme);
+              return;
+            }
+          }
+        }
+      }
+
+      void checkLocale() {
+        if (!projectData.allLocaleLanguageTags
+            .contains(state.languageTag)) {
+          if (projectData.allLocaleLanguageTags.isEmpty) {
+            _setLocale(defaultLocale);
+          } else {
+            _setLocale(projectData.allLocaleLanguageTags.first);
+          }
+        }
+      }
+
+      checkStory();
+      checkTheme();
+      checkLocale();
+    });
+  }
 
   @override
   Future<ReferenceDataInfo> getReferenceData(ServiceCall call, Empty request) =>
       Future.value(ReferenceDataInfo(
-          devices: deviceDefinitions.map((e) => DeviceInfo(
-              id: e.id,
-              name: e.name,
-              targetPlatform: targetPlatformToString(e.targetPlatform),
-              logicalResolutionInfo: LogicalResolutionInfo(
-                  height: e.logicalResolution.height,
-                  width: e.logicalResolution.width),
-              devicePixelRatio: e.devicePixelRatio)),
-          standardThemes: standardMetaThemeDefinitions.map(
-              (e) => ThemeInfo(id: e.id, name: e.name, isDefault: e.isDefault)),
-          scales: storyScaleDefinitions
-              .map((e) => ScaleInfo(scale: e.scale, name: e.name))));
+          devices: deviceDefinitions.map((e) => DeviceInfoMapper().toInfo(e)),
+          standardThemes: standardMetaThemeDefinitions
+              .map((e) => ThemeInfoMapper().toInfo(e)),
+          scales:
+              storyScaleDefinitions.map((e) => ScaleInfoMapper().toInfo(e))));
 
   @override
   Future<ProjectDataInfo> getProjectData(ServiceCall call, Empty request) =>
@@ -53,10 +94,22 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
   }
 
   @override
-  Future<Empty> resetStory(ServiceCall call, Empty request) {
-    channelMethodsSender.resetStory();
-    selectionsStateManager.update((state) => state.copyWith(storyKey: null));
+  Future<Empty> setStory(ServiceCall call, StoryIdInfo request) {
+    var storyId = StoryIdInfoMapper().fromInfo(request);
+    channelMethodsSender.setStory(storyId);
+    selectionsStateManager.update((state) => state.copyWith(storyId: storyId));
     return Future.value(Empty());
+  }
+
+  @override
+  Future<Empty> resetStory(ServiceCall call, Empty request) {
+    _resetStory();
+    return Future.value(Empty());
+  }
+
+  void _resetStory() {
+    channelMethodsSender.resetStory();
+    selectionsStateManager.update((state) => state.copyWith(storyId: null));
   }
 
   @override
@@ -83,10 +136,14 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
 
   @override
   Future<Empty> setLocale(ServiceCall call, LocaleInfo request) {
-    channelMethodsSender.setActiveLocale(request.languageTag);
-    selectionsStateManager
-        .update((state) => state.copyWith(languageTag: request.languageTag));
+    _setLocale(request.languageTag);
     return Future.value(Empty());
+  }
+
+  void _setLocale(String languageTag) {
+    channelMethodsSender.setActiveLocale(languageTag);
+    selectionsStateManager
+        .update((state) => state.copyWith(languageTag: languageTag));
   }
 
   @override
@@ -94,14 +151,6 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
     channelMethodsSender.setStoryScale(request.scale);
     selectionsStateManager.update(
         (state) => state.copyWith(scale: ScaleInfoMapper().fromInfo(request)));
-    return Future.value(Empty());
-  }
-
-  @override
-  Future<Empty> setStory(ServiceCall call, StoryKeyInfo request) {
-    channelMethodsSender.loadStory(request.storyKey);
-    selectionsStateManager
-        .update((state) => state.copyWith(storyKey: request.storyKey));
     return Future.value(Empty());
   }
 
@@ -116,10 +165,13 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
 
   @override
   Future<Empty> setTheme(ServiceCall call, ThemeInfo request) {
-    channelMethodsSender.setActiveTheme(request.id);
-    selectionsStateManager.update(
-        (state) => state.copyWith(theme: ThemeInfoMapper().fromInfo(request)));
+    _setTheme(ThemeInfoMapper().fromInfo(request));
     return Future.value(Empty());
+  }
+
+  void _setTheme(MetaThemeDefinition theme) {
+    channelMethodsSender.setActiveTheme(theme.id);
+    selectionsStateManager.update((state) => state.copyWith(theme: theme));
   }
 
   @override

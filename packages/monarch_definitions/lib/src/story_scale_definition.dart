@@ -8,13 +8,13 @@ class StoryScaleDefinition {
   final String name;
 }
 
-class StoryScaleDefinitionMapper implements StandardMapper {
+class StoryScaleDefinitionMapper implements StandardMapper<StoryScaleDefinition> {
   @override
-  fromStandardMap(Map<String, dynamic> args) =>
+  StoryScaleDefinition fromStandardMap(Map<String, dynamic> args) =>
       StoryScaleDefinition(scale: args['scale'], name: args['name']);
 
   @override
-  Map<String, dynamic> toStandardMap(obj) =>
+  Map<String, dynamic> toStandardMap(StoryScaleDefinition obj) =>
       {'scale': obj.scale, 'name': obj.name};
 }
 

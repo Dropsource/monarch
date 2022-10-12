@@ -1,33 +1,6 @@
+import 'package:monarch_definitions/monarch_definitions.dart';
+
 import 'active_value.dart';
-
-class StoryId {
-  final String package;
-
-  /// The generated stories path. As of 2020-05-08, this path is
-  /// relative to the stories directory.
-  /// It looks like 'stories/foo_stories.g.dart'.
-  final String generatedPath;
-
-  final String name;
-
-  const StoryId(this.package, this.generatedPath, this.name);
-
-  factory StoryId.fromNodeKey(String key) {
-    ArgumentError.checkNotNull(key, 'key');
-    final segments = key.split('|');
-    if (segments.length != 3) {
-      throw ArgumentError('story id key must have 3 piped segments');
-    }
-
-    return StoryId(segments[0], segments[1], segments[2]);
-  }
-
-  String get pathKey => '$package|$generatedPath';
-  String get storyKey => '$package|$generatedPath|$name';
-
-  @override
-  String toString() => storyKey;
-}
 
 class ActiveStory extends ActiveValue<StoryId?> {
   StoryId? _activeStoryId;

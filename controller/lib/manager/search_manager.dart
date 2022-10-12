@@ -1,3 +1,5 @@
+import 'package:monarch_definitions/monarch_definitions.dart';
+
 import '../data/stories.dart';
 
 class SearchManager {
@@ -15,12 +17,12 @@ class SearchManager {
         continue;
       } else {
         //no match, trying to filter out individual stories
-        final storyOutput = <Story>[];
+        final storyOutput = <StoryId>[];
 
         for (var b = 0; b < group.stories.length; b++) {
-          final story = group.stories[b];
-          if (story.name.toLowerCase().contains(query)) {
-            storyOutput.add(story);
+          final storyId = group.stories[b];
+          if (storyId.storyName.toLowerCase().contains(query)) {
+            storyOutput.add(storyId);
           }
         }
 

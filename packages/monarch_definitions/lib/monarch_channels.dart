@@ -9,8 +9,7 @@ class MonarchMethods {
   static const readySignalAck = 'monarch.readySignalAck';
 
   static const monarchData = 'monarch.monarchData';
-  static const defaultTheme = 'monarch.defaultTheme';
-  static const loadStory = 'monarch.loadStory';
+  static const setStory = 'monarch.setStory';
   static const resetStory = 'monarch.resetStory';
   static const setActiveLocale = 'monarch.setActiveLocale';
   static const setActiveTheme = 'monarch.setActiveTheme';

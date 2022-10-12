@@ -7,7 +7,7 @@ abstract class AbstractChannelMethodsSender {
 
   void setTextScaleFactor(double scale);
 
-  void loadStory(String storyKey);
+  void setStory(StoryId storyId);
 
   void resetStory();
 

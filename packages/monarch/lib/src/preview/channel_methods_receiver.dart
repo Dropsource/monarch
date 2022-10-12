@@ -41,10 +41,9 @@ Future<dynamic> _handler(MethodCall call) async {
       readySignal.ready();
       return;
 
-    case MonarchMethods.loadStory:
-      String storyKey = args!['storyKey'];
+    case MonarchMethods.setStory:
       resetErrors();
-      activeStory.value = StoryId.fromNodeKey(storyKey);
+      activeStory.value = StoryIdMapper().fromStandardMap(args!);
       return;
 
     case MonarchMethods.resetStory:

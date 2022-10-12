@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:monarch_definitions/monarch_definitions.dart';
 import 'monarch_data.dart';
 
-const light = materialLightThemeDefinition;
-const dark = materialDarkThemeDefinition;
+const _light = materialLightThemeDefinition;
+const _dark = materialDarkThemeDefinition;
 
-final standardMetaThemes = [
-  MetaTheme(light.id, light.name, ThemeData.light(), light.isDefault),
-  MetaTheme(dark.id, dark.name, ThemeData.dark(), dark.isDefault)
-];
+final lightTheme =
+    MetaTheme(_light.id, _light.name, ThemeData.light(), _light.isDefault);
+final dartkTheme =
+    MetaTheme(_dark.id, _dark.name, ThemeData.dark(), _dark.isDefault);
+
+final defaultTheme = lightTheme;
+
+final standardMetaThemes = [lightTheme, dartkTheme];

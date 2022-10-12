@@ -6,132 +6,90 @@ import 'package:monarch_definitions/monarch_definitions.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'controller_state.dart';
+import 'controller_actions.dart';
 import 'search_manager.dart';
 import '../data/stories.dart';
-import '../data/visual_debug_flag_ui.dart';
-import '../data/grpc.dart';
 
 class ControllerManager with Log {
   final BehaviorSubject<ControllerState> _streamController =
       BehaviorSubject<ControllerState>();
-
   StreamSubscription<ControllerState>? _subscription;
-
   Stream<ControllerState> get stream => _streamController.stream;
+
   ControllerState _state = ControllerState.init();
+  ControllerActions? _actions;
 
   ControllerState get state => _state;
+  ControllerActions? get actions => _actions;
+
   final _searchManager = SearchManager();
 
-  final MonarchPreviewApiClient previewApi;
-
-  ControllerManager({required this.previewApi, ControllerState? initialState}) {
+  ControllerManager({ControllerState? initialState}) {
     _subscription = _streamController.listen((value) {
       _state = value;
     });
     _streamController.sink.add(initialState ?? ControllerState.init());
   }
 
-  void _userSelection(String kind) {
-    cliGrpcClientInstance.client!.userSelection(UserSelectionData(
-      kind: kind,
-      localeCount: state.locales.length,
-      userThemeCount: state.userThemes.length,
-      storyCount: state.storyCount,
-      selectedDevice: state.currentDevice.id,
-      selectedTextScaleFactor: state.textScaleFactor,
-      selectedStoryScale: state.currentScale.scale,
-      selectedDockSide: state.currentDock.id,
-      slowAnimationsEnabled:
-          state.visualDebugFlags[VisualDebugFlags.slowAnimations],
-      highlightRepaintsEnabled:
-          state.visualDebugFlags[VisualDebugFlags.highlightRepaints],
-      showGuidelinesEnabled:
-          state.visualDebugFlags[VisualDebugFlags.showGuidelines],
-      highlightOversizedImagesEnabled:
-          state.visualDebugFlags[VisualDebugFlags.highlightOversizedImages],
-      showBaselinesEnabled:
-          state.visualDebugFlags[VisualDebugFlags.showBaselines],
-    ));
+  void _update(ControllerState newState) {
+    _streamController.sink.add(newState);
   }
 
-  Iterable<StoryGroup> filterStories(List<StoryGroup> stories, String query) {
-    return _searchManager.filterStories(stories, query);
+  void setUpPreviewApi(MonarchPreviewApiClient previewApi) {
+    _actions = ControllerActions(previewApi, state);
   }
 
-  /// Called by UI when the user toggles a visual debug checkbox.
-  /// It will send a message to the preview api, which calls the preview window
-  /// via channel methods, which will call the vm service extension method for
-  /// the corresponding flag.
-  void onVisualDebugFlagToggledByUi(String flagName, bool isEnabled) {
-    previewApi.toggleVisualDebugFlag(
-        VisualDebugFlagInfo(name: flagName, isEnabled: !isEnabled));
-    _userSelection(getVisualDebugFlagToggledKey(flagName));
+  Future<void> loadInitialData() async {
+    var previewApi = _actions!.previewApi;
+
+    var referenceDataInfo = await previewApi.getReferenceData(Empty());
+    referenceDataChanged(referenceDataInfo);
+
+    var projectDataInfo = await previewApi.getProjectData(Empty());
+    projectDataChanged(projectDataInfo);
+
+    var selectionsStateInfo = await previewApi.getSelectionsState(Empty());
+    selectionsStateChanged(selectionsStateInfo);
+
+    _update(state.copyWith(isReady: true));
   }
 
-  void launchDevTools() {
-    previewApi.launchDevTools(Empty());
-    _userSelection('launch_devtools_clicked');
+  void referenceDataChanged(ReferenceDataInfo info) {
+    _referenceDataChanged(
+      devices: info.devices.map((e) => DeviceInfoMapper().fromInfo(e)).toList(),
+      standardThemes: info.standardThemes
+          .map((e) => ThemeInfoMapper().fromInfo(e))
+          .toList(),
+      scales: info.scales.map((e) => ScaleInfoMapper().fromInfo(e)).toList(),
+    );
   }
 
-  void onSelectionsStateChanged({
-    required String? storyKey,
-    required DeviceDefinition device,
-    required MetaThemeDefinition theme,
-    required String locale,
-    required StoryScaleDefinition scale,
-    required double textScaleFactor,
-    required DockDefinition dock,
-    required Map<String, bool> visualDebugFlags,
+  void _referenceDataChanged({
+    required List<DeviceDefinition> devices,
+    required List<MetaThemeDefinition> standardThemes,
+    required List<StoryScaleDefinition> scales,
   }) {
     _update(state.copyWith(
-      activeStoryKey: storyKey,
-      currentDevice: device,
-      currentTheme: theme,
-      currentLocale: locale,
-      currentScale: scale,
-      textScaleFactor: textScaleFactor,
-      currentDock: dock,
-      visualDebugFlags: visualDebugFlags,
+      devices: devices,
+      standardThemes: standardThemes,
+      scaleList: scales,
     ));
   }
 
-  void onActiveStoryChanged(String key) async {
-    previewApi.setStory(StoryKeyInfo(storyKey: key));
-    _userSelection('story_selected');
+  void projectDataChanged(ProjectDataInfo info) {
+    _projectDataChanged(
+      packageName: info.packageName,
+      storiesMap: info.storiesMap.map(
+          (key, value) => MapEntry(key, StoriesInfoMapper().fromInfo(value))),
+      projectThemes:
+          info.projectThemes.map((e) => ThemeInfoMapper().fromInfo(e)).toList(),
+      localizations: info.localizations
+          .map((e) => LocalizationInfoMapper().fromInfo(e))
+          .toList(),
+    );
   }
 
-  void onDeviceChanged(DeviceDefinition deviceDefinition) {
-    previewApi.setDevice(DeviceInfoMapper().toInfo(deviceDefinition));
-    _userSelection('device_selected');
-  }
-
-  void onThemeChanged(MetaThemeDefinition theme) {
-    previewApi.setTheme(ThemeInfoMapper().toInfo(theme));
-    _userSelection('theme_selected');
-  }
-
-  void onLocaleChanged(String locale) {
-    previewApi.setLocale(LocaleInfo(languageTag: locale));
-    _userSelection('locale_selected');
-  }
-
-  void onScaleChanged(StoryScaleDefinition scaleDefinition) {
-    previewApi.setScale(ScaleInfoMapper().toInfo(scaleDefinition));
-    _userSelection('story_scale_selected');
-  }
-
-  void onTextScaleFactorChanged(double val) {
-    previewApi.setTextScaleFactor(TextScaleFactorInfo(scale: val));
-    _userSelection('text_scale_factor_selected');
-  }
-
-  void onDockSettingsChange(DockDefinition dock) {
-    previewApi.setDock(DockInfoMapper().toInfo(dock));
-    _userSelection('dock_side_selected');
-  }
-
-  void onProjectDataChanged({
+  void _projectDataChanged({
     required String packageName,
     required Map<String, MetaStoriesDefinition> storiesMap,
     required List<MetaThemeDefinition> projectThemes,
@@ -157,32 +115,49 @@ class ControllerManager with Log {
     ));
   }
 
-  void onStandardThemesChanged(List<MetaThemeDefinition> standardThemes) {
-    var themeHelper = _ThemeHelper(
-        standardThemes: standardThemes,
-        userThemes: state.userThemes,
-        currentTheme: state.currentTheme);
+  void selectionsStateChanged(SelectionsStateInfo info) {
+    _selectionsStateChanged(
+      storyId:
+          info.hasStoryId() ? StoryIdInfoMapper().fromInfo(info.storyId) : null,
+      device: DeviceInfoMapper().fromInfo(info.device),
+      theme: ThemeInfoMapper().fromInfo(info.theme),
+      locale: info.locale.languageTag,
+      scale: ScaleInfoMapper().fromInfo(info.scale),
+      textScaleFactor: info.textScaleFactor,
+      dock: DockInfoMapper().fromInfo(info.dock),
+      visualDebugFlags: info.visualDebugFlags,
+    );
+  }
 
+  void _selectionsStateChanged({
+    required StoryId? storyId,
+    required DeviceDefinition device,
+    required MetaThemeDefinition theme,
+    required String locale,
+    required StoryScaleDefinition scale,
+    required double textScaleFactor,
+    required DockDefinition dock,
+    required Map<String, bool> visualDebugFlags,
+  }) {
     _update(state.copyWith(
-        standardThemes: standardThemes,
-        currentTheme: themeHelper.getCurrentTheme()));
+      currentStoryId: storyId,
+      currentDevice: device,
+      currentTheme: theme,
+      currentLocale: locale,
+      currentScale: scale,
+      textScaleFactor: textScaleFactor,
+      currentDock: dock,
+      visualDebugFlags: visualDebugFlags,
+    ));
   }
 
-  void onPreviewReady() {
-    _update(state.copyWith(isPreviewReady: true));
-  }
+  // TODO: remove?
+  // void onPreviewReady() {
+  //   _update(state.copyWith(isPreviewReady: true));
+  // }
 
-  void onStoryScaleDefinitionsChanged(
-      List<StoryScaleDefinition> scaleDefinitions) {
-    _update(state.copyWith(scaleList: scaleDefinitions));
-  }
-
-  void onDeviceDefinitionsChanged(List<DeviceDefinition> deviceDefinitions) {
-    _update(state.copyWith(devices: deviceDefinitions));
-  }
-
-  void _update(ControllerState newState) {
-    _streamController.sink.add(newState);
+  Iterable<StoryGroup> filterStories(List<StoryGroup> stories, String query) {
+    return _searchManager.filterStories(stories, query);
   }
 
   void dispose() {
@@ -193,28 +168,25 @@ class ControllerManager with Log {
 
   List<StoryGroup> _translateStories(
       Map<String, MetaStoriesDefinition> metaStoriesMap) {
-    return metaStoriesMap.entries
-        .map((group) => StoryGroup(
-            groupName: _readStoryGroupName(group.key),
-            groupKey: group.key,
-            stories: group.value.storiesNames
-                /// @NEXT: I want to create a richer Story object so I can pass
-                /// a StoryInfo to preview api with these properies
-                /// StoryInfo
-                /// - MapKey (the key in the stories map)
-                /// - package
-                /// - path
-                /// - storyName (the name of the stories in the list of stories in the path)
-                /// Then change preview to use the richer object. It has gotten harder (i.e. repetetive and error prone) to 
-                /// continue to parse the storyKey string, just pass a richer object around, like everything else.
-                .map((story) => Story(key: '${group.key}|$story', name: story))
-                .toList()))
-        .toList();
+    return metaStoriesMap.entries.map((storiesMapEntry) {
+      var storiesMapKey = storiesMapEntry.key;
+      var storiesDefinition = storiesMapEntry.value;
+      return StoryGroup(
+          groupName: _parseStoriesFileName(storiesMapKey),
+          groupKey: storiesMapKey,
+          stories: storiesDefinition.storiesNames
+              .map((storyName) => StoryId(
+                  storiesMapKey: storiesMapKey,
+                  package: storiesDefinition.package,
+                  path: storiesDefinition.path,
+                  storyName: storyName))
+              .toList());
+    }).toList();
   }
 
-  String _readStoryGroupName(String key) {
+  String _parseStoriesFileName(String key) {
     ///// As of 2020-04-15, the key looks like `$packageName|$generatedStoriesFilePath`
-    //test|stories/sample_button_stories.main_generated.g.dart
+    //test|stories/sample_button_stories.meta_stories.g.dart
     final firstSlash = key.indexOf('/');
     final firstDot = key.indexOf('.');
     return key.substring(firstSlash + 1, firstDot);

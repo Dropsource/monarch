@@ -22,9 +22,9 @@ class ChannelMethodsSender with Log implements AbstractChannelMethodsSender {
   }
 
   @override
-  void loadStory(String storyKey) {
+  void setStory(StoryId storyId) {
     _invokeMonarchChannelMethod(
-        MonarchMethods.loadStory, {'storyKey': storyKey});
+        MonarchMethods.setStory, StoryIdMapper().toStandardMap(storyId));
   }
 
   @override

@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
 
 class StoryGroup {
   final String groupName;
-  final List<Story> stories;
+  final List<StoryId> stories;
   final String groupKey;
 
   StoryGroup({
@@ -21,32 +22,11 @@ class StoryGroup {
   @override
   int get hashCode => groupName.hashCode ^ stories.hashCode;
 
-  StoryGroup copyWith({List<Story>? stories}) {
+  StoryGroup copyWith({List<StoryId>? stories}) {
     return StoryGroup(
       groupName: groupName,
       stories: stories ?? this.stories,
       groupKey: groupKey,
     );
   }
-}
-
-class Story {
-  final String name;
-  final String key;
-
-  Story({
-    required this.name,
-    required this.key,
-  });
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Story &&
-          runtimeType == other.runtimeType &&
-          name == other.name &&
-          key == other.key;
-
-  @override
-  int get hashCode => name.hashCode ^ key.hashCode;
 }

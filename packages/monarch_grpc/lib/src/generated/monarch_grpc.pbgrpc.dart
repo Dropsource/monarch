@@ -32,9 +32,9 @@ class MonarchPreviewApiClient extends $grpc.Client {
           ($0.Empty value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $0.SelectionsStateInfo.fromBuffer(value));
-  static final _$setStory = $grpc.ClientMethod<$0.StoryKeyInfo, $0.Empty>(
+  static final _$setStory = $grpc.ClientMethod<$0.StoryIdInfo, $0.Empty>(
       '/monarch_grpc.MonarchPreviewApi/SetStory',
-      ($0.StoryKeyInfo value) => value.writeToBuffer(),
+      ($0.StoryIdInfo value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
   static final _$resetStory = $grpc.ClientMethod<$0.Empty, $0.Empty>(
       '/monarch_grpc.MonarchPreviewApi/ResetStory',
@@ -109,7 +109,7 @@ class MonarchPreviewApiClient extends $grpc.Client {
     return $createUnaryCall(_$getSelectionsState, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.Empty> setStory($0.StoryKeyInfo request,
+  $grpc.ResponseFuture<$0.Empty> setStory($0.StoryIdInfo request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$setStory, request, options: options);
   }
@@ -203,12 +203,12 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
         ($0.SelectionsStateInfo value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.StoryKeyInfo, $0.Empty>(
+    $addMethod($grpc.ServiceMethod<$0.StoryIdInfo, $0.Empty>(
         'SetStory',
         setStory_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.StoryKeyInfo.fromBuffer(value),
+        ($core.List<$core.int> value) => $0.StoryIdInfo.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.Empty, $0.Empty>(
         'ResetStory',
@@ -314,7 +314,7 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
   }
 
   $async.Future<$0.Empty> setStory_Pre(
-      $grpc.ServiceCall call, $async.Future<$0.StoryKeyInfo> request) async {
+      $grpc.ServiceCall call, $async.Future<$0.StoryIdInfo> request) async {
     return setStory(call, await request);
   }
 
@@ -385,7 +385,7 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
   $async.Future<$0.SelectionsStateInfo> getSelectionsState(
       $grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.Empty> setStory(
-      $grpc.ServiceCall call, $0.StoryKeyInfo request);
+      $grpc.ServiceCall call, $0.StoryIdInfo request);
   $async.Future<$0.Empty> resetStory($grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.Empty> setTextScaleFactor(
       $grpc.ServiceCall call, $0.TextScaleFactorInfo request);

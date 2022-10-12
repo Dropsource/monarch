@@ -55,7 +55,7 @@ final $typed_data.Uint8List projectDataInfoDescriptor = $convert.base64Decode('C
 const SelectionsStateInfo$json = const {
   '1': 'SelectionsStateInfo',
   '2': const [
-    const {'1': 'storyKey', '3': 1, '4': 1, '5': 9, '10': 'storyKey'},
+    const {'1': 'storyId', '3': 1, '4': 1, '5': 11, '6': '.monarch_grpc.StoryIdInfo', '10': 'storyId'},
     const {'1': 'device', '3': 2, '4': 1, '5': 11, '6': '.monarch_grpc.DeviceInfo', '10': 'device'},
     const {'1': 'theme', '3': 3, '4': 1, '5': 11, '6': '.monarch_grpc.ThemeInfo', '10': 'theme'},
     const {'1': 'locale', '3': 4, '4': 1, '5': 11, '6': '.monarch_grpc.LocaleInfo', '10': 'locale'},
@@ -78,17 +78,20 @@ const SelectionsStateInfo_VisualDebugFlagsEntry$json = const {
 };
 
 /// Descriptor for `SelectionsStateInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List selectionsStateInfoDescriptor = $convert.base64Decode('ChNTZWxlY3Rpb25zU3RhdGVJbmZvEhoKCHN0b3J5S2V5GAEgASgJUghzdG9yeUtleRIwCgZkZXZpY2UYAiABKAsyGC5tb25hcmNoX2dycGMuRGV2aWNlSW5mb1IGZGV2aWNlEi0KBXRoZW1lGAMgASgLMhcubW9uYXJjaF9ncnBjLlRoZW1lSW5mb1IFdGhlbWUSMAoGbG9jYWxlGAQgASgLMhgubW9uYXJjaF9ncnBjLkxvY2FsZUluZm9SBmxvY2FsZRIoCg90ZXh0U2NhbGVGYWN0b3IYBSABKAFSD3RleHRTY2FsZUZhY3RvchItCgVzY2FsZRgGIAEoCzIXLm1vbmFyY2hfZ3JwYy5TY2FsZUluZm9SBXNjYWxlEioKBGRvY2sYByABKAsyFi5tb25hcmNoX2dycGMuRG9ja0luZm9SBGRvY2sSYwoQdmlzdWFsRGVidWdGbGFncxgIIAMoCzI3Lm1vbmFyY2hfZ3JwYy5TZWxlY3Rpb25zU3RhdGVJbmZvLlZpc3VhbERlYnVnRmxhZ3NFbnRyeVIQdmlzdWFsRGVidWdGbGFncxpDChVWaXN1YWxEZWJ1Z0ZsYWdzRW50cnkSEAoDa2V5GAEgASgJUgNrZXkSFAoFdmFsdWUYAiABKAhSBXZhbHVlOgI4AQ==');
-@$core.Deprecated('Use storyKeyInfoDescriptor instead')
-const StoryKeyInfo$json = const {
-  '1': 'StoryKeyInfo',
+final $typed_data.Uint8List selectionsStateInfoDescriptor = $convert.base64Decode('ChNTZWxlY3Rpb25zU3RhdGVJbmZvEjMKB3N0b3J5SWQYASABKAsyGS5tb25hcmNoX2dycGMuU3RvcnlJZEluZm9SB3N0b3J5SWQSMAoGZGV2aWNlGAIgASgLMhgubW9uYXJjaF9ncnBjLkRldmljZUluZm9SBmRldmljZRItCgV0aGVtZRgDIAEoCzIXLm1vbmFyY2hfZ3JwYy5UaGVtZUluZm9SBXRoZW1lEjAKBmxvY2FsZRgEIAEoCzIYLm1vbmFyY2hfZ3JwYy5Mb2NhbGVJbmZvUgZsb2NhbGUSKAoPdGV4dFNjYWxlRmFjdG9yGAUgASgBUg90ZXh0U2NhbGVGYWN0b3ISLQoFc2NhbGUYBiABKAsyFy5tb25hcmNoX2dycGMuU2NhbGVJbmZvUgVzY2FsZRIqCgRkb2NrGAcgASgLMhYubW9uYXJjaF9ncnBjLkRvY2tJbmZvUgRkb2NrEmMKEHZpc3VhbERlYnVnRmxhZ3MYCCADKAsyNy5tb25hcmNoX2dycGMuU2VsZWN0aW9uc1N0YXRlSW5mby5WaXN1YWxEZWJ1Z0ZsYWdzRW50cnlSEHZpc3VhbERlYnVnRmxhZ3MaQwoVVmlzdWFsRGVidWdGbGFnc0VudHJ5EhAKA2tleRgBIAEoCVIDa2V5EhQKBXZhbHVlGAIgASgIUgV2YWx1ZToCOAE=');
+@$core.Deprecated('Use storyIdInfoDescriptor instead')
+const StoryIdInfo$json = const {
+  '1': 'StoryIdInfo',
   '2': const [
-    const {'1': 'storyKey', '3': 1, '4': 1, '5': 9, '10': 'storyKey'},
+    const {'1': 'storiesMapKey', '3': 1, '4': 1, '5': 9, '10': 'storiesMapKey'},
+    const {'1': 'package', '3': 2, '4': 1, '5': 9, '10': 'package'},
+    const {'1': 'path', '3': 3, '4': 1, '5': 9, '10': 'path'},
+    const {'1': 'storyName', '3': 4, '4': 1, '5': 9, '10': 'storyName'},
   ],
 };
 
-/// Descriptor for `StoryKeyInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List storyKeyInfoDescriptor = $convert.base64Decode('CgxTdG9yeUtleUluZm8SGgoIc3RvcnlLZXkYASABKAlSCHN0b3J5S2V5');
+/// Descriptor for `StoryIdInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List storyIdInfoDescriptor = $convert.base64Decode('CgtTdG9yeUlkSW5mbxIkCg1zdG9yaWVzTWFwS2V5GAEgASgJUg1zdG9yaWVzTWFwS2V5EhgKB3BhY2thZ2UYAiABKAlSB3BhY2thZ2USEgoEcGF0aBgDIAEoCVIEcGF0aBIcCglzdG9yeU5hbWUYBCABKAlSCXN0b3J5TmFtZQ==');
 @$core.Deprecated('Use storiesInfoDescriptor instead')
 const StoriesInfo$json = const {
   '1': 'StoriesInfo',

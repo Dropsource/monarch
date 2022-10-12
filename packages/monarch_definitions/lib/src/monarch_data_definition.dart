@@ -2,6 +2,7 @@ import 'meta_localization_definition.dart';
 import 'meta_stories_definition.dart';
 import 'meta_theme_definition.dart';
 import 'standard_mapper.dart';
+import 'story_id.dart';
 
 class MonarchDataDefinition {
   final String packageName;
@@ -24,6 +25,12 @@ class MonarchDataDefinition {
       required this.metaLocalizationDefinitions,
       required this.metaThemeDefinitions,
       required this.metaStoriesDefinitionMap});
+
+  bool hasStory(StoryId storyId) =>
+      metaStoriesDefinitionMap.containsKey(storyId.storiesMapKey) &&
+      metaStoriesDefinitionMap[storyId.storiesMapKey]!
+          .storiesNames
+          .contains(storyId.storyName);
 }
 
 class MonarchDataDefinitionMapper
@@ -42,9 +49,9 @@ class MonarchDataDefinitionMapper
             (e) => MetaThemeDefinitionMapper().fromStandardMap(e))
         .toList();
 
-    Map<String, MetaStoriesDefinition> metaStoriesDefinitionMap = args['metaStoriesMap']
-        .map<String, MetaStoriesDefinition>((key, value) =>
-            MapEntry<String, MetaStoriesDefinition>(
+    Map<String, MetaStoriesDefinition> metaStoriesDefinitionMap =
+        args['metaStoriesMap'].map<String, MetaStoriesDefinition>(
+            (key, value) => MapEntry<String, MetaStoriesDefinition>(
                 key, MetaStoriesDefinitionMapper().fromStandardMap(value)));
 
     return MonarchDataDefinition(

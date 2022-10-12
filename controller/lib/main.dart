@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:grpc/grpc.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:monarch_controller/data/channel_methods_sender.dart';
+import 'package:monarch_controller/data/preview_notifications_api_service.dart';
+import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
 
 import 'package:monarch_utils/log_config.dart';
@@ -11,12 +13,12 @@ import 'package:monarch_controller/utils/localization.dart';
 import 'package:monarch_controller/default_theme.dart' as theme;
 import 'package:monarch_controller/manager/controller_manager.dart';
 import 'package:monarch_controller/screens/controller_screen.dart';
-import 'package:monarch_controller/data/channel_methods_receiver.dart';
-import 'data/grpc.dart';
 
-final manager = ControllerManager(channelMethodsSender: channelMethodsSender);
+import 'data/preview_api_client.dart';
 
 final _logger = Logger('ControllerMain');
+
+final manager = ControllerManager();
 
 void main(List<String> arguments) async {
   _setUpLog();
@@ -37,8 +39,7 @@ void main(List<String> arguments) async {
 
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MonarchControllerApp());
-  setUpGrpc(cliGrpcServerPort);
-  receiveChannelMethodCalls();
+  setUpChannels(cliGrpcServerPort);
 }
 
 void _setUpLog() {
@@ -48,24 +49,34 @@ void _setUpLog() {
   logCurrentProcessInformation(_logger, LogLevel.FINE);
 }
 
+void setUpChannels(int cliServerPort) async {
+  _logger.info(
+      'Will use cli grpc server (discovery service) at port $cliServerPort');
+  var channel = constructClientChannel(cliServerPort);
+  var discoveryClient = MonarchDiscoveryApiClient(channel);
+
+  var server = Server([PreviewNotificationsApiService(manager)]);
+  await server.serve(port: 0);
+  var previewNotificationsApiPort = server.port!;
+  _logger.info(
+      'preview_notifications_api grpc server (preview notifications api service) started on port $previewNotificationsApiPort');
+  discoveryClient.registerPreviewNotificationsApi(
+      ServerInfo(port: previewNotificationsApiPort));
+
+  var previewApiClient = await getPreviewApiClient(discoveryClient);
+  if (previewApiClient == null) {
+    _logger.severe('Controller could not find Monarch Preview API');
+    exit(1);
+  }
+  manager.setUpPreviewApi(previewApiClient);
+  await manager.loadInitialData();
+}
+
 class MonarchControllerApp extends StatelessWidget {
   const MonarchControllerApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    /// @TODO: this should be stateful, first show a Loading screen
-    /// then poll the discovery api until we get a preview api port
-    /// then, hmm... maybe get rid of the `previewReady` flag, it is really just 
-    /// waiting on the project data, which the controller can work with if it gets
-    /// empty project data, figure out the ready signals later once i see it working?
-    /// i will also register the notification api thus it will start getting data
-    /// ok.... so the preview api might need to be nullable inside the manager
-    /// it has default data, the previewReady flag might not work since we may 
-    /// miss the notification, but there is nothing the user can do until the preview api
-    /// is accessible, so let the manager work with just the notifications api
-    /// and when we have a preview api we let the ui fly, the manager can have a nullable preview api
-    /// the polling instantiates it, we set the manager with it, and then the ui is let loose, 
-    /// something like that
     return MaterialApp(
         title: 'Monarch Controller',
         theme: theme.theme,

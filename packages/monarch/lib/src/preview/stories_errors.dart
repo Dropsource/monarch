@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import 'active_story.dart';
@@ -156,13 +157,13 @@ String _getActiveStoryErrorMessage() {
 
 String _getRelevantStoryMessage(StoryId activeStoryId) {
   var metaStories =
-      monarchDataManager.data!.metaStoriesMap[activeStoryId.pathKey];
+      monarchDataManager.data!.metaStoriesMap[activeStoryId.storiesMapKey];
   if (metaStories == null) {
-    return 'Unexpected - Could not find meta stories for ${activeStoryId.pathKey}';
+    return 'Unexpected - Could not find meta stories for ${activeStoryId.storiesMapKey}';
   }
   return '''
 The relevant story is:
-  ${metaStories.path} > ${activeStoryId.name}''';
+  ${metaStories.path} > ${activeStoryId.storyName}''';
 }
 
 void resetErrors() {

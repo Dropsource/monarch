@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:monarch_definitions/monarch_definitions.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
 
+import 'project_data.dart';
+
 class SelectionsState {
-  final String? storyKey;
+  final StoryId? storyId;
   final DeviceDefinition device;
   final MetaThemeDefinition theme;
   final String languageTag;
@@ -14,7 +16,7 @@ class SelectionsState {
   final Map<String, bool> visualDebugFlags;
 
   SelectionsState({
-    required this.storyKey,
+    required this.storyId,
     required this.device,
     required this.theme,
     required this.languageTag,
@@ -25,7 +27,7 @@ class SelectionsState {
   });
 
   factory SelectionsState.init() => SelectionsState(
-      storyKey: null,
+      storyId: null,
       device: defaultDeviceDefinition,
       theme: defaultThemeDefinition,
       languageTag: defaultLocale,
@@ -35,7 +37,7 @@ class SelectionsState {
       visualDebugFlags: defaultVisualDebugFlags);
 
   SelectionsState copyWith({
-    String? storyKey,
+    StoryId? storyId,
     DeviceDefinition? device,
     MetaThemeDefinition? theme,
     String? languageTag,
@@ -45,7 +47,7 @@ class SelectionsState {
     Map<String, bool>? visualDebugFlags,
   }) =>
       SelectionsState(
-          storyKey: storyKey ?? this.storyKey,
+          storyId: storyId ?? this.storyId,
           device: device ?? this.device,
           theme: theme ?? this.theme,
           languageTag: languageTag ?? this.languageTag,
@@ -55,7 +57,7 @@ class SelectionsState {
           visualDebugFlags: visualDebugFlags ?? this.visualDebugFlags);
 
   SelectionsStateInfo toInfo() => SelectionsStateInfo(
-        storyKey: storyKey,
+        storyId: storyId == null ? null : StoryIdInfoMapper().toInfo(storyId!),
         device: DeviceInfoMapper().toInfo(device),
         theme: ThemeInfoMapper().toInfo(theme),
         locale: LocaleInfo(languageTag: languageTag),
@@ -67,10 +69,11 @@ class SelectionsState {
 
   Map<String, dynamic> toStandardMap() {
     return {
+      'storyId':
+          storyId == null ? null : StoryIdMapper().toStandardMap(storyId!),
       'device': DeviceDefinitionMapper().toStandardMap(device),
       'scale': StoryScaleDefinitionMapper().toStandardMap(scale),
       'dock': dock.id,
-      'activeStoryKey': storyKey,
       'themeId': theme.id,
       'locale': languageTag,
       'textScaleFactor': textScaleFactor,
@@ -84,7 +87,7 @@ class SelectionsState {
 class SelectionsStateManager {
   SelectionsState _state = SelectionsState.init();
   SelectionsState get state => _state;
-  
+
   final _controller = StreamController<SelectionsState>.broadcast();
   Stream<SelectionsState> get stream => _controller.stream;
 

@@ -15,7 +15,7 @@ import 'src/selections_state.dart';
 final _logger = Logger('PreviewApiMain');
 
 final projectDataManager = ProjectDataManager();
-final selectionsStateManager = SelectionsStateManager(projectDataManager);
+final selectionsStateManager = SelectionsStateManager();
 
 void main(List<String> arguments) async {
   _setUpLog();
@@ -50,8 +50,7 @@ void setUpChannels(int cliServerPort) async {
   var channel = constructClientChannel(cliServerPort);
   var discoveryClient = MonarchDiscoveryApiClient(channel);
 
-  var previewNotifications = PreviewNotifications(
-      discoveryClient, projectDataManager, selectionsStateManager);
+  var previewNotifications = PreviewNotifications(discoveryClient);
   var channelMethodsSender = ChannelMethodsSender();
 
   var server = Server([

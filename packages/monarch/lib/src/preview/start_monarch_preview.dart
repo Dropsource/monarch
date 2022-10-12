@@ -6,12 +6,8 @@ import 'package:monarch_utils/log_config.dart';
 
 import 'monarch_data_manager.dart';
 import 'ready_signal.dart';
-import 'device_definitions.dart';
-import 'story_scale_definitions.dart';
-import 'active_theme.dart';
 import 'channel_methods_sender.dart';
 import 'channel_methods_receiver.dart';
-import 'standard_themes.dart';
 import 'stories_errors.dart';
 import 'monarch_preview.dart';
 import 'monarch_data.dart';
@@ -50,7 +46,6 @@ void _startMonarchPreview(MonarchData Function() getMonarchData) async {
   receiveChannelMethodCalls();
   await _controllerReady();
   await _connectToVmService();
-  await _sendDefinitions();
   await monarchDataManager.sendChannelMethods();
   await channelMethodsSender.sendReadySignal();
 }
@@ -97,18 +92,6 @@ Future<void> _connectToVmService() async {
         e,
         s);
   }
-}
-
-Future<void> _sendDefinitions() async {
-  await channelMethodsSender.sendDefaultTheme(activeTheme.defaultMetaTheme);
-  /// @TODO: device definitions and story scale definitions are referenced data, 
-  /// the preview server will send them to the controller, the preview won't need them anymore
-  await channelMethodsSender.sendDeviceDefinitions(DeviceDefinitions());
-  await channelMethodsSender.sendStoryScaleDefinitions(StoryScaleDefinitions());
-  /// @TODO: the preview has the standard themes due to the ThemeData object,
-  /// right now I'm thinking that the preview should send it to the preview server, which
-  /// will then send it to its clients (i.e. the controller)
-  await channelMethodsSender.sendStandardThemes(StandardThemes());
 }
 
 Future dispose() async {

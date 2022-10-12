@@ -10,11 +10,12 @@ class PreviewNotificationsApiService
 
   PreviewNotificationsApiService(this.manager);
 
+  // TODO: remove?
   @override
   Future<Empty> previewReady(ServiceCall call, Empty request) {
-    if (!manager.state.isPreviewReady) {
-      manager.onPreviewReady();
-    }
+    // if (!manager.state.isPreviewReady) {
+    //   manager.onPreviewReady();
+    // }
     return Future.value(Empty());
   }
 
@@ -26,31 +27,14 @@ class PreviewNotificationsApiService
 
   @override
   Future<Empty> projectDataChanged(ServiceCall call, ProjectDataInfo request) {
-    manager.onProjectDataChanged(
-        packageName: request.packageName,
-        storiesMap: request.storiesMap.map(
-            (key, value) => MapEntry(key, StoriesInfoMapper().fromInfo(value))),
-        projectThemes: request.projectThemes
-            .map((e) => ThemeInfoMapper().fromInfo(e))
-            .toList(),
-        localizations: request.localizations
-            .map((e) => LocalizationInfoMapper().fromInfo(e))
-            .toList());
+    manager.projectDataChanged(request);
     return Future.value(Empty());
   }
 
   @override
   Future<Empty> selectionsStateChanged(
       ServiceCall call, SelectionsStateInfo request) {
-    manager.onSelectionsStateChanged(
-        storyKey: request.hasStoryKey() ? request.storyKey : null,
-        device: DeviceInfoMapper().fromInfo(request.device),
-        theme: ThemeInfoMapper().fromInfo(request.theme),
-        locale: request.locale.languageTag,
-        scale: ScaleInfoMapper().fromInfo(request.scale),
-        textScaleFactor: request.textScaleFactor,
-        dock: DockInfoMapper().fromInfo(request.dock),
-        visualDebugFlags: request.visualDebugFlags);
+    manager.selectionsStateChanged(request);
     return Future.value(Empty());
   }
 

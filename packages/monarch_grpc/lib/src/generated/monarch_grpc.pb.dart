@@ -168,7 +168,7 @@ class ProjectDataInfo extends $pb.GeneratedMessage {
 
 class SelectionsStateInfo extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'SelectionsStateInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'storyKey', protoName: 'storyKey')
+    ..aOM<StoryIdInfo>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'storyId', protoName: 'storyId', subBuilder: StoryIdInfo.create)
     ..aOM<DeviceInfo>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'device', subBuilder: DeviceInfo.create)
     ..aOM<ThemeInfo>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'theme', subBuilder: ThemeInfo.create)
     ..aOM<LocaleInfo>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'locale', subBuilder: LocaleInfo.create)
@@ -181,7 +181,7 @@ class SelectionsStateInfo extends $pb.GeneratedMessage {
 
   SelectionsStateInfo._() : super();
   factory SelectionsStateInfo({
-    $core.String? storyKey,
+    StoryIdInfo? storyId,
     DeviceInfo? device,
     ThemeInfo? theme,
     LocaleInfo? locale,
@@ -191,8 +191,8 @@ class SelectionsStateInfo extends $pb.GeneratedMessage {
     $core.Map<$core.String, $core.bool>? visualDebugFlags,
   }) {
     final _result = create();
-    if (storyKey != null) {
-      _result.storyKey = storyKey;
+    if (storyId != null) {
+      _result.storyId = storyId;
     }
     if (device != null) {
       _result.device = device;
@@ -239,13 +239,15 @@ class SelectionsStateInfo extends $pb.GeneratedMessage {
   static SelectionsStateInfo? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get storyKey => $_getSZ(0);
+  StoryIdInfo get storyId => $_getN(0);
   @$pb.TagNumber(1)
-  set storyKey($core.String v) { $_setString(0, v); }
+  set storyId(StoryIdInfo v) { setField(1, v); }
   @$pb.TagNumber(1)
-  $core.bool hasStoryKey() => $_has(0);
+  $core.bool hasStoryId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearStoryKey() => clearField(1);
+  void clearStoryId() => clearField(1);
+  @$pb.TagNumber(1)
+  StoryIdInfo ensureStoryId() => $_ensure(0);
 
   @$pb.TagNumber(2)
   DeviceInfo get device => $_getN(1);
@@ -315,51 +317,93 @@ class SelectionsStateInfo extends $pb.GeneratedMessage {
   $core.Map<$core.String, $core.bool> get visualDebugFlags => $_getMap(7);
 }
 
-class StoryKeyInfo extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'StoryKeyInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'storyKey', protoName: 'storyKey')
+class StoryIdInfo extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'StoryIdInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'storiesMapKey', protoName: 'storiesMapKey')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'package')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'path')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'storyName', protoName: 'storyName')
     ..hasRequiredFields = false
   ;
 
-  StoryKeyInfo._() : super();
-  factory StoryKeyInfo({
-    $core.String? storyKey,
+  StoryIdInfo._() : super();
+  factory StoryIdInfo({
+    $core.String? storiesMapKey,
+    $core.String? package,
+    $core.String? path,
+    $core.String? storyName,
   }) {
     final _result = create();
-    if (storyKey != null) {
-      _result.storyKey = storyKey;
+    if (storiesMapKey != null) {
+      _result.storiesMapKey = storiesMapKey;
+    }
+    if (package != null) {
+      _result.package = package;
+    }
+    if (path != null) {
+      _result.path = path;
+    }
+    if (storyName != null) {
+      _result.storyName = storyName;
     }
     return _result;
   }
-  factory StoryKeyInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory StoryKeyInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory StoryIdInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory StoryIdInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  StoryKeyInfo clone() => StoryKeyInfo()..mergeFromMessage(this);
+  StoryIdInfo clone() => StoryIdInfo()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  StoryKeyInfo copyWith(void Function(StoryKeyInfo) updates) => super.copyWith((message) => updates(message as StoryKeyInfo)) as StoryKeyInfo; // ignore: deprecated_member_use
+  StoryIdInfo copyWith(void Function(StoryIdInfo) updates) => super.copyWith((message) => updates(message as StoryIdInfo)) as StoryIdInfo; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static StoryKeyInfo create() => StoryKeyInfo._();
-  StoryKeyInfo createEmptyInstance() => create();
-  static $pb.PbList<StoryKeyInfo> createRepeated() => $pb.PbList<StoryKeyInfo>();
+  static StoryIdInfo create() => StoryIdInfo._();
+  StoryIdInfo createEmptyInstance() => create();
+  static $pb.PbList<StoryIdInfo> createRepeated() => $pb.PbList<StoryIdInfo>();
   @$core.pragma('dart2js:noInline')
-  static StoryKeyInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StoryKeyInfo>(create);
-  static StoryKeyInfo? _defaultInstance;
+  static StoryIdInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StoryIdInfo>(create);
+  static StoryIdInfo? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get storyKey => $_getSZ(0);
+  $core.String get storiesMapKey => $_getSZ(0);
   @$pb.TagNumber(1)
-  set storyKey($core.String v) { $_setString(0, v); }
+  set storiesMapKey($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasStoryKey() => $_has(0);
+  $core.bool hasStoriesMapKey() => $_has(0);
   @$pb.TagNumber(1)
-  void clearStoryKey() => clearField(1);
+  void clearStoriesMapKey() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get package => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set package($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasPackage() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPackage() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get path => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set path($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasPath() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearPath() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get storyName => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set storyName($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasStoryName() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearStoryName() => clearField(4);
 }
 
 class StoriesInfo extends $pb.GeneratedMessage {

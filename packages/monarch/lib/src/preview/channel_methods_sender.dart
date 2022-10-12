@@ -22,26 +22,6 @@ class ChannelMethodsSender with Log {
     return _invokeMonarchChannelMethod(MonarchMethods.ping);
   }
 
-  Future sendDeviceDefinitions(List<DeviceDefinition> definitions) {
-    return _invokeMonarchChannelMethod(MonarchMethods.deviceDefinitions,
-        DeviceDefinitionListMapper().toStandardMap(definitions));
-  }
-
-  Future sendStoryScaleDefinitions(List<StoryScaleDefinition> definitions) {
-    return _invokeMonarchChannelMethod(MonarchMethods.storyScaleDefinitions,
-        StoryScaleDefinitionListMapper().toStandardMap(definitions));
-  }
-
-  Future sendStandardThemes(List<MetaThemeDefinition> definitions) {
-    return _invokeMonarchChannelMethod(MonarchMethods.standardThemes,
-        StandardThemesMapper().toStandardMap(definitions));
-  }
-
-  Future sendDefaultTheme(MetaThemeDefinition themeDefinition) {
-    return _invokeMonarchChannelMethod(MonarchMethods.defaultTheme,
-        MetaThemeDefinitionMapper().toStandardMap(themeDefinition));
-  }
-
   Future sendMonarchData(MonarchDataDefinition monarchData) {
     return _invokeMonarchChannelMethod(MonarchMethods.monarchData,
         MonarchDataDefinitionMapper().toStandardMap(monarchData));
@@ -49,25 +29,25 @@ class ChannelMethodsSender with Log {
 
   Future getState() async {
     var state = await _invokeMonarchChannelMethod(MonarchMethods.getState);
-    var activeStoryKey = state['activeStoryKey'];
+    var storyIdArgs = state['storyId'];
     var deviceArgs = state['device'];
     var themeId = state['themeId'];
     var locale = state['locale'];
     var textScaleFactor = state['textScaleFactor'];
-    var scale = state['scale']['scale'];
+    var scaleArgs = state['scale'];
     var visualDebugFlags = state['visualDebugFlags'];
 
     resetErrors();
-    if (activeStoryKey == null) {
+    if (storyIdArgs == null) {
       activeStory.value = null;
     } else {
-      activeStory.value = StoryId.fromNodeKey(activeStoryKey);
+      activeStory.value = StoryIdMapper().fromStandardMap(storyIdArgs);
     }
     activeLocale.setActiveLocaleTag(locale);
     activeTheme.value = activeTheme.getMetaTheme(themeId);
     activeDevice.value = DeviceDefinitionMapper().fromStandardMap(deviceArgs);
     activeTextScaleFactor.value = textScaleFactor;
-    activeStoryScale.value = scale;
+    activeStoryScale.value = StoryScaleDefinitionMapper().fromStandardMap(scaleArgs).scale;
     for (var flagArgs in visualDebugFlags) {
       var flag = VisualDebugFlagMapper().fromStandardMap(flagArgs);
       await visual_debug.toggleFlagViaVmServiceExtension(

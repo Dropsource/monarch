@@ -2,11 +2,11 @@ import 'package:monarch_definitions/monarch_definitions.dart';
 import '../data/stories.dart';
 
 class ControllerState {
-  final bool isPreviewReady;
+  final bool isReady;
   final String packageName;
   final List<StoryGroup> storyGroups;
   final Set<String> collapsedGroupKeys;
-  final String? activeStoryKey;
+  final StoryId? currentStoryId;
 
   final DeviceDefinition currentDevice;
   final List<DeviceDefinition> devices;
@@ -33,10 +33,10 @@ class ControllerState {
       0, (previousValue, element) => previousValue + element.stories.length);
 
   ControllerState({
-    required this.isPreviewReady,
+    required this.isReady,
     this.packageName = '',
     this.storyGroups = const [],
-    this.activeStoryKey,
+    this.currentStoryId,
     required this.devices,
     required this.currentDevice,
     required this.locales,
@@ -54,7 +54,7 @@ class ControllerState {
   });
 
   factory ControllerState.init() => ControllerState(
-        isPreviewReady: false,
+        isReady: false,
         collapsedGroupKeys: {},
         devices: [defaultDeviceDefinition],
         currentDevice: defaultDeviceDefinition,
@@ -72,10 +72,10 @@ class ControllerState {
       );
 
   ControllerState copyWith({
-    String? activeStoryKey,
+    StoryId? currentStoryId,
     String? packageName,
     List<StoryGroup>? storyGroups,
-    bool? isPreviewReady,
+    bool? isReady,
     List<DeviceDefinition>? devices,
     DeviceDefinition? currentDevice,
     String? currentLocale,
@@ -90,9 +90,9 @@ class ControllerState {
     List<StoryScaleDefinition>? scaleList,
   }) =>
       ControllerState(
-        activeStoryKey: activeStoryKey ?? this.activeStoryKey,
+        currentStoryId: currentStoryId ?? this.currentStoryId,
         storyGroups: storyGroups ?? this.storyGroups,
-        isPreviewReady: isPreviewReady ?? this.isPreviewReady,
+        isReady: isReady ?? this.isReady,
         devices: devices ?? this.devices,
         currentDevice: currentDevice ?? this.currentDevice,
         locales: locales ?? this.locales,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stockholm/stockholm.dart';
 
 import '../../../utils/translations.dart';
-import '../../data/visual_debug_flag_ui.dart';
+import '../../data/visual_debug_flag_utils.dart';
 
 class CheckboxList extends StatelessWidget {
   final Map<String, bool> visualDebugFlags;

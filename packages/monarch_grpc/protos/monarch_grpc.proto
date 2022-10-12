@@ -8,7 +8,7 @@ service MonarchPreviewApi {
     rpc GetProjectData(Empty) returns (ProjectDataInfo) {}
     rpc GetSelectionsState(Empty) returns (SelectionsStateInfo) {}
 
-    rpc SetStory(StoryKeyInfo) returns (Empty) {}
+    rpc SetStory(StoryIdInfo) returns (Empty) {}
     rpc ResetStory(Empty) returns (Empty) {}
     rpc SetTextScaleFactor(TextScaleFactorInfo) returns (Empty) {}
     rpc SetLocale(LocaleInfo) returns (Empty) {}
@@ -60,7 +60,7 @@ message ProjectDataInfo {
 }
 
 message SelectionsStateInfo {
-    string storyKey = 1;
+    StoryIdInfo storyId = 1;
     DeviceInfo device = 2;
     ThemeInfo theme = 3;
     LocaleInfo locale = 4;
@@ -70,8 +70,11 @@ message SelectionsStateInfo {
     map<string, bool> visualDebugFlags = 8;
 }
 
-message StoryKeyInfo {
-    string storyKey = 1;
+message StoryIdInfo {
+    string storiesMapKey = 1;
+    string package = 2;
+    string path = 3;
+    string storyName = 4;
 }
 
 message StoriesInfo {
