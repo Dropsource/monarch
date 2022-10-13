@@ -28,29 +28,30 @@ class ChannelMethodsSender with Log {
   }
 
   Future getState() async {
-    var stateArgs = await _invokeMonarchChannelMethod(MonarchMethods.getState);
-    var state = Map<String, dynamic>.from(stateArgs);
-    var storyIdArgs = state['storyId'];
-    var deviceArgs = state['device'];
-    var themeId = state['themeId'];
-    var locale = state['locale'];
-    var textScaleFactor = state['textScaleFactor'];
-    var scaleArgs = state['scale'];
-    var visualDebugFlags = Map<String, bool>.from(state['visualDebugFlags']);
+    dynamic stateDynamic =
+        await _invokeMonarchChannelMethod(MonarchMethods.getState);
+    var stateArgs = Map<String, dynamic>.from(stateDynamic);
 
     resetErrors();
-    if (storyIdArgs == null) {
+    if (stateArgs['storyId'] == null) {
       activeStory.value = null;
     } else {
-      activeStory.value = StoryIdMapper().fromStandardMap(storyIdArgs);
+      activeStory.value = StoryIdMapper()
+          .fromStandardMap(Map<String, dynamic>.from(stateArgs['storyId']));
     }
-    activeLocale.setActiveLocaleTag(locale);
-    activeTheme.value = activeTheme.getMetaTheme(themeId);
-    activeDevice.value = DeviceDefinitionMapper().fromStandardMap(deviceArgs);
-    activeTextScaleFactor.value = textScaleFactor;
-    activeStoryScale.value =
-        StoryScaleDefinitionMapper().fromStandardMap(scaleArgs).scale;
-    visualDebugFlags.forEach((name, isEnabled) async =>
+
+    activeDevice.value = DeviceDefinitionMapper()
+        .fromStandardMap(Map<String, dynamic>.from(stateArgs['device']));
+    activeStoryScale.value = StoryScaleDefinitionMapper()
+        .fromStandardMap(Map<String, dynamic>.from(stateArgs['scale']))
+        .scale;
+
+    activeLocale.setActiveLocaleTag(stateArgs['locale']);
+    activeTheme.value = activeTheme.getMetaTheme(stateArgs['themeId']);
+    activeTextScaleFactor.value = stateArgs['textScaleFactor'];
+
+    Map<String, bool>.from(stateArgs['visualDebugFlags']).forEach((name,
+            isEnabled) async =>
         await visual_debug.toggleFlagViaVmServiceExtension(name, isEnabled));
   }
 
