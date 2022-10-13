@@ -11,7 +11,7 @@
 
 class PreviewWindowManager;
 
-const std::string previewServerChannelName = "monarch.previewApi";
+const std::string previewApiChannelName = "monarch.previewApi";
 const std::string previewWindowChannelName = "monarch.previewWindow";
 
 class Channels
@@ -28,7 +28,7 @@ public:
 	void unregisterMethodCallHandlers();
 	void restartPreviewChannel(flutter::BinaryMessenger* previewMessenger);
 
-	std::unique_ptr<flutter::MethodChannel<EncodableValue>> previewServerChannel;
+	std::unique_ptr<flutter::MethodChannel<EncodableValue>> previewApiChannel;
 	std::unique_ptr<flutter::MethodChannel<EncodableValue>> previewWindowChannel;
 	PreviewWindowManager* windowManager;
 

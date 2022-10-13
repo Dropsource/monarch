@@ -326,6 +326,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         ],
         workingDirectory: projectDirectory.path,
         analytics: analytics,
+        logLevelRegex: RegExp(r'^[\w :]+ (\w+)'),
+        onStdErrMessage: onRunMonarchAppStdErrMessage,
         readyMessage: 'monarch-preview-ready');
 
     _winControllerWindowTask = ProcessReadyTask(
@@ -343,6 +345,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         ],
         workingDirectory: projectDirectory.path,
         analytics: analytics,
+        logLevelRegex: RegExp(r'^[\w :]+ (\w+)'),
+        onStdErrMessage: onRunMonarchAppStdErrMessage,
         readyMessage: 'monarch-controller-ready');
 
     _attachToReloadTask = AttachTask(
@@ -379,6 +383,14 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         if (Platform.isWindows) {
           await _winPreviewWindowTask!.run();
           await _winControllerWindowTask!.run();
+
+          var monarchAppStdoutListener = MonarchAppStdoutListener();
+          
+          _winPreviewWindowTask!.stdout.listen(monarchAppStdoutListener.listen);
+          await _winPreviewWindowTask!.ready();
+          
+          _winControllerWindowTask!.stdout.listen(monarchAppStdoutListener.listen);
+          await _winControllerWindowTask!.ready();
         } else {
           await _runMonarchAppTask!.run();
           unawaited(_runMonarchAppTask!.done().whenComplete(() async {

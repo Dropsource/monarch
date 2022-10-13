@@ -28,14 +28,15 @@ class ChannelMethodsSender with Log {
   }
 
   Future getState() async {
-    var state = await _invokeMonarchChannelMethod(MonarchMethods.getState);
+    var stateArgs = await _invokeMonarchChannelMethod(MonarchMethods.getState);
+    var state = Map<String, dynamic>.from(stateArgs);
     var storyIdArgs = state['storyId'];
     var deviceArgs = state['device'];
     var themeId = state['themeId'];
     var locale = state['locale'];
     var textScaleFactor = state['textScaleFactor'];
     var scaleArgs = state['scale'];
-    var visualDebugFlags = state['visualDebugFlags'];
+    var visualDebugFlags = Map<String, bool>.from(state['visualDebugFlags']);
 
     resetErrors();
     if (storyIdArgs == null) {
@@ -47,12 +48,10 @@ class ChannelMethodsSender with Log {
     activeTheme.value = activeTheme.getMetaTheme(themeId);
     activeDevice.value = DeviceDefinitionMapper().fromStandardMap(deviceArgs);
     activeTextScaleFactor.value = textScaleFactor;
-    activeStoryScale.value = StoryScaleDefinitionMapper().fromStandardMap(scaleArgs).scale;
-    for (var flagArgs in visualDebugFlags) {
-      var flag = VisualDebugFlagMapper().fromStandardMap(flagArgs);
-      await visual_debug.toggleFlagViaVmServiceExtension(
-          flag.name, flag.isEnabled);
-    }
+    activeStoryScale.value =
+        StoryScaleDefinitionMapper().fromStandardMap(scaleArgs).scale;
+    visualDebugFlags.forEach((name, isEnabled) async =>
+        await visual_debug.toggleFlagViaVmServiceExtension(name, isEnabled));
   }
 
   Future sendReadySignal() {

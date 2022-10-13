@@ -49,10 +49,14 @@ class MonarchDataDefinitionMapper
             (e) => MetaThemeDefinitionMapper().fromStandardMap(e))
         .toList();
 
+    var metaStoriesMap = Map<String, dynamic>.from(args['metaStoriesMap']);
+
     Map<String, MetaStoriesDefinition> metaStoriesDefinitionMap =
-        args['metaStoriesMap'].map<String, MetaStoriesDefinition>(
-            (key, value) => MapEntry<String, MetaStoriesDefinition>(
-                key, MetaStoriesDefinitionMapper().fromStandardMap(value)));
+        metaStoriesMap.map<String, MetaStoriesDefinition>(
+            (key, value) => MapEntry(
+                key,
+                MetaStoriesDefinitionMapper()
+                    .fromStandardMap(Map<String, dynamic>.from(value))));
 
     return MonarchDataDefinition(
         packageName: packageName,
@@ -70,7 +74,8 @@ class MonarchDataDefinitionMapper
         'metaThemes': obj.metaThemeDefinitions
             .map((e) => MetaThemeDefinitionMapper().toStandardMap(e))
             .toList(),
-        'metaStoriesMap': obj.metaStoriesDefinitionMap.map((key, value) =>
-            MapEntry(key, MetaStoriesDefinitionMapper().toStandardMap(value)))
+        'metaStoriesMap': obj.metaStoriesDefinitionMap
+            .map<String, Map<String, dynamic>>((key, value) => MapEntry(
+                key, MetaStoriesDefinitionMapper().toStandardMap(value)))
       };
 }

@@ -77,9 +77,7 @@ class SelectionsState {
       'themeId': theme.id,
       'locale': languageTag,
       'textScaleFactor': textScaleFactor,
-      'visualDebugFlags': visualDebugFlags.entries.map((e) =>
-          VisualDebugFlagMapper()
-              .toStandardMap(VisualDebugFlag(name: e.key, isEnabled: e.value)))
+      'visualDebugFlags': visualDebugFlags,
     };
   }
 }

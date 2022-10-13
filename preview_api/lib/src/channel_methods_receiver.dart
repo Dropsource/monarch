@@ -27,9 +27,9 @@ class ChannelMethodsReceiver with Log {
     MonarchMethodChannels.previewApi
         .setMethodCallHandler((MethodCall call) async {
       log.finest('channel method received: ${call.method}');
-      // if (call.arguments != null) {
-      //   _logger.finest('with arguments: ${call.arguments}');
-      // }
+      if (call.arguments != null) {
+        log.finest('with arguments: ${call.arguments}');
+      }
       try {
         return await _handler(call);
       } catch (e, s) {
@@ -45,6 +45,8 @@ class ChannelMethodsReceiver with Log {
     final args = call.arguments == null
         ? null
         : Map<String, dynamic>.from(call.arguments);
+
+    log.shout(args.runtimeType);
 
     switch (call.method) {
       case MonarchMethods.ping:

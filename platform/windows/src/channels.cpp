@@ -2,17 +2,17 @@
 #include <future>
 
 Channels::Channels(
-	flutter::BinaryMessenger* controllerMessenger, 
-	flutter::BinaryMessenger* previewMessenger, 
+	flutter::BinaryMessenger* previewApiMessenger, 
+	flutter::BinaryMessenger* previewWindowMessenger, 
 	PreviewWindowManager* windowManager_)
 {
-	previewServerChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
-		controllerMessenger,
-		previewServerChannelName,
+	previewApiChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+		previewApiMessenger,
+		previewApiChannelName,
 		&flutter::StandardMethodCodec::GetInstance());
 
 	previewWindowChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
-		previewMessenger,
+		previewWindowMessenger,
 		previewWindowChannelName,
 		&flutter::StandardMethodCodec::GetInstance());
 
@@ -21,22 +21,22 @@ Channels::Channels(
 
 Channels::~Channels()
 {
-	auto controllerPtr = previewServerChannel.release();
-	delete controllerPtr;
+	auto previewApiPtr = previewApiChannel.release();
+	delete previewApiPtr;
 
-	auto previewPtr = previewWindowChannel.release();
-	delete previewPtr;
+	auto previewWindowPtr = previewWindowChannel.release();
+	delete previewWindowPtr;
 }
 
 void Channels::setUpCallForwarding()
 {
 	previewWindowChannel->SetMethodCallHandler(
 		[=](const auto& call, auto callback) {
-			_forwardMethodCall(call, callback, previewServerChannel);
+			_forwardMethodCall(call, callback, previewApiChannel);
 		}
 	);
 
-	previewServerChannel->SetMethodCallHandler(
+	previewApiChannel->SetMethodCallHandler(
 		[=](const auto& call, auto callback) {
 			_forwardMethodCall(call, callback, previewWindowChannel);
 
@@ -112,12 +112,12 @@ void Channels::_forwardMethodCall(
 void Channels::sendWillClosePreview()
 {
 	previewWindowChannel->InvokeMethod(MonarchMethods::willClosePreview, nullptr);
-	previewServerChannel->InvokeMethod(MonarchMethods::willClosePreview, nullptr);
+	previewApiChannel->InvokeMethod(MonarchMethods::willClosePreview, nullptr);
 }
 
 void Channels::unregisterMethodCallHandlers()
 {
-	previewServerChannel->SetMethodCallHandler(nullptr);
+	previewApiChannel->SetMethodCallHandler(nullptr);
 	previewWindowChannel->SetMethodCallHandler(nullptr);
 }
 

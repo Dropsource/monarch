@@ -34,7 +34,9 @@ void receiveChannelMethodCalls() {
 }
 
 Future<dynamic> _handler(MethodCall call) async {
-  final Map<String, dynamic>? args = call.arguments;
+  final args = call.arguments == null
+        ? null
+        : Map<String, dynamic>.from(call.arguments);
 
   switch (call.method) {
     case MonarchMethods.readySignalAck:

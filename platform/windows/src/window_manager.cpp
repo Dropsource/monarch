@@ -175,7 +175,7 @@ void PreviewWindowManager::resizePreviewWindow()
 		},
 		nullptr, nullptr);
 
-	_channels->previewServerChannel->InvokeMethod(
+	_channels->previewApiChannel->InvokeMethod(
 		MonarchMethods::getState, nullptr, std::move(result_handler));
 }
 
@@ -194,7 +194,7 @@ void PreviewWindowManager::setDocking()
 		},
 		nullptr, nullptr);
 
-	_channels->previewServerChannel->InvokeMethod(
+	_channels->previewApiChannel->InvokeMethod(
 		MonarchMethods::getState, nullptr, std::move(result_handler));
 }
 
