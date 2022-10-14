@@ -73,9 +73,14 @@ ControllerWindow::~ControllerWindow()
 {
 }
 
-void ControllerWindow::_requestPreviewWindowHandle()
+void ControllerWindow::requestPreviewWindowHandle()
 {
-	::PostMessage(HWND_BROADCAST, MonarchWindowMessages::requestPreviewHandleMessage, WPARAM(GetHandle()), 0);
+	requestPreviewWindowHandle(GetHandle());
+}
+
+void ControllerWindow::requestPreviewWindowHandle(HWND controllerWindowHandle)
+{
+	::PostMessage(HWND_BROADCAST, MonarchWindowMessages::requestPreviewHandleMessage, WPARAM(controllerWindowHandle), 0);
 }
 
 LRESULT ControllerWindow::MessageHandler(
@@ -89,12 +94,12 @@ LRESULT ControllerWindow::MessageHandler(
 		switch (wparam)
 		{
 		case IDT_TIMER_REQ_HANDLE_1:
-			_requestPreviewWindowHandle();
+			requestPreviewWindowHandle();
 			KillTimer(GetHandle(), IDT_TIMER_REQ_HANDLE_1);
 			break;
 
 		case IDT_TIMER_REQ_HANDLE_2:
-			_requestPreviewWindowHandle();
+			requestPreviewWindowHandle();
 			KillTimer(GetHandle(), IDT_TIMER_REQ_HANDLE_2);
 			break;
 		}
@@ -274,9 +279,19 @@ void PreviewWindow::disableResizeMinimize()
 		GetWindowLong(GetHandle(), GWL_STYLE) & ~WS_SIZEBOX & ~WS_MAXIMIZEBOX);
 }
 
-void PreviewWindow::_requestControllerWindowHandle()
+HWND PreviewWindow::getControllerWindowHandle()
 {
-	::PostMessage(HWND_BROADCAST, MonarchWindowMessages::requestControllerHandleMessage, WPARAM(GetHandle()), 0);
+	return _controllerWindowHandle;
+}
+
+void PreviewWindow::requestControllerWindowHandle()
+{
+	requestControllerWindowHandle(GetHandle());
+}
+
+void PreviewWindow::requestControllerWindowHandle(HWND previewWindowHandle)
+{
+	::PostMessage(HWND_BROADCAST, MonarchWindowMessages::requestControllerHandleMessage, WPARAM(previewWindowHandle), 0);
 }
 
 LRESULT PreviewWindow::MessageHandler(
@@ -290,12 +305,12 @@ LRESULT PreviewWindow::MessageHandler(
 		switch (wparam)
 		{
 		case IDT_TIMER_REQ_HANDLE_1:
-			_requestControllerWindowHandle();
+			requestControllerWindowHandle();
 			KillTimer(GetHandle(), IDT_TIMER_REQ_HANDLE_1);
 			break;
 
 		case IDT_TIMER_REQ_HANDLE_2:
-			_requestControllerWindowHandle();
+			requestControllerWindowHandle();
 			KillTimer(GetHandle(), IDT_TIMER_REQ_HANDLE_2);
 			break;
 		}
@@ -309,7 +324,7 @@ LRESULT PreviewWindow::MessageHandler(
 			(int)state->device.logicalResolution.width,
 			(int)state->device.logicalResolution.height);
 
-		if (_isControllerWindowSet())
+		if (isControllerWindowSet())
 		{
 			auto controllerWindowInfo = getWindowInfo(_controllerWindowHandle);
 			resize(deviceSize, state->scale.scale, state->dock, controllerWindowInfo);
@@ -329,7 +344,7 @@ LRESULT PreviewWindow::MessageHandler(
 		break;
 
 	case WM_MOVE:
-		if (!isMovingProgrammatically && _isControllerWindowSet()) {
+		if (!isMovingProgrammatically && isControllerWindowSet()) {
 			PostMessage(
 				_controllerWindowHandle,
 				MonarchWindowMessages::previewMoveMessage,
@@ -393,7 +408,7 @@ Point_ PreviewWindow::_getTopLeft(WindowInfo controllerWindowInfo, DockSide side
 	}
 }
 
-bool PreviewWindow::_isControllerWindowSet()
+bool PreviewWindow::isControllerWindowSet()
 {
 	return _controllerWindowHandle != nullptr;
 }

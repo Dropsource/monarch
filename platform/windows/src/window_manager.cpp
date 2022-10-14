@@ -222,8 +222,10 @@ void PreviewWindowManager::setDocking(MonarchState state)
 
 void PreviewWindowManager::restartPreviewWindow()
 {
-	/*_channels->sendWillClosePreview();
+	_channels->sendWillClosePreview();
 	_channels->unregisterMethodCallHandlers();
+
+	auto controllerWindowHandle = _previewWindow->getControllerWindowHandle();
 
 	_previewWindow->SetQuitOnClose(false);
 	_previewWindow->Destroy();
@@ -235,14 +237,16 @@ void PreviewWindowManager::restartPreviewWindow()
 	_previewWindow = std::make_unique<PreviewWindow>(
 		previewProject,
 		this);
+	
+	auto controllerWindowInfo = _previewWindow->getWindowInfo(controllerWindowHandle);
+	_showAndSetUpPreviewWindow(controllerWindowInfo);
 
-	_showAndSetUpPreviewWindow(_controllerWindow->getWindowInfo());
+	PreviewWindow::requestControllerWindowHandle(_previewWindow->GetHandle());
+	ControllerWindow::requestPreviewWindowHandle(controllerWindowHandle);
 
-	_controllerWindow->setPreviewWindow(_previewWindow->GetHandle());
-	_previewWindow->setControllerWindow(_controllerWindow->GetHandle());
 
 	_channels->restartPreviewChannel(_previewWindow->messenger());
-	resizePreviewWindow();*/
+	resizePreviewWindow();
 }
 
 void PreviewWindowManager::_postMessageStateChange(MonarchState state_)

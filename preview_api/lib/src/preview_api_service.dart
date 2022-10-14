@@ -128,9 +128,9 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
 
   @override
   Future<Empty> setDock(ServiceCall call, DockInfo request) {
+    channelMethodsSender.setDockSide(request.id);
     selectionsStateManager.update(
         (state) => state.copyWith(dock: DockInfoMapper().fromInfo(request)));
-    channelMethodsSender.setDockSide(request.id);
     return Future.value(Empty());
   }
 

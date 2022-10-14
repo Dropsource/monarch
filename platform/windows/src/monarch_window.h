@@ -37,13 +37,15 @@ public:
 
 	static WindowInfo defaultWindowInfo;
 
+	void requestPreviewWindowHandle();
+	static void requestPreviewWindowHandle(HWND controllerWindowHandle);
+
 protected:
 	LRESULT MessageHandler(HWND hwnd, UINT const message, WPARAM const wparam,
 		LPARAM const lparam) noexcept override;
 
 private:
 	HWND _previewWindowHandle;
-	void _requestPreviewWindowHandle();
 	Point_ _getTopLeft(WindowInfo previewWindowInfo, DockSide side);
 	bool _isPreviewWindowSet();
 	void _postMoveMessage();
@@ -84,6 +86,11 @@ public:
 		WindowInfo controllerWindowInfo);
 
 	void disableResizeMinimize();
+	HWND getControllerWindowHandle();
+	bool isControllerWindowSet();
+
+	static void requestControllerWindowHandle(HWND previewWindowHandle);
+	void requestControllerWindowHandle();
 
 protected:
 	LRESULT MessageHandler(HWND window, UINT const message, WPARAM const wparam,
@@ -92,10 +99,9 @@ protected:
 private:
 	PreviewWindowManager* windowManager;
 	HWND _controllerWindowHandle;
-	void _requestControllerWindowHandle();
+	
 	void _move(DockSide side, WindowInfo controllerWindowInfo);
 	Point_ _getTopLeft(WindowInfo controllerWindowInfo, DockSide side);
-	bool _isControllerWindowSet();
 };
 
 
