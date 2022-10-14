@@ -10,22 +10,21 @@
 #include "string_utils.h"
 #include "logger.h"
 
-
-LPCSTR MonarchWindowMessages::previewMoveString = "monarch.preview.window.move";
-LPCSTR MonarchWindowMessages::controllerMoveString = "monarch.controller.window.move";
-
 LPCSTR MonarchWindowMessages::requestControllerHandleString = "monarch.request.controller.window.handle";
 LPCSTR MonarchWindowMessages::controllerHandleString = "monarch.controller.window.handle";
 
 LPCSTR MonarchWindowMessages::requestPreviewHandleString = "monarch.request.preview.window.handle";
 LPCSTR MonarchWindowMessages::previewHandleString = "monarch.preview.window.handle";
 
-UINT MonarchWindowMessages::previewMoveMessage = 0;
-UINT MonarchWindowMessages::controllerMoveMessage = 0;
+LPCSTR MonarchWindowMessages::previewMoveString = "monarch.preview.window.move";
+LPCSTR MonarchWindowMessages::controllerMoveString = "monarch.controller.window.move";
+
 UINT MonarchWindowMessages::requestControllerHandleMessage = 0;
 UINT MonarchWindowMessages::controllerHandleMessage = 0;
 UINT MonarchWindowMessages::requestPreviewHandleMessage = 0;
 UINT MonarchWindowMessages::previewHandleMessage = 0;
+UINT MonarchWindowMessages::previewMoveMessage = 0;
+UINT MonarchWindowMessages::controllerMoveMessage = 0;
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
@@ -55,12 +54,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
     return EXIT_FAILURE;
   }
 
-  MonarchWindowMessages::previewMoveMessage = RegisterWindowMessageA(MonarchWindowMessages::previewMoveString);
-  MonarchWindowMessages::controllerMoveMessage = RegisterWindowMessageA(MonarchWindowMessages::controllerMoveString);
   MonarchWindowMessages::requestControllerHandleMessage = RegisterWindowMessageA(MonarchWindowMessages::requestControllerHandleString);
   MonarchWindowMessages::controllerHandleMessage = RegisterWindowMessageA(MonarchWindowMessages::controllerHandleString);
   MonarchWindowMessages::requestPreviewHandleMessage = RegisterWindowMessageA(MonarchWindowMessages::requestPreviewHandleString);
   MonarchWindowMessages::previewHandleMessage = RegisterWindowMessageA(MonarchWindowMessages::previewHandleString);
+  MonarchWindowMessages::previewMoveMessage = RegisterWindowMessageA(MonarchWindowMessages::previewMoveString);
+  MonarchWindowMessages::controllerMoveMessage = RegisterWindowMessageA(MonarchWindowMessages::controllerMoveString);
 
   std::string mode = trim_copy(arguments[0]);
 
@@ -118,21 +117,3 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
     std::wcout << L"Unexpected mode, first argument should be controller or preview" << std::endl;
     return EXIT_FAILURE;
   }
-
-
-  /*if (arguments.size() < 5) {
-    _logger.severe("Expected 5 arguments in this order: controller-bundle preview-bundle log-level cli-grpc-server-port project-name");
-    return EXIT_FAILURE;
-  }*/
-
-
-  /*::MSG msg;
-  while (::GetMessage(&msg, nullptr, 0, 0)) {
-    ::TranslateMessage(&msg);
-    ::DispatchMessage(&msg);
-  }
-
-  ::CoUninitialize();
-  return EXIT_SUCCESS;*/
-}
-

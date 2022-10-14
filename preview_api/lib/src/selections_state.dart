@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:monarch_definitions/monarch_definitions.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
 
-import 'project_data.dart';
-
 class SelectionsState {
   final StoryId? storyId;
   final DeviceDefinition device;
@@ -86,15 +84,15 @@ class SelectionsStateManager {
   SelectionsState _state = SelectionsState.init();
   SelectionsState get state => _state;
 
-  final _controller = StreamController<SelectionsState>.broadcast();
-  Stream<SelectionsState> get stream => _controller.stream;
+  final _streamController = StreamController<SelectionsState>.broadcast();
+  Stream<SelectionsState> get stream => _streamController.stream;
 
   void update(SelectionsState Function(SelectionsState state) fn) {
     _state = fn(_state);
-    _controller.add(_state);
+    _streamController.add(_state);
   }
 
   void close() {
-    _controller.close();
+    _streamController.close();
   }
 }

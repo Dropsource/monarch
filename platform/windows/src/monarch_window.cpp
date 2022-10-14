@@ -10,6 +10,8 @@
 #include "string_utils.h"
 #include "monarch_state.h"
 
+/// MonarchWindow
+
 MonarchWindow::MonarchWindow(
 	const flutter::DartProject& project)
 	: FlutterWindow(project)
@@ -54,6 +56,10 @@ flutter::BinaryMessenger* MonarchWindow::messenger()
 	return flutter_controller_->engine()->messenger();
 }
 
+
+
+/// ControllerWindow
+
 WindowInfo ControllerWindow::defaultWindowInfo = WindowInfo(Point_(200, 200), Size_(600, 700));
 
 ControllerWindow::ControllerWindow(
@@ -65,11 +71,6 @@ ControllerWindow::ControllerWindow(
 
 ControllerWindow::~ControllerWindow()
 {
-}
-
-void ControllerWindow::setPreviewWindow(HWND previewHwnd)
-{
-	_previewWindowHandle = previewHwnd;
 }
 
 void ControllerWindow::_requestPreviewWindowHandle()
@@ -176,6 +177,10 @@ void ControllerWindow::_postMoveMessage()
 		0);
 }
 
+
+
+/// PreviewWindow
+
 PreviewWindow::PreviewWindow(
 	const flutter::DartProject& project,
 	PreviewWindowManager* windowManager)
@@ -186,11 +191,6 @@ PreviewWindow::PreviewWindow(
 
 PreviewWindow::~PreviewWindow()
 {
-}
-
-void PreviewWindow::setControllerWindow(HWND controllerHwnd)
-{
-	_controllerWindowHandle = controllerHwnd;
 }
 
 void PreviewWindow::resize(
@@ -231,9 +231,6 @@ void PreviewWindow::resizeDpiAware(
 	auto target_point = _getTopLeft(controllerWindowInfo, dockSide);
 	double scale_factor = WindowHelper::getDpiScaleFactor(GetHandle());
 
-	//Logger _logger{ L"FlutterWindowHelpers.resizeDpiAware" };
-	//_logger.shout(L"scale_factor: " + std::to_wstring(scale_factor));
-
 	move(
 		target_point.x, 
 		target_point.y,
@@ -254,7 +251,7 @@ void PreviewWindow::resizeUsingClientRectOffset(
 	clientFrame.right = WindowHelper::convert(clientFrame.right, scale_factor);
 	clientFrame.bottom = WindowHelper::convert(clientFrame.bottom, scale_factor);
 
-	//Logger _logger{ L"FlutterWindowHelpers.resizeOffsetDpiAware" };
+	//Logger _logger{ L"PreviewWindow::resizeUsingClientRectOffset" };
 	//_logger.shout(L"size: " + std::to_wstring(size.width) + L"x" + std::to_wstring(size.height));
 	//_logger.shout(L"client: " + std::to_wstring(clientFrame.right) + L"x" + std::to_wstring(clientFrame.bottom));
 
@@ -315,15 +312,13 @@ LRESULT PreviewWindow::MessageHandler(
 		if (_isControllerWindowSet())
 		{
 			auto controllerWindowInfo = getWindowInfo(_controllerWindowHandle);
-
 			resize(deviceSize, state->scale.scale, state->dock, controllerWindowInfo);
 		}
 
 		auto title = state->scale.scale == defaultStoryScaleDefinition.scale ?
 			state->device.title() :
 			state->device.title() + " | " + state->scale.name;
-
-		setTitle(title);		
+		setTitle(title);
 
 		delete state;
 	}
@@ -402,6 +397,9 @@ bool PreviewWindow::_isControllerWindowSet()
 {
 	return _controllerWindowHandle != nullptr;
 }
+
+
+/// PreviewServer
 
 PreviewServer::PreviewServer(const flutter::DartProject& project, PreviewWindowManager* windowManager)
 	: project_(project), windowManager(windowManager)

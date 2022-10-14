@@ -115,7 +115,7 @@ class DockInfoMapper implements InfoMapper<DockInfo, DockDefinition> {
 
   @override
   DockInfo toInfo(DockDefinition def) => DockInfo(
-        id: def.name,
+        id: def.id,
         name: def.name,
       );
 }

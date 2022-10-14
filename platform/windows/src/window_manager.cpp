@@ -16,6 +16,8 @@
 #include "device_definition.h"
 
 
+/// ControllerWindowManager
+
 ControllerWindowManager::ControllerWindowManager(
 	std::string controllerWindowBundlePath,
 	std::string defaultLogLevelString,
@@ -45,8 +47,6 @@ void ControllerWindowManager::launchWindow()
 
 	_controllerWindow = std::make_unique<ControllerWindow>(controllerProject);
 	_showAndSetUpControllerWindow(ControllerWindow::defaultWindowInfo);
-	
-	//_controllerWindow->setPreviewWindow(_previewWindow->GetHandle());
 
 	Logger _logger{ L"ControllerWindowManager" };
 	_logger.info("monarch-controller-ready");
@@ -76,8 +76,7 @@ void ControllerWindowManager::_showAndSetUpControllerWindow(WindowInfo controlle
 }
 
 
-/////
-
+/// PreviewWindowManager
 
 PreviewWindowManager::PreviewWindowManager(
 	std::string previewServerBundlePath,
@@ -128,25 +127,12 @@ void PreviewWindowManager::launchWindow()
 		serverProject,
 		this);
 	_previewServer->create();
-	//_showAndSetUpControllerWindow(controllerWindowInfo);
 
 	_channels = std::make_unique<Channels>(
 		_previewServer->engine()->messenger(),
 		_previewWindow->messenger(),
 		this);
 	_channels->setUpCallForwarding();
-
-
-	// @TODO: remove
-	//_controllerWindowHandle = FindWindowA(nullptr, "monarch_window_controller");
-	//if (_controllerWindowHandle != NULL) {
-	//	_previewWindow->setControllerWindow(_controllerWindowHandle);
-	//}
-	
-
-
-	//_controllerWindow->setPreviewWindow(_previewWindow->GetHandle());
-	//_previewWindow->setControllerWindow(_controllerWindow->GetHandle());
 
 	Logger _logger{ L"PreviewWindowManager" };
 	_logger.info("monarch-preview-ready");
@@ -263,12 +249,4 @@ void PreviewWindowManager::_postMessageStateChange(MonarchState state_)
 {
 	MonarchState* state = new MonarchState(state_);
 	PostMessage(_previewWindow->GetHandle(), WM_M_STATECHANGE, LPARAM(state), 0);
-}
-
-// @TODO: remove?
-WindowInfo PreviewWindowManager::_getControllerWindowInfo()
-{
-	return WindowInfo(
-		WindowHelper::getTopLeftPoint(_controllerWindowHandle),
-		WindowHelper::getWindowSize(_controllerWindowHandle));
 }

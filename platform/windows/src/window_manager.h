@@ -70,7 +70,5 @@ private:
 	std::unique_ptr<Channels> _channels;
 
 	void _showAndSetUpPreviewWindow(WindowInfo windowInfo);
-	//void _showAndSetUpController(WindowInfo windowInfo);
 	void _postMessageStateChange(MonarchState state);
-	WindowInfo _getControllerWindowInfo();
 };

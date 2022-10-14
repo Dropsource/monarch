@@ -35,8 +35,6 @@ public:
 
 	virtual ~ControllerWindow();
 
-	void setPreviewWindow(HWND previewHwnd);
-
 	static WindowInfo defaultWindowInfo;
 
 protected:
@@ -59,8 +57,6 @@ public:
 		PreviewWindowManager* windowManager);
 
 	virtual ~PreviewWindow();
-
-	void setControllerWindow(HWND controllerHwnd);
 
 	// Resizes this window using the given device dimensions, the scale
 	// and the monitor's DPI scale factor.
