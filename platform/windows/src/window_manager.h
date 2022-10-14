@@ -23,6 +23,7 @@ public:
 	~ControllerWindowManager();
 
 	void launchWindow();
+	void requestPreviewWindowHandle();
 
 private:
 	std::string _controllerWindowBundlePath;
@@ -49,6 +50,7 @@ public:
 	DockSide selectedDockSide;
 
 	void launchWindow();
+	void requestControllerWindowHandle();
 	void resizePreviewWindow();
 	void resizePreviewWindow(MonarchState state);
 	void setDocking();
@@ -71,5 +73,4 @@ private:
 	//void _showAndSetUpController(WindowInfo windowInfo);
 	void _postMessageStateChange(MonarchState state);
 	WindowInfo _getControllerWindowInfo();
-	bool _isControllerWindowSet();
 };

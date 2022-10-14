@@ -52,6 +52,16 @@ void ControllerWindowManager::launchWindow()
 	_logger.info("monarch-controller-ready");
 }
 
+/// <summary>
+/// Sets timers to request the window handle from the preview window.
+/// We use timers to give the preview window enough time to load.
+/// </summary>
+void ControllerWindowManager::requestPreviewWindowHandle()
+{
+	SetTimer(_controllerWindow->GetHandle(), IDT_TIMER_REQ_HANDLE_1, 50, (TIMERPROC)NULL);
+	SetTimer(_controllerWindow->GetHandle(), IDT_TIMER_REQ_HANDLE_1, 500, (TIMERPROC)NULL);
+}
+
 void ControllerWindowManager::_showAndSetUpControllerWindow(WindowInfo controllerWindowInfo)
 {
 	// @GOTCHA: The Monarch CLI kills the controller window using its title.
@@ -140,6 +150,16 @@ void PreviewWindowManager::launchWindow()
 
 	Logger _logger{ L"PreviewWindowManager" };
 	_logger.info("monarch-preview-ready");
+}
+
+/// <summary>
+/// Sets timers to request the window handle from the controller window.
+/// We use timers to give the controller window enough time to load.
+/// </summary>
+void PreviewWindowManager::requestControllerWindowHandle()
+{
+	SetTimer(_previewWindow->GetHandle(), IDT_TIMER_REQ_HANDLE_1, 50, (TIMERPROC)NULL);
+	SetTimer(_previewWindow->GetHandle(), IDT_TIMER_REQ_HANDLE_1, 500, (TIMERPROC)NULL);
 }
 
 void PreviewWindowManager::_showAndSetUpPreviewWindow(WindowInfo controllerWindowInfo)
@@ -241,22 +261,14 @@ void PreviewWindowManager::restartPreviewWindow()
 
 void PreviewWindowManager::_postMessageStateChange(MonarchState state_)
 {
-	if (_isControllerWindowSet())
-	{
-		WindowInfo* windowInfo = new WindowInfo(_getControllerWindowInfo());
-		MonarchState* state = new MonarchState(state_);
-		PostMessage(_previewWindow->GetHandle(), WM_M_STATECHANGE, WPARAM(windowInfo), LPARAM(state));
-	}
+	MonarchState* state = new MonarchState(state_);
+	PostMessage(_previewWindow->GetHandle(), WM_M_STATECHANGE, LPARAM(state), 0);
 }
 
+// @TODO: remove?
 WindowInfo PreviewWindowManager::_getControllerWindowInfo()
 {
 	return WindowInfo(
 		WindowHelper::getTopLeftPoint(_controllerWindowHandle),
 		WindowHelper::getWindowSize(_controllerWindowHandle));
-}
-
-bool PreviewWindowManager::_isControllerWindowSet()
-{
-	return _controllerWindowHandle != nullptr;
 }

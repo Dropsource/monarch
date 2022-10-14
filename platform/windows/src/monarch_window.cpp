@@ -28,9 +28,14 @@ void MonarchWindow::setTitle(std::string title)
 
 WindowInfo MonarchWindow::getWindowInfo()
 {
+	return getWindowInfo(GetHandle());
+}
+
+WindowInfo MonarchWindow::getWindowInfo(HWND handle)
+{
 	return WindowInfo(
-		WindowHelper::getTopLeftPoint(GetHandle()),
-		WindowHelper::getWindowSize(GetHandle()));
+		WindowHelper::getTopLeftPoint(handle),
+		WindowHelper::getWindowSize(handle));
 }
 
 void MonarchWindow::move(int X, int Y, int nWidth, int nHeight)
@@ -67,6 +72,11 @@ void ControllerWindow::setPreviewWindow(HWND previewHwnd)
 	_previewWindowHandle = previewHwnd;
 }
 
+void ControllerWindow::_requestPreviewWindowHandle()
+{
+	::PostMessage(HWND_BROADCAST, MonarchWindowMessages::requestPreviewHandleMessage, WPARAM(GetHandle()), 0);
+}
+
 LRESULT ControllerWindow::MessageHandler(
 	HWND hwnd, 
 	UINT const message, 
@@ -74,6 +84,21 @@ LRESULT ControllerWindow::MessageHandler(
 	LPARAM const lparam) noexcept
 {
 	switch (message) {
+	case WM_TIMER:
+		switch (wparam)
+		{
+		case IDT_TIMER_REQ_HANDLE_1:
+			_requestPreviewWindowHandle();
+			KillTimer(GetHandle(), IDT_TIMER_REQ_HANDLE_1);
+			break;
+
+		case IDT_TIMER_REQ_HANDLE_2:
+			_requestPreviewWindowHandle();
+			KillTimer(GetHandle(), IDT_TIMER_REQ_HANDLE_2);
+			break;
+		}
+		break;
+
 	case WM_MOVE:
 		if (_isPreviewWindowSet() && !isMovingProgrammatically) {
 			_postMoveMessage();
@@ -86,20 +111,6 @@ LRESULT ControllerWindow::MessageHandler(
 		}
 		break;
 
-	/*case WM_M_PREVMOVE:
-		if (_isPreviewWindowSet()) {
-			WindowInfo* previewWindowInfo = (WindowInfo*)wparam;
-			auto point = _getTopLeft(
-				WindowInfo(previewWindowInfo->topLeft, previewWindowInfo->size),
-				windowManager->selectedDockSide);
-			auto size = getWindowInfo().size;
-
-			move(point.x, point.y, size.width, size.height);
-
-			delete previewWindowInfo;
-		}
-		break;*/
-
 	case WM_GETMINMAXINFO:
 		{
 			LPMINMAXINFO lpMMI = (LPMINMAXINFO)lparam;
@@ -109,25 +120,24 @@ LRESULT ControllerWindow::MessageHandler(
 		break;
 	}
 
-	if (message == MonarchWindowMessages::previewMoveMessage)
+	if (message == MonarchWindowMessages::requestControllerHandleMessage)
 	{
-		// @TODO, @NEXT: do not pass the pointer, instead the controller should have
-		// the preview handle, then it can use the handle to construct its WindowInfo,
-		// see MonarchWindow::GetWindowInfo for an example... now, what is the best way to 
-		// pass the handles, is a handle an integer? or should i send the process id?
-		// int a = (int)_controllerWindowHandle;
-		// int b = _controllerWindowHandle->unused;
-		//WindowInfo* previewWindowInfo = (WindowInfo*)wparam;
-
+		// The preview sent a request to get the controller window handle.
 		HWND previewHandle = HWND(wparam);
-		auto previewWindowInfo = WindowInfo(
-			WindowHelper::getTopLeftPoint(previewHandle),
-			WindowHelper::getWindowSize(previewHandle));
+		::PostMessage(previewHandle, MonarchWindowMessages::controllerHandleMessage, WPARAM(GetHandle()), 0);
+	}
+	else if (message == MonarchWindowMessages::previewHandleMessage)
+	{
+		// The preview sent its window handle, store it.
+		_previewWindowHandle = HWND(wparam);
+	}
+	else if (message == MonarchWindowMessages::previewMoveMessage)
+	{
+		HWND previewHandle = HWND(wparam);
+		DockSide dockSide = DockSide(lparam);
+		auto previewWindowInfo = getWindowInfo(previewHandle);
 
-		// @TODO: get dockside from lparam
-		auto point = _getTopLeft(
-			previewWindowInfo,
-			DockSide::right);
+		auto point = _getTopLeft(previewWindowInfo, dockSide);
 		auto size = getWindowInfo().size;
 
 		move(point.x, point.y, size.width, size.height);
@@ -159,8 +169,11 @@ bool ControllerWindow::_isPreviewWindowSet()
 
 void ControllerWindow::_postMoveMessage()
 {
-	WindowInfo* windowInfo = new WindowInfo(getWindowInfo());
-	::PostMessage(_previewWindowHandle, WM_M_CONTMOVE, WPARAM(windowInfo), 0);
+	::PostMessage(
+		_previewWindowHandle, 
+		MonarchWindowMessages::controllerMoveMessage, 
+		WPARAM(GetHandle()), 
+		0);
 }
 
 PreviewWindow::PreviewWindow(
@@ -264,6 +277,11 @@ void PreviewWindow::disableResizeMinimize()
 		GetWindowLong(GetHandle(), GWL_STYLE) & ~WS_SIZEBOX & ~WS_MAXIMIZEBOX);
 }
 
+void PreviewWindow::_requestControllerWindowHandle()
+{
+	::PostMessage(HWND_BROADCAST, MonarchWindowMessages::requestControllerHandleMessage, WPARAM(GetHandle()), 0);
+}
+
 LRESULT PreviewWindow::MessageHandler(
 	HWND hwnd,
 	UINT const message, 
@@ -271,37 +289,43 @@ LRESULT PreviewWindow::MessageHandler(
 	LPARAM const lparam) noexcept
 {
 	switch (message) {
+	case WM_TIMER:
+		switch (wparam)
+		{
+		case IDT_TIMER_REQ_HANDLE_1:
+			_requestControllerWindowHandle();
+			KillTimer(GetHandle(), IDT_TIMER_REQ_HANDLE_1);
+			break;
+
+		case IDT_TIMER_REQ_HANDLE_2:
+			_requestControllerWindowHandle();
+			KillTimer(GetHandle(), IDT_TIMER_REQ_HANDLE_2);
+			break;
+		}
+		break;
+
 	case WM_M_STATECHANGE:
 	{		
-		WindowInfo* controllerWindowInfo = (WindowInfo*)wparam;
-		MonarchState* state = (MonarchState*)lparam;
-
+		MonarchState* state = (MonarchState*)wparam;
+		
 		Size_ deviceSize(
-			(int)state->device.logicalResolution.width, 
+			(int)state->device.logicalResolution.width,
 			(int)state->device.logicalResolution.height);
 
-		resize(deviceSize, state->scale.scale, state->dock,
-			WindowInfo(controllerWindowInfo->topLeft, controllerWindowInfo->size));
+		if (_isControllerWindowSet())
+		{
+			auto controllerWindowInfo = getWindowInfo(_controllerWindowHandle);
+
+			resize(deviceSize, state->scale.scale, state->dock, controllerWindowInfo);
+		}
 
 		auto title = state->scale.scale == defaultStoryScaleDefinition.scale ?
 			state->device.title() :
 			state->device.title() + " | " + state->scale.name;
 
-		setTitle(title);
+		setTitle(title);		
 
-		delete controllerWindowInfo;
 		delete state;
-	}
-	break;
-
-	case WM_M_CONTMOVE:
-	{
-		WindowInfo* controllerWindowInfo = (WindowInfo*)wparam;
-
-		_move(windowManager->selectedDockSide,
-			WindowInfo(controllerWindowInfo->topLeft, controllerWindowInfo->size));
-
-		delete controllerWindowInfo;
 	}
 	break;
 
@@ -310,15 +334,37 @@ LRESULT PreviewWindow::MessageHandler(
 		break;
 
 	case WM_MOVE:
-		if (!isMovingProgrammatically) {
-			//WindowInfo* previewWindowInfo = new WindowInfo(getWindowInfo());
+		if (!isMovingProgrammatically && _isControllerWindowSet()) {
 			PostMessage(
-				HWND_BROADCAST,
+				_controllerWindowHandle,
 				MonarchWindowMessages::previewMoveMessage,
 				WPARAM(GetHandle()), 
 				LPARAM(windowManager->selectedDockSide));
 		}
 		break;
+	}
+
+	if (message == MonarchWindowMessages::requestPreviewHandleMessage)
+	{
+		// The controller sent a request to get the preview window handle.
+		HWND controllerHandle = HWND(wparam);
+		::PostMessage(controllerHandle, MonarchWindowMessages::previewHandleMessage, WPARAM(GetHandle()), 0);
+	}
+	else if (message == MonarchWindowMessages::controllerHandleMessage)
+	{
+		// The controller sent its window handle, store it.
+		_controllerWindowHandle = HWND(wparam);
+	}
+	else if (message == MonarchWindowMessages::controllerMoveMessage)
+	{
+		HWND controllerHandle = HWND(wparam);
+		DockSide dockSide = windowManager->selectedDockSide;
+		auto controllerWindowInfo = getWindowInfo(controllerHandle);
+
+		auto point = _getTopLeft(controllerWindowInfo, dockSide);
+		auto size = getWindowInfo().size;
+
+		move(point.x, point.y, size.width, size.height);
 	}
 
 	return MonarchWindow::MessageHandler(hwnd, message, wparam, lparam);

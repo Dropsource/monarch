@@ -14,8 +14,18 @@
 LPCSTR MonarchWindowMessages::previewMoveString = "monarch.preview.window.move";
 LPCSTR MonarchWindowMessages::controllerMoveString = "monarch.controller.window.move";
 
+LPCSTR MonarchWindowMessages::requestControllerHandleString = "monarch.request.controller.window.handle";
+LPCSTR MonarchWindowMessages::controllerHandleString = "monarch.controller.window.handle";
+
+LPCSTR MonarchWindowMessages::requestPreviewHandleString = "monarch.request.preview.window.handle";
+LPCSTR MonarchWindowMessages::previewHandleString = "monarch.preview.window.handle";
+
 UINT MonarchWindowMessages::previewMoveMessage = 0;
 UINT MonarchWindowMessages::controllerMoveMessage = 0;
+UINT MonarchWindowMessages::requestControllerHandleMessage = 0;
+UINT MonarchWindowMessages::controllerHandleMessage = 0;
+UINT MonarchWindowMessages::requestPreviewHandleMessage = 0;
+UINT MonarchWindowMessages::previewHandleMessage = 0;
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
@@ -47,6 +57,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
 
   MonarchWindowMessages::previewMoveMessage = RegisterWindowMessageA(MonarchWindowMessages::previewMoveString);
   MonarchWindowMessages::controllerMoveMessage = RegisterWindowMessageA(MonarchWindowMessages::controllerMoveString);
+  MonarchWindowMessages::requestControllerHandleMessage = RegisterWindowMessageA(MonarchWindowMessages::requestControllerHandleString);
+  MonarchWindowMessages::controllerHandleMessage = RegisterWindowMessageA(MonarchWindowMessages::controllerHandleString);
+  MonarchWindowMessages::requestPreviewHandleMessage = RegisterWindowMessageA(MonarchWindowMessages::requestPreviewHandleString);
+  MonarchWindowMessages::previewHandleMessage = RegisterWindowMessageA(MonarchWindowMessages::previewHandleString);
 
   std::string mode = trim_copy(arguments[0]);
 
@@ -64,6 +78,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
       defaultLogLevelString,
       cliGrpcServerPort);
     manager.launchWindow();
+    manager.requestControllerWindowHandle();
 
     ::MSG msg;
     while (::GetMessage(&msg, nullptr, 0, 0)) {
@@ -88,6 +103,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
       cliGrpcServerPort,
       projectName);
     manager.launchWindow();
+    manager.requestPreviewWindowHandle();
 
     ::MSG msg;
     while (::GetMessage(&msg, nullptr, 0, 0)) {
