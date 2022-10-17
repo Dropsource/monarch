@@ -249,6 +249,11 @@ void PreviewWindowManager::restartPreviewWindow()
 	resizePreviewWindow();
 }
 
+void PreviewWindowManager::destroyWindow()
+{
+	DestroyWindow(_previewWindow->GetHandle());
+}
+
 void PreviewWindowManager::_postMessageStateChange(MonarchState state_)
 {
 	MonarchState* state = new MonarchState(state_);

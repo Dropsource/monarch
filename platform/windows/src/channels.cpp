@@ -50,6 +50,9 @@ void Channels::setUpCallForwarding()
 			else if (call.method_name() == MonarchMethods::restartPreview) {
 				windowManager->restartPreviewWindow();
 			}
+			else if (call.method_name() == MonarchMethods::terminatePreview) {
+				windowManager->destroyWindow();
+			}
 			else {
 				// no-op
 			}

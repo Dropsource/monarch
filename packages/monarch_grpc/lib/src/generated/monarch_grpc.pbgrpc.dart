@@ -87,6 +87,10 @@ class MonarchPreviewApiClient extends $grpc.Client {
           '/monarch_grpc.MonarchPreviewApi/TrackUserSelection',
           ($0.UserSelectionData value) => value.writeToBuffer(),
           ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
+  static final _$terminatePreview = $grpc.ClientMethod<$0.Empty, $0.Empty>(
+      '/monarch_grpc.MonarchPreviewApi/TerminatePreview',
+      ($0.Empty value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
 
   MonarchPreviewApiClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -175,6 +179,11 @@ class MonarchPreviewApiClient extends $grpc.Client {
       $0.UserSelectionData request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$trackUserSelection, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Empty> terminatePreview($0.Empty request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$terminatePreview, request, options: options);
   }
 }
 
@@ -296,6 +305,13 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.UserSelectionData.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.Empty>(
+        'TerminatePreview',
+        terminatePreview_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.ReferenceDataInfo> getReferenceData_Pre(
@@ -378,6 +394,11 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
     return trackUserSelection(call, await request);
   }
 
+  $async.Future<$0.Empty> terminatePreview_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
+    return terminatePreview(call, await request);
+  }
+
   $async.Future<$0.ReferenceDataInfo> getReferenceData(
       $grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.ProjectDataInfo> getProjectData(
@@ -408,6 +429,8 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
       $grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.Empty> trackUserSelection(
       $grpc.ServiceCall call, $0.UserSelectionData request);
+  $async.Future<$0.Empty> terminatePreview(
+      $grpc.ServiceCall call, $0.Empty request);
 }
 
 class MonarchPreviewNotificationsApiClient extends $grpc.Client {

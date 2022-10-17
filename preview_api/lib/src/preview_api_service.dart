@@ -201,4 +201,10 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
     previewNotifications.trackUserSelection(request);
     return Future.value(Empty());
   }
+  
+  @override
+  Future<Empty> terminatePreview(ServiceCall call, Empty request) {
+    channelMethodsSender.terminatePreview();
+    return Future.value(Empty());
+  }
 }

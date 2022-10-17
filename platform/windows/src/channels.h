@@ -48,5 +48,6 @@ namespace MonarchMethods
 	const std::string screenChanged = "monarch.screenChanged";
 	const std::string restartPreview = "monarch.restartPreview";
 	const std::string willClosePreview = "monarch.willClosePreview";
+	const std::string terminatePreview = "monarch.terminatePreview";
 };
 

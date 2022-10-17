@@ -56,6 +56,7 @@ public:
 	void setDocking();
 	void setDocking(MonarchState state);
 	void restartPreviewWindow();
+	void destroyWindow();
 
 private:
 	std::string _previewWindowBundlePath;
