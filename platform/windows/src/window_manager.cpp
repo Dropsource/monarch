@@ -79,17 +79,17 @@ void ControllerWindowManager::_showAndSetUpControllerWindow(WindowInfo controlle
 /// PreviewWindowManager
 
 PreviewWindowManager::PreviewWindowManager(
-	std::string previewServerBundlePath,
+	std::string previewApiBundlePath,
 	std::string previewWindowBundlePath,
 	std::string defaultLogLevelString,
 	std::string cliGrpcServerPort)
 {
-	_previewServerBundlePath = previewServerBundlePath;
+	_previewApiBundlePath = previewApiBundlePath;
 	_previewWindowBundlePath = previewWindowBundlePath;
 	_defaultLogLevelString = defaultLogLevelString;
 	_cliGrpcServerPort = cliGrpcServerPort;
 
-	_previewServer = nullptr;
+	_previewApi = nullptr;
 	_previewWindow = nullptr;
 	_channels = nullptr;
 
@@ -98,11 +98,11 @@ PreviewWindowManager::PreviewWindowManager(
 
 PreviewWindowManager::~PreviewWindowManager()
 {
-	auto controllerPtr = _previewServer.release();
-	delete controllerPtr;
+	auto apiPtr = _previewApi.release();
+	delete apiPtr;
 
-	auto previewPtr = _previewWindow.release();
-	delete previewPtr;
+	auto windowPtr = _previewWindow.release();
+	delete windowPtr;
 
 	auto channelsPtr = _channels.release();
 	delete channelsPtr;
@@ -110,26 +110,26 @@ PreviewWindowManager::~PreviewWindowManager()
 
 void PreviewWindowManager::launchWindow()
 {
-	flutter::DartProject serverProject(to_wstring(_previewServerBundlePath));
-	flutter::DartProject previewProject(to_wstring(_previewWindowBundlePath));
+	flutter::DartProject previewApiProject(to_wstring(_previewApiBundlePath));
+	flutter::DartProject previewWindowProject(to_wstring(_previewWindowBundlePath));
 
-	std::vector<std::string> controllerArguments = { _defaultLogLevelString, _cliGrpcServerPort };
-	serverProject.set_dart_entrypoint_arguments(controllerArguments);
-	std::vector<std::string> previewArguments = { _defaultLogLevelString };
-	previewProject.set_dart_entrypoint_arguments(previewArguments);
+	std::vector<std::string> apiArguments = { _defaultLogLevelString, _cliGrpcServerPort };
+	previewApiProject.set_dart_entrypoint_arguments(apiArguments);
+	std::vector<std::string> windowArguments = { _defaultLogLevelString };
+	previewWindowProject.set_dart_entrypoint_arguments(windowArguments);
 
 	_previewWindow = std::make_unique<PreviewWindow>(
-		previewProject,
+		previewWindowProject,
 		this);
 	_showAndSetUpPreviewWindow(ControllerWindow::defaultWindowInfo);
 
-	_previewServer = std::make_unique<PreviewServer>(
-		serverProject,
+	_previewApi = std::make_unique<PreviewServer>(
+		previewApiProject,
 		this);
-	_previewServer->create();
+	_previewApi->create();
 
 	_channels = std::make_unique<Channels>(
-		_previewServer->engine()->messenger(),
+		_previewApi->engine()->messenger(),
 		_previewWindow->messenger(),
 		this);
 	_channels->setUpCallForwarding();

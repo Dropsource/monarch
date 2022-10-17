@@ -60,12 +60,12 @@ public:
 
 private:
 	std::string _previewWindowBundlePath;
-	std::string _previewServerBundlePath;
+	std::string _previewApiBundlePath;
 	std::string _defaultLogLevelString;
 	std::string _cliGrpcServerPort;
 
 	std::unique_ptr<PreviewWindow> _previewWindow;
-	std::unique_ptr<PreviewServer> _previewServer;
+	std::unique_ptr<PreviewServer> _previewApi;
 	HWND _controllerWindowHandle;
 
 	std::unique_ptr<Channels> _channels;

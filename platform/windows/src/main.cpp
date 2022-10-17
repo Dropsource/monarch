@@ -65,7 +65,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   std::string mode = trim_copy(arguments[0]);
 
   if (mode == "preview") {
-    std::string previewServerBundlePath = trim_copy(arguments[1]);
+    std::string previewApiBundlePath = trim_copy(arguments[1]);
     std::string previewWindowBundlePath = trim_copy(arguments[2]);
     std::string defaultLogLevelString = trim_copy(arguments[3]);
     std::string cliGrpcServerPort = trim_copy(arguments[4]);
@@ -73,7 +73,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
     defaultLogLevel = logLevelFromString(defaultLogLevelString);
 
     auto manager = PreviewWindowManager(
-      previewServerBundlePath,
+      previewApiBundlePath,
       previewWindowBundlePath,
       defaultLogLevelString,
       cliGrpcServerPort);
