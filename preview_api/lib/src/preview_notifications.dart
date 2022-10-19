@@ -39,10 +39,6 @@ class PreviewNotifications {
     _notifyClients((client) => client.launchDevTools(Empty()));
   }
 
-  void previewReady() {
-    _notifyClients((client) => client.previewReady(Empty()));
-  }
-
   void projectDataChanged(ProjectData projectData) {
     _notifyClients((client) => client.projectDataChanged(projectData.toInfo()));
   }

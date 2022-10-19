@@ -55,25 +55,8 @@ class ChannelMethodsReceiver with Log {
           log.info('monarch-preview-ready');
           _isPreviewReady = true;
         }
-        previewNotifications.previewReady();
         channelMethodsSender.sendReadySignalAck();
-
-        /// Already moved to controller. The controller is managing its own state. For now
-        /// send preview-ready signal to all clients, preview_api will keep its own state, see how it goes.
-        /// @TODO: remove comment above and commented out code below
-
-        // if (!manager.state.isPreviewReady) {
-        //   manager.onPreviewReady();
-        //   _logger.info('monarch-preview-ready');
-        // }
-        // channelMethodsSender.sendReadySignalAck();
         return;
-
-      // @TODO: remove? questionable why we need to pass defaultTheme
-      // case MonarchMethods.defaultTheme:
-      //   var theme = MetaThemeDefinitionMapper().fromStandardMap(args!);
-      //   previewNotifications.defaultTheme(theme);
-      //   return;
 
       case MonarchMethods.previewVmServerUri:
         var uri = UriMapper().fromStandardMap(args!);

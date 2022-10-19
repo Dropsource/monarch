@@ -10,15 +10,6 @@ class PreviewNotificationsApiService
 
   PreviewNotificationsApiService(this.manager);
 
-  // TODO: remove?
-  @override
-  Future<Empty> previewReady(ServiceCall call, Empty request) {
-    // if (!manager.state.isPreviewReady) {
-    //   manager.onPreviewReady();
-    // }
-    return Future.value(Empty());
-  }
-
   @override
   Future<Empty> vmServerUri(ServiceCall call, UriInfo request) {
     // do nothing

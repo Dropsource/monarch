@@ -56,12 +56,6 @@ class PreviewNotificationsApiService extends MonarchPreviewNotificationsApiServi
   }
 
   @override
-  Future<Empty> previewReady(ServiceCall call, Empty request) {
-    // do nothing
-    return Future.value(Empty()); 
-  }
-  
-  @override
   Future<Empty> projectDataChanged(ServiceCall call, ProjectDataInfo request) {
     // do nothing
     return Future.value(Empty()); 

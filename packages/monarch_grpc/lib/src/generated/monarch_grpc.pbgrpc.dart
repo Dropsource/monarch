@@ -434,10 +434,6 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
 }
 
 class MonarchPreviewNotificationsApiClient extends $grpc.Client {
-  static final _$previewReady = $grpc.ClientMethod<$0.Empty, $0.Empty>(
-      '/monarch_grpc.MonarchPreviewNotificationsApi/PreviewReady',
-      ($0.Empty value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
   static final _$vmServerUri = $grpc.ClientMethod<$0.UriInfo, $0.Empty>(
       '/monarch_grpc.MonarchPreviewNotificationsApi/VmServerUri',
       ($0.UriInfo value) => value.writeToBuffer(),
@@ -470,11 +466,6 @@ class MonarchPreviewNotificationsApiClient extends $grpc.Client {
       {$grpc.CallOptions? options,
       $core.Iterable<$grpc.ClientInterceptor>? interceptors})
       : super(channel, options: options, interceptors: interceptors);
-
-  $grpc.ResponseFuture<$0.Empty> previewReady($0.Empty request,
-      {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$previewReady, request, options: options);
-  }
 
   $grpc.ResponseFuture<$0.Empty> vmServerUri($0.UriInfo request,
       {$grpc.CallOptions? options}) {
@@ -514,13 +505,6 @@ abstract class MonarchPreviewNotificationsApiServiceBase extends $grpc.Service {
   $core.String get $name => 'monarch_grpc.MonarchPreviewNotificationsApi';
 
   MonarchPreviewNotificationsApiServiceBase() {
-    $addMethod($grpc.ServiceMethod<$0.Empty, $0.Empty>(
-        'PreviewReady',
-        previewReady_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
-        ($0.Empty value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.UriInfo, $0.Empty>(
         'VmServerUri',
         vmServerUri_Pre,
@@ -566,11 +550,6 @@ abstract class MonarchPreviewNotificationsApiServiceBase extends $grpc.Service {
         ($0.Empty value) => value.writeToBuffer()));
   }
 
-  $async.Future<$0.Empty> previewReady_Pre(
-      $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
-    return previewReady(call, await request);
-  }
-
   $async.Future<$0.Empty> vmServerUri_Pre(
       $grpc.ServiceCall call, $async.Future<$0.UriInfo> request) async {
     return vmServerUri(call, await request);
@@ -601,8 +580,6 @@ abstract class MonarchPreviewNotificationsApiServiceBase extends $grpc.Service {
     return trackUserSelection(call, await request);
   }
 
-  $async.Future<$0.Empty> previewReady(
-      $grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.Empty> vmServerUri(
       $grpc.ServiceCall call, $0.UriInfo request);
   $async.Future<$0.Empty> projectDataChanged(

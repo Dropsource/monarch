@@ -26,7 +26,6 @@ service MonarchPreviewApi {
 }
 
 service MonarchPreviewNotificationsApi {
-    rpc PreviewReady(Empty) returns (Empty) {}
     rpc VmServerUri(UriInfo) returns (Empty) {}
 
     rpc ProjectDataChanged(ProjectDataInfo) returns (Empty) {}

@@ -151,11 +151,6 @@ class ControllerManager with Log {
     ));
   }
 
-  // TODO: remove?
-  // void onPreviewReady() {
-  //   _update(state.copyWith(isPreviewReady: true));
-  // }
-
   Iterable<StoryGroup> filterStories(List<StoryGroup> stories, String query) {
     return _searchManager.filterStories(stories, query);
   }
