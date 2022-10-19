@@ -9,7 +9,7 @@
 
 class ControllerWindow;
 class PreviewWindow;
-class PreviewServer;
+class PreviewApiRunner;
 class Channels;
 
 class ControllerWindowManager
@@ -22,7 +22,7 @@ public:
 		std::string projectName);
 	~ControllerWindowManager();
 
-	void launchWindow();
+	void launchControllerWindow();
 	void requestPreviewWindowHandle();
 
 private:
@@ -49,14 +49,16 @@ public:
 
 	DockSide selectedDockSide;
 
-	void launchWindow();
+	void launchPreviewWindow();
+	void runPreviewApi();
+	void setUpChannels();
 	void requestControllerWindowHandle();
 	void resizePreviewWindow();
 	void resizePreviewWindow(MonarchState state);
 	void setDocking();
 	void setDocking(MonarchState state);
 	void restartPreviewWindow();
-	void destroyWindow();
+	void terminate();
 
 private:
 	std::string _previewWindowBundlePath;
@@ -65,7 +67,7 @@ private:
 	std::string _cliGrpcServerPort;
 
 	std::unique_ptr<PreviewWindow> _previewWindow;
-	std::unique_ptr<PreviewServer> _previewApi;
+	std::unique_ptr<PreviewApiRunner> _previewApi;
 	HWND _controllerWindowHandle;
 
 	std::unique_ptr<Channels> _channels;

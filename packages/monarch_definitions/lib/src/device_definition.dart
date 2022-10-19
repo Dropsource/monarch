@@ -13,6 +13,8 @@ const iPhone13DeviceDefinition = DeviceDefinition(
   targetPlatform: MonarchTargetPlatform.iOS,
 );
 
+/// @GOTCHA: The default device is also defined in the platform code.
+/// If you change it here, change it in the platform code as well.
 const defaultDeviceDefinition = iPhone13DeviceDefinition;
 
 class DeviceDefinition {

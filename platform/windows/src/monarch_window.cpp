@@ -414,19 +414,31 @@ bool PreviewWindow::isControllerWindowSet()
 }
 
 
-/// PreviewServer
+/// PreviewApiRunner
 
-PreviewServer::PreviewServer(const flutter::DartProject& project, PreviewWindowManager* windowManager)
-	: project_(project), windowManager(windowManager)
+PreviewApiRunner::PreviewApiRunner(const flutter::DartProject& project)
+	: project_(project)
 {
 }
 
-PreviewServer::~PreviewServer()
+PreviewApiRunner::~PreviewApiRunner()
 {
+	auto ptr = engine_.release();
+	delete ptr;
 }
 
-void PreviewServer::create()
+void PreviewApiRunner::run()
 {
 	engine_ = std::make_unique<flutter::FlutterEngine>(project_);
 	engine_->Run();
+}
+
+flutter::BinaryMessenger* PreviewApiRunner::messenger()
+{
+	return engine_->messenger();
+}
+
+void PreviewApiRunner::shutDown()
+{
+	engine_->ShutDown();
 }

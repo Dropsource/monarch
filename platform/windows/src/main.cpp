@@ -77,7 +77,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
       previewWindowBundlePath,
       defaultLogLevelString,
       cliGrpcServerPort);
-    manager.launchWindow();
+    manager.launchPreviewWindow();
+    manager.runPreviewApi();
+    manager.setUpChannels();
     manager.requestControllerWindowHandle();
 
     ::MSG msg;
@@ -102,7 +104,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
       defaultLogLevelString,
       cliGrpcServerPort,
       projectName);
-    manager.launchWindow();
+    manager.launchControllerWindow();
     manager.requestPreviewWindowHandle();
 
     ::MSG msg;
@@ -115,7 +117,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
     return EXIT_SUCCESS;
   }
   else {
-    std::wcout << L"Unexpected mode, first argument should be controller or preview" << std::endl;
+    std::wcout << L"Unexpected mode, first argument should be `controller` or `preview`" << std::endl;
     return EXIT_FAILURE;
   }
 }

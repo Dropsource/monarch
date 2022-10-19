@@ -38,10 +38,9 @@ ControllerWindowManager::~ControllerWindowManager()
 	delete controllerPtr;
 }
 
-void ControllerWindowManager::launchWindow()
+void ControllerWindowManager::launchControllerWindow()
 {
 	flutter::DartProject controllerProject(to_wstring(_controllerWindowBundlePath));
-
 	std::vector<std::string> controllerArguments = { _defaultLogLevelString, _cliGrpcServerPort };
 	controllerProject.set_dart_entrypoint_arguments(controllerArguments);
 
@@ -108,28 +107,30 @@ PreviewWindowManager::~PreviewWindowManager()
 	delete channelsPtr;
 }
 
-void PreviewWindowManager::launchWindow()
+void PreviewWindowManager::launchPreviewWindow()
 {
-	flutter::DartProject previewApiProject(to_wstring(_previewApiBundlePath));
 	flutter::DartProject previewWindowProject(to_wstring(_previewWindowBundlePath));
-
-	std::vector<std::string> apiArguments = { _defaultLogLevelString, _cliGrpcServerPort };
-	previewApiProject.set_dart_entrypoint_arguments(apiArguments);
 	std::vector<std::string> windowArguments = { _defaultLogLevelString };
 	previewWindowProject.set_dart_entrypoint_arguments(windowArguments);
 
-	_previewWindow = std::make_unique<PreviewWindow>(
-		previewWindowProject,
-		this);
+	_previewWindow = std::make_unique<PreviewWindow>(previewWindowProject, this);
 	_showAndSetUpPreviewWindow(ControllerWindow::defaultWindowInfo);
+}
 
-	_previewApi = std::make_unique<PreviewServer>(
-		previewApiProject,
-		this);
-	_previewApi->create();
+void PreviewWindowManager::runPreviewApi()
+{
+	flutter::DartProject previewApiProject(to_wstring(_previewApiBundlePath));
+	std::vector<std::string> apiArguments = { _defaultLogLevelString, _cliGrpcServerPort };
+	previewApiProject.set_dart_entrypoint_arguments(apiArguments);
 
+	_previewApi = std::make_unique<PreviewApiRunner>(previewApiProject);
+	_previewApi->run();
+}
+
+void PreviewWindowManager::setUpChannels()
+{
 	_channels = std::make_unique<Channels>(
-		_previewApi->engine()->messenger(),
+		_previewApi->messenger(),
 		_previewWindow->messenger(),
 		this);
 	_channels->setUpCallForwarding();
@@ -249,9 +250,10 @@ void PreviewWindowManager::restartPreviewWindow()
 	resizePreviewWindow();
 }
 
-void PreviewWindowManager::destroyWindow()
+void PreviewWindowManager::terminate()
 {
-	DestroyWindow(_previewWindow->GetHandle());
+	_previewWindow->Destroy();
+	_previewApi->shutDown();
 }
 
 void PreviewWindowManager::_postMessageStateChange(MonarchState state_)

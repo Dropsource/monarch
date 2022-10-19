@@ -30,7 +30,7 @@ public:
 
 	std::unique_ptr<flutter::MethodChannel<EncodableValue>> previewApiChannel;
 	std::unique_ptr<flutter::MethodChannel<EncodableValue>> previewWindowChannel;
-	PreviewWindowManager* windowManager;
+	PreviewWindowManager* previewWindowManager;
 
 private:
 	void _forwardMethodCall(

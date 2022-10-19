@@ -4,7 +4,7 @@
 Channels::Channels(
 	flutter::BinaryMessenger* previewApiMessenger, 
 	flutter::BinaryMessenger* previewWindowMessenger, 
-	PreviewWindowManager* windowManager_)
+	PreviewWindowManager* previewWindowManager_)
 {
 	previewApiChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
 		previewApiMessenger,
@@ -16,7 +16,7 @@ Channels::Channels(
 		previewWindowChannelName,
 		&flutter::StandardMethodCodec::GetInstance());
 
-	windowManager = windowManager_;
+	previewWindowManager = previewWindowManager_;
 }
 
 Channels::~Channels()
@@ -42,16 +42,16 @@ void Channels::setUpCallForwarding()
 
 			if (call.method_name() == MonarchMethods::setActiveDevice ||
 				call.method_name() == MonarchMethods::setStoryScale) {
-				windowManager->resizePreviewWindow();
+				previewWindowManager->resizePreviewWindow();
 			}
 			else if (call.method_name() == MonarchMethods::setDockSide) {
-				windowManager->setDocking();
+				previewWindowManager->setDocking();
 			}
 			else if (call.method_name() == MonarchMethods::restartPreview) {
-				windowManager->restartPreviewWindow();
+				previewWindowManager->restartPreviewWindow();
 			}
 			else if (call.method_name() == MonarchMethods::terminatePreview) {
-				windowManager->destroyWindow();
+				previewWindowManager->terminate();
 			}
 			else {
 				// no-op

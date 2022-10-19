@@ -105,21 +105,25 @@ private:
 };
 
 
-class PreviewServer
+class PreviewApiRunner
 {
 public:
-	PreviewServer(
-		const flutter::DartProject& project,
-		PreviewWindowManager* windowManager);
+	PreviewApiRunner(
+		const flutter::DartProject& project);
 
-	virtual ~PreviewServer();
+	virtual ~PreviewApiRunner();
 
-	void create();
+	/// <summary>
+	/// Runs a headless Flutter engine for the preview_api project
+	/// </summary>
+	void run();
+
+	flutter::BinaryMessenger* messenger();
+	void shutDown();
 
 	flutter::FlutterEngine* engine() { return engine_.get(); }
 
 private:
 	flutter::DartProject project_;
 	std::unique_ptr<flutter::FlutterEngine> engine_;
-	PreviewWindowManager* windowManager;
 };

@@ -28,7 +28,7 @@ void main() {
       utils.readPubspecVersion(p.join(local_repo_paths.preview_api, 'pubspec.yaml'));
   version = local_utils.getVersionSuffix(version);
 
-  local_utils.writeInternalFile('controller_version.txt', version);
+  local_utils.writeInternalFile('preview_api_version.txt', version);
 
-  print('Monarch controller build finished. Version $version');
+  print('Monarch preview_api build finished. Version $version');
 }
