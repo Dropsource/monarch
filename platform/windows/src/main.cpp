@@ -26,6 +26,40 @@ UINT MonarchWindowMessages::previewHandleMessage = 0;
 UINT MonarchWindowMessages::previewMoveMessage = 0;
 UINT MonarchWindowMessages::controllerMoveMessage = 0;
 
+UINT _registerWindowMessage(LPCSTR message, std::string identifier)
+{
+  std::string messageString(message);
+  messageString += identifier;
+  return RegisterWindowMessageA(messageString.c_str());
+}
+
+/// <summary>
+/// On Windows, at runtime, we execute two instances of the monarch_windows executable,
+/// one instance in preview mode and another one in controller mode.
+/// 
+/// Since these two instances are separate processes, we use window messages so they 
+/// can talk to each other. (See RegisterWindowMessageA winapi function).
+/// 
+/// If the user runs monarch on multiple projects, there could be multiple preview windows
+/// and multiple controller windows, which could lead to conflicts between their window
+/// messages.
+/// 
+/// To avoid this conflict, each pair of preview window and controller window 
+/// registers its window messages using an identifier which uniquely identifies each 
+/// monarch run.
+/// 
+/// As of 2022-10-20, we are passing the cli-grpc-server-port as the identifier. The cli 
+/// server port is the different on each monarch run thus we can use it as the identifier.
+/// </summary>
+void _registerWindowMessages(std::string identifier)
+{
+  MonarchWindowMessages::requestControllerHandleMessage = _registerWindowMessage(MonarchWindowMessages::requestControllerHandleString, identifier);
+  MonarchWindowMessages::controllerHandleMessage = _registerWindowMessage(MonarchWindowMessages::controllerHandleString, identifier);
+  MonarchWindowMessages::requestPreviewHandleMessage = _registerWindowMessage(MonarchWindowMessages::requestPreviewHandleString, identifier);
+  MonarchWindowMessages::previewHandleMessage = _registerWindowMessage(MonarchWindowMessages::previewHandleString, identifier);
+  MonarchWindowMessages::previewMoveMessage = _registerWindowMessage(MonarchWindowMessages::previewMoveString, identifier);
+  MonarchWindowMessages::controllerMoveMessage = _registerWindowMessage(MonarchWindowMessages::controllerMoveString, identifier);
+}
 
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   _In_ wchar_t* command_line, _In_ int show_command)
@@ -55,13 +89,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
     return EXIT_FAILURE;
   }
 
-  MonarchWindowMessages::requestControllerHandleMessage = RegisterWindowMessageA(MonarchWindowMessages::requestControllerHandleString);
-  MonarchWindowMessages::controllerHandleMessage = RegisterWindowMessageA(MonarchWindowMessages::controllerHandleString);
-  MonarchWindowMessages::requestPreviewHandleMessage = RegisterWindowMessageA(MonarchWindowMessages::requestPreviewHandleString);
-  MonarchWindowMessages::previewHandleMessage = RegisterWindowMessageA(MonarchWindowMessages::previewHandleString);
-  MonarchWindowMessages::previewMoveMessage = RegisterWindowMessageA(MonarchWindowMessages::previewMoveString);
-  MonarchWindowMessages::controllerMoveMessage = RegisterWindowMessageA(MonarchWindowMessages::controllerMoveString);
-
   std::string mode = trim_copy(arguments[0]);
 
   if (mode == "preview") {
@@ -71,6 +98,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
     std::string cliGrpcServerPort = trim_copy(arguments[4]);
 
     defaultLogLevel = logLevelFromString(defaultLogLevelString);
+
+    _registerWindowMessages(cliGrpcServerPort);
 
     auto manager = PreviewWindowManager(
       previewApiBundlePath,
@@ -98,6 +127,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
     std::string projectName = trim_copy(arguments[4]);
 
     defaultLogLevel = logLevelFromString(defaultLogLevelString);
+
+    _registerWindowMessages(cliGrpcServerPort);
 
     auto manager = ControllerWindowManager(
       controllerBundlePath,

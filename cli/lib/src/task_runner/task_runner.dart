@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:monarch_cli/src/task_runner/preview_api.dart';
 import 'package:monarch_cli/src/utils/standard_input.dart';
-import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:path/path.dart' as p;
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';
