@@ -35,21 +35,3 @@ class MetaThemeDefinitionMapper implements StandardMapper<MetaThemeDefinition> {
   Map<String, dynamic> toStandardMap(MetaThemeDefinition obj) =>
       {'id': obj.id, 'name': obj.name, 'isDefault': obj.isDefault};
 }
-
-class StandardThemesMapper implements StandardMapperList<MetaThemeDefinition> {
-  @override
-  List<MetaThemeDefinition> fromStandardMap(Map<String, dynamic> args) {
-    final themes = args['standardThemes'];
-    return themes
-        .map<MetaThemeDefinition>(
-            (element) => MetaThemeDefinitionMapper().fromStandardMap(element))
-        .toList();
-  }
-
-  @override
-  Map<String, dynamic> toStandardMap(List<MetaThemeDefinition> list) => {
-        'standardThemes': list
-            .map((d) => MetaThemeDefinitionMapper().toStandardMap(d))
-            .toList(),
-      };
-}

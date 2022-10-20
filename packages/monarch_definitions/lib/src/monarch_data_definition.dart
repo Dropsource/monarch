@@ -40,23 +40,23 @@ class MonarchDataDefinitionMapper
     String packageName = args['packageName'];
     List<MetaLocalizationDefinition> metaLocalizationsDefinitions =
         args['metaLocalizations']
-            .map<MetaLocalizationDefinition>(
-                (e) => MetaLocalizationDefinitionMapper().fromStandardMap(e))
+            .map<MetaLocalizationDefinition>((e) =>
+                MetaLocalizationDefinitionMapper()
+                    .fromStandardMap(Map<String, dynamic>.from(e)))
             .toList();
 
     List<MetaThemeDefinition> metaThemesDefinitions = args['metaThemes']
-        .map<MetaThemeDefinition>(
-            (e) => MetaThemeDefinitionMapper().fromStandardMap(e))
+        .map<MetaThemeDefinition>((e) => MetaThemeDefinitionMapper()
+            .fromStandardMap(Map<String, dynamic>.from(e)))
         .toList();
 
     var metaStoriesMap = Map<String, dynamic>.from(args['metaStoriesMap']);
 
-    Map<String, MetaStoriesDefinition> metaStoriesDefinitionMap =
-        metaStoriesMap.map<String, MetaStoriesDefinition>(
-            (key, value) => MapEntry(
-                key,
-                MetaStoriesDefinitionMapper()
-                    .fromStandardMap(Map<String, dynamic>.from(value))));
+    Map<String, MetaStoriesDefinition> metaStoriesDefinitionMap = metaStoriesMap
+        .map<String, MetaStoriesDefinition>((key, value) => MapEntry(
+            key,
+            MetaStoriesDefinitionMapper()
+                .fromStandardMap(Map<String, dynamic>.from(value))));
 
     return MonarchDataDefinition(
         packageName: packageName,

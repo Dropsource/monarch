@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:monarch_controller/data/device_definitions.dart';
-import 'package:monarch_controller/data/logical_resolution.dart';
 import 'package:monarch_controller/data/stories.dart';
 import 'package:monarch_controller/manager/controller_manager.dart';
 import 'package:monarch_controller/manager/controller_state.dart';
 import 'package:monarch_controller/screens/controller_screen.dart';
-import 'package:monarch_controller/data/dock_definition.dart' as defs;
-import 'package:monarch/src/preview/device_definitions.dart' as preview;
+import 'package:monarch_definitions/monarch_definitions.dart';
 
 import 'story_utils.dart';
 
@@ -14,32 +11,28 @@ import 'story_utils.dart';
 
 Widget state_not_ready() => ControllerScreen(
         manager: ControllerManager(
-      channelMethodsSender: mockChannelMethodsSender,
       initialState: ControllerState.init()
-          .copyWith(isPreviewReady: false, packageName: 'monarch_demo'),
+          .copyWith(isReady: false, packageName: 'monarch_demo'),
     ));
 
 Widget empty_story_list() => ControllerScreen(
       manager: ControllerManager(
-          channelMethodsSender: mockChannelMethodsSender,
-          initialState: ControllerState.init()
-              .copyWith(isPreviewReady: true, storyGroups: [])),
+          initialState:
+              ControllerState.init().copyWith(isReady: true, storyGroups: [])),
     );
 
 Widget sample_story_list() => ControllerScreen(
         manager: ControllerManager(
-      channelMethodsSender: mockChannelMethodsSender,
       initialState: ControllerState.init().copyWith(
-          isPreviewReady: true,
+          isReady: true,
           storyGroups: _longStoryList(),
           packageName: 'monarch_demo'),
     ));
 
 Widget devices_themes_and_locales_list() => ControllerScreen(
         manager: ControllerManager(
-      channelMethodsSender: mockChannelMethodsSender,
       initialState: ControllerState.init().copyWith(
-          isPreviewReady: true,
+          isReady: true,
           storyGroups: _longStoryList(),
           devices: deviceDefinitions,
           locales: [
@@ -54,32 +47,23 @@ Widget devices_themes_and_locales_list() => ControllerScreen(
 
 Widget devices_long_list() => ControllerScreen(
         manager: ControllerManager(
-      channelMethodsSender: mockChannelMethodsSender,
       initialState: ControllerState.init().copyWith(
-          isPreviewReady: true,
+          isReady: true,
           storyGroups: _longStoryList(),
-          devices: preview.deviceDefinitions
-              .map((e) => DeviceDefinition(
-                  id: e.id,
-                  name: e.name,
-                  logicalResolution: LogicalResolution(
-                      height: e.logicalResolution.height,
-                      width: e.logicalResolution.width),
-                  devicePixelRatio: e.devicePixelRatio,
-                  targetPlatform: e.targetPlatform))
-              .toList(),
+          devices: [
+            ...deviceDefinitions,
+            ...deviceDefinitions,
+            ...deviceDefinitions
+          ],
           packageName: 'monarch_demo'),
     ));
 
 Widget all_dev_tools_enabled() => ControllerScreen(
         manager: ControllerManager(
-      channelMethodsSender: mockChannelMethodsSender,
       initialState: ControllerState.init().copyWith(
-          isPreviewReady: true,
+          isReady: true,
           storyGroups: _longStoryList(),
-          visualDebugFlags: defs.devToolsOptions
-              .map((e) => e.copyWith(enabled: true))
-              .toList(),
+          visualDebugFlags: defaultVisualDebugFlags,
           packageName: 'monarch_demo'),
     ));
 
@@ -87,36 +71,112 @@ List<StoryGroup> _longStoryList() => [
       StoryGroup(
           groupName: 'sample_button_stories',
           stories: [
-            Story(name: 'primary', key: 'key-primary'),
-            Story(name: 'secondary', key: 'key-secondary'),
-            Story(name: 'disabled', key: 'key-disabled'),
+            StoryId(
+                storyName: 'primary',
+                storiesMapKey: 'key-primary',
+                package: 'foo',
+                path: 'foo/sample_button_stories.dart'),
+            StoryId(
+                storyName: 'secondary',
+                storiesMapKey: 'key-secondary',
+                package: 'foo',
+                path: 'foo/sample_button_stories.dart'),
+            StoryId(
+                storyName: 'disabled',
+                storiesMapKey: 'key-disabled',
+                package: 'foo',
+                path: 'foo/sample_button_stories.dart'),
           ],
           groupKey: 'simple_list_key'),
       StoryGroup(
         groupName: 'other_sample_button_stories',
         stories: [
-          Story(name: 'tertiary', key: 'key-tertiary'),
-          Story(name: 'gone', key: 'key-gone'),
+          StoryId(
+              storyName: 'tertiary',
+              storiesMapKey: 'key-tertiary',
+              package: 'foo',
+              path: 'foo/other_sample_button_stories.dart'),
+          StoryId(
+              storyName: 'gone',
+              storiesMapKey: 'key-gone',
+              package: 'foo',
+              path: 'foo/other_sample_button_stories.dart'),
         ],
         groupKey: 'other_list_key',
       ),
       StoryGroup(
         groupName: 'long_list_of_stories',
         stories: [
-          Story(name: 'story_1', key: 'key-story-1'),
-          Story(name: 'story_2', key: 'key-story-2'),
-          Story(name: 'story_3', key: 'key-story-3'),
-          Story(name: 'story_4', key: 'key-story-4'),
-          Story(name: 'story_5', key: 'key-story-5'),
-          Story(name: 'story_6', key: 'key-story-6'),
-          Story(name: 'story_7', key: 'key-story-7'),
-          Story(name: 'story_8', key: 'key-story-8'),
-          Story(name: 'story_9', key: 'key-story-9'),
-          Story(name: 'story_10', key: 'key-story-10'),
-          Story(name: 'story_11', key: 'key-story-11'),
-          Story(name: 'story_12', key: 'key-story-12'),
-          Story(name: 'story_13', key: 'key-story-13'),
-          Story(name: 'story_14', key: 'key-story-14'),
+          StoryId(
+              storyName: 'story_1',
+              storiesMapKey: 'key-story-1',
+              package: 'foo',
+              path: 'foo/long_list_of_stories.dart'),
+          StoryId(
+              storyName: 'story_2',
+              storiesMapKey: 'key-story-2',
+              package: 'foo',
+              path: 'foo/long_list_of_stories.dart'),
+          StoryId(
+              storyName: 'story_3',
+              storiesMapKey: 'key-story-3',
+              package: 'foo',
+              path: 'foo/long_list_of_stories.dart'),
+          StoryId(
+              storyName: 'story_4',
+              storiesMapKey: 'key-story-4',
+              package: 'foo',
+              path: 'foo/long_list_of_stories.dart'),
+          StoryId(
+              storyName: 'story_5',
+              storiesMapKey: 'key-story-5',
+              package: 'foo',
+              path: 'foo/long_list_of_stories.dart'),
+          StoryId(
+              storyName: 'story_6',
+              storiesMapKey: 'key-story-6',
+              package: 'foo',
+              path: 'foo/long_list_of_stories.dart'),
+          StoryId(
+              storyName: 'story_7',
+              storiesMapKey: 'key-story-7',
+              package: 'foo',
+              path: 'foo/long_list_of_stories.dart'),
+          StoryId(
+              storyName: 'story_8',
+              storiesMapKey: 'key-story-8',
+              package: 'foo',
+              path: 'foo/long_list_of_stories.dart'),
+          StoryId(
+              storyName: 'story_9',
+              storiesMapKey: 'key-story-9',
+              package: 'foo',
+              path: 'foo/long_list_of_stories.dart'),
+          StoryId(
+              storyName: 'story_10',
+              storiesMapKey: 'key-story-10',
+              package: 'foo',
+              path: 'foo/long_list_of_stories.dart'),
+          StoryId(
+              storyName: 'story_11',
+              storiesMapKey: 'key-story-11',
+              package: 'foo',
+              path: 'foo/long_list_of_stories.dart'),
+          StoryId(
+              storyName: 'story_12',
+              storiesMapKey: 'key-story-12',
+              package: 'foo',
+              path: 'foo/long_list_of_stories.dart'),
+          StoryId(
+              storyName: 'story_13',
+              storiesMapKey: 'key-story-13',
+              package: 'foo',
+              path: 'foo/long_list_of_stories.dart'),
+          StoryId(
+              storyName: 'story_14',
+              storiesMapKey: 'key-story-14',
+              package: 'foo',
+              path: 'foo/long_list_of_stories.dart'),
         ],
         groupKey: 'long_list_key',
       )
