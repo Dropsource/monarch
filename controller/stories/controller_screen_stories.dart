@@ -1,17 +1,13 @@
 //ignore_for_file: non_constant_identifier_names
 import 'package:flutter/material.dart';
-import 'package:mockito/annotations.dart';
 import 'package:monarch_controller/data/stories.dart';
 import 'package:monarch_controller/manager/controller_manager.dart';
 import 'package:monarch_controller/manager/controller_state.dart';
 import 'package:monarch_controller/screens/controller_screen.dart';
 import 'package:monarch_definitions/monarch_definitions.dart';
-import 'package:monarch_grpc/monarch_grpc.dart';
 
+import 'mocks.dart';
 import 'story_utils.dart';
-
-@GenerateNiceMocks([MockSpec<MonarchPreviewApiClient>()])
-import 'controller_screen_stories.mocks.dart';
 
 ControllerManager _mockManager({required ControllerState initialState}) {
   var manager = ControllerManager(initialState: initialState);
@@ -47,7 +43,7 @@ Widget devices_themes_and_locales_list() => ControllerScreen(
           devices: deviceDefinitions,
           locales: [
             'en-US',
-            'es-US',
+            'es-MX',
             'en-UK',
           ],
           currentLocale: 'en-US',
