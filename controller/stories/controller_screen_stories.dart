@@ -1,28 +1,38 @@
+//ignore_for_file: non_constant_identifier_names
 import 'package:flutter/material.dart';
+import 'package:mockito/annotations.dart';
 import 'package:monarch_controller/data/stories.dart';
 import 'package:monarch_controller/manager/controller_manager.dart';
 import 'package:monarch_controller/manager/controller_state.dart';
 import 'package:monarch_controller/screens/controller_screen.dart';
 import 'package:monarch_definitions/monarch_definitions.dart';
+import 'package:monarch_grpc/monarch_grpc.dart';
 
 import 'story_utils.dart';
 
-//ignore_for_file: non_constant_identifier_names
+@GenerateNiceMocks([MockSpec<MonarchPreviewApiClient>()])
+import 'controller_screen_stories.mocks.dart';
+
+ControllerManager _mockManager({required ControllerState initialState}) {
+  var manager = ControllerManager(initialState: initialState);
+  manager.setUpPreviewApi(MockMonarchPreviewApiClient());
+  return manager;
+}
 
 Widget state_not_ready() => ControllerScreen(
-        manager: ControllerManager(
+        manager: _mockManager(
       initialState: ControllerState.init()
           .copyWith(isReady: false, packageName: 'monarch_demo'),
     ));
 
 Widget empty_story_list() => ControllerScreen(
-      manager: ControllerManager(
+      manager: _mockManager(
           initialState:
               ControllerState.init().copyWith(isReady: true, storyGroups: [])),
     );
 
 Widget sample_story_list() => ControllerScreen(
-        manager: ControllerManager(
+        manager: _mockManager(
       initialState: ControllerState.init().copyWith(
           isReady: true,
           storyGroups: _longStoryList(),
@@ -30,7 +40,7 @@ Widget sample_story_list() => ControllerScreen(
     ));
 
 Widget devices_themes_and_locales_list() => ControllerScreen(
-        manager: ControllerManager(
+        manager: _mockManager(
       initialState: ControllerState.init().copyWith(
           isReady: true,
           storyGroups: _longStoryList(),
@@ -46,24 +56,34 @@ Widget devices_themes_and_locales_list() => ControllerScreen(
     ));
 
 Widget devices_long_list() => ControllerScreen(
-        manager: ControllerManager(
+        manager: _mockManager(
       initialState: ControllerState.init().copyWith(
           isReady: true,
           storyGroups: _longStoryList(),
           devices: [
             ...deviceDefinitions,
             ...deviceDefinitions,
-            ...deviceDefinitions
+            ...deviceDefinitions,
+            ...deviceDefinitions,
+            ...deviceDefinitions,
+            ...deviceDefinitions,
+            ...deviceDefinitions,
+            ...deviceDefinitions,
+            ...deviceDefinitions,
+            ...deviceDefinitions,
+            ...deviceDefinitions,
+            ...deviceDefinitions,
           ],
           packageName: 'monarch_demo'),
     ));
 
 Widget all_dev_tools_enabled() => ControllerScreen(
-        manager: ControllerManager(
+        manager: _mockManager(
       initialState: ControllerState.init().copyWith(
           isReady: true,
           storyGroups: _longStoryList(),
-          visualDebugFlags: defaultVisualDebugFlags,
+          visualDebugFlags:
+              defaultVisualDebugFlags.map((key, value) => MapEntry(key, true)),
           packageName: 'monarch_demo'),
     ));
 

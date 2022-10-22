@@ -38,6 +38,7 @@ dev_dependencies:
   # monarch: ^2.4.0-pre.1
   monarch:
     path: C:\Users\fertrig\development\monarch_product\monarch_shift\packages\monarch
+  mockito: ^5.3.2
 
 
 flutter:
