@@ -14,7 +14,7 @@ void main() async {
 
 #### Running cli tests''');
     var process = await Process.start('dart', ['test'],
-        workingDirectory: local_repo_paths.cli);
+        workingDirectory: local_repo_paths.cli, runInShell: Platform.isWindows);
     stdout.addStream(process.stdout);
     stderr.addStream(process.stderr);
     var exitCode = await process.exitCode;
@@ -23,9 +23,8 @@ void main() async {
 
   {
     try {
-      Process.runSync('flutter', ['--version']);
+      Process.runSync('flutter', ['--version'], runInShell: Platform.isWindows);
     } on ProcessException {
-      print('');
       print(
           'ERROR: Could not run flutter command. Make sure the flutter command is in your PATH.');
       exit(1);
@@ -37,7 +36,8 @@ void main() async {
 
 #### Running controller tests''');
     var process = await Process.start('flutter', ['test'],
-        workingDirectory: local_repo_paths.controller);
+        workingDirectory: local_repo_paths.controller,
+        runInShell: Platform.isWindows);
     stdout.addStream(process.stdout);
     stderr.addStream(process.stderr);
     var exitCode = await process.exitCode;
@@ -74,7 +74,8 @@ Future<TestResult> _runPackageTests(String packageName, String command) async {
 
 #### Running $packageName package tests''');
   var process = await Process.start(command, ['test'],
-      workingDirectory: p.join(local_repo_paths.packages, packageName));
+      workingDirectory: p.join(local_repo_paths.packages, packageName),
+      runInShell: Platform.isWindows);
   stdout.addStream(process.stdout);
   stderr.addStream(process.stderr);
   var exitCode = await process.exitCode;
