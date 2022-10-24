@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:monarch_controller/data/stories.dart';
 import 'package:monarch_controller/manager/search_manager.dart';
 import 'package:flutter/foundation.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
 
 void main() {
   final cut = SearchManager();
@@ -56,20 +57,41 @@ List<StoryGroup> _testData() => [
           groupKey: 'first_group_key',
           groupName: 'first_group',
           stories: [
-            Story(name: 'first_story', key: 'first_story_key'),
-            Story(name: 'second_story', key: 'second_story_key'),
-            Story(name: 'third_story', key: 'third_story_key'),
+            StoryId(
+              storiesMapKey: 'first_group',
+              package: 'test',
+              path: 'a/b/first_stories.dart',
+              storyName: 'first_story',
+            ),
+            StoryId(
+              storiesMapKey: 'first_group',
+              package: 'test',
+              path: 'a/b/first_stories.dart',
+              storyName: 'second_story',
+            ),
+            StoryId(
+              storiesMapKey: 'first_group',
+              package: 'test',
+              path: 'a/b/first_stories.dart',
+              storyName: 'third_story',
+            ),
           ]),
       StoryGroup(
         groupKey: 'second_group_key',
         groupName: 'second_group',
         stories: [
-          Story(
-              name: 'first_story_in_second_group',
-              key: 'first_story_in_second_group_key'),
-          Story(
-              name: 'second_story_in_second_group',
-              key: 'second_story_in_second_group_key'),
+          StoryId(
+            storiesMapKey: 'second_group',
+            package: 'test',
+            path: 'a/b/second_stories.dart',
+            storyName: 'first_story_in_second_group',
+          ),
+          StoryId(
+            storiesMapKey: 'second_group',
+            package: 'test',
+            path: 'a/b/second_stories.dart',
+            storyName: 'second_story_in_second_group',
+          ),
         ],
       )
     ];
