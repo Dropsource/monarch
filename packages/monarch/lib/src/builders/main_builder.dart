@@ -131,10 +131,10 @@ ${metaThemesImportStatements.join('\n')}
 
 ${metaStoriesImportStatements.join('\n')}
 
-MonarchData get _monarchData => MonarchData('$packageName', [${metaLocalizationList.join(', ')}], [${metaThemeList.join(', ')}], $metaStoriesMap);
+ProjectData get _projectData => ProjectData('$packageName', [${metaLocalizationList.join(', ')}], [${metaThemeList.join(', ')}], $metaStoriesMap);
 
 void main() {
-  startMonarchPreview(() => _monarchData);
+  startMonarchPreview(() => _projectData);
 }
 
 ''';

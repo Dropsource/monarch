@@ -4,13 +4,13 @@ import 'package:stack_trace/stack_trace.dart';
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';
 
-import 'monarch_data_manager.dart';
+import 'project_data_manager.dart';
 import 'ready_signal.dart';
 import 'channel_methods_sender.dart';
 import 'channel_methods_receiver.dart';
 import 'stories_errors.dart';
 import 'monarch_preview.dart';
-import 'monarch_data.dart';
+import 'project_data.dart';
 import 'vm_service_client.dart';
 import 'monarch_binding.dart';
 
@@ -18,24 +18,24 @@ final _logger = Logger('Start');
 StreamSubscription? _willReassembleSubcription;
 StreamSubscription? _serverUriSubscription;
 
-void startMonarchPreview(MonarchData Function() getMonarchData) {
+void startMonarchPreview(ProjectData Function() getProjectData) {
   Chain.capture(() {
-    _startMonarchPreview(getMonarchData);
+    _startMonarchPreview(getProjectData);
   }, onError: handleUncaughtError);
 }
 
-void _startMonarchPreview(MonarchData Function() getMonarchData) async {
+void _startMonarchPreview(ProjectData Function() getProjectData) async {
   final monarchBinding = MonarchBinding.ensureInitialized();
 
   _setUpLog();
   readySignal.loading();
-  monarchDataManager.load(getMonarchData);
+  projectDataManager.load(getProjectData);
   handleFlutterFrameworkErrors();
 
   _willReassembleSubcription =
       monarchBinding.willReassembleStream.listen((event) async {
-    monarchDataManager.load(getMonarchData);
-    await monarchDataManager.sendChannelMethods();
+    projectDataManager.load(getProjectData);
+    await projectDataManager.sendChannelMethods();
   });
 
   Timer.run(() {
@@ -46,7 +46,7 @@ void _startMonarchPreview(MonarchData Function() getMonarchData) async {
   receiveChannelMethodCalls();
   await _previewApiReady();
   await _connectToVmService();
-  await monarchDataManager.sendChannelMethods();
+  await projectDataManager.sendChannelMethods();
   await channelMethodsSender.sendReadySignal();
 }
 

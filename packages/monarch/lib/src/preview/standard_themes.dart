@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monarch_definitions/monarch_definitions.dart';
-import 'monarch_data.dart';
+import 'project_data.dart';
 
 const _light = materialLightThemeDefinition;
 const _dark = materialDarkThemeDefinition;

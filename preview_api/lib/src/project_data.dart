@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:monarch_definitions/monarch_definitions.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
 
-class ProjectData extends MonarchDataDefinition {
+class ProjectData extends ProjectDataDefinition {
   ProjectData({
     required String packageName,
     required Map<String, MetaStoriesDefinition> storiesMap,

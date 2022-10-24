@@ -132,9 +132,9 @@ class StoriesInfoMapper
 }
 
 class ProjectDataInfoMapper
-    implements InfoMapper<ProjectDataInfo, MonarchDataDefinition> {
+    implements InfoMapper<ProjectDataInfo, ProjectDataDefinition> {
   @override
-  MonarchDataDefinition fromInfo(ProjectDataInfo info) => MonarchDataDefinition(
+  ProjectDataDefinition fromInfo(ProjectDataInfo info) => ProjectDataDefinition(
       packageName: info.packageName,
       metaLocalizationDefinitions: info.localizations
           .map((e) => LocalizationInfoMapper().fromInfo(e))
@@ -145,7 +145,7 @@ class ProjectDataInfoMapper
           (key, value) => MapEntry(key, StoriesInfoMapper().fromInfo(value))));
 
   @override
-  ProjectDataInfo toInfo(MonarchDataDefinition def) => ProjectDataInfo(
+  ProjectDataInfo toInfo(ProjectDataDefinition def) => ProjectDataInfo(
       packageName: def.packageName,
       localizations: def.metaLocalizationDefinitions
           .map((e) => LocalizationInfoMapper().toInfo(e)),

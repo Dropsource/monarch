@@ -63,14 +63,14 @@ class ChannelMethodsReceiver with Log {
         previewNotifications.vmServerUri(uri);
         return;
 
-      case MonarchMethods.monarchData:
-        final monarchData =
-            MonarchDataDefinitionMapper().fromStandardMap(args!);
+      case MonarchMethods.projectData:
+        final projectData =
+            ProjectDataDefinitionMapper().fromStandardMap(args!);
         projectDataManager.update(ProjectData(
-            packageName: monarchData.packageName,
-            storiesMap: monarchData.metaStoriesDefinitionMap,
-            themes: monarchData.metaThemeDefinitions,
-            localizations: monarchData.metaLocalizationDefinitions));
+            packageName: projectData.packageName,
+            storiesMap: projectData.metaStoriesDefinitionMap,
+            themes: projectData.metaThemeDefinitions,
+            localizations: projectData.metaLocalizationDefinitions));
         return;
 
       /// Sent by the preview's vm-service-client via the method channels.

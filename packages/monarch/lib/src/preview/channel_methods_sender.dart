@@ -22,9 +22,9 @@ class ChannelMethodsSender with Log {
     return _invokeMonarchChannelMethod(MonarchMethods.ping);
   }
 
-  Future sendMonarchData(MonarchDataDefinition monarchData) {
-    return _invokeMonarchChannelMethod(MonarchMethods.monarchData,
-        MonarchDataDefinitionMapper().toStandardMap(monarchData));
+  Future sendProjectData(ProjectDataDefinition projectData) {
+    return _invokeMonarchChannelMethod(MonarchMethods.projectData,
+        ProjectDataDefinitionMapper().toStandardMap(projectData));
   }
 
   Future getState() async {

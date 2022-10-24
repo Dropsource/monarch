@@ -2,24 +2,24 @@ import 'package:monarch_utils/log.dart';
 
 import '../builders/builder_helper.dart';
 import 'active_theme.dart';
-import 'monarch_data.dart';
+import 'project_data.dart';
 import 'standard_themes.dart';
 import 'channel_methods_sender.dart';
 
-class MonarchDataManager with Log {
-  MonarchData? _data;
-  MonarchData? get data => _data;
+class ProjectDataManager with Log {
+  ProjectData? _data;
+  ProjectData? get data => _data;
 
   final List<String> _validationMessages = [];
 
-  void load(MonarchData Function() getData) {
+  void load(ProjectData Function() getData) {
     var data = getData();
 
     var validatedMetaLocalizations =
         _validateAndFilterMetaLocalizations(data.metaLocalizations);
     var validatedMetaThemes = _validateAndFilterMetaThemes(data.metaThemes);
 
-    _data = MonarchData(data.packageName, validatedMetaLocalizations,
+    _data = ProjectData(data.packageName, validatedMetaLocalizations,
         validatedMetaThemes, data.metaStoriesMap);
 
     activeTheme.setMetaThemes([..._data!.metaThemes, ...standardMetaThemes]);
@@ -75,9 +75,9 @@ $monarchWarningEnd
     }
     _validationMessages.clear();
 
-    await channelMethodsSender.sendMonarchData(_data!);
+    await channelMethodsSender.sendProjectData(_data!);
     await channelMethodsSender.getState();
   }
 }
 
-final monarchDataManager = MonarchDataManager();
+final projectDataManager = ProjectDataManager();

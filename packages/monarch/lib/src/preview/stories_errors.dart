@@ -5,7 +5,7 @@ import 'package:stack_trace/stack_trace.dart';
 import 'active_story.dart';
 import 'active_story_error.dart';
 import 'monarch_binding.dart';
-import 'monarch_data_manager.dart';
+import 'project_data_manager.dart';
 import 'log_level.dart';
 
 int _uncaughtErrorCount = 0;
@@ -157,7 +157,7 @@ String _getActiveStoryErrorMessage() {
 
 String _getRelevantStoryMessage(StoryId activeStoryId) {
   var metaStories =
-      monarchDataManager.data!.metaStoriesMap[activeStoryId.storiesMapKey];
+      projectDataManager.data!.metaStoriesMap[activeStoryId.storiesMapKey];
   if (metaStories == null) {
     return 'Unexpected - Could not find meta stories for ${activeStoryId.storiesMapKey}';
   }

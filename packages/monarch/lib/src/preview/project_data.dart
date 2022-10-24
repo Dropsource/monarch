@@ -53,8 +53,8 @@ class MetaLocalization extends MetaLocalizationDefinition {
             delegateClassName: delegateClassName);
 }
 
-class MonarchData extends MonarchDataDefinition {
-  MonarchData(
+class ProjectData extends ProjectDataDefinition {
+  ProjectData(
     String packageName,
     List<MetaLocalization> metaLocalizations,
     List<MetaTheme> metaThemes,

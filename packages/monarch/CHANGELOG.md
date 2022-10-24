@@ -1,3 +1,7 @@
+## 2.5.0-pre.1 - 2022-10
+- Rename `MonarchData` to `ProjectData`
+- Compatible with preview_api
+
 ## 2.4.0-pre.6 - 2022-09-02
 - Fix `dart analyze` issues
 - Run `dart format .`

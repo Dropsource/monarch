@@ -4,7 +4,7 @@ import 'meta_theme_definition.dart';
 import 'standard_mapper.dart';
 import 'story_id.dart';
 
-class MonarchDataDefinition {
+class ProjectDataDefinition {
   final String packageName;
 
   /// List of user-annotated localizations
@@ -20,7 +20,7 @@ class MonarchDataDefinition {
   Iterable<String> get allLocaleLanguageTags =>
       metaLocalizationDefinitions.expand((m) => m.localeLanguageTags);
 
-  MonarchDataDefinition(
+  ProjectDataDefinition(
       {required this.packageName,
       required this.metaLocalizationDefinitions,
       required this.metaThemeDefinitions,
@@ -33,10 +33,10 @@ class MonarchDataDefinition {
           .contains(storyId.storyName);
 }
 
-class MonarchDataDefinitionMapper
-    implements StandardMapper<MonarchDataDefinition> {
+class ProjectDataDefinitionMapper
+    implements StandardMapper<ProjectDataDefinition> {
   @override
-  MonarchDataDefinition fromStandardMap(Map<String, dynamic> args) {
+  ProjectDataDefinition fromStandardMap(Map<String, dynamic> args) {
     String packageName = args['packageName'];
     List<MetaLocalizationDefinition> metaLocalizationsDefinitions =
         args['metaLocalizations']
@@ -58,7 +58,7 @@ class MonarchDataDefinitionMapper
             MetaStoriesDefinitionMapper()
                 .fromStandardMap(Map<String, dynamic>.from(value))));
 
-    return MonarchDataDefinition(
+    return ProjectDataDefinition(
         packageName: packageName,
         metaLocalizationDefinitions: metaLocalizationsDefinitions,
         metaThemeDefinitions: metaThemesDefinitions,
@@ -66,7 +66,7 @@ class MonarchDataDefinitionMapper
   }
 
   @override
-  Map<String, dynamic> toStandardMap(MonarchDataDefinition obj) => {
+  Map<String, dynamic> toStandardMap(ProjectDataDefinition obj) => {
         'packageName': obj.packageName,
         'metaLocalizations': obj.metaLocalizationDefinitions
             .map((e) => MetaLocalizationDefinitionMapper().toStandardMap(e))

@@ -8,7 +8,7 @@ class MonarchMethods {
   static const previewReadySignal = 'monarch.previewReadySignal';
   static const readySignalAck = 'monarch.readySignalAck';
 
-  static const monarchData = 'monarch.monarchData';
+  static const projectData = 'monarch.projectData';
   static const setStory = 'monarch.setStory';
   static const resetStory = 'monarch.resetStory';
   static const setActiveLocale = 'monarch.setActiveLocale';

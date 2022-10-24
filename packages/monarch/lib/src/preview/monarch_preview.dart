@@ -7,7 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'active_locale.dart';
 import 'active_story_scale.dart';
 import 'monarch_binding.dart';
-import 'monarch_data_manager.dart';
+import 'project_data_manager.dart';
 import 'ready_signal.dart';
 import 'story_view.dart';
 
@@ -86,17 +86,17 @@ class MonarchMaterialApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             scrollBehavior: MonarchScrollBehavior(),
             localizationsDelegates: locale == null ||
-                    monarchDataManager.data!.metaLocalizations.isEmpty
+                    projectDataManager.data!.metaLocalizations.isEmpty
                 ? null
                 : [
-                    ...monarchDataManager.data!.metaLocalizations
+                    ...projectDataManager.data!.metaLocalizations
                         .map((x) => x.delegate!),
                     ...GlobalMaterialLocalizations.delegates,
                   ],
             supportedLocales:
-                locale == null || monarchDataManager.data!.allLocales.isEmpty
+                locale == null || projectDataManager.data!.allLocales.isEmpty
                     ? const <Locale>[Locale('en', 'US')]
-                    : monarchDataManager.data!.allLocales,
+                    : projectDataManager.data!.allLocales,
             locale: locale,
             home: home));
   }
