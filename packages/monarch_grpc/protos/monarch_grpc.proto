@@ -55,7 +55,7 @@ message ReferenceDataInfo {
 message ProjectDataInfo {
     string packageName = 1;
     map<string, StoriesInfo> storiesMap = 2;
-    repeated ThemeInfo projectThemes = 3;
+    repeated ThemeInfo themes = 3;
     repeated LocalizationInfo localizations = 4;
 }
 

@@ -8,18 +8,32 @@ class MetaStories extends MetaStoriesDefinition {
   final Map<String, StoryFunction> storiesMap;
 
   MetaStories(
-      String package, String path, List<String> storiesNames, this.storiesMap)
-      : super(package: package, path: path, storiesNames: storiesNames);
+    String package,
+    String path,
+    List<String> storiesNames,
+    this.storiesMap,
+  ) : super(package: package, path: path, storiesNames: storiesNames);
 }
 
 class MetaTheme extends MetaThemeDefinition {
   final ThemeData? theme;
 
-  MetaTheme(String id, String name, this.theme, bool isDefault)
-      : super(id: id, name: name, isDefault: isDefault);
+  MetaTheme(
+    String id,
+    String name,
+    this.theme,
+    bool isDefault,
+  ) : super(
+          id: id,
+          name: name,
+          isDefault: isDefault,
+        );
 
-  MetaTheme.user(String name, dynamic dynamicTheme, bool isDefault)
-      : theme = dynamicTheme is ThemeData ? dynamicTheme : null,
+  MetaTheme.user(
+    String name,
+    dynamic dynamicTheme,
+    bool isDefault,
+  )   : theme = dynamicTheme is ThemeData ? dynamicTheme : null,
         super(id: name, name: name, isDefault: isDefault);
 }
 
@@ -28,8 +42,10 @@ class MetaLocalization extends MetaLocalizationDefinition {
   final LocalizationsDelegate? delegate;
 
   MetaLocalization.user(
-      this.locales, dynamic dynamicLocalization, String delegateClassName)
-      : delegate = dynamicLocalization is LocalizationsDelegate
+    this.locales,
+    dynamic dynamicLocalization,
+    String delegateClassName,
+  )   : delegate = dynamicLocalization is LocalizationsDelegate
             ? dynamicLocalization
             : null,
         super(
@@ -38,13 +54,17 @@ class MetaLocalization extends MetaLocalizationDefinition {
 }
 
 class MonarchData extends MonarchDataDefinition {
-  MonarchData(String packageName, List<MetaLocalization> metaLocalizations,
-      List<MetaTheme> metaThemes, Map<String, MetaStories> metaStoriesMap)
-      : super(
-            packageName: packageName,
-            metaLocalizationDefinitions: metaLocalizations,
-            metaThemeDefinitions: metaThemes,
-            metaStoriesDefinitionMap: metaStoriesMap);
+  MonarchData(
+    String packageName,
+    List<MetaLocalization> metaLocalizations,
+    List<MetaTheme> metaThemes,
+    Map<String, MetaStories> metaStoriesMap,
+  ) : super(
+          packageName: packageName,
+          metaLocalizationDefinitions: metaLocalizations,
+          metaThemeDefinitions: metaThemes,
+          metaStoriesDefinitionMap: metaStoriesMap,
+        );
 
   List<MetaLocalization> get metaLocalizations =>
       metaLocalizationDefinitions.map((e) => e as MetaLocalization).toList();

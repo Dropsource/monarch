@@ -99,7 +99,7 @@ class ProjectDataInfo extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ProjectDataInfo', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'monarch_grpc'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'packageName', protoName: 'packageName')
     ..m<$core.String, StoriesInfo>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'storiesMap', protoName: 'storiesMap', entryClassName: 'ProjectDataInfo.StoriesMapEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OM, valueCreator: StoriesInfo.create, packageName: const $pb.PackageName('monarch_grpc'))
-    ..pc<ThemeInfo>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'projectThemes', $pb.PbFieldType.PM, protoName: 'projectThemes', subBuilder: ThemeInfo.create)
+    ..pc<ThemeInfo>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'themes', $pb.PbFieldType.PM, subBuilder: ThemeInfo.create)
     ..pc<LocalizationInfo>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'localizations', $pb.PbFieldType.PM, subBuilder: LocalizationInfo.create)
     ..hasRequiredFields = false
   ;
@@ -108,7 +108,7 @@ class ProjectDataInfo extends $pb.GeneratedMessage {
   factory ProjectDataInfo({
     $core.String? packageName,
     $core.Map<$core.String, StoriesInfo>? storiesMap,
-    $core.Iterable<ThemeInfo>? projectThemes,
+    $core.Iterable<ThemeInfo>? themes,
     $core.Iterable<LocalizationInfo>? localizations,
   }) {
     final _result = create();
@@ -118,8 +118,8 @@ class ProjectDataInfo extends $pb.GeneratedMessage {
     if (storiesMap != null) {
       _result.storiesMap.addAll(storiesMap);
     }
-    if (projectThemes != null) {
-      _result.projectThemes.addAll(projectThemes);
+    if (themes != null) {
+      _result.themes.addAll(themes);
     }
     if (localizations != null) {
       _result.localizations.addAll(localizations);
@@ -160,7 +160,7 @@ class ProjectDataInfo extends $pb.GeneratedMessage {
   $core.Map<$core.String, StoriesInfo> get storiesMap => $_getMap(1);
 
   @$pb.TagNumber(3)
-  $core.List<ThemeInfo> get projectThemes => $_getList(2);
+  $core.List<ThemeInfo> get themes => $_getList(2);
 
   @$pb.TagNumber(4)
   $core.List<LocalizationInfo> get localizations => $_getList(3);

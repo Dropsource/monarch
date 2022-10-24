@@ -140,7 +140,7 @@ class ProjectDataInfoMapper
           .map((e) => LocalizationInfoMapper().fromInfo(e))
           .toList(),
       metaThemeDefinitions:
-          info.projectThemes.map((e) => ThemeInfoMapper().fromInfo(e)).toList(),
+          info.themes.map((e) => ThemeInfoMapper().fromInfo(e)).toList(),
       metaStoriesDefinitionMap: info.storiesMap.map(
           (key, value) => MapEntry(key, StoriesInfoMapper().fromInfo(value))));
 
@@ -149,7 +149,7 @@ class ProjectDataInfoMapper
       packageName: def.packageName,
       localizations: def.metaLocalizationDefinitions
           .map((e) => LocalizationInfoMapper().toInfo(e)),
-      projectThemes:
+      themes:
           def.metaThemeDefinitions.map((e) => ThemeInfoMapper().toInfo(e)),
       storiesMap: def.metaStoriesDefinitionMap.map(
           (key, value) => MapEntry(key, StoriesInfoMapper().toInfo(value))));

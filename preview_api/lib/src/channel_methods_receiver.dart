@@ -69,7 +69,7 @@ class ChannelMethodsReceiver with Log {
         projectDataManager.update(ProjectData(
             packageName: monarchData.packageName,
             storiesMap: monarchData.metaStoriesDefinitionMap,
-            projectThemes: monarchData.metaThemeDefinitions,
+            themes: monarchData.metaThemeDefinitions,
             localizations: monarchData.metaLocalizationDefinitions));
         return;
 

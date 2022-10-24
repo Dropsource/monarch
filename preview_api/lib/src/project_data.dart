@@ -7,20 +7,20 @@ class ProjectData extends MonarchDataDefinition {
   ProjectData({
     required String packageName,
     required Map<String, MetaStoriesDefinition> storiesMap,
-    required List<MetaThemeDefinition> projectThemes,
+    required List<MetaThemeDefinition> themes,
     required List<MetaLocalizationDefinition> localizations,
   }) : super(
             packageName: packageName,
             metaStoriesDefinitionMap: storiesMap,
-            metaThemeDefinitions: projectThemes,
+            metaThemeDefinitions: themes,
             metaLocalizationDefinitions: localizations);
 
   Map<String, MetaStoriesDefinition> get storiesMap => metaStoriesDefinitionMap;
-  List<MetaThemeDefinition> get projectThemes => metaThemeDefinitions;
+  List<MetaThemeDefinition> get themes => metaThemeDefinitions;
   List<MetaLocalizationDefinition> get localizations => metaLocalizationDefinitions;
 
   factory ProjectData.init() => ProjectData(
-      packageName: '', storiesMap: {}, projectThemes: [], localizations: []);
+      packageName: '', storiesMap: {}, themes: [], localizations: []);
 
   ProjectDataInfo toInfo() => ProjectDataInfo(
       packageName: packageName,
@@ -30,7 +30,7 @@ class ProjectData extends MonarchDataDefinition {
               package: value.package,
               path: value.path,
               storiesNames: value.storiesNames))),
-      projectThemes: projectThemes.map(
+      themes: themes.map(
           (e) => ThemeInfo(id: e.id, name: e.name, isDefault: e.isDefault)),
       localizations: localizations.map((e) => LocalizationInfo(
           localeLanguageTags: e.localeLanguageTags,

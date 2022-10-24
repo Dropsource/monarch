@@ -81,8 +81,8 @@ class ControllerManager with Log {
       packageName: info.packageName,
       storiesMap: info.storiesMap.map(
           (key, value) => MapEntry(key, StoriesInfoMapper().fromInfo(value))),
-      projectThemes:
-          info.projectThemes.map((e) => ThemeInfoMapper().fromInfo(e)).toList(),
+      themes:
+          info.themes.map((e) => ThemeInfoMapper().fromInfo(e)).toList(),
       localizations: info.localizations
           .map((e) => LocalizationInfoMapper().fromInfo(e))
           .toList(),
@@ -92,12 +92,12 @@ class ControllerManager with Log {
   void _projectDataChanged({
     required String packageName,
     required Map<String, MetaStoriesDefinition> storiesMap,
-    required List<MetaThemeDefinition> projectThemes,
+    required List<MetaThemeDefinition> themes,
     required List<MetaLocalizationDefinition> localizations,
   }) {
     var themeHelper = _ThemeHelper(
         standardThemes: state.standardThemes,
-        userThemes: projectThemes,
+        userThemes: themes,
         currentTheme: state.currentTheme);
 
     var allLocaleLanguageTags =
@@ -108,7 +108,7 @@ class ControllerManager with Log {
     _update(state.copyWith(
       packageName: packageName,
       storyGroups: _translateStories(storiesMap),
-      userThemes: projectThemes,
+      userThemes: themes,
       currentTheme: themeHelper.getCurrentTheme(),
       locales: localeHelper.getLocales(),
       currentLocale: localeHelper.getCurrentLocale(),

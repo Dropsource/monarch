@@ -34,10 +34,10 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
       }
 
       void checkTheme() {
-        var themes = standardMetaThemeDefinitions + projectData.projectThemes;
+        var themes = standardMetaThemeDefinitions + projectData.themes;
         if (!themes.any(
             (element) => element.id == state.theme.id)) {
-          for (var theme in projectData.projectThemes) {
+          for (var theme in projectData.themes) {
             if (theme.isDefault) {
               _setTheme(theme);
               return;

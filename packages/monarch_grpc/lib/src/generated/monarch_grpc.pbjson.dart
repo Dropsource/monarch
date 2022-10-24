@@ -33,7 +33,7 @@ const ProjectDataInfo$json = const {
   '2': const [
     const {'1': 'packageName', '3': 1, '4': 1, '5': 9, '10': 'packageName'},
     const {'1': 'storiesMap', '3': 2, '4': 3, '5': 11, '6': '.monarch_grpc.ProjectDataInfo.StoriesMapEntry', '10': 'storiesMap'},
-    const {'1': 'projectThemes', '3': 3, '4': 3, '5': 11, '6': '.monarch_grpc.ThemeInfo', '10': 'projectThemes'},
+    const {'1': 'themes', '3': 3, '4': 3, '5': 11, '6': '.monarch_grpc.ThemeInfo', '10': 'themes'},
     const {'1': 'localizations', '3': 4, '4': 3, '5': 11, '6': '.monarch_grpc.LocalizationInfo', '10': 'localizations'},
   ],
   '3': const [ProjectDataInfo_StoriesMapEntry$json],
@@ -50,7 +50,7 @@ const ProjectDataInfo_StoriesMapEntry$json = const {
 };
 
 /// Descriptor for `ProjectDataInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List projectDataInfoDescriptor = $convert.base64Decode('Cg9Qcm9qZWN0RGF0YUluZm8SIAoLcGFja2FnZU5hbWUYASABKAlSC3BhY2thZ2VOYW1lEk0KCnN0b3JpZXNNYXAYAiADKAsyLS5tb25hcmNoX2dycGMuUHJvamVjdERhdGFJbmZvLlN0b3JpZXNNYXBFbnRyeVIKc3Rvcmllc01hcBI9Cg1wcm9qZWN0VGhlbWVzGAMgAygLMhcubW9uYXJjaF9ncnBjLlRoZW1lSW5mb1INcHJvamVjdFRoZW1lcxJECg1sb2NhbGl6YXRpb25zGAQgAygLMh4ubW9uYXJjaF9ncnBjLkxvY2FsaXphdGlvbkluZm9SDWxvY2FsaXphdGlvbnMaWAoPU3Rvcmllc01hcEVudHJ5EhAKA2tleRgBIAEoCVIDa2V5Ei8KBXZhbHVlGAIgASgLMhkubW9uYXJjaF9ncnBjLlN0b3JpZXNJbmZvUgV2YWx1ZToCOAE=');
+final $typed_data.Uint8List projectDataInfoDescriptor = $convert.base64Decode('Cg9Qcm9qZWN0RGF0YUluZm8SIAoLcGFja2FnZU5hbWUYASABKAlSC3BhY2thZ2VOYW1lEk0KCnN0b3JpZXNNYXAYAiADKAsyLS5tb25hcmNoX2dycGMuUHJvamVjdERhdGFJbmZvLlN0b3JpZXNNYXBFbnRyeVIKc3Rvcmllc01hcBIvCgZ0aGVtZXMYAyADKAsyFy5tb25hcmNoX2dycGMuVGhlbWVJbmZvUgZ0aGVtZXMSRAoNbG9jYWxpemF0aW9ucxgEIAMoCzIeLm1vbmFyY2hfZ3JwYy5Mb2NhbGl6YXRpb25JbmZvUg1sb2NhbGl6YXRpb25zGlgKD1N0b3JpZXNNYXBFbnRyeRIQCgNrZXkYASABKAlSA2tleRIvCgV2YWx1ZRgCIAEoCzIZLm1vbmFyY2hfZ3JwYy5TdG9yaWVzSW5mb1IFdmFsdWU6AjgB');
 @$core.Deprecated('Use selectionsStateInfoDescriptor instead')
 const SelectionsStateInfo$json = const {
   '1': 'SelectionsStateInfo',
