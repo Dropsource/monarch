@@ -58,7 +58,7 @@ class WindowsTerminator {
   /// taskkill /F /FI "WindowTitle eq [windowTitle]" /T
   ///
   /// Example:
-  //  taskkill /F /FI "WindowTitle eq my_project - Monarch" /T
+  /// taskkill /F /FI "WindowTitle eq my_project - Monarch" /T
   ///
   /// Due to a bug, Dart on Windows is not able to kill child processes thus the [Terminator]
   /// class doest not terminate all the processes Monarch starts.

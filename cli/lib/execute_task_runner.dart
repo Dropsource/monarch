@@ -253,7 +253,7 @@ Future<void> _exit(CliExitCode exitCode) async {
   ];
 
   if (_grpc != null) {
-    //futures.add(_grpc!.shutdownServers());
+    futures.add(_grpc!.shutdownServers());
   }
 
   await Future.wait(futures);

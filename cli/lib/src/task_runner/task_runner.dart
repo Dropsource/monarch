@@ -161,9 +161,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
     if (Platform.isWindows) {
       WindowsTerminator.killTasksByWindowTitle(
           '${config.pubspecProjectName} - Monarch');
+      previewApi.terminatePreview();
     }
-
-    previewApi.terminatePreview();
 
     final tasks = [
       _generateStoriesTask,
