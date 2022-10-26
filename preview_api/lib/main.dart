@@ -63,7 +63,7 @@ void setUpChannels(int discoveryServerPort) async {
   var previewApiPort = server.port!;
   _logger.info(
       'preview_api grpc server (preview api service) started on port $previewApiPort');
-  discoveryClient.registerPreviewApi(ServerInfo(port: previewApiPort));
+  await discoveryClient.registerPreviewApi(ServerInfo(port: previewApiPort));
 
   var channelMethodsReceiver = ChannelMethodsReceiver(projectDataManager,
       selectionsStateManager, previewNotifications, channelMethodsSender);

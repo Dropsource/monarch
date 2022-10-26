@@ -48,14 +48,16 @@ class HotRestarter extends Reloader {
   /// It restarts the Monarch Preview. Restarts the Preview by closing the existing
   /// Preview window and opening a new one.
   ///
-  /// We don't use the vm service restart functionality because it also restarts the
-  /// controller window.
+  /// We don't use the vm service restart functionality because it restarts all 
+  /// the isolates, not just the preview window isolate. On macOS, a vm service
+  /// restart would restart the controller, preview and preview api.
   ///
   /// Restart sequence:
   ///
   /// - Build the preview bundle
-  /// - Request the controller to restart the preview window
-  /// - The controller in turn sends a message to the window manager to relaunch the preview window
+  /// - Request the preview api to restart the preview window
+  /// - The preview api, in turn, sends a message to the platform window manager to 
+  ///   relaunch the preview window
   @override
   Future<void> reload(Heartbeat heartbeat) async {
     await bundleTask.run();

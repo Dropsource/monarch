@@ -44,6 +44,7 @@ final _crashReporter = CrashReporterImpl(CrashReportBuilder());
 final _analytics = AnalyticsImpl(AnalyticsEventBuilder());
 
 EnvironmentMutations? _mutations;
+Grpc? _grpc;
 
 void executeTaskRunner(
     {required bool isVerbose,
@@ -132,15 +133,15 @@ The monarch_ui directory below is missing. Make sure to add the path to your Flu
   final notifications = await notificationsReader.notifications;
   _showNotifications(notifications);
 
-  late int discoveryServerPort;
+  _grpc = Grpc();
   try {
-    discoveryServerPort = await setUpDiscoveryApiServer();
+    await _grpc!.setUpDiscoveryApiServer();
   } catch (e) {
     await _exit(TaskRunnerExitCodes.cliGrpcServerStartError);
     return;
   }
 
-  final discoveryApi = getDiscoveryApiClient(discoveryServerPort);
+  final discoveryApi = _grpc!.getDiscoveryApiClient();
   final previewApi = PreviewApi(discoveryApi);
 
   final taskRunner = TaskRunner(
@@ -152,11 +153,11 @@ The monarch_ui directory below is missing. Make sure to add the path to your Flu
       noSoundNullSafety: noSoundNullSafety,
       reloadOption: _getReloadOption(reloadOption),
       analytics: _analytics,
-      discoveryServerPort: discoveryServerPort,
+      discoveryServerPort: _grpc!.discoveryApiServerPort,
       previewApi: previewApi);
 
   try {
-    await setUpNotificationsApiServer(discoveryApi, taskRunner, _analytics);
+    await _grpc!.setUpNotificationsApiServer(discoveryApi, taskRunner, _analytics);
   } catch (e) {
     await _exit(TaskRunnerExitCodes.cliGrpcServerStartError);
     return;
@@ -250,6 +251,10 @@ Future<void> _exit(CliExitCode exitCode) async {
     _logStreamUserLogger.tearDown(),
     _logStreamCrashReporter.tearDown(),
   ];
+
+  if (_grpc != null) {
+    //futures.add(_grpc!.shutdownServers());
+  }
 
   await Future.wait(futures);
 

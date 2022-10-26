@@ -31,11 +31,11 @@ class PreviewApi with Log {
 
   Future<void> restartPreview() async {
     var client = await getClient();
-    client!.restartPreview(Empty());
+    await client!.restartPreview(Empty());
   }
 
   Future<void> terminatePreview() async {
     var client = await getClient();
-    client!.terminatePreview(Empty());
+    await client!.terminatePreview(Empty());
   }
 }

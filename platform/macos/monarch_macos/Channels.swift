@@ -9,34 +9,34 @@ import Foundation
 import FlutterMacOS
 
 class Channels {
-    let controllerChannel: FlutterMethodChannel
-    var previewChannel: FlutterMethodChannel
+    let previewApiChannel: FlutterMethodChannel
+    var previewWindowChannel: FlutterMethodChannel
     let windowManager: WindowManager
     
-    init(controllerMessenger: FlutterBinaryMessenger,
-         previewMessenger: FlutterBinaryMessenger,
+    init(previewApiMessenger: FlutterBinaryMessenger,
+         previewWindowMessenger: FlutterBinaryMessenger,
          windowManager: WindowManager) {
-        self.controllerChannel = FlutterMethodChannel(
-            name: "monarch.controller",
-            binaryMessenger: controllerMessenger)
-        self.previewChannel = FlutterMethodChannel(
-            name: "monarch.preview",
-            binaryMessenger: previewMessenger)
+        self.previewApiChannel = FlutterMethodChannel(
+            name: "monarch.previewApi",
+            binaryMessenger: previewApiMessenger)
+        self.previewWindowChannel = FlutterMethodChannel(
+            name: "monarch.previewWindow",
+            binaryMessenger: previewWindowMessenger)
         self.windowManager = windowManager
     }
     
-    func restartPreviewChannel(previewMessenger: FlutterBinaryMessenger) {
+    func restartPreviewChannel(previewWindowMessenger: FlutterBinaryMessenger) {
         self.unregisterMethodCallHandlers()
-        self.previewChannel = FlutterMethodChannel(
-            name: "monarch.preview",
-            binaryMessenger: previewMessenger)
+        self.previewWindowChannel = FlutterMethodChannel(
+            name: "monarch.previewWindow",
+            binaryMessenger: previewWindowMessenger)
         self.setUpCallForwarding()
     }
     
     func setUpCallForwarding() {
-        self.controllerChannel.setMethodCallHandler {
+        self.previewApiChannel.setMethodCallHandler {
             (call: FlutterMethodCall, callback:@escaping FlutterResult) -> Void in
-            self.previewChannel.invokeMethod(call.method, arguments: call.arguments) {
+            self.previewWindowChannel.invokeMethod(call.method, arguments: call.arguments) {
                 (result) -> Void in
                 callback(result)
             }            
@@ -56,14 +56,18 @@ class Channels {
                 self.windowManager.restartPreviewWindow()
                 break
                 
+            case MonarchMethods.terminatePreview:
+                self.windowManager.terminate();
+                break
+                
             default:
                 break
             }
         }
         
-        self.previewChannel.setMethodCallHandler {
+        self.previewWindowChannel.setMethodCallHandler {
             (call: FlutterMethodCall, callback:@escaping FlutterResult) -> Void in
-            self.controllerChannel.invokeMethod(call.method, arguments: call.arguments) {
+            self.previewApiChannel.invokeMethod(call.method, arguments: call.arguments) {
                 (result) -> Void in
                 callback(result)
             }
@@ -71,19 +75,19 @@ class Channels {
     }
     
     func unregisterMethodCallHandlers() {
-        self.controllerChannel.setMethodCallHandler(nil)
-        self.previewChannel.setMethodCallHandler(nil)
+        self.previewApiChannel.setMethodCallHandler(nil)
+        self.previewWindowChannel.setMethodCallHandler(nil)
     }
     
     func getMonarchState(state:@escaping (MonarchState) -> Void) {
-        self.controllerChannel.invokeMethod(MonarchMethods.getState, arguments: nil) {
+        self.previewApiChannel.invokeMethod(MonarchMethods.getState, arguments: nil) {
             (result) -> Void in
             let logger: Logger = Logger("MonarchState")
             if result is FlutterError {
-                logger.severe("Controller returned FlutterError while getting monarch state")
+                logger.severe("preview_api returned FlutterError while getting monarch state")
             }
             if result == nil {
-                logger.severe("Controller returned nil instead of monarch state")
+                logger.severe("preview_api returned nil instead of monarch state")
             }
             let res = result as? [String: Any]
             state(MonarchState.init(standardMap: res!))
@@ -91,16 +95,16 @@ class Channels {
     }
     
     func sendPreviewScreenChanged() {
-        self.previewChannel.invokeMethod(MonarchMethods.screenChanged, arguments: nil)
+        self.previewWindowChannel.invokeMethod(MonarchMethods.screenChanged, arguments: nil)
     }
     
     func sendControllerScreenChanged() {
-        self.controllerChannel.invokeMethod(MonarchMethods.screenChanged, arguments: nil)
+        self.previewApiChannel.invokeMethod(MonarchMethods.screenChanged, arguments: nil)
     }
     
     func sendWillClosePreview() {
-        self.previewChannel.invokeMethod(MonarchMethods.willClosePreview, arguments: nil)
-        self.controllerChannel.invokeMethod(MonarchMethods.willClosePreview, arguments: nil)
+        self.previewWindowChannel.invokeMethod(MonarchMethods.willClosePreview, arguments: nil)
+        self.previewApiChannel.invokeMethod(MonarchMethods.willClosePreview, arguments: nil)
     }
 }
 
@@ -110,8 +114,9 @@ class MonarchMethods {
     static let setDockSide = "monarch.setDockSide"
     static let getState = "monarch.getState"
     static let screenChanged = "monarch.screenChanged"
-    static let willClosePreview = "monarch.willClosePreview"
     static let restartPreview = "monarch.restartPreview"
+    static let willClosePreview = "monarch.willClosePreview"
+    static let terminatePreview = "monarch.terminatePreview"
 }
 
 protocol ChannelArgument {}

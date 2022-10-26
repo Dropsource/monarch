@@ -60,7 +60,7 @@ void setUpChannels(int discoveryServerPort) async {
   var previewNotificationsApiPort = server.port!;
   _logger.info(
       'preview_notifications_api grpc server (preview notifications api service) started on port $previewNotificationsApiPort');
-  discoveryClient.registerPreviewNotificationsApi(
+  await discoveryClient.registerPreviewNotificationsApi(
       ServerInfo(port: previewNotificationsApiPort));
 
   var previewApiClient = await getPreviewApiClient(discoveryClient);
