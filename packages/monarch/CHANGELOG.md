@@ -1,6 +1,11 @@
-## 2.5.0-pre.1 - 2022-10
+## 3.0.0-pre.1 - 2022-10-27
 - Rename `MonarchData` to `ProjectData`
-- Compatible with preview_api
+- Compatible with Monarch Preview API
+- Definitions moved to monarch_definitions package
+- Change channel names
+- Use definition mappers
+- Send channel methods to preview_api instead of controller
+- Reference data moved to preview_api
 
 ## 2.4.0-pre.6 - 2022-09-02
 - Fix `dart analyze` issues

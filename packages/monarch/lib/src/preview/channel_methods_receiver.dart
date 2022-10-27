@@ -21,7 +21,8 @@ final _logger = Logger('ChannelMethodsReceiver');
 
 void receiveChannelMethodCalls() {
   // logger.level = LogLevel.ALL;
-  MonarchMethodChannels.previewWindow.setMethodCallHandler((MethodCall call) async {
+  MonarchMethodChannels.previewWindow
+      .setMethodCallHandler((MethodCall call) async {
     _logger.finest('channel method received: ${call.method}');
 
     try {
@@ -34,9 +35,8 @@ void receiveChannelMethodCalls() {
 }
 
 Future<dynamic> _handler(MethodCall call) async {
-  final args = call.arguments == null
-        ? null
-        : Map<String, dynamic>.from(call.arguments);
+  final args =
+      call.arguments == null ? null : Map<String, dynamic>.from(call.arguments);
 
   switch (call.method) {
     case MonarchMethods.readySignalAck:

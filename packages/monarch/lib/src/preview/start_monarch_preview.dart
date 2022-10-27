@@ -75,8 +75,7 @@ Future<void> _previewApiReady() async {
     }
     await Future.delayed(Duration(milliseconds: 50));
   }
-  _logger.warning(
-      'Could not reach preview_api after $maxRetries attempts.');
+  _logger.warning('Could not reach preview_api after $maxRetries attempts.');
 }
 
 Future<void> _connectToVmService() async {
