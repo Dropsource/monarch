@@ -77,7 +77,7 @@ void onRunMonarchAppStdErrMessage(String message, Logger _logger) {
   // messages below are expected to be single line
   if (Platform.isMacOS) {
     var cannotFindBundle = RegExp(
-        r'Cannot find executable for CFBundle .* <.*(\.monarch|monarch_controller)> \(not loaded\)');
+        r'Cannot find executable for CFBundle .* <.*(\.monarch|monarch_controller|monarch_preview_api)> \(not loaded\)');
 
     if (cannotFindBundle.hasMatch(message)) {
       _logger.info('**ignored-severe** $message');
