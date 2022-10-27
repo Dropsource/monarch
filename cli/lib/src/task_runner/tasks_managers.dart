@@ -1,7 +1,7 @@
 import 'package:monarch_cli/src/task_runner/task.dart';
 import 'package:monarch_utils/log.dart';
 
-import 'grpc.dart';
+import 'preview_api.dart';
 import 'reloaders.dart';
 import 'process_task.dart';
 import '../utils/standard_output.dart' show StandardOutput;
@@ -15,12 +15,12 @@ abstract class TasksManager with Log {
 class RegenAndHotReload extends TasksManager {
   final StandardOutput stdout_;
   final ProcessParentReadyTask regenTask;
-  final ControllerGrpcClient controllerGrpcClient;
+  final PreviewApi previewApi;
 
   RegenAndHotReload({
     required this.stdout_,
     required this.regenTask,
-    required this.controllerGrpcClient,
+    required this.previewApi,
   });
 
   bool _isReloading = false;
@@ -64,7 +64,7 @@ class RegenAndHotReload extends TasksManager {
     _needsReload = false;
 
     _isReloading = true;
-    var reloader = HotReloader(controllerGrpcClient, stdout_);
+    var reloader = HotReloader(previewApi, stdout_);
     await reloader.reload(heartbeat);
     _isReloading = false;
 
@@ -80,12 +80,12 @@ class RegenAndHotReload extends TasksManager {
 class RegenRebundleAndHotRestart extends TasksManager {
   final ProcessParentReadyTask regenTask;
   final ProcessTask buildPreviewBundleTask;
-  final ControllerGrpcClient controllerGrpcClient;
+  final PreviewApi previewApi;
 
   RegenRebundleAndHotRestart({
     required this.regenTask,
     required this.buildPreviewBundleTask,
-    required this.controllerGrpcClient,
+    required this.previewApi,
   });
 
   @override
@@ -124,7 +124,7 @@ class RegenRebundleAndHotRestart extends TasksManager {
   }
 
   void reload() async {
-    var reloader = HotRestarter(buildPreviewBundleTask, controllerGrpcClient);
+    var reloader = HotRestarter(buildPreviewBundleTask, previewApi);
     reloader.reload(heartbeat);
   }
 }

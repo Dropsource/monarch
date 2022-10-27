@@ -17,7 +17,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
-  monarch_channels: ^1.0.2
+  monarch_definitions: 
+    path: ../packages/monarch_definitions
   monarch_io_utils: ^1.2.0
   monarch_utils: ^1.0.4
   monarch_grpc:
@@ -34,7 +35,9 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^1.0.0
   # monarch: ^2.4.0-pre.6
-  monarch: ^2.4.0-pre.1
+  # monarch: ^2.4.0-pre.1
+  monarch:
+    path: /Users/fertrig/development/monarch_product/monarch_shift/packages/monarch
 
 
 flutter:

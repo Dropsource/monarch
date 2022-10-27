@@ -9,18 +9,18 @@
 #include "monarch_state.h"
 #include "channels_utils.h"
 
-class WindowManager;
+class PreviewWindowManager;
 
-const std::string controllerChannelName = "monarch.controller";
-const std::string previewChannelName = "monarch.preview";
+const std::string previewApiChannelName = "monarch.previewApi";
+const std::string previewWindowChannelName = "monarch.previewWindow";
 
 class Channels
 {
 public:
 	Channels(
-		flutter::BinaryMessenger* controllerMessenger,
-		flutter::BinaryMessenger* previewMessenger,
-		WindowManager* windowManager_);
+		flutter::BinaryMessenger* previewServerMessenger,
+		flutter::BinaryMessenger* previewWindowMessenger,
+		PreviewWindowManager* windowManager_);
 	~Channels();
 
 	void setUpCallForwarding();
@@ -28,9 +28,9 @@ public:
 	void unregisterMethodCallHandlers();
 	void restartPreviewChannel(flutter::BinaryMessenger* previewMessenger);
 
-	std::unique_ptr<flutter::MethodChannel<EncodableValue>> controllerChannel;
-	std::unique_ptr<flutter::MethodChannel<EncodableValue>> previewChannel;
-	WindowManager* windowManager;
+	std::unique_ptr<flutter::MethodChannel<EncodableValue>> previewApiChannel;
+	std::unique_ptr<flutter::MethodChannel<EncodableValue>> previewWindowChannel;
+	PreviewWindowManager* previewWindowManager;
 
 private:
 	void _forwardMethodCall(
@@ -48,5 +48,6 @@ namespace MonarchMethods
 	const std::string screenChanged = "monarch.screenChanged";
 	const std::string restartPreview = "monarch.restartPreview";
 	const std::string willClosePreview = "monarch.willClosePreview";
+	const std::string terminatePreview = "monarch.terminatePreview";
 };
 

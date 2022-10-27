@@ -25,15 +25,33 @@ struct WindowInfo
         : topLeft(topLeft), size(size) {}
 };
 
+struct MonarchWindowMessages
+{
+  static LPCSTR requestControllerHandleString;
+  static LPCSTR controllerHandleString;
 
-// Preview window moved
-#define WM_M_PREVMOVE (WM_USER + 50)
+  static LPCSTR requestPreviewHandleString;
+  static LPCSTR previewHandleString;
 
-// Controller window moved
-#define WM_M_CONTMOVE (WM_USER + 51)
+  static LPCSTR previewMoveString;
+  static LPCSTR controllerMoveString;
+  
+  static UINT previewMoveMessage;
+  static UINT controllerMoveMessage;
+
+  static UINT requestControllerHandleMessage;
+  static UINT controllerHandleMessage;
+
+  static UINT requestPreviewHandleMessage;
+  static UINT previewHandleMessage;
+};
+
 
 // Monarch state changed
 #define WM_M_STATECHANGE (WM_USER + 52)
 
 // User selected undock
 #define WM_M_UNDOCK (WM_USER + 53)
+
+#define IDT_TIMER_REQ_HANDLE_1 UINT_PTR(1000)
+#define IDT_TIMER_REQ_HANDLE_2 UINT_PTR(2000)

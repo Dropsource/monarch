@@ -1,19 +1,12 @@
-import 'package:monarch_controller/data/device_definitions.dart';
-import 'package:monarch_controller/data/dock_definition.dart';
-import 'package:monarch_controller/data/monarch_data.dart';
-import 'package:monarch_controller/data/definitions.dart' as defs;
-import 'package:monarch_controller/data/stories.dart';
-import 'package:monarch_controller/data/story_scale_definitions.dart';
-import 'package:monarch_controller/data/visual_debug_flags.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
+import '../data/stories.dart';
 
-import '../data/channel_methods.dart';
-
-class ControllerState implements OutboundChannelArgument {
-  final bool isPreviewReady;
+class ControllerState {
+  final bool isReady;
   final String packageName;
   final List<StoryGroup> storyGroups;
   final Set<String> collapsedGroupKeys;
-  final String? activeStoryKey;
+  final StoryId? currentStoryId;
 
   final DeviceDefinition currentDevice;
   final List<DeviceDefinition> devices;
@@ -21,10 +14,9 @@ class ControllerState implements OutboundChannelArgument {
   final String currentLocale;
   final List<String> locales;
 
-  final String defaultThemeId;
-  final MetaTheme currentTheme;
-  final List<MetaTheme> standardThemes;
-  final List<MetaTheme> userThemes;
+  final MetaThemeDefinition currentTheme;
+  final List<MetaThemeDefinition> standardThemes;
+  final List<MetaThemeDefinition> userThemes;
 
   final StoryScaleDefinition currentScale;
 
@@ -34,22 +26,21 @@ class ControllerState implements OutboundChannelArgument {
   final List<DockDefinition> dockList;
 
   final double textScaleFactor;
-  final List<VisualDebugFlag> visualDebugFlags;
+  final Map<String, bool> visualDebugFlags;
 
-  List<MetaTheme> get allThemes => standardThemes + userThemes;
+  List<MetaThemeDefinition> get allThemes => standardThemes + userThemes;
   int get storyCount => storyGroups.fold<int>(
       0, (previousValue, element) => previousValue + element.stories.length);
 
   ControllerState({
-    required this.isPreviewReady,
+    required this.isReady,
     this.packageName = '',
     this.storyGroups = const [],
-    this.activeStoryKey,
+    this.currentStoryId,
     required this.devices,
     required this.currentDevice,
     required this.locales,
     required this.currentLocale,
-    required this.defaultThemeId,
     required this.standardThemes,
     required this.userThemes,
     required this.currentTheme,
@@ -63,52 +54,49 @@ class ControllerState implements OutboundChannelArgument {
   });
 
   factory ControllerState.init() => ControllerState(
-        isPreviewReady: false,
+        isReady: false,
         collapsedGroupKeys: {},
         devices: [defaultDeviceDefinition],
         currentDevice: defaultDeviceDefinition,
-        locales: [defs.defaultLocale],
-        currentLocale: defs.defaultLocale,
-        defaultThemeId: defs.defaultTheme.id,
-        currentTheme: defs.defaultTheme,
-        standardThemes: [defs.defaultTheme],
+        locales: [defaultLocale],
+        currentLocale: defaultLocale,
+        currentTheme: defaultThemeDefinition,
+        standardThemes: [defaultThemeDefinition],
         userThemes: [],
-        currentDock: defs.defaultDock,
+        currentDock: defaultDockDefinition,
         currentScale: defaultScaleDefinition,
-        dockList: defs.dockList,
+        dockList: dockDefinitions,
         scaleList: [defaultScaleDefinition],
-        visualDebugFlags: defs.devToolsOptions,
+        visualDebugFlags: defaultVisualDebugFlags,
         textScaleFactor: 1.0,
       );
 
   ControllerState copyWith({
-    String? activeStoryKey,
+    StoryId? currentStoryId,
     String? packageName,
     List<StoryGroup>? storyGroups,
-    bool? isPreviewReady,
+    bool? isReady,
     List<DeviceDefinition>? devices,
     DeviceDefinition? currentDevice,
     String? currentLocale,
     List<String>? locales,
-    String? defaultThemeId,
-    MetaTheme? currentTheme,
-    List<MetaTheme>? standardThemes,
-    List<MetaTheme>? userThemes,
+    MetaThemeDefinition? currentTheme,
+    List<MetaThemeDefinition>? standardThemes,
+    List<MetaThemeDefinition>? userThemes,
     StoryScaleDefinition? currentScale,
     DockDefinition? currentDock,
     double? textScaleFactor,
-    List<VisualDebugFlag>? visualDebugFlags,
+    Map<String, bool>? visualDebugFlags,
     List<StoryScaleDefinition>? scaleList,
   }) =>
       ControllerState(
-        activeStoryKey: activeStoryKey ?? this.activeStoryKey,
+        currentStoryId: currentStoryId ?? this.currentStoryId,
         storyGroups: storyGroups ?? this.storyGroups,
-        isPreviewReady: isPreviewReady ?? this.isPreviewReady,
+        isReady: isReady ?? this.isReady,
         devices: devices ?? this.devices,
         currentDevice: currentDevice ?? this.currentDevice,
         locales: locales ?? this.locales,
         currentLocale: currentLocale ?? this.currentLocale,
-        defaultThemeId: defaultThemeId ?? this.defaultThemeId,
         currentTheme: currentTheme ?? this.currentTheme,
         standardThemes: standardThemes ?? this.standardThemes,
         userThemes: userThemes ?? this.userThemes,
@@ -121,22 +109,4 @@ class ControllerState implements OutboundChannelArgument {
         packageName: packageName ?? this.packageName,
         collapsedGroupKeys: collapsedGroupKeys,
       );
-
-  @override
-  Map<String, dynamic> toStandardMap() {
-    // As of 2022-05, we only return device, scale and dock.
-    // In the future, if clients require more state properties then add
-    // them as needed.
-    return {
-      'device': currentDevice.toStandardMap(),
-      'scale': currentScale.toStandardMap(),
-      'dock': currentDock.id,
-      'activeStoryKey': activeStoryKey,
-      'themeId': currentTheme.id,
-      'locale': currentLocale,
-      'textScaleFactor': textScaleFactor,
-      'visualDebugFlags':
-          visualDebugFlags.map((e) => e.toStandardMap()).toList()
-    };
-  }
 }

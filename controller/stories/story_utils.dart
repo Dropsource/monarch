@@ -1,50 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:monarch_controller/data/abstract_channel_methods_sender.dart';
-import 'package:monarch_controller/data/channel_methods.dart';
-import 'package:monarch_controller/data/device_definitions.dart';
-import 'package:monarch_controller/data/logical_resolution.dart';
-import 'package:monarch_controller/data/monarch_data.dart';
-
-final mockChannelMethodsSender = MockChannelMethodsSender();
-
-class MockChannelMethodsSender implements AbstractChannelMethodsSender {
-  @override
-  void loadStory(String storyKey) {}
-
-  @override
-  void resetStory() {}
-
-  @override
-  void sendReadySignalAck() {}
-
-  @override
-  Future sendToggleVisualDebugFlag(OutboundChannelArgument visualDebugFlag) =>
-      Future.value();
-
-  @override
-  void setActiveDevice(String deviceId) {}
-
-  @override
-  void setActiveLocale(String locale) {}
-
-  @override
-  void setActiveTheme(String themeId) {}
-
-  @override
-  void setDockSide(String dock) {}
-
-  @override
-  void setStoryScale(double scale) {}
-
-  @override
-  void setTextScaleFactor(double scale) {}
-
-  @override
-  Future<bool> hotReload() => Future.value(true);
-
-  @override
-  void restartPreview() {}
-}
+import 'package:monarch_definitions/monarch_definitions.dart';
 
 const deviceDefinitions = [
   iPhone13DeviceDefinition,
@@ -56,7 +10,7 @@ const deviceDefinitions = [
       width: 375,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-13-pro',
@@ -66,7 +20,7 @@ const deviceDefinitions = [
       width: 390,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-13-pro-max',
@@ -76,7 +30,7 @@ const deviceDefinitions = [
       width: 428,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-12',
@@ -86,7 +40,7 @@ const deviceDefinitions = [
       width: 390,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-12-mini',
@@ -96,7 +50,7 @@ const deviceDefinitions = [
       width: 360,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
   DeviceDefinition(
     id: 'ios-iphone-12-pro',
@@ -106,17 +60,17 @@ const deviceDefinitions = [
       width: 390,
     ),
     devicePixelRatio: 3.0,
-    targetPlatform: TargetPlatform.iOS,
+    targetPlatform: MonarchTargetPlatform.iOS,
   ),
 ];
 
 const standardMetaThemes = [
-  MetaTheme(
+  MetaThemeDefinition(
     id: '__material-light-theme__',
     name: 'Material Light Theme',
     isDefault: true,
   ),
-  MetaTheme(
+  MetaThemeDefinition(
     id: '__material-dark-theme__',
     name: 'Material Dark Theme',
     isDefault: false,

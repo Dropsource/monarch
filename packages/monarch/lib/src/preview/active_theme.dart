@@ -1,16 +1,14 @@
 import 'active_value.dart';
-import 'monarch_data.dart';
+import 'project_data.dart';
+import 'standard_themes.dart';
 
 class ActiveTheme extends ActiveValue<MetaTheme> {
   final List<MetaTheme> _metaThemes = [];
   List<MetaTheme> get metaThemes => _metaThemes;
 
-  late MetaTheme _defaultMetaTheme;
-  MetaTheme get defaultMetaTheme => _defaultMetaTheme;
-
   MetaTheme? _activeMetaTheme;
   @override
-  MetaTheme get value => _activeMetaTheme ?? _defaultMetaTheme;
+  MetaTheme get value => _activeMetaTheme ?? defaultTheme;
 
   void setMetaThemes(List<MetaTheme> list) {
     if (list.isEmpty) {
@@ -19,10 +17,6 @@ class ActiveTheme extends ActiveValue<MetaTheme> {
 
     _metaThemes.clear();
     _metaThemes.addAll(list);
-
-    _defaultMetaTheme = _metaThemes.firstWhere(
-        (metaTheme) => metaTheme.isDefault,
-        orElse: () => _metaThemes.first);
   }
 
   MetaTheme getMetaTheme(String id) =>

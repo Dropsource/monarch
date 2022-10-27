@@ -3,6 +3,7 @@ import 'package:monarch_controller/data/stories.dart';
 import 'package:monarch_controller/widgets/story_list/search_field.dart';
 import 'package:monarch_controller/widgets/story_list/story_tree.dart';
 import 'package:monarch_controller/manager/controller_manager.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
 
 import '../../../utils/translations.dart';
 import '../components/no_stories_found_text.dart';
@@ -13,12 +14,12 @@ class StoryList extends StatefulWidget {
     required this.stories,
     required this.projectName,
     required this.manager,
-    this.activeStoryKey,
+    this.activeStoryId,
   }) : super(key: key);
 
   final List<StoryGroup> stories;
   final String projectName;
-  final String? activeStoryKey;
+  final StoryId? activeStoryId;
   final ControllerManager manager;
 
   @override
@@ -77,7 +78,7 @@ class StoryListState extends State<StoryList> {
                     query: query,
                     focusNode: _storyListFocusNode,
                     onStorySelected: (storyKey) =>
-                        widget.manager.onActiveStoryChanged(storyKey),
+                        widget.manager.actions!.onActiveStoryChanged(storyKey),
                     // selectionColor: _focused
                   )
                 ],

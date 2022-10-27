@@ -3,14 +3,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:monarch_utils/log.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
 
 import 'active_device.dart';
 import 'active_story.dart';
 import 'active_theme.dart';
 import 'active_story_error.dart';
-import 'device_definitions.dart';
-import 'monarch_data_manager.dart';
-import 'monarch_data.dart';
+import 'project_data_manager.dart';
+import 'project_data.dart';
 import 'story_error_view.dart';
 
 final _logger = Logger('MonarchStoryView');
@@ -89,8 +89,8 @@ class _MonarchStoryViewState extends State<MonarchStoryView> {
       _storyFunction = null;
     } else {
       final metaStories =
-          monarchDataManager.data!.metaStoriesMap[activeStoryId.pathKey]!;
-      _storyFunction = metaStories.storiesMap[activeStoryId.name];
+          projectDataManager.data!.metaStoriesMap[activeStoryId.storiesMapKey]!;
+      _storyFunction = metaStories.storiesMap[activeStoryId.storyName];
     }
   }
 
@@ -118,7 +118,9 @@ class _MonarchStoryViewState extends State<MonarchStoryView> {
       key: UniqueKey(),
       body: Theme(
           data: _themeData.copyWith(
-              platform: _device.targetPlatform,
+              platform: _device.targetPlatform == MonarchTargetPlatform.android
+                  ? TargetPlatform.android
+                  : TargetPlatform.iOS,
               // Override visualDensity to use the one set for mobile platform:
               // - https://github.com/flutter/flutter/pull/66370
               // - https://github.com/flutter/flutter/issues/63788

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:stockholm/stockholm.dart';
 
 import '../../../utils/translations.dart';
-import '../../data/visual_debug_flags.dart';
+import '../../data/visual_debug_flag_utils.dart';
 
 class CheckboxList extends StatelessWidget {
-  final List<VisualDebugFlag> visualDebugFlags;
-  final Function(VisualDebugFlag)? onFlagToggled;
+  final Map<String, bool> visualDebugFlags;
+  final Function(String, bool)? onFlagToggled;
 
   const CheckboxList({
     Key? key,
@@ -17,17 +17,19 @@ class CheckboxList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: visualDebugFlags
-          .map((item) => SizedBox(
-              height: 20,
-              child: StockholmCheckbox(
-                value: item.isEnabled,
-                onChanged: (newValue) {
-                  onFlagToggled?.call(item);
-                },
-                label: Translations.of(context)!.text(item.label),
-              )))
-          .toList(),
-    );
+        children: visualDebugFlags.entries.map((e) {
+      var flagName = e.key;
+      var isEnabled = e.value;
+      return SizedBox(
+          height: 20,
+          child: StockholmCheckbox(
+            value: isEnabled,
+            onChanged: (newValue) {
+              onFlagToggled?.call(flagName, isEnabled);
+            },
+            label: Translations.of(context)!
+                .text(getVisualDebugFlagLabel(flagName)),
+          ));
+    }).toList());
   }
 }

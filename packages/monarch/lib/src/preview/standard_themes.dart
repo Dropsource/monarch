@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
+import 'project_data.dart';
 
-import 'channel_argument.dart';
-import 'monarch_data.dart';
+const _light = materialLightThemeDefinition;
+const _dark = materialDarkThemeDefinition;
 
-final standardMetaThemes = [
-  MetaTheme('__material-light-theme__', 'Material Light Theme',
-      ThemeData.light(), true),
-  MetaTheme(
-      '__material-dark-theme__', 'Material Dark Theme', ThemeData.dark(), false)
-];
+final lightTheme =
+    MetaTheme(_light.id, _light.name, ThemeData.light(), _light.isDefault);
+final dartkTheme =
+    MetaTheme(_dark.id, _dark.name, ThemeData.dark(), _dark.isDefault);
 
-class StandardThemes implements OutboundChannelArgument {
-  @override
-  Map<String, dynamic> toStandardMap() {
-    return {
-      'standardThemes':
-          standardMetaThemes.map((d) => d.toStandardMap()).toList(),
-    };
-  }
-}
+final defaultTheme = lightTheme;
+
+final standardMetaThemes = [lightTheme, dartkTheme];

@@ -11,3 +11,5 @@ environment:
 
 dependencies:
   grpc: ^3.0.2
+  monarch_definitions:
+    path: ../monarch_definitions

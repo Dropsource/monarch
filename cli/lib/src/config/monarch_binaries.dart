@@ -37,6 +37,9 @@ class MonarchBinaries {
     return File(path);
   }
 
+  Directory previewApiDirectory(FlutterSdkId id) =>
+      Directory(p.join(uiIdDirectory(id).path, 'monarch_preview_api'));
+
   Directory controllerDirectory(FlutterSdkId id) =>
       Directory(p.join(uiIdDirectory(id).path, 'monarch_controller'));
 }

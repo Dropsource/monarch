@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:monarch_cli/src/task_runner/preview_api.dart';
 import 'package:monarch_cli/src/utils/standard_input.dart';
 import 'package:path/path.dart' as p;
 import 'package:monarch_utils/log.dart';
@@ -14,7 +15,6 @@ import '../config/project_config.dart';
 import '../utils/cli_exit_code.dart';
 import '../utils/standard_output.dart';
 import 'attach_task.dart';
-import 'grpc.dart';
 import 'monarch_app_stdout.dart';
 import 'monarch_app_stderr.dart';
 import 'task.dart';
@@ -37,9 +37,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   final bool noSoundNullSafety;
   final ReloadOption reloadOption;
   final Analytics analytics;
-  final ControllerGrpcClient controllerGrpcClient;
-
-  late final int cliGrpcServerPort;
+  final int discoveryServerPort;
+  final PreviewApi previewApi;
 
   String get generatedMainFilePath => p.join('.dart_tool', 'build', 'generated',
       config.pubspecProjectName, 'lib', 'main_monarch.g.dart');
@@ -60,7 +59,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
     required this.noSoundNullSafety,
     required this.reloadOption,
     required this.analytics,
-    required this.controllerGrpcClient,
+    required this.discoveryServerPort,
+    required this.previewApi,
   });
 
   /*
@@ -96,6 +96,12 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   /// Launches the Monarch desktop app for the current platform and Flutter SDK.
   /// The desktop app launches the Monarch Controller and Preview.
   ProcessReadyTask? _runMonarchAppTask;
+
+  /// Similar to [_runMonarchAppTask] but it only launches the Preview.
+  ProcessReadyTask? _runPreviewAppTask;
+
+  /// Similar to [_runMonarchAppTask] but it only launches the Controller.
+  ProcessReadyTask? _runControllerAppTask;
 
   /// Attaches to the running Monarch Preview. This process allows us to
   /// hot reload.
@@ -155,12 +161,15 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
     if (Platform.isWindows) {
       WindowsTerminator.killTasksByWindowTitle(
           '${config.pubspecProjectName} - Monarch');
+      previewApi.terminatePreview();
     }
 
     final tasks = [
       _generateStoriesTask,
       _buildPreviewBundleTask,
       _runMonarchAppTask,
+      _runPreviewAppTask,
+      _runControllerAppTask,
       _attachToReloadTask?.task,
       _watchToRegenTask
     ];
@@ -285,6 +294,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
     }
   }
 
+  final _appLogLevelRegex = RegExp(r'^[\w :]+ (\w+)');
+
   Future _createLongRunningTasks() async {
     _runMonarchAppTask = ProcessReadyTask(
         taskName: TaskNames.runMonarchApp,
@@ -292,18 +303,59 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
             monarchBinaries.monarchAppExecutableFile(config.flutterSdkId).path,
         arguments: [
           monarchBinaries
+              .previewApiDirectory(config.flutterSdkId)
+              .path, // preview-api-bundle
+          p.join(projectDirectory.path, dotMonarch), // preview-window-bundle
+          monarchBinaries
               .controllerDirectory(config.flutterSdkId)
-              .path, // controller-bundle
-          p.join(projectDirectory.path, dotMonarch), // preview-bundle
+              .path, // controller-window-bundle
           defaultLogLevel.name, // log-level
-          cliGrpcServerPort.toString(), // cli-grpc-server-port
+          discoveryServerPort.toString(), // discovery-server-port
           config.pubspecProjectName, // project-name
         ],
         workingDirectory: projectDirectory.path,
         analytics: analytics,
-        logLevelRegex: RegExp(r'^[\w :]+ (\w+)'),
+        logLevelRegex: _appLogLevelRegex,
         onStdErrMessage: onRunMonarchAppStdErrMessage,
         readyMessage: 'monarch-preview-ready');
+
+    _runPreviewAppTask = ProcessReadyTask(
+        taskName: TaskNames.runPreviewApp,
+        executable:
+            monarchBinaries.monarchAppExecutableFile(config.flutterSdkId).path,
+        arguments: [
+          'preview', // mode
+          monarchBinaries
+              .previewApiDirectory(config.flutterSdkId)
+              .path, // preview-api-bundle
+          p.join(projectDirectory.path, dotMonarch), // preview-window-bundle
+          defaultLogLevel.name, // log-level
+          discoveryServerPort.toString(), // discovery-server-port
+        ],
+        workingDirectory: projectDirectory.path,
+        analytics: analytics,
+        logLevelRegex: _appLogLevelRegex,
+        onStdErrMessage: onRunMonarchAppStdErrMessage,
+        readyMessage: 'monarch-preview-ready');
+
+    _runControllerAppTask = ProcessReadyTask(
+        taskName: TaskNames.runControllerapp,
+        executable:
+            monarchBinaries.monarchAppExecutableFile(config.flutterSdkId).path,
+        arguments: [
+          'controller', // mode
+          monarchBinaries
+              .controllerDirectory(config.flutterSdkId)
+              .path, // controller-window-bundle
+          defaultLogLevel.name, // log-level
+          discoveryServerPort.toString(), // discovery-server-port
+          config.pubspecProjectName, // project-name
+        ],
+        workingDirectory: projectDirectory.path,
+        analytics: analytics,
+        logLevelRegex: _appLogLevelRegex,
+        onStdErrMessage: onRunMonarchAppStdErrMessage,
+        readyMessage: 'monarch-controller-ready');
 
     _attachToReloadTask = AttachTask(
         taskName: TaskNames.attachToHotRestart,
@@ -330,27 +382,42 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
             running: 'Watch:Starting Build', done: 'Build:Succeeded'));
   }
 
+  Future _whenMonarchAppDone() async {
+    if (!_isTerminating) {
+      _watchToRegenTask?.stopScrapingMessages();
+      _attachToReloadTask?.stopScrapingMessages();
+      await Future.delayed(Duration(milliseconds: 50), () {
+        var ctrlC = valueForPlatform(macos: '⌃C', windows: 'Ctrl+C');
+        stdout_default
+            .writeln('\nMonarch app terminated. Press $ctrlC to exit CLI.');
+      });
+    }
+  }
+
   Future _runLongRunningTasks() async {
     var taskFunctions = <Future Function()>[
       () async {
         var launching =
             TaskCountHeartbeat('Launching Monarch app', taskCount: 1)..start();
 
-        await _runMonarchAppTask!.run();
-        unawaited(_runMonarchAppTask!.done().whenComplete(() async {
-          if (!_isTerminating) {
-            _watchToRegenTask?.stopScrapingMessages();
-            _attachToReloadTask?.stopScrapingMessages();
-            await Future.delayed(Duration(milliseconds: 50), () {
-              var ctrlC = valueForPlatform(macos: '⌃C', windows: 'Ctrl+C');
-              stdout_default.writeln(
-                  '\nMonarch app terminated. Press $ctrlC to exit CLI.');
-            });
-          }
-        }));
-        var monarchAppStdoutListener = MonarchAppStdoutListener();
-        _runMonarchAppTask!.stdout.listen(monarchAppStdoutListener.listen);
-        await _runMonarchAppTask!.ready();
+        if (Platform.isWindows) {
+          await _runPreviewAppTask!.run();
+          await _runControllerAppTask!.run();
+
+          _runPreviewAppTask!.done().whenComplete(_whenMonarchAppDone);
+          _runControllerAppTask!.done().whenComplete(_whenMonarchAppDone);
+
+          _runPreviewAppTask!.stdout.listen(onMonarchAppStdoutMessage);
+          _runControllerAppTask!.stdout.listen(onMonarchAppStdoutMessage);
+
+          await _runPreviewAppTask!.ready();
+          await _runControllerAppTask!.ready();
+        } else {
+          await _runMonarchAppTask!.run();
+          _runMonarchAppTask!.done().whenComplete(_whenMonarchAppDone);
+          _runMonarchAppTask!.stdout.listen(onMonarchAppStdoutMessage);
+          await _runMonarchAppTask!.ready();
+        }
 
         launching.complete();
       },
@@ -376,12 +443,12 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
               ? RegenAndHotReload(
                   stdout_: stdout_default,
                   regenTask: _watchToRegenTask!,
-                  controllerGrpcClient: controllerGrpcClient,
+                  previewApi: previewApi,
                 )
               : RegenRebundleAndHotRestart(
                   regenTask: _watchToRegenTask!,
                   buildPreviewBundleTask: _buildPreviewBundleTask!,
-                  controllerGrpcClient: controllerGrpcClient,
+                  previewApi: previewApi,
                 );
 
           _regenAndReloadManager!.manage();
@@ -408,12 +475,12 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
     if (isReloadAutomatic) {
       keyCommands.addAll([
         HotReloadKeyCommand(
-            controllerGrpcClient: controllerGrpcClient,
+            previewApi: previewApi,
             stdout_: stdout_default,
             isDefault: reloadOption == ReloadOption.hotReload),
         HotRestartKeyCommand(
             bundleTask: _buildPreviewBundleTask!,
-            controllerGrpcClient: controllerGrpcClient,
+            previewApi: previewApi,
             stdout_: stdout_default,
             isDefault: reloadOption == ReloadOption.hotRestart),
         helpKeyCommand,
@@ -424,11 +491,11 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         GenerateAndHotReloadKeyCommand(
             stdout_: stdout_default,
             generateTask: _generateStoriesTask!,
-            controllerGrpcClient: controllerGrpcClient),
+            previewApi: previewApi),
         GenerateAndHotRestartKeyCommand(
           generateTask: _generateStoriesTask!,
           bundleTask: _buildPreviewBundleTask!,
-          controllerGrpcClient: controllerGrpcClient,
+          previewApi: previewApi,
         ),
         helpKeyCommand,
         QuitKeyCommand()

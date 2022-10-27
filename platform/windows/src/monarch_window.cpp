@@ -10,10 +10,11 @@
 #include "string_utils.h"
 #include "monarch_state.h"
 
+/// MonarchWindow
+
 MonarchWindow::MonarchWindow(
-	const flutter::DartProject& project,
-	WindowManager* windowManager_)
-	: FlutterWindow(project), windowManager(windowManager_)
+	const flutter::DartProject& project)
+	: FlutterWindow(project)
 {
 }
 
@@ -29,9 +30,14 @@ void MonarchWindow::setTitle(std::string title)
 
 WindowInfo MonarchWindow::getWindowInfo()
 {
+	return getWindowInfo(GetHandle());
+}
+
+WindowInfo MonarchWindow::getWindowInfo(HWND handle)
+{
 	return WindowInfo(
-		WindowHelper::getTopLeftPoint(GetHandle()),
-		WindowHelper::getWindowSize(GetHandle()));
+		WindowHelper::getTopLeftPoint(handle),
+		WindowHelper::getWindowSize(handle));
 }
 
 void MonarchWindow::move(int X, int Y, int nWidth, int nHeight)
@@ -50,10 +56,15 @@ flutter::BinaryMessenger* MonarchWindow::messenger()
 	return flutter_controller_->engine()->messenger();
 }
 
+
+
+/// ControllerWindow
+
+WindowInfo ControllerWindow::defaultWindowInfo = WindowInfo(Point_(200, 200), Size_(600, 700));
+
 ControllerWindow::ControllerWindow(
-	const flutter::DartProject& project,
-	WindowManager* windowManager)
-	: MonarchWindow(project, windowManager)
+	const flutter::DartProject& project)
+	: MonarchWindow(project)
 {
 	_previewWindowHandle = nullptr;
 }
@@ -62,9 +73,14 @@ ControllerWindow::~ControllerWindow()
 {
 }
 
-void ControllerWindow::setPreviewWindow(HWND previewHwnd)
+void ControllerWindow::requestPreviewWindowHandle()
 {
-	_previewWindowHandle = previewHwnd;
+	requestPreviewWindowHandle(GetHandle());
+}
+
+void ControllerWindow::requestPreviewWindowHandle(HWND controllerWindowHandle)
+{
+	::PostMessage(HWND_BROADCAST, MonarchWindowMessages::requestPreviewHandleMessage, WPARAM(controllerWindowHandle), 0);
 }
 
 LRESULT ControllerWindow::MessageHandler(
@@ -74,6 +90,21 @@ LRESULT ControllerWindow::MessageHandler(
 	LPARAM const lparam) noexcept
 {
 	switch (message) {
+	case WM_TIMER:
+		switch (wparam)
+		{
+		case IDT_TIMER_REQ_HANDLE_1:
+			requestPreviewWindowHandle();
+			KillTimer(GetHandle(), IDT_TIMER_REQ_HANDLE_1);
+			break;
+
+		case IDT_TIMER_REQ_HANDLE_2:
+			requestPreviewWindowHandle();
+			KillTimer(GetHandle(), IDT_TIMER_REQ_HANDLE_2);
+			break;
+		}
+		break;
+
 	case WM_MOVE:
 		if (_isPreviewWindowSet() && !isMovingProgrammatically) {
 			_postMoveMessage();
@@ -86,20 +117,6 @@ LRESULT ControllerWindow::MessageHandler(
 		}
 		break;
 
-	case WM_M_PREVMOVE:
-		if (_isPreviewWindowSet()) {
-			WindowInfo* previewWindowInfo = (WindowInfo*)wparam;
-			auto point = _getTopLeft(
-				WindowInfo(previewWindowInfo->topLeft, previewWindowInfo->size),
-				windowManager->selectedDockSide);
-			auto size = getWindowInfo().size;
-
-			move(point.x, point.y, size.width, size.height);
-
-			delete previewWindowInfo;
-		}
-		break;
-
 	case WM_GETMINMAXINFO:
 		{
 			LPMINMAXINFO lpMMI = (LPMINMAXINFO)lparam;
@@ -107,6 +124,29 @@ LRESULT ControllerWindow::MessageHandler(
 			lpMMI->ptMinTrackSize.y = 500;
 		}
 		break;
+	}
+
+	if (message == MonarchWindowMessages::requestControllerHandleMessage)
+	{
+		// The preview sent a request to get the controller window handle.
+		HWND previewHandle = HWND(wparam);
+		::PostMessage(previewHandle, MonarchWindowMessages::controllerHandleMessage, WPARAM(GetHandle()), 0);
+	}
+	else if (message == MonarchWindowMessages::previewHandleMessage)
+	{
+		// The preview sent its window handle, store it.
+		_previewWindowHandle = HWND(wparam);
+	}
+	else if (message == MonarchWindowMessages::previewMoveMessage)
+	{
+		HWND previewHandle = HWND(wparam);
+		DockSide dockSide = DockSide(lparam);
+		auto previewWindowInfo = getWindowInfo(previewHandle);
+
+		auto point = _getTopLeft(previewWindowInfo, dockSide);
+		auto size = getWindowInfo().size;
+
+		move(point.x, point.y, size.width, size.height);
 	}
 
 	return MonarchWindow::MessageHandler(hwnd, message, wparam, lparam);
@@ -135,25 +175,27 @@ bool ControllerWindow::_isPreviewWindowSet()
 
 void ControllerWindow::_postMoveMessage()
 {
-	WindowInfo* windowInfo = new WindowInfo(getWindowInfo());
-	::PostMessage(_previewWindowHandle, WM_M_CONTMOVE, WPARAM(windowInfo), 0);
+	::PostMessage(
+		_previewWindowHandle, 
+		MonarchWindowMessages::controllerMoveMessage, 
+		WPARAM(GetHandle()), 
+		0);
 }
+
+
+
+/// PreviewWindow
 
 PreviewWindow::PreviewWindow(
 	const flutter::DartProject& project,
-	WindowManager* windowManager)
-	: MonarchWindow(project, windowManager)
+	PreviewWindowManager* windowManager)
+	: MonarchWindow(project), windowManager(windowManager)
 {
 	_controllerWindowHandle = nullptr;
 }
 
 PreviewWindow::~PreviewWindow()
 {
-}
-
-void PreviewWindow::setControllerWindow(HWND controllerHwnd)
-{
-	_controllerWindowHandle = controllerHwnd;
 }
 
 void PreviewWindow::resize(
@@ -194,9 +236,6 @@ void PreviewWindow::resizeDpiAware(
 	auto target_point = _getTopLeft(controllerWindowInfo, dockSide);
 	double scale_factor = WindowHelper::getDpiScaleFactor(GetHandle());
 
-	//Logger _logger{ L"FlutterWindowHelpers.resizeDpiAware" };
-	//_logger.shout(L"scale_factor: " + std::to_wstring(scale_factor));
-
 	move(
 		target_point.x, 
 		target_point.y,
@@ -217,7 +256,7 @@ void PreviewWindow::resizeUsingClientRectOffset(
 	clientFrame.right = WindowHelper::convert(clientFrame.right, scale_factor);
 	clientFrame.bottom = WindowHelper::convert(clientFrame.bottom, scale_factor);
 
-	//Logger _logger{ L"FlutterWindowHelpers.resizeOffsetDpiAware" };
+	//Logger _logger{ L"PreviewWindow::resizeUsingClientRectOffset" };
 	//_logger.shout(L"size: " + std::to_wstring(size.width) + L"x" + std::to_wstring(size.height));
 	//_logger.shout(L"client: " + std::to_wstring(clientFrame.right) + L"x" + std::to_wstring(clientFrame.bottom));
 
@@ -240,6 +279,21 @@ void PreviewWindow::disableResizeMinimize()
 		GetWindowLong(GetHandle(), GWL_STYLE) & ~WS_SIZEBOX & ~WS_MAXIMIZEBOX);
 }
 
+HWND PreviewWindow::getControllerWindowHandle()
+{
+	return _controllerWindowHandle;
+}
+
+void PreviewWindow::requestControllerWindowHandle()
+{
+	requestControllerWindowHandle(GetHandle());
+}
+
+void PreviewWindow::requestControllerWindowHandle(HWND previewWindowHandle)
+{
+	::PostMessage(HWND_BROADCAST, MonarchWindowMessages::requestControllerHandleMessage, WPARAM(previewWindowHandle), 0);
+}
+
 LRESULT PreviewWindow::MessageHandler(
 	HWND hwnd,
 	UINT const message, 
@@ -247,37 +301,41 @@ LRESULT PreviewWindow::MessageHandler(
 	LPARAM const lparam) noexcept
 {
 	switch (message) {
+	case WM_TIMER:
+		switch (wparam)
+		{
+		case IDT_TIMER_REQ_HANDLE_1:
+			requestControllerWindowHandle();
+			KillTimer(GetHandle(), IDT_TIMER_REQ_HANDLE_1);
+			break;
+
+		case IDT_TIMER_REQ_HANDLE_2:
+			requestControllerWindowHandle();
+			KillTimer(GetHandle(), IDT_TIMER_REQ_HANDLE_2);
+			break;
+		}
+		break;
+
 	case WM_M_STATECHANGE:
 	{		
-		WindowInfo* controllerWindowInfo = (WindowInfo*)wparam;
-		MonarchState* state = (MonarchState*)lparam;
-
+		MonarchState* state = (MonarchState*)wparam;
+		
 		Size_ deviceSize(
-			(int)state->device.logicalResolution.width, 
+			(int)state->device.logicalResolution.width,
 			(int)state->device.logicalResolution.height);
 
-		resize(deviceSize, state->scale.scale, state->dock,
-			WindowInfo(controllerWindowInfo->topLeft, controllerWindowInfo->size));
+		if (isControllerWindowSet())
+		{
+			auto controllerWindowInfo = getWindowInfo(_controllerWindowHandle);
+			resize(deviceSize, state->scale.scale, state->dock, controllerWindowInfo);
+		}
 
 		auto title = state->scale.scale == defaultStoryScaleDefinition.scale ?
 			state->device.title() :
 			state->device.title() + " | " + state->scale.name;
-
 		setTitle(title);
 
-		delete controllerWindowInfo;
 		delete state;
-	}
-	break;
-
-	case WM_M_CONTMOVE:
-	{
-		WindowInfo* controllerWindowInfo = (WindowInfo*)wparam;
-
-		_move(windowManager->selectedDockSide,
-			WindowInfo(controllerWindowInfo->topLeft, controllerWindowInfo->size));
-
-		delete controllerWindowInfo;
 	}
 	break;
 
@@ -286,11 +344,37 @@ LRESULT PreviewWindow::MessageHandler(
 		break;
 
 	case WM_MOVE:
-		if (!isMovingProgrammatically) {
-			WindowInfo* windowInfo = new WindowInfo(getWindowInfo());
-			PostMessage(_controllerWindowHandle, WM_M_PREVMOVE, WPARAM(windowInfo), 0);
+		if (!isMovingProgrammatically && isControllerWindowSet()) {
+			PostMessage(
+				_controllerWindowHandle,
+				MonarchWindowMessages::previewMoveMessage,
+				WPARAM(GetHandle()), 
+				LPARAM(windowManager->selectedDockSide));
 		}
 		break;
+	}
+
+	if (message == MonarchWindowMessages::requestPreviewHandleMessage)
+	{
+		// The controller sent a request to get the preview window handle.
+		HWND controllerHandle = HWND(wparam);
+		::PostMessage(controllerHandle, MonarchWindowMessages::previewHandleMessage, WPARAM(GetHandle()), 0);
+	}
+	else if (message == MonarchWindowMessages::controllerHandleMessage)
+	{
+		// The controller sent its window handle, store it.
+		_controllerWindowHandle = HWND(wparam);
+	}
+	else if (message == MonarchWindowMessages::controllerMoveMessage)
+	{
+		HWND controllerHandle = HWND(wparam);
+		DockSide dockSide = windowManager->selectedDockSide;
+		auto controllerWindowInfo = getWindowInfo(controllerHandle);
+
+		auto point = _getTopLeft(controllerWindowInfo, dockSide);
+		auto size = getWindowInfo().size;
+
+		move(point.x, point.y, size.width, size.height);
 	}
 
 	return MonarchWindow::MessageHandler(hwnd, message, wparam, lparam);
@@ -324,7 +408,37 @@ Point_ PreviewWindow::_getTopLeft(WindowInfo controllerWindowInfo, DockSide side
 	}
 }
 
-bool PreviewWindow::_isControllerWindowSet()
+bool PreviewWindow::isControllerWindowSet()
 {
 	return _controllerWindowHandle != nullptr;
+}
+
+
+/// PreviewApiRunner
+
+PreviewApiRunner::PreviewApiRunner(const flutter::DartProject& project)
+	: project_(project)
+{
+}
+
+PreviewApiRunner::~PreviewApiRunner()
+{
+	auto ptr = engine_.release();
+	delete ptr;
+}
+
+void PreviewApiRunner::run()
+{
+	engine_ = std::make_unique<flutter::FlutterEngine>(project_);
+	engine_->Run();
+}
+
+flutter::BinaryMessenger* PreviewApiRunner::messenger()
+{
+	return engine_->messenger();
+}
+
+void PreviewApiRunner::shutDown()
+{
+	engine_->ShutDown();
 }

@@ -14,11 +14,13 @@ import os.log
 
 class WindowManager {
     
+    var previewApiBundlePath: String?
+    var previewWindowBundlePath: String?
     var controllerBundlePath: String?
-    var previewBundlePath: String?
     var cliGrpcServerPort: String?
     var projectName: String?
     
+    var previewApi: FlutterEngine?
     var controllerWindow: NSWindow?
     var previewWindow: NSWindow?
     var channels: Channels?
@@ -38,38 +40,53 @@ class WindowManager {
         
         logger.fine("arguments \(arguments)");
         
-        if (arguments.count < 6) {
-            fatalError("Expected 6 arguments in this order: executable-path controller-bundle preview-bundle log-level cli-grpc-server-port project-name")
+        if (arguments.count < 7) {
+            fatalError("Expected 6 arguments in this order: executable-path preview-api-bundle preview-window-bundle controller-bundle log-level cli-grpc-server-port project-name")
         }
         
-        controllerBundlePath = arguments[1]
-        previewBundlePath = arguments[2]
-        defaultLogLevel = logLevelFromString(levelString: arguments[3])
-        cliGrpcServerPort = arguments[4]
-        projectName = arguments[5]
+        previewApiBundlePath = arguments[1]
+        previewWindowBundlePath = arguments[2]
+        controllerBundlePath = arguments[3]
+        defaultLogLevel = logLevelFromString(levelString: arguments[4])
+        cliGrpcServerPort = arguments[5]
+        projectName = arguments[6]
         
         self._loadWindows()
     }
     
     func _loadWindows() {
+        let previewApiProject = _initDartProject(previewApiBundlePath!)
+        let previewWindowProject = _initDartProject(previewWindowBundlePath!)
         let controllerProject = _initDartProject(controllerBundlePath!)
-        let previewProject = _initDartProject(previewBundlePath!)
         
+        previewApiProject.dartEntrypointArguments = [
+            logLevelToString(level: defaultLogLevel), cliGrpcServerPort!]
+        previewWindowProject.dartEntrypointArguments = [
+            logLevelToString(level: defaultLogLevel)]
         controllerProject.dartEntrypointArguments = [
             logLevelToString(level: defaultLogLevel), cliGrpcServerPort!]
-        previewProject.dartEntrypointArguments = [
-            logLevelToString(level: defaultLogLevel)]
         
-        let controller = FlutterViewController.init(project: controllerProject)
-        let preview = FlutterViewController.init(project: previewProject)
+        let previewApi = FlutterEngine.init(
+            name: "monarch-preview-api",
+            project: previewApiProject,
+            allowHeadlessExecution: true)
+        let previewViewController = FlutterViewController.init(project: previewWindowProject)
+        let controllerViewController = FlutterViewController.init(project: controllerProject)
         
         channels = Channels.init(
-            controllerMessenger: controller.engine.binaryMessenger,
-            previewMessenger: preview.engine.binaryMessenger,
+            previewApiMessenger: previewApi.binaryMessenger,
+            previewWindowMessenger: previewViewController.engine.binaryMessenger,
             windowManager: self)
         channels!.setUpCallForwarding()
         
-        _launchFlutterWindows(preview, controller)
+        _launchFlutterWindows(previewViewController, controllerViewController)
+        
+        /// Run the preview api in its own isolate. Make sure to run it after launching the windows to make sure
+        /// devtools inspects the preview widget tree. See [_launchFlutterWindows] below.
+        if (!previewApi.run(withEntrypoint: nil)) {
+            fatalError("FlutterEngine.run for preview_api was not successful")
+        }
+        
         logger.info("monarch-window-manager-ready")
     }
     
@@ -84,6 +101,15 @@ class WindowManager {
         return project
     }
     
+    /**
+     * Launches the Monarch Flutter Windows (the preview and the controller windows).
+     *
+     * @GOTCHA: the preview needs to be launched after the controller to make sure the devtools
+     * widget inspector inspects the preview widget tree. This is a workaround until [this issue]
+     * (https://github.com/flutter/devtools/issues/4304) is fixed or until the monarch macos code launches
+     * the preview and the controller in their own separate applications, similar to how monarch windows
+     * does it.
+     */
     func _launchFlutterWindows(_ previewFVC: FlutterViewController, _ controllerFVC: FlutterViewController) {
         controllerWindow = NSWindow()
         previewWindow = NSWindow()
@@ -101,15 +127,22 @@ class WindowManager {
         _tearDownObservers()
         channels!.sendWillClosePreview()
         previewWindow!.close()
-        let previewProject = _initDartProject(previewBundlePath!)
-        previewProject.dartEntrypointArguments = [
+        let previewWindowProject = _initDartProject(previewWindowBundlePath!)
+        previewWindowProject.dartEntrypointArguments = [
             logLevelToString(level: defaultLogLevel)]
-        let preview = FlutterViewController.init(project: previewProject)
-        channels!.restartPreviewChannel(previewMessenger: preview.engine.binaryMessenger)
+        let previewWindowViewController = FlutterViewController.init(project: previewWindowProject)
+        channels!.restartPreviewChannel(
+            previewWindowMessenger: previewWindowViewController.engine.binaryMessenger)
         previewWindow = NSWindow()
-        _setUpPreviewWindow(preview, previewWindow!)
+        _setUpPreviewWindow(previewWindowViewController, previewWindow!)
         _setUpObservers(controllerWindow!, previewWindow!)
         resizePreviewWindow()
+    }
+    
+    func terminate() {
+        controllerWindow!.close()
+        previewWindow!.close()
+        previewApi!.shutDownEngine()
     }
     
     func _setUpControllerWindow(_ controllerFVC: FlutterViewController, _ controllerWindow: NSWindow) {

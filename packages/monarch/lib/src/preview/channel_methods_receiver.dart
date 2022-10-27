@@ -1,7 +1,8 @@
 import 'package:flutter/services.dart';
 
 import 'package:monarch_utils/log.dart';
-import 'package:monarch_channels/monarch_channels.dart';
+import 'package:monarch_definitions/monarch_channels.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
 
 import 'active_device.dart';
 import 'active_story.dart';
@@ -9,6 +10,7 @@ import 'active_theme.dart';
 import 'active_locale.dart';
 import 'active_text_scale_factor.dart';
 import 'active_story_scale.dart';
+import 'channel_methods.dart';
 import 'ready_signal.dart';
 import 'start_monarch_preview.dart' as startup;
 import 'stories_errors.dart';
@@ -19,7 +21,7 @@ final _logger = Logger('ChannelMethodsReceiver');
 
 void receiveChannelMethodCalls() {
   // logger.level = LogLevel.ALL;
-  MonarchChannels.preview.setMethodCallHandler((MethodCall call) async {
+  MonarchMethodChannels.previewWindow.setMethodCallHandler((MethodCall call) async {
     _logger.finest('channel method received: ${call.method}');
 
     try {
@@ -32,17 +34,18 @@ void receiveChannelMethodCalls() {
 }
 
 Future<dynamic> _handler(MethodCall call) async {
-  final Map? args = call.arguments;
+  final args = call.arguments == null
+        ? null
+        : Map<String, dynamic>.from(call.arguments);
 
   switch (call.method) {
     case MonarchMethods.readySignalAck:
       readySignal.ready();
       return;
 
-    case MonarchMethods.loadStory:
-      String storyKey = args!['storyKey'];
+    case MonarchMethods.setStory:
       resetErrors();
-      activeStory.value = StoryId.fromNodeKey(storyKey);
+      activeStory.value = StoryIdMapper().fromStandardMap(args!);
       return;
 
     case MonarchMethods.resetStory:
@@ -63,9 +66,8 @@ Future<dynamic> _handler(MethodCall call) async {
       return;
 
     case MonarchMethods.setActiveDevice:
-      String deviceId = args!['deviceId'];
       resetErrors();
-      activeDevice.value = activeDevice.getDeviceDefinition(deviceId);
+      activeDevice.value = DeviceDefinitionMapper().fromStandardMap(args!);
       return;
 
     case MonarchMethods.screenChanged:

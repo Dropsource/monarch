@@ -2,20 +2,134 @@ syntax = "proto3";
 
 package monarch_grpc;
 
-service MonarchCli {
-    rpc PreviewVmServerUriChanged(UriInfo) returns (Empty) {}
-    rpc ControllerGrpcServerStarted(ServerInfo) returns (Empty) {}
-    rpc LaunchDevTools(Empty) returns (Empty) {}
-    rpc PrintUserMessage(UserMessage) returns (Empty) {}
-    rpc UserSelection(UserSelectionData) returns (Empty) {}
-}
 
-service MonarchController {
+service MonarchPreviewApi {
+    rpc GetReferenceData(Empty) returns (ReferenceDataInfo) {}
+    rpc GetProjectData(Empty) returns (ProjectDataInfo) {}
+    rpc GetSelectionsState(Empty) returns (SelectionsStateInfo) {}
+
+    rpc SetStory(StoryIdInfo) returns (Empty) {}
+    rpc ResetStory(Empty) returns (Empty) {}
+    rpc SetTextScaleFactor(TextScaleFactorInfo) returns (Empty) {}
+    rpc SetLocale(LocaleInfo) returns (Empty) {}
+    rpc SetTheme(ThemeInfo) returns (Empty) {}
+    rpc SetDevice(DeviceInfo) returns (Empty) {}
+    rpc SetScale(ScaleInfo) returns (Empty) {}
+    rpc SetDock(DockInfo) returns (Empty) {}
+    rpc ToggleVisualDebugFlag(VisualDebugFlagInfo) returns (Empty) {}
+
     rpc HotReload(Empty) returns (ReloadResponse) {}
     rpc RestartPreview(Empty) returns (Empty) {}
+    rpc LaunchDevTools(Empty) returns (Empty) {}
+    rpc TrackUserSelection(UserSelectionData) returns (Empty) {}
+    rpc TerminatePreview(Empty) returns (Empty) {}
 }
 
+service MonarchPreviewNotificationsApi {
+    rpc VmServerUri(UriInfo) returns (Empty) {}
+
+    rpc ProjectDataChanged(ProjectDataInfo) returns (Empty) {}
+    rpc SelectionsStateChanged(SelectionsStateInfo) returns (Empty) {}
+
+    rpc UserMessage(UserMessageInfo) returns (Empty) {}
+    rpc LaunchDevTools(Empty) returns (Empty) {}
+    rpc TrackUserSelection(UserSelectionData) returns (Empty) {}
+}
+
+service MonarchDiscoveryApi {
+    rpc RegisterPreviewApi(ServerInfo) returns (Empty) {}
+    rpc RegisterPreviewNotificationsApi(ServerInfo) returns (Empty) {}
+    rpc GetPreviewApi(Empty) returns (ServerInfo) {}
+    rpc GetPreviewNotificationsApiList(Empty) returns (ServerListInfo) {}
+}
+
+
 message Empty {}
+
+message ReferenceDataInfo {
+    repeated DeviceInfo devices = 1;
+    repeated ThemeInfo standardThemes = 2;
+    repeated ScaleInfo scales = 3;
+}
+
+message ProjectDataInfo {
+    string packageName = 1;
+    map<string, StoriesInfo> storiesMap = 2;
+    repeated ThemeInfo themes = 3;
+    repeated LocalizationInfo localizations = 4;
+}
+
+message SelectionsStateInfo {
+    StoryIdInfo storyId = 1;
+    DeviceInfo device = 2;
+    ThemeInfo theme = 3;
+    LocaleInfo locale = 4;
+    double textScaleFactor = 5;
+    ScaleInfo scale = 6;
+    DockInfo dock = 7;
+    map<string, bool> visualDebugFlags = 8;
+}
+
+message StoryIdInfo {
+    string storiesMapKey = 1;
+    string package = 2;
+    string path = 3;
+    string storyName = 4;
+}
+
+message StoriesInfo {
+    string package = 1;
+    string path = 2;
+    repeated string storiesNames = 3;
+}
+
+message TextScaleFactorInfo {
+    double scale = 1;
+}
+
+message LocaleInfo {
+    string languageTag = 1;
+}
+
+message LocalizationInfo {
+    repeated string localeLanguageTags = 1;
+    string delegateClassName = 2;
+}
+
+
+message ThemeInfo {
+    string id = 1;
+    string name = 2;
+    bool isDefault = 3;
+}
+
+message LogicalResolutionInfo {
+    double width = 1;
+    double height = 2;
+}
+
+message DeviceInfo {
+    string id = 1;
+    string name = 2;
+    string targetPlatform = 3;
+    LogicalResolutionInfo logicalResolutionInfo = 4;
+    double devicePixelRatio = 5;
+}
+
+message ScaleInfo {
+    double scale = 1;
+    string name = 2;
+}
+
+message DockInfo {
+    string id = 1;
+    string name = 2;
+}
+
+message VisualDebugFlagInfo {
+    string name = 1;
+    bool isEnabled = 2;
+}
 
 message UriInfo {
     string host = 1;
@@ -28,11 +142,15 @@ message ServerInfo {
     int32 port = 1;
 }
 
+message ServerListInfo {
+    repeated ServerInfo servers = 1;
+}
+
 message ReloadResponse {
     bool isSuccessful = 1;
 }
 
-message UserMessage {
+message UserMessageInfo {
     string message = 1;
 }
 

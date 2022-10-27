@@ -10,6 +10,7 @@ Monarch modules:
 - cli: ${internal.cliVersion}
 - controller: ${internal.controllerVersion}
 - platform_app: ${internal.platformAppVersion}
+- preview_api: ${internal.previewApiVersion}
 
 Revision:
 ${internal.binariesRevision}

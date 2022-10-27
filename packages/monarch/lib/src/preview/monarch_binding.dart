@@ -11,8 +11,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'dart:ui' as ui;
 
+import 'package:monarch_definitions/monarch_definitions.dart';
+
 import 'active_device.dart';
-import 'device_definitions.dart';
 import 'active_text_scale_factor.dart';
 
 /// Similar to [WidgetsFlutterBinding].

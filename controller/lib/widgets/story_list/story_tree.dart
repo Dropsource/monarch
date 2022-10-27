@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:monarch_controller/widgets/story_list/text_with_highlight.dart';
 import 'package:monarch_controller/widgets/tree_view/flutter_simple_treeview.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
 
 import '../../data/stories.dart';
 import '../tree_view/primitives/key_provider.dart';
@@ -10,7 +11,7 @@ class StoryTree extends StatefulWidget {
   final Iterable<StoryGroup> filteredStories;
   final String query;
   final FocusNode? focusNode;
-  final Function(String)? onStorySelected;
+  final Function(StoryId)? onStorySelected;
 
   const StoryTree({
     Key? key,
@@ -52,9 +53,9 @@ class _StoryTreeState extends State<StoryTree> {
                   ),
                   children: group.stories
                       .map(
-                        (story) => TreeNode(
-                          key: LeafKey(story.key),
-                          onTap: () => widget.onStorySelected?.call(story.key),
+                        (storyId) => TreeNode(
+                          key: LeafKey(storyId.key),
+                          onTap: () => widget.onStorySelected?.call(storyId),
                           content: Container(
                             padding: const EdgeInsets.only(
                               left: 40,
@@ -63,7 +64,7 @@ class _StoryTreeState extends State<StoryTree> {
                               right: 8,
                             ),
                             child: TextWithHighlight(
-                              text: story.name,
+                              text: storyId.storyName,
                               highlightedText: widget.query,
                             ),
                           ),

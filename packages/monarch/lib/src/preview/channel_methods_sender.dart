@@ -1,77 +1,58 @@
-import 'package:monarch/src/preview/stories_errors.dart';
 import 'package:monarch_utils/log.dart';
-import 'package:monarch_channels/monarch_channels.dart';
+import 'package:monarch_definitions/monarch_channels.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
 import 'active_device.dart';
 import 'active_locale.dart';
 import 'active_story.dart';
 import 'active_story_scale.dart';
 import 'active_text_scale_factor.dart';
 import 'active_theme.dart';
-import 'channel_argument.dart';
+import 'channel_methods.dart';
+import 'stories_errors.dart';
 import 'visual_debug_flags.dart' as visual_debug;
 
 class ChannelMethodsSender with Log {
   Future<T?> _invokeMonarchChannelMethod<T>(String method,
       [dynamic arguments]) async {
     log.finest('sending channel method: $method');
-    return MonarchChannels.preview.invokeMethod(method, arguments);
+    return MonarchMethodChannels.previewWindow.invokeMethod(method, arguments);
   }
 
   Future sendPing() {
     return _invokeMonarchChannelMethod(MonarchMethods.ping);
   }
 
-  Future sendDeviceDefinitions(OutboundChannelArgument definitions) {
-    return _invokeMonarchChannelMethod(
-        MonarchMethods.deviceDefinitions, definitions.toStandardMap());
-  }
-
-  Future sendStoryScaleDefinitions(OutboundChannelArgument definitions) {
-    return _invokeMonarchChannelMethod(
-        MonarchMethods.storyScaleDefinitions, definitions.toStandardMap());
-  }
-
-  Future sendStandardThemes(OutboundChannelArgument definitions) {
-    return _invokeMonarchChannelMethod(
-        MonarchMethods.standardThemes, definitions.toStandardMap());
-  }
-
-  Future sendDefaultTheme(String id) {
-    return _invokeMonarchChannelMethod(
-        MonarchMethods.defaultTheme, {'themeId': id});
-  }
-
-  Future sendMonarchData(OutboundChannelArgument monarchData) {
-    return _invokeMonarchChannelMethod(
-        MonarchMethods.monarchData, monarchData.toStandardMap());
+  Future sendProjectData(ProjectDataDefinition projectData) {
+    return _invokeMonarchChannelMethod(MonarchMethods.projectData,
+        ProjectDataDefinitionMapper().toStandardMap(projectData));
   }
 
   Future getState() async {
-    var state = await _invokeMonarchChannelMethod(MonarchMethods.getState);
-    var activeStoryKey = state['activeStoryKey'];
-    var deviceId = state['device']['id'];
-    var themeId = state['themeId'];
-    var locale = state['locale'];
-    var textScaleFactor = state['textScaleFactor'];
-    var scale = state['scale']['scale'];
-    var visualDebugFlags = state['visualDebugFlags'];
+    dynamic stateDynamic =
+        await _invokeMonarchChannelMethod(MonarchMethods.getState);
+    var stateArgs = Map<String, dynamic>.from(stateDynamic);
 
     resetErrors();
-    if (activeStoryKey == null) {
+    if (stateArgs['storyId'] == null) {
       activeStory.value = null;
     } else {
-      activeStory.value = StoryId.fromNodeKey(activeStoryKey);
+      activeStory.value = StoryIdMapper()
+          .fromStandardMap(Map<String, dynamic>.from(stateArgs['storyId']));
     }
-    activeLocale.setActiveLocaleTag(locale);
-    activeTheme.value = activeTheme.getMetaTheme(themeId);
-    activeDevice.value = activeDevice.getDeviceDefinition(deviceId);
-    activeTextScaleFactor.value = textScaleFactor;
-    activeStoryScale.value = scale;
-    for (var flag in visualDebugFlags) {
-      var name = flag['name'];
-      var isEnabled = flag['isEnabled'];
-      await visual_debug.toggleFlagViaVmServiceExtension(name, isEnabled);
-    }
+
+    activeDevice.value = DeviceDefinitionMapper()
+        .fromStandardMap(Map<String, dynamic>.from(stateArgs['device']));
+    activeStoryScale.value = StoryScaleDefinitionMapper()
+        .fromStandardMap(Map<String, dynamic>.from(stateArgs['scale']))
+        .scale;
+
+    activeLocale.setActiveLocaleTag(stateArgs['locale']);
+    activeTheme.value = activeTheme.getMetaTheme(stateArgs['themeId']);
+    activeTextScaleFactor.value = stateArgs['textScaleFactor'];
+
+    Map<String, bool>.from(stateArgs['visualDebugFlags']).forEach((name,
+            isEnabled) async =>
+        await visual_debug.toggleFlagViaVmServiceExtension(name, isEnabled));
   }
 
   Future sendReadySignal() {
@@ -79,12 +60,8 @@ class ChannelMethodsSender with Log {
   }
 
   Future sendPreviewVmServerUri(Uri uri) {
-    return _invokeMonarchChannelMethod(MonarchMethods.previewVmServerUri, {
-      'scheme': uri.scheme,
-      'host': uri.host,
-      'port': uri.port,
-      'path': uri.path,
-    });
+    return _invokeMonarchChannelMethod(
+        MonarchMethods.previewVmServerUri, UriMapper().toStandardMap(uri));
   }
 
   Future sendUserMessage(String message) {
@@ -92,9 +69,9 @@ class ChannelMethodsSender with Log {
         MonarchMethods.userMessage, {'message': message});
   }
 
-  Future sendToggleVisualDebugFlag(OutboundChannelArgument visualDebugFlag) {
-    return _invokeMonarchChannelMethod(
-        MonarchMethods.toggleVisualDebugFlag, visualDebugFlag.toStandardMap());
+  Future sendToggleVisualDebugFlag(VisualDebugFlag visualDebugFlag) {
+    return _invokeMonarchChannelMethod(MonarchMethods.toggleVisualDebugFlag,
+        VisualDebugFlagMapper().toStandardMap(visualDebugFlag));
   }
 }
 

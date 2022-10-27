@@ -30,12 +30,14 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 foo''';
 
 const internalInfoBlank = InternalInfo(
-    binariesRevision: '',
-    binariesVersion: '',
-    cliVersion: '',
-    controllerVersion: '',
-    minFlutterVersion: '',
-    platformAppVersion: '');
+  binariesRevision: '',
+  binariesVersion: '',
+  cliVersion: '',
+  controllerVersion: '',
+  minFlutterVersion: '',
+  platformAppVersion: '',
+  previewApiVersion: '',
+);
 
 void main() {
   group('xcodebuild', () {

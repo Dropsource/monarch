@@ -4,17 +4,13 @@ import 'package:stack_trace/stack_trace.dart';
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';
 
-import 'monarch_data_manager.dart';
+import 'project_data_manager.dart';
 import 'ready_signal.dart';
-import 'device_definitions.dart';
-import 'story_scale_definitions.dart';
-import 'active_theme.dart';
 import 'channel_methods_sender.dart';
 import 'channel_methods_receiver.dart';
-import 'standard_themes.dart';
 import 'stories_errors.dart';
 import 'monarch_preview.dart';
-import 'monarch_data.dart';
+import 'project_data.dart';
 import 'vm_service_client.dart';
 import 'monarch_binding.dart';
 
@@ -22,24 +18,24 @@ final _logger = Logger('Start');
 StreamSubscription? _willReassembleSubcription;
 StreamSubscription? _serverUriSubscription;
 
-void startMonarchPreview(MonarchData Function() getMonarchData) {
+void startMonarchPreview(ProjectData Function() getProjectData) {
   Chain.capture(() {
-    _startMonarchPreview(getMonarchData);
+    _startMonarchPreview(getProjectData);
   }, onError: handleUncaughtError);
 }
 
-void _startMonarchPreview(MonarchData Function() getMonarchData) async {
+void _startMonarchPreview(ProjectData Function() getProjectData) async {
   final monarchBinding = MonarchBinding.ensureInitialized();
 
   _setUpLog();
   readySignal.loading();
-  monarchDataManager.load(getMonarchData);
+  projectDataManager.load(getProjectData);
   handleFlutterFrameworkErrors();
 
   _willReassembleSubcription =
       monarchBinding.willReassembleStream.listen((event) async {
-    monarchDataManager.load(getMonarchData);
-    await monarchDataManager.sendChannelMethods();
+    projectDataManager.load(getProjectData);
+    await projectDataManager.sendChannelMethods();
   });
 
   Timer.run(() {
@@ -48,10 +44,9 @@ void _startMonarchPreview(MonarchData Function() getMonarchData) async {
   monarchBinding.scheduleWarmUpFrame();
 
   receiveChannelMethodCalls();
-  await _controllerReady();
+  await _previewApiReady();
   await _connectToVmService();
-  await _sendDefinitions();
-  await monarchDataManager.sendChannelMethods();
+  await projectDataManager.sendChannelMethods();
   await channelMethodsSender.sendReadySignal();
 }
 
@@ -61,7 +56,7 @@ void _setUpLog() {
   logCurrentProcessInformation(_logger, LogLevel.FINE);
 }
 
-Future<void> _controllerReady() async {
+Future<void> _previewApiReady() async {
   const maxRetries = 5;
 
   Future<bool> canPing() async {
@@ -75,13 +70,13 @@ Future<void> _controllerReady() async {
 
   for (var i = 1; i <= maxRetries; i++) {
     if (await canPing()) {
-      _logger.fine('Monarch Preview reached Controller after $i attempts.');
+      _logger.fine('Reached preview_api after $i attempts.');
       return;
     }
     await Future.delayed(Duration(milliseconds: 50));
   }
   _logger.warning(
-      'Monarch Preview could not reach Controller after $maxRetries attempts.');
+      'Could not reach preview_api after $maxRetries attempts.');
 }
 
 Future<void> _connectToVmService() async {
@@ -97,13 +92,6 @@ Future<void> _connectToVmService() async {
         e,
         s);
   }
-}
-
-Future<void> _sendDefinitions() async {
-  await channelMethodsSender.sendDefaultTheme(activeTheme.defaultMetaTheme.id);
-  await channelMethodsSender.sendDeviceDefinitions(DeviceDefinitions());
-  await channelMethodsSender.sendStoryScaleDefinitions(StoryScaleDefinitions());
-  await channelMethodsSender.sendStandardThemes(StandardThemes());
 }
 
 Future dispose() async {

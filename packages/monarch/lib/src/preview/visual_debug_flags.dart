@@ -1,75 +1,45 @@
-import 'package:monarch_utils/log.dart';
-
-import 'channel_argument.dart';
-import 'vm_service_client.dart';
 import 'package:vm_service/vm_service.dart' as vm_service;
+import 'package:monarch_utils/log.dart';
+import 'package:monarch_definitions/monarch_definitions.dart';
+import 'vm_service_client.dart';
 import 'channel_methods_sender.dart';
 
 final _logger = Logger('VisualDebugFlags');
 
-class VisualDebugFlag implements OutboundChannelArgument {
-  final String name;
-  final bool isEnabled;
-
-  VisualDebugFlag(this.name, this.isEnabled);
-
-  @override
-  Map<String, dynamic> toStandardMap() {
-    return {'name': name, 'isEnabled': isEnabled};
-  }
-}
-
-class _Flags {
-  static const slowAnimations = 'slowAnimations';
-  static const showGuidelines = 'showGuidelines';
-  static const showBaselines = 'showBaselines';
-  static const highlightRepaints = 'highlightRepaints';
-  static const highlightOversizedImages = 'highlightOversizedImages';
-}
-
-class _ExtensionMethods {
-  static const timeDilation = 'ext.flutter.timeDilation';
-  static const debugPaint = 'ext.flutter.debugPaint';
-  static const debugPaintBaselinesEnabled =
-      'ext.flutter.debugPaintBaselinesEnabled';
-  static const repaintRainbow = 'ext.flutter.repaintRainbow';
-  static const invertOversizedImages = 'ext.flutter.invertOversizedImages';
-}
-
-const _timeDilationDisabledValue = 1.0;
-const _timeDilationEnabledValue = 5.0;
-
 Future<void> toggleFlagViaVmServiceExtension(
     String name, bool isEnabled) async {
   switch (name) {
-    case _Flags.slowAnimations:
+    case VisualDebugFlags.slowAnimations:
       // As documented in the flutter/devtools code:
       // > The param name for a numeric service extension will be the last part
       // > of the extension name (ext.flutter.extensionName => extensionName).
       // File: https://github.com/flutter/devtools/blob/master/packages/devtools_app/lib/src/service_manager.dart
       // Method: _callServiceExtension
       await vmServiceClient
-          .callServiceExtension(_ExtensionMethods.timeDilation, {
-        'timeDilation':
-            isEnabled ? _timeDilationEnabledValue : _timeDilationDisabledValue
+          .callServiceExtension(VisualDebugExtensionMethods.timeDilation, {
+        'timeDilation': isEnabled
+            ? VisualDebugTimeDilationValues.enabledValue
+            : VisualDebugTimeDilationValues.disabledValue
       });
       break;
 
-    case _Flags.showGuidelines:
+    case VisualDebugFlags.showGuidelines:
       await vmServiceClient.callServiceExtension(
-          _ExtensionMethods.debugPaint, {'enabled': isEnabled});
+          VisualDebugExtensionMethods.debugPaint, {'enabled': isEnabled});
       break;
-    case _Flags.showBaselines:
+    case VisualDebugFlags.showBaselines:
       await vmServiceClient.callServiceExtension(
-          _ExtensionMethods.debugPaintBaselinesEnabled, {'enabled': isEnabled});
+          VisualDebugExtensionMethods.debugPaintBaselinesEnabled,
+          {'enabled': isEnabled});
       break;
-    case _Flags.highlightRepaints:
+    case VisualDebugFlags.highlightRepaints:
       await vmServiceClient.callServiceExtension(
-          _ExtensionMethods.repaintRainbow, {'enabled': isEnabled});
+          VisualDebugExtensionMethods.repaintRainbow, {'enabled': isEnabled});
       break;
-    case _Flags.highlightOversizedImages:
+    case VisualDebugFlags.highlightOversizedImages:
       await vmServiceClient.callServiceExtension(
-          _ExtensionMethods.invertOversizedImages, {'enabled': isEnabled});
+          VisualDebugExtensionMethods.invertOversizedImages,
+          {'enabled': isEnabled});
       break;
 
     default:
@@ -99,27 +69,31 @@ void handleVmServiceExtensionEvent(vm_service.Event event) {
       var $true = 'true';
 
       switch (extension) {
-        case _ExtensionMethods.timeDilation:
+        case VisualDebugExtensionMethods.timeDilation:
           var time = double.parse(value);
           channelMethodsSender.sendToggleVisualDebugFlag(VisualDebugFlag(
-              _Flags.slowAnimations, time > _timeDilationDisabledValue));
+              name: VisualDebugFlags.slowAnimations,
+              isEnabled: time > VisualDebugTimeDilationValues.disabledValue));
           break;
 
-        case _ExtensionMethods.debugPaint:
-          channelMethodsSender.sendToggleVisualDebugFlag(
-              VisualDebugFlag(_Flags.showGuidelines, value == $true));
+        case VisualDebugExtensionMethods.debugPaint:
+          channelMethodsSender.sendToggleVisualDebugFlag(VisualDebugFlag(
+              name: VisualDebugFlags.showGuidelines,
+              isEnabled: value == $true));
           break;
-        case _ExtensionMethods.debugPaintBaselinesEnabled:
-          channelMethodsSender.sendToggleVisualDebugFlag(
-              VisualDebugFlag(_Flags.showBaselines, value == $true));
+        case VisualDebugExtensionMethods.debugPaintBaselinesEnabled:
+          channelMethodsSender.sendToggleVisualDebugFlag(VisualDebugFlag(
+              name: VisualDebugFlags.showBaselines, isEnabled: value == $true));
           break;
-        case _ExtensionMethods.repaintRainbow:
-          channelMethodsSender.sendToggleVisualDebugFlag(
-              VisualDebugFlag(_Flags.highlightRepaints, value == $true));
+        case VisualDebugExtensionMethods.repaintRainbow:
+          channelMethodsSender.sendToggleVisualDebugFlag(VisualDebugFlag(
+              name: VisualDebugFlags.highlightRepaints,
+              isEnabled: value == $true));
           break;
-        case _ExtensionMethods.invertOversizedImages:
-          channelMethodsSender.sendToggleVisualDebugFlag(
-              VisualDebugFlag(_Flags.highlightOversizedImages, value == $true));
+        case VisualDebugExtensionMethods.invertOversizedImages:
+          channelMethodsSender.sendToggleVisualDebugFlag(VisualDebugFlag(
+              name: VisualDebugFlags.highlightOversizedImages,
+              isEnabled: value == $true));
           break;
 
         default:

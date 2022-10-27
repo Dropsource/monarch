@@ -6,38 +6,39 @@
 #include "dock_side.h"
 #include "window_manager.h"
 
-class WindowManager;
+class PreviewWindowManager;
 
 class MonarchWindow : public FlutterWindow
 {
 public:
 	MonarchWindow(
-		const flutter::DartProject& project,
-		WindowManager* windowManager_);
+		const flutter::DartProject& project);
 
 	virtual ~MonarchWindow();
 
 	void setTitle(std::string title);
 
 	WindowInfo getWindowInfo();
+	WindowInfo getWindowInfo(HWND handle);
 	void move(int X, int Y, int nWidth, int nHeight);
 	flutter::BinaryMessenger* messenger();
 
 protected:
 	bool isMovingProgrammatically = false;
-	WindowManager* windowManager;
 };
 
 class ControllerWindow : public MonarchWindow
 {
 public:
 	ControllerWindow(
-		const flutter::DartProject& project,
-		WindowManager* windowManager);
+		const flutter::DartProject& project);
 
 	virtual ~ControllerWindow();
 
-	void setPreviewWindow(HWND previewHwnd);
+	static WindowInfo defaultWindowInfo;
+
+	void requestPreviewWindowHandle();
+	static void requestPreviewWindowHandle(HWND controllerWindowHandle);
 
 protected:
 	LRESULT MessageHandler(HWND hwnd, UINT const message, WPARAM const wparam,
@@ -55,11 +56,9 @@ class PreviewWindow : public MonarchWindow
 public:
 	PreviewWindow(
 		const flutter::DartProject& project,
-		WindowManager* windowManager);
+		PreviewWindowManager* windowManager);
 
 	virtual ~PreviewWindow();
-
-	void setControllerWindow(HWND controllerHwnd);
 
 	// Resizes this window using the given device dimensions, the scale
 	// and the monitor's DPI scale factor.
@@ -87,14 +86,44 @@ public:
 		WindowInfo controllerWindowInfo);
 
 	void disableResizeMinimize();
+	HWND getControllerWindowHandle();
+	bool isControllerWindowSet();
+
+	static void requestControllerWindowHandle(HWND previewWindowHandle);
+	void requestControllerWindowHandle();
 
 protected:
 	LRESULT MessageHandler(HWND window, UINT const message, WPARAM const wparam,
 		LPARAM const lparam) noexcept override;
 
 private:
+	PreviewWindowManager* windowManager;
 	HWND _controllerWindowHandle;
+	
 	void _move(DockSide side, WindowInfo controllerWindowInfo);
 	Point_ _getTopLeft(WindowInfo controllerWindowInfo, DockSide side);
-	bool _isControllerWindowSet();
+};
+
+
+class PreviewApiRunner
+{
+public:
+	PreviewApiRunner(
+		const flutter::DartProject& project);
+
+	virtual ~PreviewApiRunner();
+
+	/// <summary>
+	/// Runs a headless Flutter engine for the preview_api project
+	/// </summary>
+	void run();
+
+	flutter::BinaryMessenger* messenger();
+	void shutDown();
+
+	flutter::FlutterEngine* engine() { return engine_.get(); }
+
+private:
+	flutter::DartProject project_;
+	std::unique_ptr<flutter::FlutterEngine> engine_;
 };

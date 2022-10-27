@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:monarch_cli/src/config/context_info.dart';
+import 'package:monarch_cli/src/task_runner/preview_api.dart';
 import 'package:monarch_utils/log.dart';
 import 'package:monarch_utils/log_config.dart';
 import 'package:monarch_io_utils/monarch_io_utils.dart';
@@ -43,6 +44,7 @@ final _crashReporter = CrashReporterImpl(CrashReportBuilder());
 final _analytics = AnalyticsImpl(AnalyticsEventBuilder());
 
 EnvironmentMutations? _mutations;
+Grpc? _grpc;
 
 void executeTaskRunner(
     {required bool isVerbose,
@@ -131,6 +133,17 @@ The monarch_ui directory below is missing. Make sure to add the path to your Flu
   final notifications = await notificationsReader.notifications;
   _showNotifications(notifications);
 
+  _grpc = Grpc();
+  try {
+    await _grpc!.setUpDiscoveryApiServer();
+  } catch (e) {
+    await _exit(TaskRunnerExitCodes.cliGrpcServerStartError);
+    return;
+  }
+
+  final discoveryApi = _grpc!.getDiscoveryApiClient();
+  final previewApi = PreviewApi(discoveryApi);
+
   final taskRunner = TaskRunner(
       projectDirectory: projectDirectory,
       config: projectConfig,
@@ -140,12 +153,11 @@ The monarch_ui directory below is missing. Make sure to add the path to your Flu
       noSoundNullSafety: noSoundNullSafety,
       reloadOption: _getReloadOption(reloadOption),
       analytics: _analytics,
-      controllerGrpcClient: controllerGrpcClientInstance);
+      discoveryServerPort: _grpc!.discoveryApiServerPort,
+      previewApi: previewApi);
 
-  final cliGrpcServer = CliGrpcServer();
   try {
-    await cliGrpcServer.startServer(taskRunner, _analytics);
-    taskRunner.cliGrpcServerPort = cliGrpcServer.port;
+    await _grpc!.setUpNotificationsApiServer(discoveryApi, taskRunner, _analytics);
   } catch (e) {
     await _exit(TaskRunnerExitCodes.cliGrpcServerStartError);
     return;
@@ -239,6 +251,10 @@ Future<void> _exit(CliExitCode exitCode) async {
     _logStreamUserLogger.tearDown(),
     _logStreamCrashReporter.tearDown(),
   ];
+
+  if (_grpc != null) {
+    futures.add(_grpc!.shutdownServers());
+  }
 
   await Future.wait(futures);
 
