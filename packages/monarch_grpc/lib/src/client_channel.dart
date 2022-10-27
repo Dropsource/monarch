@@ -14,7 +14,7 @@ String get clientLocalhost {
 }
 
 const clientChannelOptions =
-    const ChannelOptions(credentials: ChannelCredentials.insecure());
+    ChannelOptions(credentials: ChannelCredentials.insecure());
 
 ClientChannel constructClientChannel(int port) =>
     ClientChannel(clientLocalhost, port: port, options: clientChannelOptions);
