@@ -17,7 +17,8 @@ class ProjectData extends ProjectDataDefinition {
 
   Map<String, MetaStoriesDefinition> get storiesMap => metaStoriesDefinitionMap;
   List<MetaThemeDefinition> get themes => metaThemeDefinitions;
-  List<MetaLocalizationDefinition> get localizations => metaLocalizationDefinitions;
+  List<MetaLocalizationDefinition> get localizations =>
+      metaLocalizationDefinitions;
 
   factory ProjectData.init() => ProjectData(
       packageName: '', storiesMap: {}, themes: [], localizations: []);

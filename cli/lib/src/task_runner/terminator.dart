@@ -70,9 +70,9 @@ class WindowsTerminator {
   ///
   /// This function kills most of the dart processes that Monarch starts.
   /// However, there are other processes started by monarch.exe (aka the Monarch CLI) which
-  /// are being left orphan. 
-  /// 
-  /// Once the issues above are fixed, the [Terminator] class should work as 
+  /// are being left orphan.
+  ///
+  /// Once the issues above are fixed, the [Terminator] class should work as
   /// expected and we won't need this function anymore.
   static void killTasksByWindowTitle(String windowTitle) {
     var _log = Logger('WindowsTerminator');

@@ -81,8 +81,7 @@ class ControllerManager with Log {
       packageName: info.packageName,
       storiesMap: info.storiesMap.map(
           (key, value) => MapEntry(key, StoriesInfoMapper().fromInfo(value))),
-      themes:
-          info.themes.map((e) => ThemeInfoMapper().fromInfo(e)).toList(),
+      themes: info.themes.map((e) => ThemeInfoMapper().fromInfo(e)).toList(),
       localizations: info.localizations
           .map((e) => LocalizationInfoMapper().fromInfo(e))
           .toList(),

@@ -35,8 +35,7 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
 
       void checkTheme() {
         var themes = standardMetaThemeDefinitions + projectData.themes;
-        if (!themes.any(
-            (element) => element.id == state.theme.id)) {
+        if (!themes.any((element) => element.id == state.theme.id)) {
           for (var theme in projectData.themes) {
             if (theme.isDefault) {
               _setTheme(theme);
@@ -53,8 +52,7 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
       }
 
       void checkLocale() {
-        if (!projectData.allLocaleLanguageTags
-            .contains(state.languageTag)) {
+        if (!projectData.allLocaleLanguageTags.contains(state.languageTag)) {
           if (projectData.allLocaleLanguageTags.isEmpty) {
             _setLocale(defaultLocale);
           } else {
@@ -201,7 +199,7 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
     previewNotifications.trackUserSelection(request);
     return Future.value(Empty());
   }
-  
+
   @override
   Future<Empty> terminatePreview(ServiceCall call, Empty request) {
     channelMethodsSender.terminatePreview();

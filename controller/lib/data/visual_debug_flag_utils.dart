@@ -33,4 +33,3 @@ String getVisualDebugFlagToggledKey(String name) {
       throw 'Unexpected visual debug flag name $name';
   }
 }
-

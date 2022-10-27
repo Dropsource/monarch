@@ -5,14 +5,16 @@ import '../analytics/analytics.dart';
 import '../utils/standard_output.dart';
 import 'task_runner.dart';
 
-class PreviewNotificationsApiService extends MonarchPreviewNotificationsApiServiceBase {
+class PreviewNotificationsApiService
+    extends MonarchPreviewNotificationsApiServiceBase {
   final TaskRunner taskRunner;
   final Analytics analytics;
 
   PreviewNotificationsApiService(this.taskRunner, this.analytics);
 
   @override
-  Future<Empty> trackUserSelection(ServiceCall call, UserSelectionData request) {
+  Future<Empty> trackUserSelection(
+      ServiceCall call, UserSelectionData request) {
     analytics.user_selection({
       'locale_count': request.localeCount,
       'user_theme_count': request.userThemeCount,
@@ -58,13 +60,13 @@ class PreviewNotificationsApiService extends MonarchPreviewNotificationsApiServi
   @override
   Future<Empty> projectDataChanged(ServiceCall call, ProjectDataInfo request) {
     // do nothing
-    return Future.value(Empty()); 
+    return Future.value(Empty());
   }
-  
+
   @override
-  Future<Empty> selectionsStateChanged(ServiceCall call, SelectionsStateInfo request) {
+  Future<Empty> selectionsStateChanged(
+      ServiceCall call, SelectionsStateInfo request) {
     // do nothing
-    return Future.value(Empty()); 
+    return Future.value(Empty());
   }
-  
 }

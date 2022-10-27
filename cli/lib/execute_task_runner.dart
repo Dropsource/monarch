@@ -157,7 +157,8 @@ The monarch_ui directory below is missing. Make sure to add the path to your Flu
       previewApi: previewApi);
 
   try {
-    await _grpc!.setUpNotificationsApiServer(discoveryApi, taskRunner, _analytics);
+    await _grpc!
+        .setUpNotificationsApiServer(discoveryApi, taskRunner, _analytics);
   } catch (e) {
     await _exit(TaskRunnerExitCodes.cliGrpcServerStartError);
     return;

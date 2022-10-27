@@ -5,7 +5,6 @@ import '../manager/controller_manager.dart';
 
 class PreviewNotificationsApiService
     extends MonarchPreviewNotificationsApiServiceBase {
-
   final ControllerManager manager;
 
   PreviewNotificationsApiService(this.manager);

@@ -47,8 +47,7 @@ void _setUpLog() {
 }
 
 void setUpChannels(int discoveryServerPort) async {
-  _logger.info(
-      'Will use discovery server at port $discoveryServerPort');
+  _logger.info('Will use discovery server at port $discoveryServerPort');
   var channel = constructClientChannel(discoveryServerPort);
   var discoveryClient = MonarchDiscoveryApiClient(channel);
 

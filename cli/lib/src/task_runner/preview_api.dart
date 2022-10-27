@@ -8,8 +8,8 @@ class PreviewApi with Log {
 
   MonarchPreviewApiClient? _client;
 
-  /// Lazily returns a preview api client if the discovery 
-  /// api has the information of the preview api server. 
+  /// Lazily returns a preview api client if the discovery
+  /// api has the information of the preview api server.
   /// Otherwise it returns null.
   Future<MonarchPreviewApiClient?> getClient() async {
     if (_client == null) {
@@ -29,7 +29,7 @@ class PreviewApi with Log {
   }
 
   /// Uses the vm service of the preview window to request a hot reload.
-  /// Assumes [isAvailable] has returned true. 
+  /// Assumes [isAvailable] has returned true.
   Future<bool> hotReload() async {
     var client = await getClient();
     var response = await client!.hotReload(Empty());
@@ -37,18 +37,18 @@ class PreviewApi with Log {
   }
 
   /// Restars the preview window via platform code.
-  /// Assumes [isAvailable] has returned true. 
+  /// Assumes [isAvailable] has returned true.
   Future<void> restartPreview() async {
     var client = await getClient();
     await client!.restartPreview(Empty());
   }
 
   /// Terminates the preview app via platform code.
-  /// 
+  ///
   /// If you call this function during the sigint handler on macOS
   /// you may see error messages appear since this function makes grpc calls.
   /// On 2022-10-26, macOS did not allow grpc calls from the sigint handler.
-  /// We were getting errors like: 
+  /// We were getting errors like:
   /// ```
   /// message: HTTP/2 error: Connection error: Connection is being forcefully terminated. (errorCode: 10)
   /// ```
