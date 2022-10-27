@@ -73,4 +73,3 @@ class DeviceDefinitionListMapper
             .toList(),
       };
 }
-

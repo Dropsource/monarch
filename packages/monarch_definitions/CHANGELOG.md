@@ -1,3 +1,7 @@
+### 1.2.0 - 2022-10-27
+- Added definitions, mappers
+- Upgraded lints package
+
 ### 1.1.0 - 2022-09-29
 - Package renamed from monarch_channels to monarch_definitions
 

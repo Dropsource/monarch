@@ -10,7 +10,7 @@ class DockDefinition {
 
 final defaultDockDefinition =
     DockDefinition(name: 'dock_settings.right', id: 'right');
-    
+
 final dockDefinitions = [
   defaultDockDefinition,
   DockDefinition(name: 'dock_settings.left', id: 'left'),

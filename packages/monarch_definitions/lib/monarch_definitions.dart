@@ -10,4 +10,4 @@ export 'src/project_data_definition.dart';
 export 'src/visual_debug_flag.dart';
 export 'src/uri_mapper.dart';
 export 'src/dock_definition.dart';
-export 'src/story_id.dart'; 
+export 'src/story_id.dart';
