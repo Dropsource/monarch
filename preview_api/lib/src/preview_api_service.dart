@@ -107,7 +107,15 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
 
   void _resetStory() {
     channelMethodsSender.resetStory();
-    selectionsStateManager.update((state) => state.copyWith(storyId: null));
+    selectionsStateManager.update((state) => SelectionsState(
+        storyId: null,
+        device: state.device,
+        theme: state.theme,
+        languageTag: state.languageTag,
+        textScaleFactor: state.textScaleFactor,
+        scale: state.scale,
+        dock: state.dock,
+        visualDebugFlags: state.visualDebugFlags));
   }
 
   @override

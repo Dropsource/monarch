@@ -69,9 +69,9 @@ class MonarchBinding extends BindingBase
   @override
   Future<void> performReassemble() async {
     /// - Notify listeners of a hot reload.
-    /// - Handlers should reload the monarch data and send it to the controller.
-    /// - The controller will then compute new user selections based on the
-    ///   new monarch data and send those selections back to us.
+    /// - Handlers should reload the project data and send it to the preview_api.
+    /// - The preview_api will then compute new user selections based on the
+    ///   new project data and send those selections back to the preview.
     /// - Those selections become the new active state.
     _willReassembleStreamController.add(null);
 
