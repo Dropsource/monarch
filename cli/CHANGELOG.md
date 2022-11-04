@@ -1,4 +1,9 @@
-
+## 2.1.2 - 2022-11-04
+- Discovery service
+- Notifications service
+- Use preview_api service
+- Build tweaks
+- Update init sample code in sample_button.dart
 
 ## 2.1.1 - 2022-09-22
 - On windows: kill controller window by title
