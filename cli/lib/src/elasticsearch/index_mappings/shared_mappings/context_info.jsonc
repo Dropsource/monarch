@@ -1,0 +1,98 @@
+{
+    "properties": {
+        "dart_version": {
+            "type": "keyword"
+        },
+        "deployment": {
+            "type": "keyword"
+        },
+        "is_log_verbose": {
+            "type": "boolean"
+        },
+        "locale_name": {
+            "type": "keyword"
+        },
+        "number_of_processors": {
+            "type": "short"
+        },
+        "os_info": {
+            "properties": {
+                "build_version": {
+                    "type": "keyword"
+                },
+                "name": {
+                    "type": "keyword"
+                },
+                "version": {
+                    "type": "keyword"
+                },
+                "version_string": {
+                    "type": "text"
+                }
+            }
+        },
+        "project_info": {
+            "properties": {
+                "flutter_version": {
+                    "type": "keyword"
+                },
+                "flutter_channel": {
+                    "type": "keyword"
+                },
+                "name": {
+                    "type": "text",
+                    "fields": {
+                        "raw": {
+                            "type": "keyword"
+                        }
+                    }
+                }
+            }
+        },
+        "monarch_binaries": {
+            "properties": {
+                "desktop_app_version": {
+                    "type": "keyword"
+                },
+                "cli_version": {
+                    "type": "keyword"
+                },
+                "version": {
+                    "type": "keyword"
+                },
+                "controller_version": {
+                    "type": "keyword"
+                },
+                "revision": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "user_device_id": {
+            "type": "keyword"
+        },
+        "platform_build_tool_info": {
+            "properties": {
+                "tool_name": {
+                    "type": "keyword"
+                },
+                "version": {
+                    "type": "keyword"
+                },
+                "build_version": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "time_zone": {
+            "properties": {
+                "name": {
+                    "type": "keyword"
+                },
+                "offset_in_hours": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

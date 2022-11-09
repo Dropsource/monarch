@@ -30,7 +30,7 @@ jobs:
           channel: 'beta' # or: 'stable', 'beta', 'dev' or 'master'
           
       - name: Install dependencies
-        working-directory: monarch
+        working-directory: packages/monarch
         run: flutter pub get
 
       # Uncomment this step to verify the use of 'dart format' on each commit.
@@ -39,14 +39,14 @@ jobs:
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
-        working-directory: monarch
+        working-directory: packages/monarch
         run: flutter analyze
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
       # want to change this to 'flutter test'.
       - name: Run tests
-        working-directory: monarch
+        working-directory: packages/monarch
         run: flutter test
         
   test_monarch_utils:
@@ -55,11 +55,30 @@ jobs:
       - uses: actions/checkout@v2
       - uses: dart-lang/setup-dart@v1
       - name: Install dependencies
-        working-directory: monarch_utils
+        working-directory: packages/monarch_utils
         run: dart pub get
       - name: Analyze project source
-        working-directory: monarch_utils
+        working-directory: packages/monarch_utils
         run: dart analyze
       - name: Run tests
-        working-directory: monarch_utils
+        working-directory: packages/monarch_utils
+        run: dart test
+
+  test_monarch_io_utils:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1
+      - name: Install dependencies
+        working-directory: packages/monarch_io_utils
+        run: dart pub get
+      - name: Analyze project source
+        working-directory: packages/monarch_io_utils
+        run: dart analyze
+      - name: Run tests
+        working-directory: packages/monarch_io_utils
         run: dart test

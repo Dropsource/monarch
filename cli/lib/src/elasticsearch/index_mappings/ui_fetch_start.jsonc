@@ -1,0 +1,8 @@
+{
+    "mappings": {
+        "dynamic": false,
+        "properties": {
+            /* @GOTCHA: merge json properties from common_analytics_properties.jsonc */
+        }
+    }
+}

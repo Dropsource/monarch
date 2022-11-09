@@ -1,0 +1,420 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C82C966627FB8F0E00DC66AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C966527FB8F0E00DC66AA /* AppDelegate.swift */; };
+		C82C966827FB8F0E00DC66AA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C966727FB8F0E00DC66AA /* ViewController.swift */; };
+		C82C966A27FB8F0F00DC66AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C82C966927FB8F0F00DC66AA /* Assets.xcassets */; };
+		C82C966D27FB8F0F00DC66AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C82C966B27FB8F0F00DC66AA /* Main.storyboard */; };
+		C82C967527FE287800DC66AA /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C967427FE287800DC66AA /* WindowManager.swift */; };
+		C82C967D27FE34C200DC66AA /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C967C27FE34C200DC66AA /* Logger.swift */; };
+		C82C967F27FE34DB00DC66AA /* DockSide.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C967E27FE34DB00DC66AA /* DockSide.swift */; };
+		C82C968127FE352300DC66AA /* DeviceDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C968027FE352300DC66AA /* DeviceDefinition.swift */; };
+		C82C968327FE35AB00DC66AA /* LogicalResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C968227FE35AB00DC66AA /* LogicalResolution.swift */; };
+		C82C968B2805DB1900DC66AA /* FlutterMacOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C82C96892805DAB100DC66AA /* FlutterMacOS.framework */; };
+		C82C968C2805DB1A00DC66AA /* FlutterMacOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C82C96892805DAB100DC66AA /* FlutterMacOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C82C968F280F1C2B00DC66AA /* Channels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C968E280F1C2B00DC66AA /* Channels.swift */; };
+		C85FB9D228298C020062D640 /* MonarchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85FB9D128298C020062D640 /* MonarchState.swift */; };
+		C85FB9D428298E530062D640 /* ScaleDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85FB9D328298E530062D640 /* ScaleDefinition.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C82C968D2805DB1A00DC66AA /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C82C968C2805DB1A00DC66AA /* FlutterMacOS.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		C82C966227FB8F0E00DC66AA /* Monarch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Monarch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C82C966527FB8F0E00DC66AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C82C966727FB8F0E00DC66AA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C82C966927FB8F0F00DC66AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C82C966C27FB8F0F00DC66AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C82C966E27FB8F0F00DC66AA /* monarch_macos.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = monarch_macos.entitlements; sourceTree = "<group>"; };
+		C82C967427FE287800DC66AA /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
+		C82C967C27FE34C200DC66AA /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		C82C967E27FE34DB00DC66AA /* DockSide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockSide.swift; sourceTree = "<group>"; };
+		C82C968027FE352300DC66AA /* DeviceDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDefinition.swift; sourceTree = "<group>"; };
+		C82C968227FE35AB00DC66AA /* LogicalResolution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogicalResolution.swift; sourceTree = "<group>"; };
+		C82C968527FE382E00DC66AA /* FlutterMacOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FlutterMacOS.framework; path = ephemeral/FlutterMacOS.framework; sourceTree = "<group>"; };
+		C82C96892805DAB100DC66AA /* FlutterMacOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FlutterMacOS.framework; path = ephemeral/FlutterMacOS.framework; sourceTree = "<group>"; };
+		C82C968E280F1C2B00DC66AA /* Channels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channels.swift; sourceTree = "<group>"; };
+		C82C9690280F419200DC66AA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		C82C9691280F41B200DC66AA /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
+		C85FB9D128298C020062D640 /* MonarchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonarchState.swift; sourceTree = "<group>"; };
+		C85FB9D328298E530062D640 /* ScaleDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleDefinition.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C82C965F27FB8F0E00DC66AA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C82C968B2805DB1900DC66AA /* FlutterMacOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C82C965927FB8F0E00DC66AA = {
+			isa = PBXGroup;
+			children = (
+				C82C9691280F41B200DC66AA /* CHANGELOG.md */,
+				C82C9690280F419200DC66AA /* README.md */,
+				C82C96892805DAB100DC66AA /* FlutterMacOS.framework */,
+				C82C966427FB8F0E00DC66AA /* monarch_macos */,
+				C82C966327FB8F0E00DC66AA /* Products */,
+				C82C968427FE382E00DC66AA /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		C82C966327FB8F0E00DC66AA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C82C966227FB8F0E00DC66AA /* Monarch.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C82C966427FB8F0E00DC66AA /* monarch_macos */ = {
+			isa = PBXGroup;
+			children = (
+				C82C966527FB8F0E00DC66AA /* AppDelegate.swift */,
+				C82C966727FB8F0E00DC66AA /* ViewController.swift */,
+				C82C966927FB8F0F00DC66AA /* Assets.xcassets */,
+				C82C966B27FB8F0F00DC66AA /* Main.storyboard */,
+				C82C966E27FB8F0F00DC66AA /* monarch_macos.entitlements */,
+				C82C967427FE287800DC66AA /* WindowManager.swift */,
+				C82C967C27FE34C200DC66AA /* Logger.swift */,
+				C82C967E27FE34DB00DC66AA /* DockSide.swift */,
+				C82C968027FE352300DC66AA /* DeviceDefinition.swift */,
+				C82C968227FE35AB00DC66AA /* LogicalResolution.swift */,
+				C82C968E280F1C2B00DC66AA /* Channels.swift */,
+				C85FB9D128298C020062D640 /* MonarchState.swift */,
+				C85FB9D328298E530062D640 /* ScaleDefinition.swift */,
+			);
+			path = monarch_macos;
+			sourceTree = "<group>";
+		};
+		C82C968427FE382E00DC66AA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C82C968527FE382E00DC66AA /* FlutterMacOS.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C82C966127FB8F0E00DC66AA /* monarch_macos */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C82C967127FB8F0F00DC66AA /* Build configuration list for PBXNativeTarget "monarch_macos" */;
+			buildPhases = (
+				C82C965E27FB8F0E00DC66AA /* Sources */,
+				C82C965F27FB8F0E00DC66AA /* Frameworks */,
+				C82C966027FB8F0E00DC66AA /* Resources */,
+				C82C968D2805DB1A00DC66AA /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = monarch_macos;
+			productName = monarch_macos;
+			productReference = C82C966227FB8F0E00DC66AA /* Monarch.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C82C965A27FB8F0E00DC66AA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1320;
+				LastUpgradeCheck = 1320;
+				TargetAttributes = {
+					C82C966127FB8F0E00DC66AA = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
+				};
+			};
+			buildConfigurationList = C82C965D27FB8F0E00DC66AA /* Build configuration list for PBXProject "monarch_macos" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C82C965927FB8F0E00DC66AA;
+			productRefGroup = C82C966327FB8F0E00DC66AA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C82C966127FB8F0E00DC66AA /* monarch_macos */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C82C966027FB8F0E00DC66AA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C82C966A27FB8F0F00DC66AA /* Assets.xcassets in Resources */,
+				C82C966D27FB8F0F00DC66AA /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C82C965E27FB8F0E00DC66AA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C82C968327FE35AB00DC66AA /* LogicalResolution.swift in Sources */,
+				C85FB9D428298E530062D640 /* ScaleDefinition.swift in Sources */,
+				C82C968127FE352300DC66AA /* DeviceDefinition.swift in Sources */,
+				C85FB9D228298C020062D640 /* MonarchState.swift in Sources */,
+				C82C967F27FE34DB00DC66AA /* DockSide.swift in Sources */,
+				C82C966827FB8F0E00DC66AA /* ViewController.swift in Sources */,
+				C82C966627FB8F0E00DC66AA /* AppDelegate.swift in Sources */,
+				C82C968F280F1C2B00DC66AA /* Channels.swift in Sources */,
+				C82C967527FE287800DC66AA /* WindowManager.swift in Sources */,
+				C82C967D27FE34C200DC66AA /* Logger.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		C82C966B27FB8F0F00DC66AA /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C82C966C27FB8F0F00DC66AA /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C82C966F27FB8F0F00DC66AA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C82C967027FB8F0F00DC66AA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		C82C967227FB8F0F00DC66AA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = monarch_macos/monarch_macos.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CTY49PK23Z;
+				ENABLE_HARDENED_RUNTIME = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ephemeral",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 2.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "dropsource.monarch-macos";
+				PRODUCT_NAME = Monarch;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C82C967327FB8F0F00DC66AA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = monarch_macos/monarch_macos.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CTY49PK23Z;
+				ENABLE_HARDENED_RUNTIME = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ephemeral",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 2.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "dropsource.monarch-macos";
+				PRODUCT_NAME = Monarch;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C82C965D27FB8F0E00DC66AA /* Build configuration list for PBXProject "monarch_macos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C82C966F27FB8F0F00DC66AA /* Debug */,
+				C82C967027FB8F0F00DC66AA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C82C967127FB8F0F00DC66AA /* Build configuration list for PBXNativeTarget "monarch_macos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C82C967227FB8F0F00DC66AA /* Debug */,
+				C82C967327FB8F0F00DC66AA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C82C965A27FB8F0E00DC66AA /* Project object */;
+}

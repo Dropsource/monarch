@@ -1,0 +1,17 @@
+{
+    "properties": {
+        "context_info": {
+            /* @GOTCHA: insert json from context_info.jsonc */
+        },
+        "device_event_id": {
+            "type": "keyword"
+        },
+        "session_id": {
+            "type": "keyword"
+        },
+        "timestamp": {
+            "type": "date",
+            "format": "epoch_millis"
+        }
+    }
+}
