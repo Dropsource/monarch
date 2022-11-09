@@ -1,0 +1,13 @@
+{
+    "properties": {
+        "in_milliseconds": {
+            "type": "integer"
+        },
+        "in_minutes": {
+            "type": "integer"
+        },
+        "in_seconds": {
+            "type": "integer"
+        }
+    }
+}

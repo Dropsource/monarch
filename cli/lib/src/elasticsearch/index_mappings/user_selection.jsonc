@@ -1,0 +1,54 @@
+{
+    "mappings": {
+        "dynamic": false,
+        "properties": {
+            /* @GOTCHA: merge json properties from common_analytics_properties.jsonc */
+            "debug_paint_enabled": {
+                "type": "boolean"   // debug_paint_enabled not used after release 1.6.0,
+                                    // replaced with show_guidelines_enabled
+            },
+            "kind": {
+                "type": "keyword"
+            },
+            "locale_count": {
+                "type": "short"
+            },
+            "selected_device": {
+                "type": "keyword"
+            },
+            "selected_text_scale_factor": {
+                "type": "float"
+            },
+            "story_count": {
+                "type": "integer"
+            },
+            "task_runner_process_memory": {
+                /* @GOTCHA: insert properties from task_runner_process_memory_properties.jsonc */
+            },
+            "user_theme_count": {
+                "type": "short"
+            },
+            "selected_story_scale": {
+                "type": "float"
+            },
+            "selected_dock_side": {
+                "type": "keyword"
+            },
+            "slow_animations_enabled": {
+                "type": "boolean"
+            },
+            "show_guidelines_enabled": {
+                "type": "boolean"
+            },
+            "show_baselines_enabled": {
+                "type": "boolean"
+            },
+            "highlight_repaints_enabled": {
+                "type": "boolean"
+            },
+            "highlight_oversized_images_enabled": {
+                "type": "boolean"
+            }
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "mappings": {
+        "dynamic": false,
+        "properties": {
+            /* @GOTCHA: merge json properties from common_analytics_properties.jsonc */
+            "exit_code": {
+                /* @GOTCHA: insert properties from exit_code_properties.jsonc */
+            },
+            "upgrade": {
+                "properties": {
+                    "version_number": {
+                        "type": "keyword"
+                    },
+                    "duration" : {
+                        /* @GOTCHA: insert properties from duration_properties.jsonc */
+                    }
+                }
+            }
+        }
+    }
+}

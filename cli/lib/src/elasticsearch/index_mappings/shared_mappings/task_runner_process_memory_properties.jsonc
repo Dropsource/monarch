@@ -1,0 +1,10 @@
+{
+    "properties": {
+        "current_rss_in_mb": {
+            "type": "double"
+        },
+        "max_rss_in_mb": {
+            "type": "double"
+        }
+    }
+}
