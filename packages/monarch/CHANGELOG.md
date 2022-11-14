@@ -1,3 +1,6 @@
+## 3.0.0 - 2022-11-14
+- Releasing monarch package 3.0.0 compatible with Monarch 2.x and Flutter 3.x
+
 ## 3.0.0-pre.1 - 2022-10-27
 - Rename `MonarchData` to `ProjectData`
 - Compatible with Monarch Preview API

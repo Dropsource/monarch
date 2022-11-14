@@ -18,7 +18,7 @@ void main() {
   group('MonarchPackageCompatibility', () {
     group('any supported flutter version', () {
       test('is compatible', () {
-        isCompatible(flutter: '3.3.6', monarch: '3.0.0-pre.1');
+        isCompatible(flutter: '3.3.6', monarch: '3.0.0');
         isCompatible(flutter: '3.3.3', monarch: '3.0.1');
         isCompatible(flutter: '3.3.2', monarch: '3.1.1');
       });
@@ -33,7 +33,7 @@ void main() {
 
       test('incompatibilityMessage', () {
         expect(MonarchPackageCompatibility('3.0.5').incompatibilityMessage,
-            'Use monarch package version ^3.0.0-pre.1 or greater.');
+            'Use monarch package version ^3.0.0 or greater.');
       });
     });
   });
