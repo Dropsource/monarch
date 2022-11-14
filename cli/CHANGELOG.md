@@ -1,3 +1,6 @@
+## 2.1.3 - 2022-11-14
+- Update monarch package compatibility to 3.0.0
+
 ## 2.1.2 - 2022-11-04
 - Discovery service
 - Notifications service
