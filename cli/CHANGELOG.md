@@ -1,3 +1,7 @@
+## 2.1.4 - 2022-11-15
+- Include project config in notification request context
+- Validate compatibility with Flutter 2.x 
+
 ## 2.1.3 - 2022-11-14
 - Update monarch package compatibility to 3.0.0
 

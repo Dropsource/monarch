@@ -73,11 +73,6 @@ void executeTaskRunner(
   final contextInfo = await setUpContextAndSession(
       isVerbose, _crashReporter.builder, _analytics.builder);
 
-  final notificationsReader = NotificationsReader(
-      VersionApi(readUserId: contextInfo.userDeviceIdOrUnknown),
-      _isLocalDeployment);
-  notificationsReader.read(contextInfo);
-
   final projectConfig =
       TaskRunnerProjectConfig(projectDirectory, contextInfo.internalInfo);
   await projectConfig.validate();
@@ -89,6 +84,11 @@ void executeTaskRunner(
   }
 
   contextInfo.projectConfig = projectConfig;
+
+  final notificationsReader = NotificationsReader(
+      VersionApi(readUserId: contextInfo.userDeviceIdOrUnknown),
+      _isLocalDeployment);
+  notificationsReader.read(contextInfo);
 
   final compatibility = ProjectCompatibility(projectConfig);
   await compatibility.validate();
