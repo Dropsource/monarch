@@ -8,5 +8,6 @@ environment:
 dev_dependencies:
   path:
   yaml:
+  pub_semver:
   monarch_io_utils:
     path: ../packages/monarch_io_utils/

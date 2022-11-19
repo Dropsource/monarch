@@ -65,7 +65,11 @@ void ControllerWindowManager::_showAndSetUpControllerWindow(WindowInfo controlle
 {
 	// @GOTCHA: The Monarch CLI kills the controller window using its title.
 	// If you change the title, change the CLI as well.
+#ifdef MONARCH_WINDOW_API_CREATE
+	if (!_controllerWindow->Create(
+#else
 	if (!_controllerWindow->CreateAndShow(
+#endif
 		to_wstring(_projectName) + L" - Monarch",
 		Win32Window::Point(controllerWindowInfo.topLeft.x, controllerWindowInfo.topLeft.y),
 		Win32Window::Size(controllerWindowInfo.size.width, controllerWindowInfo.size.height))) {
@@ -154,8 +158,11 @@ void PreviewWindowManager::_showAndSetUpPreviewWindow(WindowInfo controllerWindo
 	auto previewSize = Win32Window::Size(
 		(long)defaultDeviceDefinition.logicalResolution.width,
 		(long)defaultDeviceDefinition.logicalResolution.height);
-
+#ifdef MONARCH_WINDOW_API_CREATE
+	if (!_previewWindow->Create(
+#else
 	if (!_previewWindow->CreateAndShow(
+#endif
 		to_wstring(defaultDeviceDefinition.title()),
 		Win32Window::Point(
 			controllerWindowInfo.topLeft.x + controllerWindowInfo.size.width,

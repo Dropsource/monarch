@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
+import 'package:pub_semver/pub_semver.dart' as pub;
 
 import 'paths.dart';
 import 'utils.dart' as utils;
@@ -219,10 +220,11 @@ void buildWindows(
     }
   }
 
+  var cmakelists_txt =
+      p.join(repo_paths.platform_windows_gen, 'runner', 'CMakeLists.txt');
+
   {
     print('Including src files in CMakeLists.txt...');
-    var cmakelists_txt =
-        p.join(repo_paths.platform_windows_gen, 'runner', 'CMakeLists.txt');
     var cmakelists_og_file = File(cmakelists_txt);
     var cmakelistsContents = cmakelists_og_file.readAsStringSync();
     cmakelists_og_file.renameSync(
@@ -239,9 +241,42 @@ void buildWindows(
       buffer.writeln('  "$_path"');
     }
 
+    // Replace "main.cpp" for the list of files in the src directory
     cmakelistsContents = _assertAndReplace(
         cmakelistsContents, '"main.cpp"', buffer.toString().trim());
+
     File(cmakelists_txt).writeAsStringSync(cmakelistsContents);
+  }
+
+  {
+    print('Append preprocessor directives to CMakeLists.txt...');
+
+    /// We can use preprocessor directives so the Monarch C++ code can compile with 
+    /// different Flutter versions. Sometimes the Flutter Windows APIs 
+    /// change between versions.
+    /// 
+    /// In flutter version 3.4.0-34.1.pre, the flutter team changed the signature of a
+    /// function we use. `Win32Window::CreateAndShow` changed to `Win32Window::Create`.
+    /// See PR: https://github.com/flutter/flutter/pull/109816/files
+    /// See file: packages/flutter_tools/templates/app_shared/windows.tmpl/runner/win32_window.cpp
+    ///
+    /// Here we set a preprocessor directive to flag the change so the Monarch source code
+    /// can adapt to the change.
+    var flutterVersion = pub.Version.parse(get_flutter_version(flutter_sdk));
+    var flutterVersionWithCreateWindowApiChange =
+        pub.Version(3, 4, 0, pre: '34.1.pre');
+    var buffer = StringBuffer();
+
+    if (flutterVersion >= flutterVersionWithCreateWindowApiChange) {
+      buffer.writeln();
+      buffer.writeln('''
+# Monarch preprocessor definitions
+target_compile_definitions(\${BINARY_NAME} PRIVATE "MONARCH_WINDOW_API_CREATE")
+''');
+    }
+
+    File(cmakelists_txt)
+        .writeAsStringSync(buffer.toString(), mode: FileMode.writeOnlyAppend);
   }
 
   {
