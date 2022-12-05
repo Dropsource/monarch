@@ -75,16 +75,16 @@ class WindowsTerminator {
   /// Once the issues above are fixed, the [Terminator] class should work as
   /// expected and we won't need this function anymore.
   static void killTasksByWindowTitle(String windowTitle) {
-    var _log = Logger('WindowsTerminator');
+    var log_ = Logger('WindowsTerminator');
     if (!Platform.isWindows) {
-      _log.warning(
+      log_.warning(
           'The killTasksByWindowTitle function should only be called on the Windows platform');
     }
-    _log.fine('Terminating tasks whose window title is: $windowTitle');
+    log_.fine('Terminating tasks whose window title is: $windowTitle');
     var result = Process.runSync(
         'taskkill', ['/F', '/FI', 'WindowTitle eq $windowTitle', '/T'],
         runInShell: true);
-    _log.fine(result.stdout);
-    _log.fine(result.stderr);
+    log_.fine(result.stdout);
+    log_.fine(result.stderr);
   }
 }

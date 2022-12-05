@@ -14,8 +14,8 @@ void main() {
       var logEntries = <LogEntry>[];
       logEntryStream.listen((logEntry) => logEntries.add(logEntry));
 
-      var _logger = Logger('monarch-app-stderr-test');
-      onRunMonarchAppStdErrMessage(message, _logger);
+      var logger_ = Logger('monarch-app-stderr-test');
+      onRunMonarchAppStdErrMessage(message, logger_);
 
       await pumpEventQueue();
 

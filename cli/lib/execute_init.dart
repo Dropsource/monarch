@@ -22,9 +22,9 @@ void executeInit(bool isVerbose, bool isCrashDebug) async {
 }
 
 class _InitExecutor with CommonExecutor {
-  void executeInit(bool _isVerbose, bool _isCrashDebug) async {
-    isVerbose = _isVerbose;
-    isCrashDebug = _isCrashDebug;
+  void executeInit(bool isVerbose_, bool isCrashDebug_) async {
+    isVerbose = isVerbose_;
+    isCrashDebug = isCrashDebug_;
 
     defaultLogLevel = LogLevel.ALL;
     crashReportLoggers.setIsCrashDebugFlag(isCrashDebug);

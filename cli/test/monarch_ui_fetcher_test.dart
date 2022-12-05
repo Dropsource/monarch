@@ -100,8 +100,8 @@ void main() {
         bool? shouldUiDirExist,
         bool? isZipFileDeleted,
         required String output}) async {
-      var _exitCode = await fetcher.exit;
-      expect(_exitCode.code, exitCode.code);
+      var exitCode_ = await fetcher.exit;
+      expect(exitCode_.code, exitCode.code);
       if (shouldUiDirExist != null) {
         expect(await monarchBinaries.monarchUiDirectory.exists(),
             shouldUiDirExist);

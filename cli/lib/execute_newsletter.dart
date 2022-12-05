@@ -13,9 +13,9 @@ void executeJoinNewsletter(bool isVerbose, bool isCrashDebug) async {
 }
 
 class _NewsletterExecutor with CommonExecutor {
-  void execute(bool _isVerbose, bool _isCrashDebug) async {
-    isVerbose = _isVerbose;
-    isCrashDebug = _isCrashDebug;
+  void execute(bool isVerbose_, bool isCrashDebug_) async {
+    isVerbose = isVerbose_;
+    isCrashDebug = isCrashDebug_;
 
     defaultLogLevel = LogLevel.ALL;
     crashReportLoggers.setIsCrashDebugFlag(isCrashDebug);
