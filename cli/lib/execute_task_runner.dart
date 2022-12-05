@@ -169,10 +169,10 @@ The monarch_ui directory below is missing. Make sure to add the path to your Flu
   _analytics.task_runner_start(reloadOption);
 
   taskRunner.run();
-  final _exitCode = await taskRunner.exit;
+  final exitCode_ = await taskRunner.exit;
 
-  _analytics.task_runner_end(_exitCode);
-  await _exit(_exitCode);
+  _analytics.task_runner_end(exitCode_);
+  await _exit(exitCode_);
 }
 
 void _recordAndShowValidationErrors(Validator validator) {

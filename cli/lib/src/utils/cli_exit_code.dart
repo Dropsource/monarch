@@ -5,7 +5,7 @@ class CliExitCode {
 
   const CliExitCode(this.code, this.description, this.isFailure);
 
-  bool absEqual(int _code) => code.abs() == _code.abs();
+  bool absEqual(int code_) => code.abs() == code_.abs();
 }
 
 class CliExitCodes {

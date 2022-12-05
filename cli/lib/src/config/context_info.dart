@@ -130,7 +130,7 @@ class ContextInfo with Log {
   }
 
   Future<void> readOsInfo() async {
-    Future<String?> _runSwVers(String argument) async {
+    Future<String?> runSwVers_(String argument) async {
       final result = await Process.run('sw_vers', [argument]);
       if (result.exitCode == ExitCode.success.code) {
         return result.stdout.trim();
@@ -141,7 +141,7 @@ class ContextInfo with Log {
       }
     }
 
-    Future<String?> _runVer() async {
+    Future<String?> runVer_() async {
       final result = await Process.run('ver', [], runInShell: true);
       if (result.exitCode == ExitCode.success.code) {
         return result.stdout.trim();
@@ -155,9 +155,9 @@ class ContextInfo with Log {
     _osInfo = OsInfo(
         name: Platform.operatingSystem,
         version: await futureForPlatform(
-            macos: () => _runSwVers('-productVersion'), windows: _runVer),
+            macos: () => runSwVers_('-productVersion'), windows: runVer_),
         buildVersion: await futureForPlatform(
-            macos: () => _runSwVers('-buildVersion'),
+            macos: () => runSwVers_('-buildVersion'),
             windows: () => Future.value('NA')),
         versionString: Platform.operatingSystemVersion);
 

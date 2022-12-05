@@ -49,10 +49,10 @@ void executeUpgrade(
 }
 
 class _UpgradeExecutor with CommonExecutor {
-  void executeUpgrade(bool _isVerbose, bool _isCrashDebug,
+  void executeUpgrade(bool isVerbose_, bool isCrashDebug_,
       String? monarchExecutablePath) async {
-    isVerbose = _isVerbose;
-    isCrashDebug = _isCrashDebug;
+    isVerbose = isVerbose_;
+    isCrashDebug = isCrashDebug_;
 
     defaultLogLevel = LogLevel.ALL;
     crashReportLoggers.setIsCrashDebugFlag(isCrashDebug);
