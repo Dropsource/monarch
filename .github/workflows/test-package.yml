@@ -149,10 +149,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1.3
-      - uses: finnp/create-file-action@master
-          env:
-            FILE_NAME: "cli/lib/settings.dart"
-            FILE_DATA: "const kDeployment = 'github-actions'; const kElasticsearchEndpoint = ''; const kElasticsearchUsername = ''; const kElasticsearchPassword = ''; const kVersionApiUrl = '';"
+      - uses: 1arp/create-a-file-action@0.2
+        with:
+          path: 'cli/lib'
+          file: 'settings.dart'
+          content: "const kDeployment = 'github-actions'; const kElasticsearchEndpoint = ''; const kElasticsearchUsername = ''; const kElasticsearchPassword = ''; const kVersionApiUrl = '';"
 
       - name: Install dependencies
         working-directory: cli
