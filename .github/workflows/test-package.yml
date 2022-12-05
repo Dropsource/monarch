@@ -47,7 +47,7 @@ jobs:
   analyze_monarch_annotations:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1.3
 
       - name: Install dependencies
@@ -61,7 +61,7 @@ jobs:
   analyze_monarch_grpc:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1.3
 
       - name: Install dependencies
@@ -75,7 +75,7 @@ jobs:
   analyze_monarch_definitions:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1.3
 
       - name: Install dependencies
@@ -89,7 +89,7 @@ jobs:
   analyze_monarch_http:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1.3
 
       - name: Install dependencies
@@ -103,7 +103,7 @@ jobs:
   test_monarch_utils:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1.3
 
       - name: Install dependencies
@@ -125,7 +125,7 @@ jobs:
       matrix:
         os: [windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1.3
 
       - name: Install dependencies
@@ -147,8 +147,13 @@ jobs:
       matrix:
         os: [windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1.3
+
+      - uses: "finnp/create-file-action@master"
+          env:
+            FILE_NAME: "cli/lib/settings.dart"
+            FILE_DATA: "const kDeployment = 'github-actions'; const kElasticsearchEndpoint = ''; const kElasticsearchUsername = ''; const kElasticsearchPassword = ''; const kVersionApiUrl = '';"
 
       - name: Install dependencies
         working-directory: cli
