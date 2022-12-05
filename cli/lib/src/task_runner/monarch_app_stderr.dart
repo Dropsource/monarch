@@ -53,14 +53,24 @@ import 'task_names.dart';
 /// preview api. If we don't want the errors to show, we need to submit an issue to the flutter team.
 /// The errors do not cause any side effects since the preview api doesn't have UI,
 /// therefore it doesn't need a rendering surface.
-void onRunMonarchAppStdErrMessage(String message, Logger _logger) {
-  if (Platform.isWindows && _logger.name == TaskNames.runPreviewApp) {
+void onRunMonarchAppStdErrMessage(String message, Logger logger_) {
+  if (Platform.isWindows && logger_.name == TaskNames.runPreviewApp) {
     if (message.contains(
             'Could not create a resource context for async texture uploads. Expect degraded performance. Set a valid make_resource_current callback on FlutterOpenGLRendererConfig.') ||
         message.contains(
             'Could not make the context current to set up the Gr context.') ||
         message.contains('Failed to create platform view rendering surface')) {
-      _logger.info('**ignored-severe** $message');
+      logger_.info('**ignored-severe** $message');
+      return;
+    }
+  }
+
+  if (Platform.isMacOS) {
+    var cannotFindBundle = RegExp(
+        r'Cannot find executable for CFBundle .* <.*(\.monarch|monarch_controller|monarch_preview_api)> \(not loaded\)');
+
+    if (cannotFindBundle.hasMatch(message)) {
+      logger_.info('**ignored-severe** $message');
       return;
     }
   }
@@ -70,20 +80,9 @@ void onRunMonarchAppStdErrMessage(String message, Logger _logger) {
   if (newLineIndex > -1 && newLineIndex < message.length - 1) {
     final parsedMessage = message.substring(0, newLineIndex).trimLeft();
     final stackTrace = message.substring(newLineIndex).trimLeft();
-    _logger.severe(parsedMessage, null, StackTrace.fromString(stackTrace));
+    logger_.severe(parsedMessage, null, StackTrace.fromString(stackTrace));
     return;
   }
 
-  // messages below are expected to be single line
-  if (Platform.isMacOS) {
-    var cannotFindBundle = RegExp(
-        r'Cannot find executable for CFBundle .* <.*(\.monarch|monarch_controller|monarch_preview_api)> \(not loaded\)');
-
-    if (cannotFindBundle.hasMatch(message)) {
-      _logger.info('**ignored-severe** $message');
-      return;
-    }
-  }
-
-  _logger.severe(message);
+  logger_.severe(message);
 }
