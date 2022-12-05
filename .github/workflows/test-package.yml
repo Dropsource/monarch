@@ -149,7 +149,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: dart-lang/setup-dart@v1.3
-      - uses: fertrig/create-file-node-v16
+      - uses: fertrig/create-file-action
         with:
           path: 'cli/lib'
           file: 'settings.dart'
