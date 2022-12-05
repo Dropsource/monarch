@@ -2,6 +2,10 @@
 
 This directory contains code for the Monarch Window Manager on Windows.
 
+_The [Monarch Architecture](https://github.com/Dropsource/monarch/wiki/Monarch-Architecture)_ 
+_document provides an overview of the Monarch Window Manager. The sections below provide_
+_more details of the Window Manager on Windows._
+
 ## The Monarch Window Manager on Windows
 - Is a windowless native process
 - Uses C++, Win32 APIs and Flutter Windows libraries.
