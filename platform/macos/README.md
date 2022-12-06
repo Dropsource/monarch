@@ -2,6 +2,9 @@
 
 This directory contains code for the Monarch Window Manager on macOS.
 
+_The [Monarch Architecture](https://github.com/Dropsource/monarch/wiki/Monarch-Architecture)_ 
+_document provides an overview of the Monarch Window Manager._
+
 ### Building
 ```
 dart tools/build_platform.dart

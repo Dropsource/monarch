@@ -2,6 +2,10 @@
 
 This directory contains code for the Monarch Window Manager on Windows.
 
+_The [Monarch Architecture](https://github.com/Dropsource/monarch/wiki/Monarch-Architecture)_ 
+_document provides an overview of the Monarch Window Manager. The sections below provide_
+_more details of the Window Manager on Windows._
+
 ## The Monarch Window Manager on Windows
 - Is a windowless native process
 - Uses C++, Win32 APIs and Flutter Windows libraries.
@@ -132,3 +136,12 @@ Thus, the windows monarch build is complex because:
 ## Sign commits
 To sign commits on windows install gpg4win, which installs Kleopatra (the frontend of gpg)
 which runs the gpg agent. Make sure Kleopatra is running when signing commits.
+
+
+## Preview and Controller Mode
+The code supports running the window manager in two modes: preview and controller. 
+At runtime, the Monarch CLI runs two processes of this window manager. One in preview mode
+which hosts the preview api and preview window. And the other one in controller mode, which
+hosts the controller window. We run two processes because Flutter on Windows 
+[has an issue](https://github.com/flutter/flutter/issues/110661) running two windows in the 
+same process.

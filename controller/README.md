@@ -1,5 +1,8 @@
 # Monarch Controller
 
+_The [Monarch Architecture](https://github.com/Dropsource/monarch/wiki/Monarch-Architecture)_ 
+_document provides an overview of the Monarch Controller._
+
 ### Running tests
 ```
 cd controller
