@@ -430,7 +430,7 @@ PreviewApiRunner::~PreviewApiRunner()
 void PreviewApiRunner::run()
 {
 	engine_ = std::make_unique<flutter::FlutterEngine>(project_);
-	engine_->Run();
+	engine_->Run("");
 }
 
 flutter::BinaryMessenger* PreviewApiRunner::messenger()
