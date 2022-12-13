@@ -74,13 +74,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   // plugins.
   ::CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
 
-
-  //_logger.shout("start sleep");
-  //Sleep(10000);
-  //_logger.shout("end sleep");
-
-
   Logger _logger{ L"Main" };
+
+  // _logger.shout("start sleep");
+  // Sleep(20000);
+  // _logger.shout("end sleep");
 
   std::vector<std::string> arguments = GetCommandLineArguments();
 

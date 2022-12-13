@@ -1,3 +1,7 @@
+## 2.2.2 - 2022-12-13
+- Pass empty string to `FlutterEngine::Run` to workaround crash
+  (https://github.com/flutter/flutter/issues/116753)
+
 ## 2.1.1 - 2022-09-21
 - Minimum size of controller window
 
