@@ -258,6 +258,16 @@ const UserMessageInfo$json = const {
 
 /// Descriptor for `UserMessageInfo`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List userMessageInfoDescriptor = $convert.base64Decode('Cg9Vc2VyTWVzc2FnZUluZm8SGAoHbWVzc2FnZRgBIAEoCVIHbWVzc2FnZQ==');
+@$core.Deprecated('Use kindInfoDescriptor instead')
+const KindInfo$json = const {
+  '1': 'KindInfo',
+  '2': const [
+    const {'1': 'kind', '3': 1, '4': 1, '5': 9, '10': 'kind'},
+  ],
+};
+
+/// Descriptor for `KindInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List kindInfoDescriptor = $convert.base64Decode('CghLaW5kSW5mbxISCgRraW5kGAEgASgJUgRraW5k');
 @$core.Deprecated('Use userSelectionDataDescriptor instead')
 const UserSelectionData$json = const {
   '1': 'UserSelectionData',

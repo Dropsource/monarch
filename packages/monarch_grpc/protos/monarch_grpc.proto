@@ -21,7 +21,7 @@ service MonarchPreviewApi {
     rpc HotReload(Empty) returns (ReloadResponse) {}
     rpc RestartPreview(Empty) returns (Empty) {}
     rpc LaunchDevTools(Empty) returns (Empty) {}
-    rpc TrackUserSelection(UserSelectionData) returns (Empty) {}
+    rpc TrackUserSelection(KindInfo) returns (Empty) {}
     rpc TerminatePreview(Empty) returns (Empty) {}
 }
 
@@ -152,6 +152,10 @@ message ReloadResponse {
 
 message UserMessageInfo {
     string message = 1;
+}
+
+message KindInfo {
+    string kind = 1;
 }
 
 message UserSelectionData {
