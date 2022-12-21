@@ -118,7 +118,7 @@ class MockMonarchPreviewApiClient implements MonarchPreviewApiClient {
   }
 
   @override
-  ResponseFuture<Empty> trackUserSelection(UserSelectionData request,
+  ResponseFuture<Empty> trackUserSelection(KindInfo request,
       {CallOptions? options}) {
     return FakeResponseFuture<Empty>();
   }
