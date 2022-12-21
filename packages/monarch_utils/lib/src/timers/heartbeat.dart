@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'stopwatch.dart';
-import 'write_line_function.dart';
+import '../log/write_line_function.dart';
 
 class Heartbeat {
   final String message;

@@ -6,5 +6,5 @@ export 'src/log/logger.dart';
 export 'src/log/log_level.dart';
 export 'src/log/log_utils.dart';
 export 'src/log/log_entry.dart';
-export 'src/log/stopwatch.dart';
-export 'src/log/heartbeat.dart';
+export 'src/timers/stopwatch.dart';
+export 'src/timers/heartbeat.dart';
