@@ -200,11 +200,38 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
   }
 
   @override
-  Future<Empty> trackUserSelection(
-      ServiceCall call, UserSelectionData request) {
+  Future<Empty> trackUserSelection(ServiceCall call, KindInfo request) {
+    var projectData = projectDataManager.projectData;
+    var selectionsState = selectionsStateManager.state;
+
     // The Preview API forwards this request to all the notification clients. The controller client
     // should do nothing. The cli client should handle this request.
-    previewNotifications.trackUserSelection(request);
+    previewNotifications.trackUserSelection(UserSelectionData(
+      kind: request.kind,
+      localeCount: projectData.localizations.fold<int>(
+          0,
+          (previousValue, element) =>
+              previousValue + element.localeLanguageTags.length),
+      userThemeCount: projectData.themes.length,
+      storyCount: projectData.storiesMap.values.fold<int>(
+          0,
+          (previousValue, element) =>
+              previousValue + element.storiesNames.length),
+      selectedDevice: selectionsState.device.id,
+      selectedTextScaleFactor: selectionsState.textScaleFactor,
+      selectedStoryScale: selectionsState.scale.scale,
+      selectedDockSide: selectionsState.dock.id,
+      slowAnimationsEnabled:
+          selectionsState.visualDebugFlags[VisualDebugFlags.slowAnimations],
+      highlightRepaintsEnabled:
+          selectionsState.visualDebugFlags[VisualDebugFlags.highlightRepaints],
+      showGuidelinesEnabled:
+          selectionsState.visualDebugFlags[VisualDebugFlags.showGuidelines],
+      highlightOversizedImagesEnabled: selectionsState
+          .visualDebugFlags[VisualDebugFlags.highlightOversizedImages],
+      showBaselinesEnabled:
+          selectionsState.visualDebugFlags[VisualDebugFlags.showBaselines],
+    ));
     return Future.value(Empty());
   }
 

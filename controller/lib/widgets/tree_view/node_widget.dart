@@ -26,10 +26,10 @@ class NodeWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _NodeWidgetState createState() => _NodeWidgetState();
+  NodeWidgetState createState() => NodeWidgetState();
 }
 
-class _NodeWidgetState extends State<NodeWidget> {
+class NodeWidgetState extends State<NodeWidget> {
   bool get _isLeaf {
     return widget.treeNode.children == null ||
         widget.treeNode.children!.isEmpty;

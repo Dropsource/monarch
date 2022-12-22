@@ -1,4 +1,9 @@
-## 1.0.1 = 2022-11-03
+## 2.0.0 - 2022-12-21
+- Track user selections using the preview api data (project data and selections state)
+- Use monarch_grpc v2 which changes the signature of the 
+  TrackUserSelection rpc on the MonarchPreviewApi service
+
+## 1.0.1 - 2022-11-03
 - Fix: update selections state correctly when story id is reset
 
 ## 1.0.0 - 2022-10-24

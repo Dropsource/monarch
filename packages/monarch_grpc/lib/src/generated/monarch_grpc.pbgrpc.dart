@@ -82,11 +82,10 @@ class MonarchPreviewApiClient extends $grpc.Client {
       '/monarch_grpc.MonarchPreviewApi/LaunchDevTools',
       ($0.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
-  static final _$trackUserSelection =
-      $grpc.ClientMethod<$0.UserSelectionData, $0.Empty>(
-          '/monarch_grpc.MonarchPreviewApi/TrackUserSelection',
-          ($0.UserSelectionData value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
+  static final _$trackUserSelection = $grpc.ClientMethod<$0.KindInfo, $0.Empty>(
+      '/monarch_grpc.MonarchPreviewApi/TrackUserSelection',
+      ($0.KindInfo value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
   static final _$terminatePreview = $grpc.ClientMethod<$0.Empty, $0.Empty>(
       '/monarch_grpc.MonarchPreviewApi/TerminatePreview',
       ($0.Empty value) => value.writeToBuffer(),
@@ -175,8 +174,7 @@ class MonarchPreviewApiClient extends $grpc.Client {
     return $createUnaryCall(_$launchDevTools, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.Empty> trackUserSelection(
-      $0.UserSelectionData request,
+  $grpc.ResponseFuture<$0.Empty> trackUserSelection($0.KindInfo request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$trackUserSelection, request, options: options);
   }
@@ -298,12 +296,12 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.UserSelectionData, $0.Empty>(
+    $addMethod($grpc.ServiceMethod<$0.KindInfo, $0.Empty>(
         'TrackUserSelection',
         trackUserSelection_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.UserSelectionData.fromBuffer(value),
+        ($core.List<$core.int> value) => $0.KindInfo.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.Empty, $0.Empty>(
         'TerminatePreview',
@@ -389,8 +387,8 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
     return launchDevTools(call, await request);
   }
 
-  $async.Future<$0.Empty> trackUserSelection_Pre($grpc.ServiceCall call,
-      $async.Future<$0.UserSelectionData> request) async {
+  $async.Future<$0.Empty> trackUserSelection_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.KindInfo> request) async {
     return trackUserSelection(call, await request);
   }
 
@@ -428,7 +426,7 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
   $async.Future<$0.Empty> launchDevTools(
       $grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.Empty> trackUserSelection(
-      $grpc.ServiceCall call, $0.UserSelectionData request);
+      $grpc.ServiceCall call, $0.KindInfo request);
   $async.Future<$0.Empty> terminatePreview(
       $grpc.ServiceCall call, $0.Empty request);
 }

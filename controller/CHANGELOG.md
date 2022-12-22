@@ -1,3 +1,8 @@
+## 1.2.0 - 2022-12-21
+- To track user selection, only pass the selection kind to the preview api
+- Debounce text scale factor selection tracking
+- Wait a bit before tracking visual debug flag changes
+
 ## 1.1.0 - 2022-09-15
 - update monarch package version which works with code and builds
 - adjust ui controls

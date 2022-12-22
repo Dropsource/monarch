@@ -564,30 +564,27 @@ abstract class TextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _translations = Translations.of(context);
-    var translatedText = _shouldTranslate && _translations != null
-        ? _translations.textWithArgs(text, args ?? [])
+    final translations = Translations.of(context);
+    var translatedText = _shouldTranslate && translations != null
+        ? translations.textWithArgs(text, args ?? [])
         : text;
     var formattedText =
         _shouldUpperCase ? translatedText.toUpperCase() : translatedText;
 
-    var _styles =
+    var styles_ =
         styles == null ? style(context) : style(context)?.merge(styles);
 
-    late Widget _text;
-    // This will auto
-
-    _text = Text(
+    var textWidget = Text(
       formattedText,
       overflow: overflow,
-      style: _styles,
+      style: styles_,
       textAlign: textAlign,
       maxLines: maxLines,
     );
 
     if (_shouldBeCopyable) {
       return GestureDetector(
-        child: _text,
+        child: textWidget,
         onLongPress: () {
           Clipboard.setData(ClipboardData(text: formattedText));
           ScaffoldMessenger.of(context).showSnackBar(
@@ -596,6 +593,6 @@ abstract class TextWidget extends StatelessWidget {
       );
     }
 
-    return _text;
+    return textWidget;
   }
 }

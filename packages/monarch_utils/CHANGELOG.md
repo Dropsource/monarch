@@ -1,3 +1,7 @@
+## 1.1.0 - 2022-12-21
+- Add debouncer
+- Create library timers
+
 ## 1.0.4 - 2022-01-20
 - pubspec description update.
 

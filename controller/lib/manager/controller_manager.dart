@@ -36,7 +36,7 @@ class ControllerManager with Log {
   }
 
   void setUpPreviewApi(MonarchPreviewApiClient previewApi) {
-    _actions = ControllerActions(previewApi, state);
+    _actions = ControllerActions(previewApi);
   }
 
   Future<void> loadInitialData() async {

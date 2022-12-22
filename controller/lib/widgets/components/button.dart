@@ -51,6 +51,10 @@ class StockholmButton extends StatelessWidget {
         side: BorderSide(color: Theme.of(context).dividerColor, width: 1),
       ),
       onPressed: enabled ? onPressed : null,
+      elevation: 0,
+      minWidth: 32,
+      padding: EdgeInsets.zero,
+      height: 26,
       child: Container(
         alignment: Alignment.center,
         height: large ? 32 : 24,
@@ -62,10 +66,6 @@ class StockholmButton extends StatelessWidget {
           child: child,
         ),
       ),
-      elevation: 0,
-      minWidth: 32,
-      padding: EdgeInsets.zero,
-      height: 26,
     );
   }
 }

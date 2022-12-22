@@ -27,8 +27,8 @@ class ScrollableStockholmMenu extends StockholmMenu {
         child: SizedBox(
             width: width,
             child: ListView(
-              children: items,
               shrinkWrap: true,
+              children: items,
             )));
   }
 }

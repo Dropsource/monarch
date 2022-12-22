@@ -17,10 +17,12 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
+  monarch_annotations: ^1.0.2
   monarch_definitions: ^1.2.0
   monarch_io_utils: ^1.2.0
-  monarch_utils: ^1.0.4
-  monarch_grpc: ^1.0.0
+  monarch_utils: ^1.1.0
+  grpc: ^3.1.0
+  monarch_grpc: ^2.0.0
   stockholm:
     git:
       url: https://github.com/serverpod/stockholm/
@@ -33,8 +35,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.1
-  monarch: ^3.0.0-pre.1
-
+  monarch: ^3.0.0
 
 flutter:
   uses-material-design: true

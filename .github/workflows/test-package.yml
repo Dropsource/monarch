@@ -166,3 +166,49 @@ jobs:
       - name: Run tests
         working-directory: cli
         run: dart test
+
+  test_controller:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - run: flutter --version
+
+      - name: Install dependencies
+        working-directory: controller
+        run: flutter pub get
+
+      - name: Verify formatting
+        working-directory: controller
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze project source
+        working-directory: controller
+        run: flutter analyze
+
+      - name: Run tests
+        working-directory: controller
+        run: flutter test
+
+  analyze_preview_api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - run: flutter --version
+
+      - name: Install dependencies
+        working-directory: preview_api
+        run: flutter pub get
+
+      - name: Verify formatting
+        working-directory: preview_api
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze project source
+        working-directory: preview_api
+        run: flutter analyze
