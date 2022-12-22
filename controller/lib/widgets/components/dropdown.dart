@@ -39,7 +39,7 @@ class DropDown<T> extends StatelessWidget {
           size: 18,
         ),
         width: 240,
-        onChanged: (string) => onChange?.call(stringfiedValues[string]!),
+        onChanged: (string) => onChange?.call(stringfiedValues[string] as T),
         items: values.map<StockholmDropdownItem<String>>((T value) {
           final converted = toStringFunction(value);
           return StockholmDropdownItem<String>(

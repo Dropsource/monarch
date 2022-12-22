@@ -29,6 +29,7 @@ class StockholmDropdownButton<T> extends StatefulWidget {
   final bool skipTraversal;
 
   @override
+  // ignore: library_private_types_in_public_api
   _StockholmDropdownButtonState createState() =>
       _StockholmDropdownButtonState<T>();
 }

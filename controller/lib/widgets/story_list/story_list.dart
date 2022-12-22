@@ -34,7 +34,7 @@ class StoryListState extends State<StoryList> {
 
   @override
   Widget build(BuildContext context) {
-    final _filteredStories =
+    final filteredStories =
         widget.manager.filterStories(widget.stories, query);
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
@@ -70,11 +70,11 @@ class StoryListState extends State<StoryList> {
                   child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
-                  if (_filteredStories.isEmpty) ...[
+                  if (filteredStories.isEmpty) ...[
                     const NoStoriesFoundWidget()
                   ],
                   StoryTree(
-                    filteredStories: _filteredStories,
+                    filteredStories: filteredStories,
                     query: query,
                     focusNode: _storyListFocusNode,
                     onStorySelected: (storyKey) =>

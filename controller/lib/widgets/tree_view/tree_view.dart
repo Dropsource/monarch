@@ -39,10 +39,10 @@ class TreeView extends StatefulWidget {
         super(key: key);
 
   @override
-  _TreeViewState createState() => _TreeViewState();
+  TreeViewState createState() => TreeViewState();
 }
 
-class _TreeViewState extends State<TreeView> {
+class TreeViewState extends State<TreeView> {
   late TreeController _controller;
   late KeyProvider keyProvider;
 

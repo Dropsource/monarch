@@ -26,7 +26,7 @@ class ControlPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _translations = Translations.of(context)!;
+    final translations = Translations.of(context)!;
     var state = manager.state;
     var actions = manager.actions!;
 
@@ -69,7 +69,7 @@ class ControlPanel extends StatelessWidget {
             height: 8,
           ),
           LabeledControl(
-            label: _translations.text('controls.locale'),
+            label: translations.text('controls.locale'),
             shouldTranslate: false,
             control: DropDown<String>(
               currentValue: state.currentLocale,
@@ -84,7 +84,7 @@ class ControlPanel extends StatelessWidget {
             height: 15,
           ),
           LabeledControl(
-            label: _translations.text("controls.text_scale_factor"),
+            label: translations.text("controls.text_scale_factor"),
             control: NumberedSlider(
               initialValue: state.textScaleFactor,
               onChanged: actions.onTextScaleFactorChanged,
@@ -114,7 +114,7 @@ class ControlPanel extends StatelessWidget {
               values: state.dockList.toList(),
               skipTraversal: true,
               onChange: actions.onDockSettingsChange,
-              toStringFunction: (e) => _translations.text(e.name),
+              toStringFunction: (e) => translations.text(e.name),
             ),
             controlWidth: controlWidth,
           ),
