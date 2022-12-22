@@ -62,8 +62,10 @@ class ControllerActions {
     /// Wait a bit before tracking user selection of visual debug flags.
     /// The preview api doesn't update the state
     /// of the visual debug flags immediately. It relies on the vm service.
-    Timer(const Duration(milliseconds: 50), () => previewApi.trackUserSelection(
-          KindInfo(kind: getVisualDebugFlagToggledKey(flagName))));
+    Timer(
+        const Duration(milliseconds: 50),
+        () => previewApi.trackUserSelection(
+            KindInfo(kind: getVisualDebugFlagToggledKey(flagName))));
   }
 
   void launchDevTools() async {
