@@ -212,7 +212,3 @@ jobs:
       - name: Analyze project source
         working-directory: preview_api
         run: flutter analyze
-
-      - name: Run tests
-        working-directory: preview_api
-        run: flutter test
