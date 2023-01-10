@@ -1,3 +1,6 @@
+## 1.3.0 - 2023-01-10
+- Linux support in platform_utils function, backwards compatible.
+
 ## 1.2.0 - 2022-09-13
 - Publishing to pub.dev
 
