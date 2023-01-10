@@ -30,3 +30,7 @@ dev_dependencies:
   test: ^1.17.2
   mockito: ^5.0.7
   build_runner:
+
+dependency_overrides:
+  monarch_io_utils:
+    path: ../packages/monarch_io_utils

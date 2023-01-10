@@ -5,11 +5,13 @@ import 'package:monarch_io_utils/monarch_io_utils.dart';
 class ApplicationSupportDirectory {
   static String dataDirectoryRelativePath = valueForPlatform(
       macos: 'Library/Application Support/com.dropsource.monarch/data',
-      windows: r'AppData\Local\Monarch\data');
+      windows: r'AppData\Local\Monarch\data',
+      linux: '.config/monarch/data');
 
   static String logsDirectoryRelativePath = valueForPlatform(
       macos: 'Library/Application Support/com.dropsource.monarch/logs',
-      windows: r'AppData\Local\Monarch\logs');
+      windows: r'AppData\Local\Monarch\logs',
+      linux: '.config/monarch/logs');
 
   static File get userDeviceIdFile => File(p.join(
       userDirectoryPath!, dataDirectoryRelativePath, 'user_device_id.info'));
