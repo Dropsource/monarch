@@ -42,7 +42,9 @@ class LocalOutPaths {
   String get out_bin_internal => p.join(out_bin, 'internal');
 
   String get out_bin_monarch_exe => p.join(
-      out_bin, valueForPlatform(macos: 'monarch', windows: 'monarch.exe'));
+      out_bin,
+      valueForPlatform(
+          macos: 'monarch', windows: 'monarch.exe', linux: 'monarch'));
 }
 
 String flutter_id(String flutter_sdk) {
