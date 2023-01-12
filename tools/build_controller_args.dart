@@ -1,15 +1,15 @@
 import 'dart:io';
-import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:path/path.dart' as p;
 
 import 'paths.dart';
 import 'utils.dart' as utils;
+import 'utils_local.dart' as local_utils;
 
 /// Builds Monarch Controller artifacts with these arguments:
 /// - Path to the root of the Monarch repo
 /// - Path to the Flutter SDK to use
-/// - Path to the monarch_ui/{flutter_id} output directory 
-/// 
+/// - Path to the monarch_ui/{flutter_id} output directory
+///
 /// This script is used by local builds and by the monarch automation.
 void main(List<String> arguments) {
   var repo_root = arguments[0];
@@ -30,7 +30,8 @@ Building Monarch Controller using these arguments:
   $out_ui_flutter_id
 ''');
 
-  var out_ui_flutter_id_controller = p.join(out_ui_flutter_id, 'monarch_controller');
+  var out_ui_flutter_id_controller =
+      p.join(out_ui_flutter_id, 'monarch_controller');
   var out_controller_dir = Directory(out_ui_flutter_id_controller);
   if (out_controller_dir.existsSync())
     out_controller_dir.deleteSync(recursive: true);
@@ -42,7 +43,8 @@ Running `flutter pub get` in:
   ${repo_paths.controller}
 ''');
     var result = Process.runSync(flutter_exe(flutter_sdk), ['pub', 'get'],
-        workingDirectory: repo_paths.controller, runInShell: Platform.isWindows);
+        workingDirectory: repo_paths.controller,
+        runInShell: Platform.isWindows);
     utils.exitIfNeeded(result, 'Error running `flutter pub get`');
   }
 
@@ -61,7 +63,7 @@ Building monarch controller flutter bundle. Will output to:
           'lib/main.dart',
           '--debug',
           '--target-platform',
-          valueForPlatform(macos: 'darwin', windows: 'windows-x64'),
+          local_utils.read_target_platform(),
           '--asset-dir',
           p.join(out_ui_flutter_id_controller, 'flutter_assets'),
           '--verbose'
@@ -74,15 +76,19 @@ Building monarch controller flutter bundle. Will output to:
   }
 
   {
+    var icudtl_dat_ =
+        icudtl_dat(flutter_sdk, local_utils.read_target_platform());
+
     if (Platform.isWindows) {
       var result = Process.runSync(
-          'copy',
-          [
-            p.join(flutter_sdk, 'bin', 'cache', 'artifacts', 'engine',
-                'windows-x64', 'icudtl.dat'),
-            out_ui_flutter_id_controller
-          ],
+          'copy', [icudtl_dat_, out_ui_flutter_id_controller],
           runInShell: true);
+      utils.exitIfNeeded(
+          result, 'Error copying icudtl.dat to monarch_controller directory');
+    }
+    if (Platform.isLinux) {
+      var result =
+          Process.runSync('cp', [icudtl_dat_, out_ui_flutter_id_controller]);
       utils.exitIfNeeded(
           result, 'Error copying icudtl.dat to monarch_controller directory');
     }

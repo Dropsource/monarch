@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:path/path.dart' as p;
 
 import 'paths.dart';
@@ -77,19 +76,18 @@ Building monarch preview_api flutter bundle. Will output to:
   }
 
   {
-    var icudtl_dat = p.join(flutter_sdk, 'bin', 'cache', 'artifacts', 'engine',
-        local_utils.read_target_platform(), 'icudtl.dat');
+    var icudtl_dat_ = icudtl_dat(flutter_sdk, local_utils.read_target_platform());
 
     if (Platform.isWindows) {
       var result = Process.runSync(
-          'copy', [icudtl_dat, out_ui_flutter_id_preview_api],
+          'copy', [icudtl_dat_, out_ui_flutter_id_preview_api],
           runInShell: true);
       utils.exitIfNeeded(
           result, 'Error copying icudtl.dat to monarch_preview_api directory');
     }
     if (Platform.isLinux) {
       var result =
-          Process.runSync('cp', [icudtl_dat, out_ui_flutter_id_preview_api]);
+          Process.runSync('cp', [icudtl_dat_, out_ui_flutter_id_preview_api]);
       utils.exitIfNeeded(
           result, 'Error copying icudtl.dat to monarch_preview_api directory');
     }

@@ -65,6 +65,15 @@ String darwin_flutter_framework(String flutter_sdk) => p.join(flutter_sdk,
 String windows_flutter_windows_pdb(String flutter_sdk) => p.join(flutter_sdk,
     'bin\\cache\\artifacts\\engine\\windows-x64\\flutter_windows.dll.pdb');
 
+String icudtl_dat(String flutter_sdk, String target_platform) => p.join(
+    flutter_sdk,
+    'bin',
+    'cache',
+    'artifacts',
+    'engine',
+    target_platform,
+    'icudtl.dat');
+
 String flutter_exe(String flutter_sdk) => p.join(flutter_sdk, 'bin', 'flutter');
 
 const local_settings_yaml = 'local_settings.yaml';
