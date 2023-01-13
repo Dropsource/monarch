@@ -28,7 +28,9 @@ void main() {
   }
 
   var version = functionForPlatform(
-      macos: readMacosProjectVersion, windows: readWindowsProjectVersion);
+      macos: readMacosProjectVersion,
+      windows: readWindowsProjectVersion,
+      linux: readLinuxProjectVersion);
   version = local_utils.getVersionSuffix(version);
   local_utils.writeInternalFile('platform_app_version.txt', version);
   print('Monarch ${os} platform build finished. Version $version');
@@ -55,10 +57,15 @@ String readMacosProjectVersion() {
   }
 }
 
-String readWindowsProjectVersion() {
+String readWindowsProjectVersion() =>
+    _readBuildSettingsVersion(local_repo_paths.platform_windows);
+
+String readLinuxProjectVersion() =>
+    _readBuildSettingsVersion(local_repo_paths.platform_linux);
+
+String _readBuildSettingsVersion(String platform_path) {
   var buildSettings =
-      File(p.join(local_repo_paths.platform_windows, 'build_settings.yaml'))
-          .readAsStringSync();
+      File(p.join(platform_path, 'build_settings.yaml')).readAsStringSync();
   var yaml = loadYaml(buildSettings) as YamlMap;
   return yaml['version'].toString();
 }

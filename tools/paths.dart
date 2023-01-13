@@ -20,9 +20,9 @@ class RepoPaths {
   String get platform => p.join(root, 'platform');
   String get tools => p.join(root, 'tools');
 
-  String get platform_linux => p.join(platform, 'linux');
   String get platform_macos => p.join(platform, 'macos');
   String get platform_windows => p.join(platform, 'windows');
+  String get platform_linux => p.join(platform, 'linux');
 
   String get platform_macos_ephemeral => p.join(platform_macos, 'ephemeral');
 
@@ -30,6 +30,11 @@ class RepoPaths {
   String get platform_windows_gen => p.join(platform_windows, 'gen');
   String get platform_windows_build => p.join(platform_windows, 'build');
   String get platform_windows_src => p.join(platform_windows, 'src');
+
+  String get platform_linux_gen_seed => p.join(platform_linux, 'gen_seed');
+  String get platform_linux_gen => p.join(platform_linux, 'gen');
+  String get platform_linux_build => p.join(platform_linux, 'build');
+  String get platform_linux_src => p.join(platform_linux, 'src');
 }
 
 class LocalOutPaths {
