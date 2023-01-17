@@ -14,6 +14,12 @@ void main() {
     cleanDirectory(local_repo_paths.platform_windows_gen);
     cleanDirectory(local_repo_paths.platform_windows_build);
   }
+
+  if (Platform.isLinux) {
+    cleanDirectory(local_repo_paths.platform_linux_gen_seed);
+    cleanDirectory(local_repo_paths.platform_linux_gen);
+    cleanDirectory(local_repo_paths.platform_linux_build);
+  }
 }
 
 /// Deletes and re-creates the directory at the given path.
