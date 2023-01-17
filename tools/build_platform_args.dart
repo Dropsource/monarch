@@ -391,7 +391,7 @@ void buildLinux(
           '--template',
           'app',
           '--org',
-          'Dropsource'
+          'com.dropsource'
         ],
         workingDirectory: gen_seed_dir.path);
     utils.exitIfNeeded(result, 'Error running `flutter create`');
