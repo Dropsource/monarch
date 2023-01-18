@@ -418,13 +418,11 @@ void buildLinux(
     print('Copying gen_seed/{flutter_id}/linux/* to gen directory...');
     var gen_seed_flutter_id_ =
         gen_seed_flutter_id(repo_paths.platform_linux_gen_seed, flutter_sdk);
-    var result = Process.runSync(
-        'cp',
-        [
-          '-a',
-          '$gen_seed_flutter_id_/linux/.',
-          repo_paths.platform_linux_gen,
-        ]);
+    var result = Process.runSync('cp', [
+      '-a',
+      '$gen_seed_flutter_id_/linux/.',
+      repo_paths.platform_linux_gen,
+    ]);
 
     utils.exitIfNeeded(result, 'Error copying gen_seed to gen directory',
         successExitCodes: [0, 1]);
@@ -505,12 +503,7 @@ void buildLinux(
   {
     print('Building project using Ninja...');
     var result = Process.runSync(
-        'ninja',
-        [
-          '-C',
-          p.join('build', flutter_id(flutter_sdk)),
-          'install'
-        ],
+        'ninja', ['-C', p.join('build', flutter_id(flutter_sdk)), 'install'],
         workingDirectory: repo_paths.platform_linux);
 
     utils.exitIfNeeded(result, 'Ninja error building project');
@@ -521,18 +514,21 @@ void buildLinux(
 
   {
     print('Copying executable files to out directory...');
-    var bundle = p.join(repo_paths.platform_linux_build,
-        flutter_id(flutter_sdk), 'bundle');
+    var bundle = p.join(
+        repo_paths.platform_linux_build, flutter_id(flutter_sdk), 'bundle');
 
-    var result = Process.runSync(
-        'cp', ['-r', p.join(bundle, 'lib'), out_ui_flutter_id]);
-    utils.exitIfNeeded(
-        result, 'Error copying bundle/lib to out directory');
+    var result =
+        Process.runSync('cp', ['-r', p.join(bundle, 'lib'), out_ui_flutter_id]);
+    utils.exitIfNeeded(result, 'Error copying bundle/lib to out directory');
 
     result = Process.runSync(
         'cp', [p.join(bundle, 'monarch_linux_app'), out_ui_flutter_id]);
     utils.exitIfNeeded(
         result, 'Error copying monarch_linux_app to out directory');
+
+    result = Process.runSync(
+        'cp', [p.join(bundle, 'data', 'icudtl.dat'), out_ui_flutter_id]);
+    utils.exitIfNeeded(result, 'Error copying icudtl.dat to out directory');
   }
 }
 

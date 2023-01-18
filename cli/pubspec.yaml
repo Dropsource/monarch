@@ -34,3 +34,5 @@ dev_dependencies:
 dependency_overrides:
   monarch_io_utils:
     path: ../packages/monarch_io_utils
+  monarch_grpc:
+    path: ../packages/monarch_grpc

@@ -37,6 +37,12 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   monarch: ^3.0.0
 
+dependency_overrides:
+  monarch_io_utils:
+    path: ../packages/monarch_io_utils
+  monarch_grpc:
+    path: ../packages/monarch_grpc
+
 flutter:
   uses-material-design: true
   assets:
