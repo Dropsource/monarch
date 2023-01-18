@@ -9,51 +9,163 @@ struct _MonarchApplication {
 
 G_DEFINE_TYPE(MonarchApplication, monarch_application, GTK_TYPE_APPLICATION)
 
+static char* get_preview_api_bundle_path(MonarchApplication* application) {
+  return application->command_line_arguments[0];
+}
+static char* get_preview_window_bundle_path(MonarchApplication* application) {
+  return application->command_line_arguments[1];
+}
+static char* get_controller_bundle_path(MonarchApplication* application) {
+  return application->command_line_arguments[2];
+}
+static char* get_default_log_level(MonarchApplication* application) {
+  return application->command_line_arguments[3];
+}
+static char* get_cli_grpc_server_port(MonarchApplication* application) {
+  return application->command_line_arguments[4];
+}
+static char* get_project_name(MonarchApplication* application) {
+  return application->command_line_arguments[5];
+}
 
-// static void __fl_dart_project_set_assets_path(FlDartProject* self,
-//                                                      gchar* path) {
-//   g_return_if_fail(FL_IS_DART_PROJECT(self));
-//   g_clear_pointer(&self->assets_path, g_free);
-//   self->assets_path = g_strdup(path);
-// }
+static FlDartProject* init_dart_project(gchar* bundle_path) {
+  g_message("init project: %s", bundle_path);
 
-// Implements GApplication::activate.
-static void monarch_application_activate(GApplication* application) {
-  MonarchApplication* self = MONARCH_APPLICATION(application);
+  // g_autoptr(FlDartProject) project = fl_dart_project_new();
+  FlDartProject* project = fl_dart_project_new();
+
+  g_autofree gchar* assets_path = g_strconcat(bundle_path, "/", "flutter_assets", NULL);
+  g_autofree gchar* icu_path = g_strconcat(bundle_path, "/", "icudtl.dat", NULL);
+
+  fl_dart_project_set_assets_path(project, assets_path);
+  fl_dart_project_set_icu_data_path(project, icu_path);
+
+  // g_free(assets_path);
+  // g_free(icu_path);
+  return project;
+}
+
+static void set_preview_api_args(MonarchApplication* self, FlDartProject* project) {
+  GPtrArray* args_array = g_ptr_array_new();
+  g_ptr_array_add(args_array, const_cast<char*>(get_default_log_level(self)));
+  g_ptr_array_add(args_array, const_cast<char*>(get_cli_grpc_server_port(self)));
+  g_ptr_array_add(args_array, nullptr);
+  gchar** args = reinterpret_cast<gchar**>(g_ptr_array_free(args_array, false));
+
+  fl_dart_project_set_dart_entrypoint_arguments(project, args);
+}
+
+static void set_preview_args(MonarchApplication* self, FlDartProject* project) {
+  GPtrArray* args_array = g_ptr_array_new();
+  g_ptr_array_add(args_array, const_cast<char*>(get_default_log_level(self)));
+  g_ptr_array_add(args_array, nullptr);
+  gchar** args = reinterpret_cast<gchar**>(g_ptr_array_free(args_array, false));
+
+  fl_dart_project_set_dart_entrypoint_arguments(project, args);
+}
+
+static void set_controller_args(MonarchApplication* self, FlDartProject* project) {
+  GPtrArray* args_array = g_ptr_array_new();
+  g_ptr_array_add(args_array, const_cast<char*>(get_default_log_level(self)));
+  g_ptr_array_add(args_array, const_cast<char*>(get_cli_grpc_server_port(self)));
+  g_ptr_array_add(args_array, nullptr);
+  gchar** args = reinterpret_cast<gchar**>(g_ptr_array_free(args_array, false));
+
+  fl_dart_project_set_dart_entrypoint_arguments(project, args);
+}
+
+// Cannot run headless engine on Linux. As a workaround, we'll launch a window which
+// will host the flutter engine for the preview api.
+// See https://github.com/flutter/flutter/issues/118716
+static GtkWindow* init_preview_api_window(GApplication* application) {
   GtkWindow* window =
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
 
   GtkHeaderBar* header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
   gtk_widget_show(GTK_WIDGET(header_bar));
-  gtk_header_bar_set_title(header_bar, "Monarch");
+  gtk_header_bar_set_title(header_bar, "Preview API Workaround");
   gtk_header_bar_set_show_close_button(header_bar, TRUE);
   gtk_window_set_titlebar(window, GTK_WIDGET(header_bar));
 
-  gtk_window_set_default_size(window, 1280, 720);
+  gtk_window_set_default_size(window, 350, 0);
+  gtk_widget_show(GTK_WIDGET(window));
+  return window;
+}
+
+static GtkWindow* init_preview_window(GApplication* application) {
+  GtkWindow* window =
+      GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
+
+  GtkHeaderBar* header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
+  gtk_widget_show(GTK_WIDGET(header_bar));
+  gtk_header_bar_set_title(header_bar, "Monarch Preview");
+  gtk_header_bar_set_show_close_button(header_bar, TRUE);
+  gtk_window_set_titlebar(window, GTK_WIDGET(header_bar));
+
+  gtk_window_set_default_size(window, 390, 844);
+  gtk_widget_show(GTK_WIDGET(window));
+  return window;
+}
+
+static GtkWindow* init_controller_window(GApplication* application, MonarchApplication* self) {
+  GtkWindow* window =
+      GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
+
+  GtkHeaderBar* header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
+  gtk_widget_show(GTK_WIDGET(header_bar));
+  auto title = g_strconcat(get_project_name(self), " - Monarch", NULL);
+  gtk_header_bar_set_title(header_bar, title);
+  gtk_header_bar_set_show_close_button(header_bar, TRUE);
+  gtk_window_set_titlebar(window, GTK_WIDGET(header_bar));
+
+  gtk_window_set_default_size(window, 700, 830);
   gtk_widget_show(GTK_WIDGET(window));
 
-  g_autoptr(FlDartProject) project = fl_dart_project_new();
-  //char assets_path[] = "/home/fertrig/development/monarch_product/monarch/out/monarch/bin/cache/monarch_ui/flutter_linux_3.7.0-21.0.pre.44-master/monarch_controller/flutter_assets";
-  //char icu_path[] = "/home/fertrig/development/monarch_product/monarch/out/monarch/bin/cache/monarch_ui/flutter_linux_3.7.0-21.0.pre.44-master/monarch_controller/icudtl.dat";
-  
-  char assets_path[] = "/home/fertrig/development/scratch/hair/build/linux/x64/debug/bundle/data/flutter_assets";
-  char icu_path[] = "/home/fertrig/development/scratch/hair/build/linux/x64/debug/bundle/data/icudtl.dat";
-  
-  fl_dart_project_set_assets_path(project, assets_path);
-  fl_dart_project_set_icu_data_path(project, icu_path);
-  // project->assets_path = g_strdup(assets_path);
-  fl_dart_project_set_dart_entrypoint_arguments(project, self->command_line_arguments);
+  g_free(title);
+  return window;
+}
 
-  FlView* view = fl_view_new(project);
+static void show_window(GtkWindow* window, FlView* view) {
+  gtk_widget_show(GTK_WIDGET(window));
   gtk_widget_show(GTK_WIDGET(view));
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));
+}
 
-  gtk_widget_grab_focus(GTK_WIDGET(view));
+// Implements GApplication::activate.
+static void monarch_application_activate(GApplication* application) {
+  MonarchApplication* self = MONARCH_APPLICATION(application);
+
+  g_autoptr(FlDartProject) preview_api_project = init_dart_project(get_preview_api_bundle_path(self));
+  g_autoptr(FlDartProject) preview_project = init_dart_project(get_preview_window_bundle_path(self));
+  g_autoptr(FlDartProject) controller_project = init_dart_project(get_controller_bundle_path(self));
+
+  set_preview_api_args(self, preview_api_project);
+  set_preview_args(self, preview_project);
+  set_controller_args(self, controller_project);
+
+  auto preview_api_view = fl_view_new(preview_api_project);
+  auto preview_view = fl_view_new(preview_project);
+  auto controller_view = fl_view_new(controller_project);
+
+  auto preview_api_window = init_preview_api_window(application);
+  auto preview_window = init_preview_window(application);
+  auto controller_window = init_controller_window(application, self);
+
+  show_window(preview_api_window, preview_api_view);
+  show_window(preview_window, preview_view);
+  show_window(controller_window, controller_view);
 }
 
 // Implements GApplication::local_command_line.
 static gboolean monarch_application_local_command_line(GApplication* application, gchar*** arguments, int* exit_status) {
   MonarchApplication* self = MONARCH_APPLICATION(application);
+
+   if (g_strv_length(*arguments) < 7) {
+    g_warning("Expected 7 arguments in this order: executable-path preview-api-bundle preview-window-bundle controller-bundle log-level cli-grpc-server-port project-name");
+    *exit_status = 1;
+     return TRUE;
+  }
+
   // Strip out the first argument as it is the binary name.
   self->command_line_arguments = g_strdupv(*arguments + 1);
 
