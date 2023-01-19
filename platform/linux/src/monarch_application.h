@@ -3,7 +3,10 @@
 
 #include <gtk/gtk.h>
 
-G_DECLARE_FINAL_TYPE(MonarchApplication, monarch_application, MONARCH, APPLICATION,
+G_DECLARE_FINAL_TYPE(MonarchApplication, 
+                     monarch_application, 
+                     MONARCH, 
+                     APPLICATION,
                      GtkApplication)
 
 MonarchApplication* monarch_application_new();
