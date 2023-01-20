@@ -2,6 +2,8 @@
 
 #include <flutter_linux/flutter_linux.h>
 
+#include "channels.h"
+
 struct _MonarchApplication {
   GtkApplication parent_instance;
   char** command_line_arguments;
@@ -150,6 +152,12 @@ static void monarch_application_activate(GApplication* application) {
   auto preview_api_window = init_preview_api_window(application);
   auto preview_window = init_preview_window(application);
   auto controller_window = init_controller_window(application, self);
+
+  g_autoptr(MonarchChannels) channels = monarch_channels_new(
+      fl_engine_get_binary_messenger(fl_view_get_engine(preview_api_view)),
+      fl_engine_get_binary_messenger(fl_view_get_engine(preview_view)));
+
+  set_up_call_forwarding(channels);
 
   show_window(preview_api_window, preview_api_view);
   show_window(preview_window, preview_view);
