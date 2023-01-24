@@ -3,8 +3,7 @@
 static constexpr char preview_api_channel_name[] = "monarch.previewApi";
 static constexpr char preview_channel_name[] = "monarch.previewWindow";
 
-struct _MonarchChannels
-{
+struct _MonarchChannels {
   GObject parent_instance;
 
   FlMethodChannel* preview_api_channel;
@@ -29,140 +28,138 @@ static void monarch_channels_class_init(MonarchChannelsClass* klass) {
 static void monarch_channels_init(MonarchChannels* self) {}
 
 MonarchChannels* monarch_channels_new(FlBinaryMessenger* preview_api_messenger,
-                                      FlBinaryMessenger* preview_messenger)
-{
-  MonarchChannels* self = MONARCH_CHANNELS(g_object_new(monarch_channels_get_type(), nullptr));
+                                      FlBinaryMessenger* preview_messenger) {
+  MonarchChannels* self =
+      MONARCH_CHANNELS(g_object_new(monarch_channels_get_type(), nullptr));
 
   g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
 
-  self->preview_api_channel = 
-      fl_method_channel_new(preview_api_messenger, preview_api_channel_name, FL_METHOD_CODEC(codec));
+  self->preview_api_channel = fl_method_channel_new(
+      preview_api_messenger, preview_api_channel_name, FL_METHOD_CODEC(codec));
 
-  self->preview_channel = 
-      fl_method_channel_new(preview_messenger, preview_channel_name, FL_METHOD_CODEC(codec));
+  self->preview_channel = fl_method_channel_new(
+      preview_messenger, preview_channel_name, FL_METHOD_CODEC(codec));
 
   return self;
 }
 
-
-struct ForwardInfo {
-  FlMethodChannel* from;
-  FlMethodChannel* to;
-};
-
 struct MethodCallInfo {
+  GMainLoop* loop;
   FlMethodCall* original_call;
 };
 
-void forwarded_method_call_response(GObject *object,
-                                    GAsyncResult *result,
-                                    gpointer user_data) {
+static void destination_method_call_response(GObject* object,
+                                             GAsyncResult* result,
+                                             gpointer user_data) {
   MethodCallInfo* method_call_info = static_cast<MethodCallInfo*>(user_data);
-  
-  g_autoptr(GError) error = NULL;
-  g_autoptr(FlMethodResponse) response =
-      fl_method_channel_invoke_method_finish(FL_METHOD_CHANNEL(object), result, &error);
+  FlMethodCall* original_method_call = method_call_info->original_call;
 
-  if (response == NULL)
-  {
-    g_warning("Failed to invoke forwarded method %s: %s", 
-              fl_method_call_get_name(method_call_info->original_call), 
-              error->message);
+  g_autoptr(GError) error = NULL;
+  g_autoptr(FlMethodResponse) response = fl_method_channel_invoke_method_finish(
+      FL_METHOD_CHANNEL(object), result, &error);
+
+  if (response == NULL) {
+    g_warning("Failed to invoke forwarded method %s: %s",
+              fl_method_call_get_name(original_method_call), error->message);
     return;
   }
 
-  if (FL_IS_METHOD_SUCCESS_RESPONSE(response))
-  {
-    g_autoptr(FlValue) result = fl_method_success_response_get_result(FL_METHOD_SUCCESS_RESPONSE(response));
+  if (FL_IS_METHOD_SUCCESS_RESPONSE(response)) {
+    FlValue* result = fl_method_success_response_get_result(
+        FL_METHOD_SUCCESS_RESPONSE(response));
 
-    if (!fl_method_call_respond_success(method_call_info->original_call, result, &error)) {
+    // `fl_value_ref(result)` may be useful if we need to increment the
+    // reference count of the result:
+    //
+    // if (!fl_method_call_respond_success(original_method_call,
+    // fl_value_ref(result), &error))
+
+    if (!fl_method_call_respond_success(original_method_call, result, &error)) {
       g_warning("Failed to send response to original method %s: %s",
-                fl_method_call_get_name(method_call_info->original_call), 
-                error->message);
+                fl_method_call_get_name(original_method_call), error->message);
       return;
     }
 
-    // if (!fl_method_call_respond(method_call_info->original_call, response, &error)) {
+    // This is another way to respond to the original call using
+    // `fl_method_call_respond`:
+    //
+    // g_autoptr(FlMethodResponse) response =
+    // FL_METHOD_RESPONSE(fl_method_success_response_new(result)); if
+    // (!fl_method_call_respond(original_method_call, response, &error)) {
     //   g_warning("Failed to send response to original method %s: %s",
-    //             fl_method_call_get_name(method_call_info->original_call), 
+    //             fl_method_call_get_name(original_method_call),
     //             error->message);
     //   return;
     // }
-  }
-  else if (FL_IS_METHOD_ERROR_RESPONSE(response))
-  {
-    FlMethodErrorResponse *error_response = FL_METHOD_ERROR_RESPONSE(response);
+  } else if (FL_IS_METHOD_ERROR_RESPONSE(response)) {
+    FlMethodErrorResponse* error_response = FL_METHOD_ERROR_RESPONSE(response);
     if (!fl_method_call_respond_error(
-            method_call_info->original_call, 
+            original_method_call,
             fl_method_error_response_get_code(error_response),
             fl_method_error_response_get_message(error_response),
-            fl_method_error_response_get_details(error_response),
-            &error)) {
+            fl_method_error_response_get_details(error_response), &error)) {
       g_warning("Failed to send error response to original method %s: %s",
-                fl_method_call_get_name(method_call_info->original_call), 
-                error->message);
+                fl_method_call_get_name(original_method_call), error->message);
       return;
     }
 
-    // if (!fl_method_call_respond(method_call_info->original_call, error_response, &error)) {
+    // This is another way to respond to the original call using
+    // `fl_method_call_respond`:
+    //
+    // if (!fl_method_call_respond(method_call, error_response, &error)) {
     //   g_warning("Failed to send error response to original method %s: %s",
-    //             fl_method_call_get_name(method_call_info->original_call), 
+    //             fl_method_call_get_name(method_call),
     //             error->message);
     //   return;
     // }
-
-    // handle_error(fl_method_error_response_get_code(error_response),
-    //              fl_method_error_response_get_message(error_response),
-    //              fl_method_error_response_get_details(error_response));
-  }
-  else if (FL_IS_METHOD_NOT_IMPLEMENTED_RESPONSE(response))
-  {
-    if (!fl_method_call_respond_not_implemented(method_call_info->original_call, &error)) {
-      g_warning("Failed to send not implemented response to original method %s: %s",
-                fl_method_call_get_name(method_call_info->original_call), 
-                error->message);
+  } else if (FL_IS_METHOD_NOT_IMPLEMENTED_RESPONSE(response)) {
+    if (!fl_method_call_respond_not_implemented(original_method_call, &error)) {
+      g_warning(
+          "Failed to send not implemented response to original method %s: %s",
+          fl_method_call_get_name(original_method_call), error->message);
       return;
     }
   }
+
+  g_main_loop_quit(method_call_info->loop);
 }
 
-void forward_method_call(FlMethodChannel* channel,
-                         FlMethodCall* method_call,
-                         gpointer user_data) {
-  ForwardInfo* info = static_cast<ForwardInfo*>(user_data);
+static void forward_method_call(FlMethodChannel* channel,
+                                FlMethodCall* method_call, gpointer user_data) {
+  FlMethodChannel* destination_channel =
+      static_cast<FlMethodChannel*>(user_data);
+  if (destination_channel == nullptr) {
+    g_error("destination_channel is nullptr");
+  }
 
-  MethodCallInfo method_call_info {
-    .original_call = method_call
-  };
+  g_autoptr(GMainLoop) loop = g_main_loop_new(nullptr, 0);
+
+  MethodCallInfo* method_call_info = new MethodCallInfo(
+      MethodCallInfo{.loop = loop, .original_call = method_call});
 
   fl_method_channel_invoke_method(
-      info->to, 
-      fl_method_call_get_name(method_call), 
-      fl_method_call_get_args(method_call), 
-      nullptr, 
-      forwarded_method_call_response,
-      &method_call_info);
+      destination_channel, fl_method_call_get_name(method_call),
+      fl_method_call_get_args(method_call), nullptr,
+      destination_method_call_response, method_call_info);
+
+  // Blocks here until destination_method_call_response is called
+  g_main_loop_run(method_call_info->loop);
+
+  delete method_call_info;
 }
 
-void set_up_call_forwarding(MonarchChannels* self)
-{
-  ForwardInfo to_preview_api {
-    .from = self->preview_channel,
-    .to = self->preview_api_channel
-  };
-
+void set_up_call_forwarding(MonarchChannels* self) {
+  // forward method calls from preview to preview_api
   fl_method_channel_set_method_call_handler(
-      self->preview_channel, 
-      forward_method_call,
-      &to_preview_api, NULL);
+      self->preview_channel,      // original channel
+      forward_method_call,        // handler
+      self->preview_api_channel,  // user_data or destination channel
+      NULL);
 
-  ForwardInfo to_preview {
-    .from = self->preview_api_channel,
-    .to = self->preview_channel
-  };
-  
+  // forward method calls from preview_api to preview
   fl_method_channel_set_method_call_handler(
-      self->preview_api_channel,
-      forward_method_call,
-      &to_preview, NULL);
+      self->preview_api_channel,  // original channel
+      forward_method_call,        // handler
+      self->preview_channel,      // user_data or destination channel
+      NULL);
 }
