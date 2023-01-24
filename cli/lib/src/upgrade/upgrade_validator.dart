@@ -38,7 +38,7 @@ class UpgradeValidator extends Validator {
     var expectedMonarchDir = 'monarch';
     var expectedBin = 'bin';
     var expectedMonarchExe =
-        valueForPlatform(macos: 'monarch', windows: 'monarch.exe');
+        valueForPlatform(macos: 'monarch', windows: 'monarch.exe', linux: 'monarch');
     var expectedPath =
         p.join(expectedMonarchDir, expectedBin, expectedMonarchExe);
 

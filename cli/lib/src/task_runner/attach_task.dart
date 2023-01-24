@@ -71,7 +71,7 @@ class AttachTask with Log {
           'attach',
           '--debug',
           '-d',
-          valueForPlatform(macos: 'macOS', windows: 'Windows'),
+          valueForPlatform(macos: 'macOS', windows: 'Windows', linux: 'Linux'),
           '-t',
           generatedMainFilePath,
           '--debug-uri',
@@ -85,7 +85,9 @@ class AttachTask with Log {
         readyMessage: valueForPlatform(
             macos: 'An Observatory debugger and profiler on macOS is available',
             windows:
-                'An Observatory debugger and profiler on Windows is available'),
+                'An Observatory debugger and profiler on Windows is available',
+            linux:
+                'An Observatory debugger and profiler on Linux is available'),
         childTaskMessages: ChildTaskMessages(
             running: RegExp(r'(Performing hot restart|Performing hot reload)'),
             done: RegExp(
@@ -123,7 +125,8 @@ class AttachTask with Log {
             macos: () => Process.run('open', [uri]),
             windows: () => Process.run(
                 'rundll32', ['url.dll,FileProtocolHandler', uri],
-                runInShell: true));
+                runInShell: true),
+            linux: () => Process.run('xdg-open', [uri]));
         // `explorer $uri` should work on Windows but it doesn't,
         // it doesn't work because the uri has a query string
         break;
