@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:monarch_definitions/monarch_definitions.dart';
 import 'package:stockholm/stockholm.dart';
@@ -107,17 +109,18 @@ class ControlPanel extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          LabeledControl(
-            label: 'controls.dock',
-            control: DropDown<DockDefinition>(
-              currentValue: state.currentDock,
-              values: state.dockList.toList(),
-              skipTraversal: true,
-              onChange: actions.onDockSettingsChange,
-              toStringFunction: (e) => translations.text(e.name),
+          if (!Platform.isLinux) // hidden on linux until it supports docking
+            LabeledControl(
+              label: 'controls.dock',
+              control: DropDown<DockDefinition>(
+                currentValue: state.currentDock,
+                values: state.dockList.toList(),
+                skipTraversal: true,
+                onChange: actions.onDockSettingsChange,
+                toStringFunction: (e) => translations.text(e.name),
+              ),
+              controlWidth: controlWidth,
             ),
-            controlWidth: controlWidth,
-          ),
           const ControlPanelDivider(),
           LabeledControl(
             label: 'controls.visual_debugging',
