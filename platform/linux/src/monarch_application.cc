@@ -118,6 +118,23 @@ static GtkWindow* init_preview_window(GApplication* application) {
   gtk_header_bar_set_show_close_button(header_bar, TRUE);
   gtk_window_set_titlebar(window, GTK_WIDGET(header_bar));
 
+  // @GOTCHA: (fertrig)
+  // Ideally resizable should be false `gtk_window_set_resizable(window,
+  // false);` and all the resizing of the preview window should be done
+  // programmatically in `resize_preview_window`. However, setting resizable to
+  // false prevents the window's width to resize as expected. When resizable is
+  // false, smaller devices with smaller scales do not resize the window's
+  // width. There seems to be a minimum width that it is only respected when
+  // resizable is set to false.
+  //
+  // I tried a combination of gtk_window_set_default_size,
+  // gtk_widget_set_size_request and gtk_window_set_resizable with no luck.
+  //
+  // If you are trying to make the preview window not resizable by the user,
+  // then make sure to test smaller scales with smaller devices to make sure
+  // the window is resizing as expected.
+  gtk_window_set_resizable(window, true);
+
   gtk_window_set_default_size(window, 390, 844);
   gtk_widget_show(GTK_WIDGET(window));
   return window;
@@ -148,6 +165,37 @@ static void show_window(GtkWindow* window, FlView* view) {
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));
 }
 
+static void resize_preview_window(MonarchApplication* self,
+                                  MonarchDevice* device,
+                                  MonarchStoryScale* scale) {
+  MonarchLogicalResolution* logical_resolution =
+      monarch_device_get_logical_resolution(device);
+
+  double scale_value = monarch_story_scale_get_scale(scale);
+  double scaled_width =
+      monarch_logical_resolution_get_width(logical_resolution) * scale_value;
+  double scaled_height =
+      monarch_logical_resolution_get_height(logical_resolution) * scale_value;
+
+  gtk_window_resize(self->preview_window, scaled_width, scaled_height);
+}
+
+static void set_preview_window_title(MonarchApplication* self,
+                                     MonarchDevice* device,
+                                     MonarchStoryScale* scale) {
+  if (monarch_story_scale_get_scale(monarch_story_scale_get_default()) ==
+      monarch_story_scale_get_scale(scale)) {
+    gtk_window_set_title(self->preview_window,
+                         monarch_device_get_title(device));
+
+  } else {
+    gtk_window_set_title(
+        self->preview_window,
+        g_strconcat(monarch_device_get_title(device), " | ",
+                    monarch_story_scale_get_name(scale), NULL));
+  }
+}
+
 // Implements GApplication::activate.
 static void monarch_application_activate(GApplication* application) {
   MonarchApplication* self = MONARCH_APPLICATION(application);
@@ -170,6 +218,11 @@ static void monarch_application_activate(GApplication* application) {
   self->preview_api_window = init_preview_api_window(application);
   self->preview_window = init_preview_window(application);
   self->controller_window = init_controller_window(application, self);
+
+  resize_preview_window(self, monarch_device_get_default_device(),
+                        monarch_story_scale_get_default());
+  set_preview_window_title(self, monarch_device_get_default_device(),
+                           monarch_story_scale_get_default());
 
   self->channels = monarch_channels_new(
       fl_engine_get_binary_messenger(
@@ -244,27 +297,6 @@ struct GetStateData {
   GMainLoop* loop;
   MonarchApplication* monarch_application;
 };
-
-static void resize_preview_window(MonarchApplication* self,
-                                  MonarchDevice* device,
-                                  MonarchStoryScale* scale) {
-  MonarchLogicalResolution* logical_resolution =
-      monarch_device_get_logical_resolution(device);
-
-  double scale_value = monarch_story_scale_get_scale(scale);
-  double scaled_width =
-      monarch_logical_resolution_get_width(logical_resolution) * scale_value;
-  double scaled_height =
-      monarch_logical_resolution_get_height(logical_resolution) * scale_value;
-
-  gtk_window_resize(self->preview_window, scaled_width, scaled_height);
-}
-
-static void set_preview_window_title(MonarchApplication* self,
-                                     MonarchDevice* device,
-                                     MonarchStoryScale* scale) {
-  gtk_window_set_title(self->preview_window, monarch_device_get_title(device));
-}
 
 static void get_state_callback(GObject* object, GAsyncResult* result,
                                gpointer user_data) {

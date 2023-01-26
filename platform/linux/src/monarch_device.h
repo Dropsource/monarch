@@ -15,7 +15,7 @@ typedef enum {
   MONARCH_TARGET_PLATFORM_ANDROID
 } MonarchTargetPlatform;
 
-MonarchDevice* monarch_device_new(gchar* id, gchar* name,
+MonarchDevice* monarch_device_new(const gchar* id, const gchar* name,
                                   MonarchLogicalResolution* logical_resolution,
                                   double device_pixel_ratio,
                                   MonarchTargetPlatform target_platform);
@@ -24,9 +24,12 @@ MonarchDevice* monarch_device_new_from_value(FlValue* value);
 
 MonarchTargetPlatform monarch_target_platform_from_string(gchar* string);
 
-MonarchLogicalResolution* monarch_device_get_logical_resolution(MonarchDevice* device);
+MonarchLogicalResolution* monarch_device_get_logical_resolution(
+    MonarchDevice* device);
 
-gchar* monarch_device_get_title(MonarchDevice* device);
+const gchar* monarch_device_get_title(MonarchDevice* device);
+
+MonarchDevice* monarch_device_get_default_device();
 
 G_END_DECLS
 

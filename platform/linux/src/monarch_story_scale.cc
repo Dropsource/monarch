@@ -4,15 +4,13 @@ struct _MonarchStoryScale {
   GObject parent_instance;
 
   double scale;
-  gchar* name;
+  const gchar* name;
 };
 
 G_DEFINE_TYPE(MonarchStoryScale, monarch_story_scale, G_TYPE_OBJECT)
 
 static void monarch_story_scale_dispose(GObject* object) {
-  MonarchStoryScale* self = MONARCH_STORY_SCALE(object);
-
-  g_clear_pointer(&self->name, g_free);
+  // MonarchStoryScale* self = MONARCH_STORY_SCALE(object);
 
   G_OBJECT_CLASS(monarch_story_scale_parent_class)->dispose(object);
 }
@@ -23,7 +21,7 @@ static void monarch_story_scale_class_init(MonarchStoryScaleClass* klass) {
 
 static void monarch_story_scale_init(MonarchStoryScale* self) {}
 
-MonarchStoryScale* monarch_story_scale_new(double scale, gchar* name) {
+MonarchStoryScale* monarch_story_scale_new(double scale, const gchar* name) {
   MonarchStoryScale* self = MONARCH_STORY_SCALE(
       g_object_new(monarch_story_scale_get_type(), nullptr));
 
@@ -50,6 +48,10 @@ double monarch_story_scale_get_scale(MonarchStoryScale* self) {
   return self->scale;
 }
 
-gchar* monarch_story_scale_get_name(MonarchStoryScale* self) {
+const gchar* monarch_story_scale_get_name(MonarchStoryScale* self) {
   return self->name;
+}
+
+MonarchStoryScale* monarch_story_scale_get_default() {
+  return monarch_story_scale_new(1.0, "100%");
 }

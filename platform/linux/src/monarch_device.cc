@@ -3,8 +3,8 @@
 struct _MonarchDevice {
   GObject parent_instance;
 
-  gchar* id;
-  gchar* name;
+  const gchar* id;
+  const gchar* name;
   MonarchLogicalResolution* logical_resolution;
   double device_pixel_ratio;
   MonarchTargetPlatform target_platform;
@@ -15,8 +15,6 @@ G_DEFINE_TYPE(MonarchDevice, monarch_device, G_TYPE_OBJECT)
 static void monarch_device_dispose(GObject* object) {
   MonarchDevice* self = MONARCH_DEVICE(object);
 
-  g_clear_pointer(&self->id, g_free);
-  g_clear_pointer(&self->name, g_free);
   g_clear_object(&self->logical_resolution);
 
   G_OBJECT_CLASS(monarch_device_parent_class)->dispose(object);
@@ -28,7 +26,7 @@ static void monarch_device_class_init(MonarchDeviceClass* klass) {
 
 static void monarch_device_init(MonarchDevice* self) {}
 
-MonarchDevice* monarch_device_new(gchar* id, gchar* name,
+MonarchDevice* monarch_device_new(const gchar* id, const gchar* name,
                                   MonarchLogicalResolution* logical_resolution,
                                   double device_pixel_ratio,
                                   MonarchTargetPlatform target_platform) {
@@ -49,10 +47,10 @@ MonarchDevice* monarch_device_new_from_value(FlValue* value) {
       MONARCH_DEVICE(g_object_new(monarch_device_get_type(), nullptr));
 
   FlValue* v = fl_value_lookup_string(value, "id");
-  self->id = g_strdup(fl_value_get_string(v));
+  self->id = fl_value_get_string(v);
 
   v = fl_value_lookup_string(value, "name");
-  self->name = g_strdup(fl_value_get_string(v));
+  self->name = fl_value_get_string(v);
 
   v = fl_value_lookup_string(value, "logicalResolution");
   self->logical_resolution = monarch_logical_resolution_new_from_value(v);
@@ -80,4 +78,19 @@ MonarchLogicalResolution* monarch_device_get_logical_resolution(
   return self->logical_resolution;
 }
 
-gchar* monarch_device_get_title(MonarchDevice* device) { return device->name; }
+const gchar* monarch_device_get_title(MonarchDevice* self) {
+  g_autoptr(GString) title = g_string_new("");
+  g_string_append_printf(
+      title, "%.0fx%.0f | %s",
+      monarch_logical_resolution_get_width(self->logical_resolution),
+      monarch_logical_resolution_get_height(self->logical_resolution),
+      self->name);
+
+  return g_strdup(title->str);
+}
+
+MonarchDevice* monarch_device_get_default_device() {
+  return monarch_device_new("ios-iphone-13", "iPhone 13",
+                            monarch_logical_resolution_new(390.0, 844.0), 3.0,
+                            MONARCH_TARGET_PLATFORM_IOS);
+}
