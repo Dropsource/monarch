@@ -3,13 +3,20 @@
 #include <flutter_linux/flutter_linux.h>
 
 #include "channels.h"
+#include "monarch_state.h"
 
 struct _MonarchApplication {
   GtkApplication parent_instance;
   char** command_line_arguments;
+
   FlView* preview_api_view;
   FlView* preview_view;
   FlView* controller_view;
+
+  GtkWindow* preview_window;
+  GtkWindow* preview_api_window;
+  GtkWindow* controller_window;
+
   MonarchChannels* channels;
 };
 
@@ -160,20 +167,21 @@ static void monarch_application_activate(GApplication* application) {
   self->preview_view = fl_view_new(preview_project);
   self->controller_view = fl_view_new(controller_project);
 
-  auto preview_api_window = init_preview_api_window(application);
-  auto preview_window = init_preview_window(application);
-  auto controller_window = init_controller_window(application, self);
+  self->preview_api_window = init_preview_api_window(application);
+  self->preview_window = init_preview_window(application);
+  self->controller_window = init_controller_window(application, self);
 
   self->channels = monarch_channels_new(
       fl_engine_get_binary_messenger(
           fl_view_get_engine(self->preview_api_view)),
-      fl_engine_get_binary_messenger(fl_view_get_engine(self->preview_view)));
+      fl_engine_get_binary_messenger(fl_view_get_engine(self->preview_view)),
+      self);
 
-  set_up_call_forwarding(self->channels);
+  monarch_channels_set_up_call_forwarding(self->channels);
 
-  show_window(preview_api_window, self->preview_api_view);
-  show_window(preview_window, self->preview_view);
-  show_window(controller_window, self->controller_view);
+  show_window(self->preview_api_window, self->preview_api_view);
+  show_window(self->preview_window, self->preview_view);
+  show_window(self->controller_window, self->controller_view);
 }
 
 // Implements GApplication::local_command_line.
@@ -230,4 +238,77 @@ MonarchApplication* monarch_application_new() {
   return MONARCH_APPLICATION(
       g_object_new(monarch_application_get_type(), "application-id",
                    APPLICATION_ID, "flags", G_APPLICATION_NON_UNIQUE, nullptr));
+}
+
+struct GetStateData {
+  GMainLoop* loop;
+  MonarchApplication* monarch_application;
+};
+
+static void resize_preview_window(MonarchApplication* self,
+                                  MonarchDevice* device,
+                                  MonarchStoryScale* scale) {
+  MonarchLogicalResolution* logical_resolution =
+      monarch_device_get_logical_resolution(device);
+
+  double scale_value = monarch_story_scale_get_scale(scale);
+  double scaled_width =
+      monarch_logical_resolution_get_width(logical_resolution) * scale_value;
+  double scaled_height =
+      monarch_logical_resolution_get_height(logical_resolution) * scale_value;
+
+  gtk_window_resize(self->preview_window, scaled_width, scaled_height);
+}
+
+static void set_preview_window_title(MonarchApplication* self,
+                                     MonarchDevice* device,
+                                     MonarchStoryScale* scale) {
+  gtk_window_set_title(self->preview_window, monarch_device_get_title(device));
+}
+
+static void get_state_callback(GObject* object, GAsyncResult* result,
+                               gpointer user_data) {
+  GetStateData* get_state_data = static_cast<GetStateData*>(user_data);
+
+  g_autoptr(GError) error = NULL;
+  g_autoptr(FlMethodResponse) response = fl_method_channel_invoke_method_finish(
+      FL_METHOD_CHANNEL(object), result, &error);
+
+  if (response == NULL) {
+    g_warning("Failed to invoke get_state method: %s", error->message);
+    return;
+  }
+
+  if (FL_IS_METHOD_SUCCESS_RESPONSE(response)) {
+    FlValue* result = fl_method_success_response_get_result(
+        FL_METHOD_SUCCESS_RESPONSE(response));
+
+    MonarchState* state = monarch_state_new_from_value(result);
+
+    resize_preview_window(get_state_data->monarch_application,
+                          monarch_state_get_device(state),
+                          monarch_state_get_scale(state));
+    set_preview_window_title(get_state_data->monarch_application,
+                             monarch_state_get_device(state),
+                             monarch_state_get_scale(state));
+  }
+
+  g_main_loop_quit(get_state_data->loop);
+}
+
+void monarch_application_update_preview_window(MonarchApplication* self) {
+  g_autoptr(GMainLoop) loop = g_main_loop_new(nullptr, 0);
+
+  GetStateData* get_state_data =
+      new GetStateData(GetStateData{.loop = loop, .monarch_application = self});
+
+  fl_method_channel_invoke_method(
+      monarch_channels_get_preview_api_channel(self->channels),
+      MonarchMethods::getState, nullptr, nullptr, get_state_callback,
+      get_state_data);
+
+  // Blocks here until get_state_callback is called
+  g_main_loop_run(get_state_data->loop);
+
+  delete get_state_data;
 }

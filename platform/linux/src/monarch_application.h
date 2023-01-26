@@ -11,4 +11,6 @@ G_DECLARE_FINAL_TYPE(MonarchApplication,
 
 MonarchApplication* monarch_application_new();
 
+void monarch_application_update_preview_window(MonarchApplication* application);
+
 #endif // MONARCH_APPLICATION_H_

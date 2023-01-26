@@ -1,13 +1,11 @@
 #include "channels.h"
 
-static constexpr char preview_api_channel_name[] = "monarch.previewApi";
-static constexpr char preview_channel_name[] = "monarch.previewWindow";
-
 struct _MonarchChannels {
   GObject parent_instance;
 
   FlMethodChannel* preview_api_channel;
   FlMethodChannel* preview_channel;
+  MonarchApplication* monarch_application;
 };
 
 G_DEFINE_TYPE(MonarchChannels, monarch_channels, G_TYPE_OBJECT)
@@ -17,6 +15,13 @@ static void monarch_channels_dispose(GObject* object) {
 
   g_clear_object(&self->preview_api_channel);
   g_clear_object(&self->preview_channel);
+
+  if (self->monarch_application != nullptr) {
+    g_object_remove_weak_pointer(
+        G_OBJECT(self),
+        reinterpret_cast<gpointer*>(&(self->monarch_application)));
+    self->monarch_application = nullptr;
+  }
 
   G_OBJECT_CLASS(monarch_channels_parent_class)->dispose(object);
 }
@@ -28,7 +33,8 @@ static void monarch_channels_class_init(MonarchChannelsClass* klass) {
 static void monarch_channels_init(MonarchChannels* self) {}
 
 MonarchChannels* monarch_channels_new(FlBinaryMessenger* preview_api_messenger,
-                                      FlBinaryMessenger* preview_messenger) {
+                                      FlBinaryMessenger* preview_messenger,
+                                      MonarchApplication* monarch_application) {
   MonarchChannels* self =
       MONARCH_CHANNELS(g_object_new(monarch_channels_get_type(), nullptr));
 
@@ -39,6 +45,11 @@ MonarchChannels* monarch_channels_new(FlBinaryMessenger* preview_api_messenger,
 
   self->preview_channel = fl_method_channel_new(
       preview_messenger, preview_channel_name, FL_METHOD_CODEC(codec));
+
+  self->monarch_application = monarch_application;
+
+  g_object_add_weak_pointer(G_OBJECT(self), reinterpret_cast<gpointer*>(
+                                                &(self->monarch_application)));
 
   return self;
 }
@@ -148,18 +159,59 @@ static void forward_method_call(FlMethodChannel* channel,
   delete method_call_info;
 }
 
-void set_up_call_forwarding(MonarchChannels* self) {
+static void forward_method_call_from_preview(FlMethodChannel* channel,
+                                             FlMethodCall* method_call,
+                                             gpointer user_data) {
+  MonarchChannels* monarch_channels = static_cast<MonarchChannels*>(user_data);
+
+  // forward to preview_api
+  forward_method_call(channel, method_call,
+                      monarch_channels->preview_api_channel);
+}
+
+static void forward_method_call_from_preview_api(FlMethodChannel* channel,
+                                                 FlMethodCall* method_call,
+                                                 gpointer user_data) {
+  MonarchChannels* monarch_channels = static_cast<MonarchChannels*>(user_data);
+
+  // forward to preview
+  forward_method_call(channel, method_call, monarch_channels->preview_channel);
+
+  const gchar* method = fl_method_call_get_name(method_call);
+
+  if (strcmp(method, MonarchMethods::setActiveDevice) == 0 ||
+      strcmp(method, MonarchMethods::setStoryScale) == 0) {
+    monarch_application_update_preview_window(
+        monarch_channels->monarch_application);
+  } else if (strcmp(method, MonarchMethods::setDockSide) == 0) {
+    // TODO: implement docking
+  } else if (strcmp(method, MonarchMethods::restartPreview) == 0) {
+    // TODO: implement restart preview
+  } else if (strcmp(method, MonarchMethods::terminatePreview) == 0) {
+    // TODO: implement terminate preview (not sure if really needed)
+  } else {
+    // no-op
+  }
+}
+
+void monarch_channels_set_up_call_forwarding(MonarchChannels* self) {
   // forward method calls from preview to preview_api
   fl_method_channel_set_method_call_handler(
-      self->preview_channel,      // original channel
-      forward_method_call,        // handler
-      self->preview_api_channel,  // user_data or destination channel
+      self->preview_channel,             // original channel
+      forward_method_call_from_preview,  // handler
+      self,                              // user_data or destination channel
       NULL);
 
   // forward method calls from preview_api to preview
   fl_method_channel_set_method_call_handler(
-      self->preview_api_channel,  // original channel
-      forward_method_call,        // handler
-      self->preview_channel,      // user_data or destination channel
+      self->preview_api_channel,             // original channel
+      forward_method_call_from_preview_api,  // handler
+      self,                                  // user_data or destination channel
       NULL);
+}
+
+FlMethodChannel* monarch_channels_get_preview_api_channel(
+    MonarchChannels* self) {
+  g_return_val_if_fail(MONARCH_IS_CHANNELS(self), nullptr);
+  return self->preview_api_channel;
 }
