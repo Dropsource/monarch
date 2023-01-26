@@ -232,9 +232,15 @@ static void monarch_application_activate(GApplication* application) {
 
   monarch_channels_set_up_call_forwarding(self->channels);
 
-  show_window(self->preview_api_window, self->preview_api_view);
+  /**
+   * @GOTCHA: the preview needs to be launched before the controller to make
+   * sure the devtools widget inspector inspects the preview widget tree. This
+   * is a workaround until [this issue]
+   * (https://github.com/flutter/devtools/issues/4304) is solved.
+   */
   show_window(self->preview_window, self->preview_view);
   show_window(self->controller_window, self->controller_view);
+  show_window(self->preview_api_window, self->preview_api_view);
 }
 
 // Implements GApplication::local_command_line.
