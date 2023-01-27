@@ -7,7 +7,7 @@ import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'application_support_directory.dart';
 import 'internal_info.dart';
 import 'project_config.dart';
-import '../../settings.dart' as settings;
+import 'settings.dart';
 
 class OsInfo {
   final String name;
@@ -80,7 +80,7 @@ class ContextInfo with Log {
       userDeviceId?.id ?? 'user-device-id-unknown';
 
   ContextInfo(this.isLogVerbose, this.internalInfo)
-      : deployment = settings.kDeployment;
+      : deployment = Settings.deployment;
 
   Map<String, dynamic> toPropertiesMap() => {
         'user_device_id': userDeviceId?.id,
