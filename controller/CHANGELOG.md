@@ -1,3 +1,7 @@
+## 1.3.0 - 2023-01-27
+- Linux support
+- Hide dock side on linux
+
 ## 1.2.0 - 2022-12-21
 - To track user selection, only pass the selection kind to the preview api
 - Debounce text scale factor selection tracking
