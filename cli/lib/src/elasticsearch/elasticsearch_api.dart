@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'package:monarch_utils/log.dart';
 import 'dart:convert' as convert;
 
-import '../../settings.dart' as settings;
+import '../config/settings.dart';
 import 'package:monarch_http/monarch_http.dart' as request_utils;
 
 class IndexData {
@@ -14,14 +14,14 @@ class IndexData {
 
 class ElasticsearchApi {
   final _credentials = request_utils.BasicAuth(
-      settings.kElasticsearchUsername, settings.kElasticsearchPassword);
+      Settings.elasticsearchUsername, Settings.elasticsearchPassword);
 
   Future<bool> indexDocument(String index, Object data, Logger logger) async {
     return _indexDocument(index, data, logger);
   }
 
   Future<bool> _indexDocument(String index, Object data, Logger logger) async {
-    final url = '${settings.kElasticsearchEndpoint}/$index/_doc?op_type=create';
+    final url = '${Settings.elasticsearchEndpoint}/$index/_doc?op_type=create';
     final request = http.Request('POST', Uri.parse(url))
       ..body = convert.jsonEncode(data)
       ..headers['Authorization'] = _credentials.authorizationHeaderValue
@@ -34,7 +34,7 @@ class ElasticsearchApi {
   /// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html
   Future<bool> indexDocumentsInBulk(
       Iterable<IndexData> indexDataList, Logger logger) async {
-    final url = '${settings.kElasticsearchEndpoint}/_bulk';
+    final url = '${Settings.elasticsearchEndpoint}/_bulk';
     final request = http.Request('POST', Uri.parse(url))
       ..body = _encodeToNewlineDelimitedJson(indexDataList)
       ..headers['Authorization'] = _credentials.authorizationHeaderValue

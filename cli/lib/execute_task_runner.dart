@@ -28,7 +28,7 @@ import 'src/config/environment_mutations.dart';
 import 'src/version_api/version_api.dart';
 import 'src/version_api/notification.dart';
 import 'src/task_runner/grpc.dart';
-import 'settings.dart' as settings;
+import 'src/config/settings.dart';
 
 final _logger = Logger('CommandTaskRunner');
 
@@ -38,7 +38,7 @@ late final LogStreamCrashReporter _logStreamCrashReporter;
 
 bool _isVerbose = false;
 bool _isCrashDebug = false;
-bool _isLocalDeployment = settings.kDeployment == 'local';
+bool _isLocalDeployment = Settings.deployment == 'local';
 
 final _crashReporter = CrashReporterImpl(CrashReportBuilder());
 final _analytics = AnalyticsImpl(AnalyticsEventBuilder());
