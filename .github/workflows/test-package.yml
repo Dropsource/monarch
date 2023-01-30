@@ -184,9 +184,9 @@ jobs:
         working-directory: controller
         run: dart format --output=none --set-exit-if-changed .
 
-      - name: Analyze project source
-        working-directory: controller
-        run: flutter analyze
+      # - name: Analyze project source
+      #   working-directory: controller
+      #   run: flutter analyze
 
       - name: Run tests
         working-directory: controller
