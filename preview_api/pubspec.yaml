@@ -1,7 +1,7 @@
 name: preview_api
 description: The Monarch Preview API
 publish_to: 'none'
-version: 2.0.0
+version: 2.1.0
 
 environment:
   sdk: '>=2.16.1 <3.0.0'
@@ -11,9 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
   monarch_utils: ^1.0.0
-  monarch_io_utils: ^1.2.0
+  monarch_io_utils: ^1.3.0
   monarch_definitions: ^1.2.0
-  monarch_grpc: ^2.0.0
+  monarch_grpc: ^2.1.0
   grpc: ^3.0.2
 
 dev_dependencies:

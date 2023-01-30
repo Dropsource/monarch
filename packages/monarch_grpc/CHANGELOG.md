@@ -1,3 +1,6 @@
+### 2.1.0 - 2023-01-27
+- Linux support
+
 ### 2.0.0 - 2022-12-22
 - Change TrackUserSelection rpc on the MonarchPreviewApi service
 

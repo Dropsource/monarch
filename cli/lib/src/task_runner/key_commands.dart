@@ -116,7 +116,7 @@ class QuitKeyCommand extends KeyCommand {
   String get description => 'Quit.';
 
   @override
-  String get key => valueForPlatform(macos: '⌃C', windows: 'CTRL+C');
+  String get key => valueForPlatform(macos: '⌃C', windows: 'CTRL+C', linux: 'CTRL+C');
 
   @override
   void run() {}

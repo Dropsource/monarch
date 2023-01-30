@@ -114,7 +114,7 @@ void executeTaskRunner(
   if (!await monarchUiIdDir.exists()) {
     if (_isLocalDeployment) {
       stdout_default.writeln('''
-The monarch_ui directory below is missing. Make sure to add the path to your Flutter SDK to tools/local_settings.yaml
+The monarch_ui directory below is missing. Make sure to add your Flutter SDK path to tools/local_settings.yaml
   ${monarchUiIdDir.path}''');
       await _exit(TaskRunnerExitCodes.missingFlutterIdDirInLocalDeployment);
       return;

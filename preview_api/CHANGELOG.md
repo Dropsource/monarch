@@ -1,3 +1,6 @@
+## 2.1.0 - 2023-01-30
+- Linux support, use latest monarch_* dependencies
+
 ## 2.0.0 - 2022-12-21
 - Track user selections using the preview api data (project data and selections state)
 - Use monarch_grpc v2 which changes the signature of the 

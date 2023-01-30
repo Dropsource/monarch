@@ -152,13 +152,31 @@ class ContextInfo with Log {
       }
     }
 
+    Future<String?> runCommandNoThrow_(
+        String executable, List<String> arguments) async {
+      var result = await Process.run(executable, arguments);
+      if (result.exitCode == ExitCode.success.code) {
+        return result.stdout.trim();
+      } else {
+        log.warning('command "$executable" did not exit successfully, '
+            'got exit code: ${result.exitCode}');
+        return null;
+      }
+    }
+
     _osInfo = OsInfo(
         name: Platform.operatingSystem,
         version: await futureForPlatform(
-            macos: () => runSwVers_('-productVersion'), windows: runVer_),
+          macos: () => runSwVers_('-productVersion'),
+          windows: runVer_,
+          linux: () =>
+              runCommandNoThrow_('lsb_release', ['--description', '--short']),
+        ),
         buildVersion: await futureForPlatform(
-            macos: () => runSwVers_('-buildVersion'),
-            windows: () => Future.value('NA')),
+          macos: () => runSwVers_('-buildVersion'),
+          windows: () => Future.value('NA'),
+          linux: () => runCommandNoThrow_('uname', ['-r']),
+        ),
         versionString: Platform.operatingSystemVersion);
 
     log.config('Operating system information, name=${_osInfo!.name} '
@@ -188,7 +206,10 @@ class ContextInfo with Log {
 
   Future<void> readPlatformBuildToolInfo() {
     return futureForPlatform(
-        macos: readXcodebuildInfo, windows: readMSBuildInfo);
+      macos: readXcodebuildInfo,
+      windows: readMSBuildInfo,
+      linux: readCMakeVersion,
+    );
   }
 
   Future<void> readXcodebuildInfo([Future<ProcessResult>? cmd]) async {
@@ -232,6 +253,26 @@ class ContextInfo with Log {
       }
     } catch (e, s) {
       log.warning('could not read MSBuild version', e, s);
+    }
+  }
+
+  Future<void> readCMakeVersion([Future<ProcessResult>? cmd]) async {
+    try {
+      cmd = cmd ?? Process.run('cmake', ['--version']);
+      var result = await cmd;
+      if (result.exitCode == ExitCode.success.code) {
+        String output = result.stdout;
+        var lines = output.split('\n');
+        var version = lines[0];
+        _platformBuildToolInfo = PlatformBuildToolInfo('CMake', version, null);
+        log.config(
+            'CMake info, cmake_version="${_platformBuildToolInfo!.version}"');
+      } else {
+        log.warning(
+            '"cmake --version" command did not exit successfully, got exit code: ${result.exitCode}');
+      }
+    } catch (e, s) {
+      log.warning('could not read CMake version');
     }
   }
 

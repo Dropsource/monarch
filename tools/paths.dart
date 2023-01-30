@@ -20,9 +20,9 @@ class RepoPaths {
   String get platform => p.join(root, 'platform');
   String get tools => p.join(root, 'tools');
 
-  String get platform_linux => p.join(platform, 'linux');
   String get platform_macos => p.join(platform, 'macos');
   String get platform_windows => p.join(platform, 'windows');
+  String get platform_linux => p.join(platform, 'linux');
 
   String get platform_macos_ephemeral => p.join(platform_macos, 'ephemeral');
 
@@ -30,6 +30,11 @@ class RepoPaths {
   String get platform_windows_gen => p.join(platform_windows, 'gen');
   String get platform_windows_build => p.join(platform_windows, 'build');
   String get platform_windows_src => p.join(platform_windows, 'src');
+
+  String get platform_linux_gen_seed => p.join(platform_linux, 'gen_seed');
+  String get platform_linux_gen => p.join(platform_linux, 'gen');
+  String get platform_linux_build => p.join(platform_linux, 'build');
+  String get platform_linux_src => p.join(platform_linux, 'src');
 }
 
 class LocalOutPaths {
@@ -42,7 +47,9 @@ class LocalOutPaths {
   String get out_bin_internal => p.join(out_bin, 'internal');
 
   String get out_bin_monarch_exe => p.join(
-      out_bin, valueForPlatform(macos: 'monarch', windows: 'monarch.exe'));
+      out_bin,
+      valueForPlatform(
+          macos: 'monarch', windows: 'monarch.exe', linux: 'monarch'));
 }
 
 String flutter_id(String flutter_sdk) {
@@ -62,6 +69,15 @@ String darwin_flutter_framework(String flutter_sdk) => p.join(flutter_sdk,
 
 String windows_flutter_windows_pdb(String flutter_sdk) => p.join(flutter_sdk,
     'bin\\cache\\artifacts\\engine\\windows-x64\\flutter_windows.dll.pdb');
+
+String icudtl_dat(String flutter_sdk, String target_platform) => p.join(
+    flutter_sdk,
+    'bin',
+    'cache',
+    'artifacts',
+    'engine',
+    target_platform,
+    'icudtl.dat');
 
 String flutter_exe(String flutter_sdk) => p.join(flutter_sdk, 'bin', 'flutter');
 

@@ -5,6 +5,7 @@ import 'package:pub_semver/pub_semver.dart' as pub;
 
 import 'paths.dart';
 import 'utils.dart' as utils;
+import 'utils_local.dart' as local_utils;
 
 /// Builds Monarch Platform artifacts with these arguments:
 /// - Path to the root of the Monarch repo
@@ -44,6 +45,10 @@ Building Monarch Platform using these arguments:
 
   if (Platform.isWindows) {
     buildWindows(repo_paths, flutter_sdk, out_ui_flutter_id);
+  }
+
+  if (Platform.isLinux) {
+    buildLinux(repo_paths, flutter_sdk, out_ui_flutter_id);
   }
 
   print('''
@@ -101,7 +106,7 @@ void buildWindows(
     RepoPaths repo_paths, String flutter_sdk, String out_ui_flutter_id) {
   var gen_seed_dir = Directory(
       gen_seed_flutter_id(repo_paths.platform_windows_gen_seed, flutter_sdk));
-  if (_isGenSeedDirectoryOk(gen_seed_dir)) {
+  if (_isGenSeedDirectoryOk(gen_seed_dir, 'windows')) {
     /// Commands `flutter create` and `flutter build` are slow,
     /// thus when gen_seed directory is ok, do not re-run those commands.
     print('gen_seed for this flutter version ok.');
@@ -251,10 +256,10 @@ void buildWindows(
   {
     print('Append preprocessor directives to CMakeLists.txt...');
 
-    /// We can use preprocessor directives so the Monarch C++ code can compile with 
-    /// different Flutter versions. Sometimes the Flutter Windows APIs 
+    /// We can use preprocessor directives so the Monarch C++ code can compile with
+    /// different Flutter versions. Sometimes the Flutter Windows APIs
     /// change between versions.
-    /// 
+    ///
     /// In flutter version 3.4.0-34.1.pre, the flutter team changed the signature of a
     /// function we use. `Win32Window::CreateAndShow` changed to `Win32Window::Create`.
     /// See PR: https://github.com/flutter/flutter/pull/109816/files
@@ -352,13 +357,188 @@ target_compile_definitions(\${BINARY_NAME} PRIVATE "MONARCH_WINDOW_API_CREATE")
   }
 }
 
-bool _isGenSeedDirectoryOk(Directory gen_seed_dir) {
+/// Builds the monarch_linux_app for the given [flutter_sdk].
+///
+/// The Monarch Linux builds is similar to the Monarch Windows build.
+void buildLinux(
+    RepoPaths repo_paths, String flutter_sdk, String out_ui_flutter_id) {
+  var gen_seed_dir = Directory(
+      gen_seed_flutter_id(repo_paths.platform_linux_gen_seed, flutter_sdk));
+  if (_isGenSeedDirectoryOk(gen_seed_dir, 'linux')) {
+    /// Commands `flutter create` and `flutter build` are slow,
+    /// thus when gen_seed directory is ok, do not re-run those commands.
+    print('gen_seed for this flutter version ok.');
+  } else {
+    if (gen_seed_dir.existsSync()) {
+      print('gen_seed found but not ok, will re-generate it.');
+      gen_seed_dir.deleteSync(recursive: true);
+    } else {
+      print('gen_seed for this flutter version not found, will generate it.');
+    }
+    gen_seed_dir.createSync(recursive: true);
+    print('Running `flutter create` in gen_seed...');
+
+    /// Run `flutter create` and `flutter build`
+    var result = Process.runSync(
+        flutter_exe(flutter_sdk),
+        [
+          'create',
+          '.',
+          '--project-name',
+          'monarch_linux_app',
+          '--platforms',
+          'linux',
+          '--template',
+          'app',
+          '--org',
+          'com.dropsource'
+        ],
+        workingDirectory: gen_seed_dir.path);
+    utils.exitIfNeeded(result, 'Error running `flutter create`');
+
+    print('Running `flutter build` in gen_seed...');
+    result = Process.runSync(
+        flutter_exe(flutter_sdk), ['build', 'linux', '--debug'],
+        workingDirectory: gen_seed_dir.path);
+    utils.exitIfNeeded(result, 'Error running `flutter build`');
+
+    // After `flutter build`, the ephemeral directory in
+    // gen_seed/{flutter_id}/linux/flutter/ephemeral
+    // should be there with the flutter linux libraries.
+  }
+
+  {
+    print('Cleaning gen directory...');
+    var gen_dir = Directory(repo_paths.platform_linux_gen);
+    if (gen_dir.existsSync()) gen_dir.deleteSync(recursive: true);
+    gen_dir.createSync(recursive: true);
+  }
+
+  {
+    print('Copying gen_seed/{flutter_id}/linux/* to gen directory...');
+    var gen_seed_flutter_id_ =
+        gen_seed_flutter_id(repo_paths.platform_linux_gen_seed, flutter_sdk);
+    var result = Process.runSync('cp', [
+      '-a',
+      '$gen_seed_flutter_id_/linux/.',
+      repo_paths.platform_linux_gen,
+    ]);
+
+    utils.exitIfNeeded(result, 'Error copying gen_seed to gen directory',
+        successExitCodes: [0, 1]);
+  }
+
+  {
+    print('Editing files in gen directory...');
+
+    void renameToBak(String path) {
+      var og_file = File(path);
+      og_file.renameSync(og_file.path + '.bak');
+    }
+
+    {
+      // Rename gen/*.cc to *.cc.bak
+      renameToBak(p.join(repo_paths.platform_linux_gen, 'main.cc'));
+      renameToBak(p.join(repo_paths.platform_linux_gen, 'my_application.cc'));
+      renameToBak(p.join(repo_paths.platform_linux_gen, 'my_application.h'));
+    }
+  }
+
+  var cmakelists_txt = p.join(repo_paths.platform_linux_gen, 'CMakeLists.txt');
+
+  {
+    print('Including src files in CMakeLists.txt...');
+    var cmakelists_og_file = File(cmakelists_txt);
+    var cmakelistsContents = cmakelists_og_file.readAsStringSync();
+    cmakelists_og_file.renameSync(cmakelists_og_file.path + '.bak');
+
+    var src_dir = Directory(repo_paths.platform_linux_src);
+    var srcFiles = src_dir.listSync(recursive: true, followLinks: false);
+    srcFiles = srcFiles.where(_isSourceFile).toList();
+    var buffer = StringBuffer();
+    for (var srcFile in srcFiles) {
+      var _path = p.relative(srcFile.path, from: repo_paths.platform_linux_gen);
+      buffer.writeln('  "$_path"');
+    }
+
+    // Replace body of add_executable with our source files
+    var pattern = RegExp(r'(?<=add_executable\(\${BINARY_NAME}\n)(.*?)(?=\n\))',
+        dotAll: true);
+    if (pattern.hasMatch(cmakelistsContents)) {
+      var match = pattern.firstMatch(cmakelistsContents)!;
+      cmakelistsContents = cmakelistsContents.replaceRange(
+          match.start, match.end, buffer.toString().trimRight());
+      File(cmakelists_txt).writeAsStringSync(cmakelistsContents);
+    } else {
+      print('Could not find add_executable in CMakeLists.txt');
+      exit(1);
+    }
+  }
+
+  /// cmake and ninja commands adapted from running `flutter build linux --debug --verbose`
+  /// on a flutter sample project
+
+  {
+    print('Generating Ninja build system using CMake...');
+    var result = Process.runSync(
+        'cmake',
+        [
+          '-S',
+          'gen',
+          '-B',
+          p.join('build', flutter_id(flutter_sdk)),
+          '-G',
+          'Ninja',
+          '-DCMAKE_BUILD_TYPE=Debug',
+          '-DFLUTTER_TARGET_PLATFORM=${local_utils.read_target_platform()}'
+        ],
+        workingDirectory: repo_paths.platform_linux);
+
+    utils.exitIfNeededCMake(
+        result, 'CMake error generating Ninja build system');
+
+    // The build/{flutter_id} directory should now be set up.
+  }
+
+  {
+    print('Building project using Ninja...');
+    var result = Process.runSync(
+        'ninja', ['-C', p.join('build', flutter_id(flutter_sdk)), 'install'],
+        workingDirectory: repo_paths.platform_linux);
+
+    utils.exitIfNeeded(result, 'Ninja error building project');
+
+    // The build/{flutter_id}/bundle/* files should be created,
+    // those files can be copied to the out directory
+  }
+
+  {
+    print('Copying executable files to out directory...');
+    var bundle = p.join(
+        repo_paths.platform_linux_build, flutter_id(flutter_sdk), 'bundle');
+
+    var result =
+        Process.runSync('cp', ['-r', p.join(bundle, 'lib'), out_ui_flutter_id]);
+    utils.exitIfNeeded(result, 'Error copying bundle/lib to out directory');
+
+    result = Process.runSync(
+        'cp', [p.join(bundle, 'monarch_linux_app'), out_ui_flutter_id]);
+    utils.exitIfNeeded(
+        result, 'Error copying monarch_linux_app to out directory');
+
+    result = Process.runSync(
+        'cp', [p.join(bundle, 'data', 'icudtl.dat'), out_ui_flutter_id]);
+    utils.exitIfNeeded(result, 'Error copying icudtl.dat to out directory');
+  }
+}
+
+bool _isGenSeedDirectoryOk(Directory gen_seed_dir, String platform) {
   if (!gen_seed_dir.existsSync()) {
     return false;
   }
 
-  var windows_dir = Directory(p.join(gen_seed_dir.path, 'windows'));
-  if (!windows_dir.existsSync()) {
+  var platform_dir = Directory(p.join(gen_seed_dir.path, platform));
+  if (!platform_dir.existsSync()) {
     return false;
   }
 
@@ -367,7 +547,7 @@ bool _isGenSeedDirectoryOk(Directory gen_seed_dir) {
     return false;
   }
 
-  if (windows_dir.listSync().isEmpty) {
+  if (platform_dir.listSync().isEmpty) {
     return false;
   }
 
@@ -380,7 +560,9 @@ bool _isGenSeedDirectoryOk(Directory gen_seed_dir) {
 
 /// Returns source files which should be included in CMakeLists.txt
 bool _isSourceFile(FileSystemEntity element) {
-  return element is File && p.extension(element.path) == '.cpp';
+  return element is File &&
+      (p.extension(element.path) == '.cpp' ||
+          p.extension(element.path) == '.cc');
 }
 
 String _assertAndReplace(String contents, String from, String to) {

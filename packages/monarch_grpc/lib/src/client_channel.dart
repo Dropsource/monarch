@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:grpc/grpc.dart';
 
 String get clientLocalhost {
-  if (Platform.isMacOS) {
+  if (Platform.isMacOS || Platform.isLinux) {
     return '0.0.0.0';
   } else if (Platform.isWindows) {
     return 'localhost';

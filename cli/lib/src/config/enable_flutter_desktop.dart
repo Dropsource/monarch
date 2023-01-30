@@ -14,11 +14,15 @@ class EnableFlutterDesktop with Log {
 
   static String get flutterSettingsPath => functionForPlatform(
       macos: () => p.join(userDirectoryPath!, '.flutter_settings'),
-      windows: () => p.join(
-          userDirectoryPath!, 'AppData', 'Roaming', '.flutter_settings'));
+      windows: () =>
+          p.join(userDirectoryPath!, 'AppData', 'Roaming', '.flutter_settings'),
+      linux: () =>
+          p.join(userDirectoryPath!, '.config', 'flutter', 'settings'));
 
   static String get enableDesktopKey => valueForPlatform(
-      macos: 'enable-macos-desktop', windows: 'enable-windows-desktop');
+      macos: 'enable-macos-desktop',
+      windows: 'enable-windows-desktop',
+      linux: 'enable-linux-desktop');
 
   Future<bool> isEnabled() async {
     if (isUserDirectoryValid()) {

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
@@ -24,6 +25,15 @@ String read_deployment() {
   if (!yaml.containsKey(key)) return 'local';
   return yaml[key].toString();
 }
+
+String read_target_platform() {
+  var yaml = readLocalSettingsYaml();
+  var key = 'target_platform';
+  if (!yaml.containsKey(key))
+    return valueForPlatform(
+        macos: 'darwin', windows: 'windows-x64', linux: 'linux-x64');
+  return yaml[key].toString();
+} 
 
 String getVersionSuffix(String version) {
   var deployment = read_deployment();

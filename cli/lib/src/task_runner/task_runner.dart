@@ -210,7 +210,9 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
           '--debug',
           '--target-platform',
           valueForPlatform(
-              macos: _getDarwinTargetPlatform(), windows: 'windows-x64'),
+              macos: _getDarwinTargetPlatform(),
+              windows: 'windows-x64',
+              linux: 'linux-x64'),
           '--asset-dir',
           flutterAssetsDirectoryPath,
           if (isVerbose) '--verbose'
@@ -258,7 +260,9 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
       return;
     }
 
-    await _copyIcuDataFileOnWindows();
+    if (Platform.isWindows || Platform.isLinux) {
+      await _copyIcuDataFile();
+    }
 
     if (hasExited) {
       return;
@@ -267,22 +271,20 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
     prepping.complete();
   }
 
-  Future<void> _copyIcuDataFileOnWindows() async {
-    if (Platform.isWindows) {
-      try {
-        final icuDataFile = monarchBinaries.icuDataFile(config.flutterSdkId);
-        final icuDataFileName = p.basename(icuDataFile.path);
-        final destination =
-            p.join(projectDirectory.path, dotMonarch, icuDataFileName);
-        await icuDataFile.copy(destination);
-        log.info('icudtl.dat file copied to: $destination');
-      } catch (e, s) {
-        log.severe(
-            'Error while copying icudtl.dat file to .monarch directory', e, s);
-        stdout_default
-            .writeln('Error copying resource file to .monarch directory');
-        finish(TaskRunnerExitCodes.copyIcuDataFileFailed);
-      }
+  Future<void> _copyIcuDataFile() async {
+    try {
+      final icuDataFile = monarchBinaries.icuDataFile(config.flutterSdkId);
+      final icuDataFileName = p.basename(icuDataFile.path);
+      final destination =
+          p.join(projectDirectory.path, dotMonarch, icuDataFileName);
+      await icuDataFile.copy(destination);
+      log.info('icudtl.dat file copied to: $destination');
+    } catch (e, s) {
+      log.severe(
+          'Error while copying icudtl.dat file to .monarch directory', e, s);
+      stdout_default
+          .writeln('Error copying resource file to .monarch directory');
+      finish(TaskRunnerExitCodes.copyIcuDataFileFailed);
     }
   }
 
@@ -389,7 +391,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
       _watchToRegenTask?.stopScrapingMessages();
       _attachToReloadTask?.stopScrapingMessages();
       await Future.delayed(Duration(milliseconds: 50), () {
-        var ctrlC = valueForPlatform(macos: '⌃C', windows: 'Ctrl+C');
+        var ctrlC =
+            valueForPlatform(macos: '⌃C', windows: 'Ctrl+C', linux: 'Ctrl+C');
         stdout_default
             .writeln('\nMonarch app terminated. Press $ctrlC to exit CLI.');
       });

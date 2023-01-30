@@ -1,3 +1,6 @@
+## 3.0.0 - 2023-01-27
+- Linux support
+
 ## 2.1.4 - 2022-11-15
 - Include project config in notification request context
 - Validate compatibility with Flutter 2.x 

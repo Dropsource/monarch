@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:monarch_utils/log.dart';
 
 import '../utils/standard_output.dart';
@@ -60,6 +62,12 @@ class HotRestarter extends Reloader {
   ///   relaunch the preview window
   @override
   Future<void> reload(Heartbeat heartbeat) async {
+    if (Platform.isLinux) {
+      stdout_default.writeln('Hot restart not implemented on Linux.');
+      heartbeat.completeError();
+      return;
+    }
+
     await bundleTask.run();
     await bundleTask.done();
 

@@ -19,7 +19,8 @@ class DevtoolsDiscovery with Log {
 
   String get matchPrefix => valueForPlatform(
       macos: 'The Flutter DevTools debugger and profiler on macOS',
-      windows: 'The Flutter DevTools debugger and profiler on Windows');
+      windows: 'The Flutter DevTools debugger and profiler on Windows',
+      linux: 'The Flutter DevTools debugger and profiler on Linux');
 
   late final StreamSubscription<String> _subscription;
 

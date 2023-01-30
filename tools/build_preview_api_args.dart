@@ -1,15 +1,15 @@
 import 'dart:io';
-import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:path/path.dart' as p;
 
 import 'paths.dart';
 import 'utils.dart' as utils;
+import 'utils_local.dart' as local_utils;
 
 /// Builds Monarch Preview API artifacts with these arguments:
 /// - Path to the root of the Monarch repo
 /// - Path to the Flutter SDK to use
-/// - Path to the monarch_ui/{flutter_id} output directory 
-/// 
+/// - Path to the monarch_ui/{flutter_id} output directory
+///
 /// This script is used by local builds and by the monarch automation.
 void main(List<String> arguments) {
   var repo_root = arguments[0];
@@ -30,7 +30,8 @@ Building Monarch Preview API using these arguments:
   $out_ui_flutter_id
 ''');
 
-  var out_ui_flutter_id_preview_api = p.join(out_ui_flutter_id, 'monarch_preview_api');
+  var out_ui_flutter_id_preview_api =
+      p.join(out_ui_flutter_id, 'monarch_preview_api');
   var out_preview_api_dir = Directory(out_ui_flutter_id_preview_api);
   if (out_preview_api_dir.existsSync())
     out_preview_api_dir.deleteSync(recursive: true);
@@ -42,7 +43,8 @@ Running `flutter pub get` in:
   ${repo_paths.preview_api}
 ''');
     var result = Process.runSync(flutter_exe(flutter_sdk), ['pub', 'get'],
-        workingDirectory: repo_paths.preview_api, runInShell: Platform.isWindows);
+        workingDirectory: repo_paths.preview_api,
+        runInShell: Platform.isWindows);
     utils.exitIfNeeded(result, 'Error running `flutter pub get`');
   }
 
@@ -61,7 +63,7 @@ Building monarch preview_api flutter bundle. Will output to:
           'lib/main.dart',
           '--debug',
           '--target-platform',
-          valueForPlatform(macos: 'darwin', windows: 'windows-x64'),
+          local_utils.read_target_platform(),
           '--asset-dir',
           p.join(out_ui_flutter_id_preview_api, 'flutter_assets'),
           '--verbose'
@@ -74,15 +76,18 @@ Building monarch preview_api flutter bundle. Will output to:
   }
 
   {
+    var icudtl_dat_ = icudtl_dat(flutter_sdk, local_utils.read_target_platform());
+
     if (Platform.isWindows) {
       var result = Process.runSync(
-          'copy',
-          [
-            p.join(flutter_sdk, 'bin', 'cache', 'artifacts', 'engine',
-                'windows-x64', 'icudtl.dat'),
-            out_ui_flutter_id_preview_api
-          ],
+          'copy', [icudtl_dat_, out_ui_flutter_id_preview_api],
           runInShell: true);
+      utils.exitIfNeeded(
+          result, 'Error copying icudtl.dat to monarch_preview_api directory');
+    }
+    if (Platform.isLinux) {
+      var result =
+          Process.runSync('cp', [icudtl_dat_, out_ui_flutter_id_preview_api]);
       utils.exitIfNeeded(
           result, 'Error copying icudtl.dat to monarch_preview_api directory');
     }
