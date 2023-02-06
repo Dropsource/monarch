@@ -26,14 +26,25 @@ String read_deployment() {
   return yaml[key].toString();
 }
 
+/// Tries to read the local target_platform from tools/local_settings.yaml.
+/// If local_settings.yaml doesn't exist, it returns default target
+/// platform values.
+/// If target_platform key is not set, it returns default target
+/// platform values.
 String read_target_platform() {
-  var yaml = readLocalSettingsYaml();
+  if (!File(p.join(local_repo_paths.tools, local_settings_yaml)).existsSync()) {
+    return valueForPlatform(
+        macos: 'darwin', windows: 'windows-x64', linux: 'linux-x64');
+  }
+
+  YamlMap yaml = readLocalSettingsYaml();
   var key = 'target_platform';
   if (!yaml.containsKey(key))
     return valueForPlatform(
         macos: 'darwin', windows: 'windows-x64', linux: 'linux-x64');
+
   return yaml[key].toString();
-} 
+}
 
 String getVersionSuffix(String version) {
   var deployment = read_deployment();
