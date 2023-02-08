@@ -23,13 +23,13 @@ class HotReloader extends Reloader {
     this.stdout_,
   );
 
-  /// Calls hot-reload on the controller grpc server.
+  /// Calls hot-reload on the preview_api.
   /// It checks if the hot-reload request was successful.
   /// It does not regen or rebundle.
   @override
   Future<void> reload(Heartbeat heartbeat) async {
     if (await previewApi.isAvailable()) {
-      log.fine('Sending hotReload request to controller grpc client');
+      log.fine('Sending hotReload request to preview_api');
       var isSuccessful = await previewApi.hotReload();
       heartbeat.complete();
       if (!isSuccessful) {
@@ -77,7 +77,7 @@ class HotRestarter extends Reloader {
     }
 
     if (await previewApi.isAvailable()) {
-      log.fine('Sending restartPreview request to controller grpc client');
+      log.fine('Sending restartPreview request to preview_api');
       await previewApi.restartPreview();
     } else {
       log.warning('Unable to hot restart. The preview_api is not available.');
