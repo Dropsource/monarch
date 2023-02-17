@@ -1,3 +1,6 @@
+## 3.0.1 - 2023-02-17
+- Detect hot reload crash and notify user of workaround
+
 ## 3.0.0 - 2023-01-27
 - Linux support
 
