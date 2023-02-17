@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:grpc/grpc.dart';
 import 'package:monarch_utils/log.dart';
 
 import '../utils/standard_output.dart';
 import 'preview_api.dart';
 import 'process_task.dart';
 import 'task.dart';
+import 'reload_crash.dart' as reload_crash;
 
 const kTryAgainAfterFixing = 'Try again after fixing the above error(s).';
 const kReloadingStories = 'Reloading stories';
@@ -30,13 +32,21 @@ class HotReloader extends Reloader {
   Future<void> reload(Heartbeat heartbeat) async {
     if (await previewApi.isAvailable()) {
       log.fine('Sending hotReload request to preview_api');
-      var isSuccessful = await previewApi.hotReload();
-      heartbeat.complete();
-      if (!isSuccessful) {
-        stdout_.writeln(kTryAgainAfterFixing);
+      try {
+        var isSuccessful = await previewApi.hotReload();
+        heartbeat.complete();
+        if (!isSuccessful) {
+          stdout_.writeln(kTryAgainAfterFixing);
+        }
+      } on GrpcError catch (e, s) {
+        reload_crash.hadHotReloadGrpcError = true;
+        log.severe('GrpcError during call to previewApi.hotReload', e, s);
+        heartbeat.completeError();
+        stdout_.writeln('Request to hot-reload failed.');
       }
     } else {
       log.warning('Unable to hot reload. The preview_api is not available.');
+      heartbeat.completeError();
     }
   }
 }

@@ -25,6 +25,7 @@ import 'task_names.dart';
 import 'terminator.dart';
 import 'key_commands.dart';
 import 'tasks_managers.dart';
+import 'reload_crash.dart' as reload_crash;
 
 enum ReloadOption { hotReload, hotRestart, manual }
 
@@ -393,8 +394,18 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
       await Future.delayed(Duration(milliseconds: 50), () {
         var ctrlC =
             valueForPlatform(macos: '⌃C', windows: 'Ctrl+C', linux: 'Ctrl+C');
-        stdout_default
-            .writeln('\nMonarch app terminated. Press $ctrlC to exit CLI.');
+
+        if (reload_crash.hadHotReloadGrpcError) {
+          if (reload_crash.hadUnableToUseClassDartError) {
+            stdout_default.writeln(reload_crash.knownIssue);
+          } else {
+            stdout_default.writeln(reload_crash.maybeKnownIssue);
+          }
+          stdout_default.writeln('\nPress $ctrlC to exit CLI.');
+        } else {
+          stdout_default
+              .writeln('\nMonarch app terminated. Press $ctrlC to exit CLI.');
+        }
       });
     }
   }
