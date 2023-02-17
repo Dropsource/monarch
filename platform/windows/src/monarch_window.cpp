@@ -364,6 +364,7 @@ LRESULT PreviewWindow::MessageHandler(
 	{
 		// The controller sent its window handle, store it.
 		_controllerWindowHandle = HWND(wparam);
+		windowManager->controllerWindowHandle = HWND(wparam);
 	}
 	else if (message == MonarchWindowMessages::controllerMoveMessage)
 	{

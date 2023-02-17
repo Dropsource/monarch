@@ -26,6 +26,7 @@ public:
 	void setUpCallForwarding();
 	void sendWillClosePreview();
 	void unregisterMethodCallHandlers();
+	void registerRestartPreviewMethodCallHandler();
 	void restartPreviewChannel(flutter::BinaryMessenger* previewMessenger);
 
 	std::unique_ptr<flutter::MethodChannel<EncodableValue>> previewApiChannel;
@@ -46,6 +47,7 @@ namespace MonarchMethods
 	const std::string setDockSide = "monarch.setDockSide";
 	const std::string getState = "monarch.getState";
 	const std::string screenChanged = "monarch.screenChanged";
+	const std::string willRestartPreview = "monarch.willRestartPreview";
 	const std::string restartPreview = "monarch.restartPreview";
 	const std::string willClosePreview = "monarch.willClosePreview";
 	const std::string terminatePreview = "monarch.terminatePreview";

@@ -32,7 +32,6 @@ private:
 	std::string _projectName;
 
 	std::unique_ptr<ControllerWindow> _controllerWindow;
-	HWND _previewWindowHandle;
 
 	void _showAndSetUpControllerWindow(WindowInfo windowInfo);
 };
@@ -47,6 +46,7 @@ public:
 		std::string cliGrpcServerPort);
 	~PreviewWindowManager();
 
+	HWND controllerWindowHandle;
 	DockSide selectedDockSide;
 
 	void launchPreviewWindow();
@@ -57,6 +57,8 @@ public:
 	void resizePreviewWindow(MonarchState state);
 	void setDocking();
 	void setDocking(MonarchState state);
+	
+	void willRestartPreviewWindow();
 	void restartPreviewWindow();
 	void terminate();
 
@@ -68,7 +70,6 @@ private:
 
 	std::unique_ptr<PreviewWindow> _previewWindow;
 	std::unique_ptr<PreviewApiRunner> _previewApi;
-	HWND _controllerWindowHandle;
 
 	std::unique_ptr<Channels> _channels;
 

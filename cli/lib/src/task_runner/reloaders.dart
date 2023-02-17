@@ -72,25 +72,36 @@ class HotRestarter extends Reloader {
   @override
   Future<void> reload(Heartbeat heartbeat) async {
     if (Platform.isLinux) {
-      stdout_default.writeln('Hot restart not implemented on Linux.');
+      log.warning('Hot restart not implemented on Linux.');
       heartbeat.completeError();
       return;
     }
 
+    if (!await previewApi.isAvailable()) {
+      log.warning('Unable to hot restart. The preview_api is not available.');
+      heartbeat.completeError();
+      return;
+    }
+
+    log.shout('WILL RESTART');
+
+    await previewApi.willRestartPreview();
+
+    log.shout('WILL RESTART DONE. Bundling...');
+
     await bundleTask.run();
     await bundleTask.done();
+
+    log.shout('Bundling done');
 
     if (bundleTask.status == TaskStatus.failed) {
       heartbeat.completeError();
       return;
     }
 
-    if (await previewApi.isAvailable()) {
-      log.fine('Sending restartPreview request to preview_api');
-      await previewApi.restartPreview();
-    } else {
-      log.warning('Unable to hot restart. The preview_api is not available.');
-    }
+    log.shout('Sending restartPreview request to preview_api');
+    await previewApi.restartPreview();
+
     heartbeat.complete();
   }
 }

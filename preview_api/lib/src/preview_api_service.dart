@@ -119,6 +119,12 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
   }
 
   @override
+  Future<Empty> willRestartPreview(ServiceCall call, Empty request) {
+    channelMethodsSender.willRestartPreview();
+    return Future.value(Empty());
+  }
+
+  @override
   Future<Empty> restartPreview(ServiceCall call, Empty request) {
     channelMethodsSender.restartPreview();
     return Future.value(Empty());

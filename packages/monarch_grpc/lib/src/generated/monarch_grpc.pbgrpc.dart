@@ -3,7 +3,7 @@
 //  source: monarch_grpc.proto
 //
 // @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
+// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
 import 'dart:async' as $async;
 
@@ -74,6 +74,10 @@ class MonarchPreviewApiClient extends $grpc.Client {
       '/monarch_grpc.MonarchPreviewApi/HotReload',
       ($0.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.ReloadResponse.fromBuffer(value));
+  static final _$willRestartPreview = $grpc.ClientMethod<$0.Empty, $0.Empty>(
+      '/monarch_grpc.MonarchPreviewApi/WillRestartPreview',
+      ($0.Empty value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
   static final _$restartPreview = $grpc.ClientMethod<$0.Empty, $0.Empty>(
       '/monarch_grpc.MonarchPreviewApi/RestartPreview',
       ($0.Empty value) => value.writeToBuffer(),
@@ -162,6 +166,11 @@ class MonarchPreviewApiClient extends $grpc.Client {
   $grpc.ResponseFuture<$0.ReloadResponse> hotReload($0.Empty request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$hotReload, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Empty> willRestartPreview($0.Empty request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$willRestartPreview, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.Empty> restartPreview($0.Empty request,
@@ -283,6 +292,13 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
         ($0.ReloadResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.Empty, $0.Empty>(
+        'WillRestartPreview',
+        willRestartPreview_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.Empty>(
         'RestartPreview',
         restartPreview_Pre,
         false,
@@ -377,6 +393,11 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
     return hotReload(call, await request);
   }
 
+  $async.Future<$0.Empty> willRestartPreview_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
+    return willRestartPreview(call, await request);
+  }
+
   $async.Future<$0.Empty> restartPreview_Pre(
       $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
     return restartPreview(call, await request);
@@ -420,6 +441,8 @@ abstract class MonarchPreviewApiServiceBase extends $grpc.Service {
   $async.Future<$0.Empty> toggleVisualDebugFlag(
       $grpc.ServiceCall call, $0.VisualDebugFlagInfo request);
   $async.Future<$0.ReloadResponse> hotReload(
+      $grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$0.Empty> willRestartPreview(
       $grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.Empty> restartPreview(
       $grpc.ServiceCall call, $0.Empty request);

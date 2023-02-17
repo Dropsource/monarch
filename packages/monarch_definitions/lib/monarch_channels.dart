@@ -21,6 +21,7 @@ class MonarchMethods {
   static const getState = 'monarch.getState';
   static const willClosePreview = 'monarch.willClosePreview';
   static const hotReload = 'monarch.hotReload';
+  static const willRestartPreview = 'monarch.willRestartPreview';
   static const restartPreview = 'monarch.restartPreview';
   static const previewVmServerUri = 'monarch.previewVmServerUri';
   static const userMessage = 'monarch.userMessage';

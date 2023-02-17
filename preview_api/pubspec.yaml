@@ -22,3 +22,9 @@ dev_dependencies:
   flutter_lints: ^2.0.1
 
 flutter:
+
+dependency_overrides:
+  monarch_grpc:
+    path: ../packages/monarch_grpc
+  monarch_definitions:
+    path: ../packages/monarch_definitions
