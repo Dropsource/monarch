@@ -42,7 +42,6 @@ class HotReloader extends Reloader {
         reload_crash.hadHotReloadGrpcError = true;
         log.severe('GrpcError during call to previewApi.hotReload', e, s);
         heartbeat.completeError();
-        stdout_.writeln('Request to hot-reload failed.');
       }
     } else {
       log.warning('Unable to hot reload. The preview_api is not available.');

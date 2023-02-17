@@ -17,6 +17,7 @@ import '../utils/standard_output.dart';
 import 'attach_task.dart';
 import 'monarch_app_stdout.dart';
 import 'monarch_app_stderr.dart';
+import 'notifications.dart';
 import 'task.dart';
 import 'task_runner_exit_codes.dart';
 import 'process_task.dart';
@@ -397,9 +398,11 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
 
         if (reload_crash.hadHotReloadGrpcError) {
           if (reload_crash.hadUnableToUseClassDartError) {
-            stdout_default.writeln(reload_crash.knownIssue);
+            showNotifications([reload_crash.workaroundNotification],
+                stdout_default, analytics);
           } else {
-            stdout_default.writeln(reload_crash.maybeKnownIssue);
+            showNotifications([reload_crash.workaroundMaybeNotification],
+                stdout_default, analytics);
           }
           stdout_default.writeln('\nPress $ctrlC to exit CLI.');
         } else {
