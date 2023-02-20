@@ -87,7 +87,7 @@ class ChannelMethodsSender with Log implements AbstractChannelMethodsSender {
   void terminatePreview() {
     _invokeMonarchChannelMethod(MonarchMethods.terminatePreview);
   }
-  
+
   @override
   void willRestartPreview() {
     _invokeMonarchChannelMethod(MonarchMethods.willRestartPreview);
