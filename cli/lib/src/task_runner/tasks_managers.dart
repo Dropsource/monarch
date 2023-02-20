@@ -8,32 +8,17 @@ import '../utils/standard_output.dart' show StandardOutput;
 import 'task_count_heartbeat.dart';
 
 abstract class TasksManager with Log {
-  void manage();
-  bool get isRunning;
-}
-
-class RegenAndHotReload extends TasksManager {
-  final StandardOutput stdout_;
   final ProcessParentReadyTask regenTask;
-  final PreviewApi previewApi;
+  TasksManager(this.regenTask);
 
-  RegenAndHotReload({
-    required this.stdout_,
-    required this.regenTask,
-    required this.previewApi,
-  });
+  String get reloadingStoriesMessage;
+  bool get isRunning;
 
   bool _isReloading = false;
   bool _needsReload = false;
 
-  @override
-  bool get isRunning =>
-      regenTask.childTaskStatus == ChildTaskStatus.running || _isReloading;
-
-  final heartbeat = SimpleHeartbeat(kReloadingStories);
-
-  @override
   void manage() {
+    var heartbeat = SimpleHeartbeat(reloadingStoriesMessage);
     regenTask.childTaskStatusStream.listen((childTaskStatus) {
       switch (childTaskStatus) {
         case ChildTaskStatus.running:
@@ -45,7 +30,7 @@ class RegenAndHotReload extends TasksManager {
         case ChildTaskStatus.done:
           _needsReload = true;
           if (!_isReloading) {
-            reload();
+            _manageReload(heartbeat);
           }
           break;
 
@@ -60,73 +45,72 @@ class RegenAndHotReload extends TasksManager {
     });
   }
 
-  void reload() async {
+  void _manageReload(Heartbeat heartbeat) async {
     _needsReload = false;
 
     _isReloading = true;
-    var reloader = HotReloader(previewApi, stdout_);
-    await reloader.reload(heartbeat);
+    await reload(heartbeat);
     _isReloading = false;
 
     if (_needsReload) {
       if (!heartbeat.isActive) {
         heartbeat.start();
       }
-      reload();
+      _manageReload(heartbeat);
     }
+  }
+
+  Future<void> reload(Heartbeat heartbeat);
+}
+
+class RegenAndHotReload extends TasksManager {
+  final StandardOutput stdout_;
+  final PreviewApi previewApi;
+
+  RegenAndHotReload({
+    required this.stdout_,
+    required ProcessParentReadyTask regenTask,
+    required this.previewApi,
+  }) : super(regenTask);
+
+  @override
+  bool get isRunning =>
+      regenTask.childTaskStatus == ChildTaskStatus.running || _isReloading;
+
+  @override
+  String get reloadingStoriesMessage => kReloadingStories;
+
+  @override
+  Future<void> reload(Heartbeat heartbeat) async {
+    var reloader = HotReloader(previewApi, stdout_);
+    await reloader.reload(heartbeat);
   }
 }
 
 class RegenRebundleAndHotRestart extends TasksManager {
-  final ProcessParentReadyTask regenTask;
   final ProcessTask buildPreviewBundleTask;
   final PreviewApi previewApi;
   final StandardOutput stdout_;
 
   RegenRebundleAndHotRestart({
-    required this.regenTask,
+    required ProcessParentReadyTask regenTask,
     required this.buildPreviewBundleTask,
     required this.previewApi,
     required this.stdout_,
-  });
+  }) : super(regenTask);
 
   @override
   bool get isRunning =>
       regenTask.childTaskStatus == ChildTaskStatus.running ||
-      buildPreviewBundleTask.status == TaskStatus.running;
-
-  final heartbeat =
-      TaskCountHeartbeat(kReloadingStoriesHotRestart, taskCount: 2);
+      buildPreviewBundleTask.status == TaskStatus.running ||
+      _isReloading;
 
   @override
-  void manage() {
-    regenTask.childTaskStatusStream.listen((childTaskStatus) {
-      switch (childTaskStatus) {
-        case ChildTaskStatus.running:
-          if (!heartbeat.isActive) {
-            heartbeat.completedTaskCount = 0;
-            heartbeat.start();
-          }
-          break;
+  String get reloadingStoriesMessage => kReloadingStoriesHotRestart;
 
-        case ChildTaskStatus.done:
-          heartbeat.completedTaskCount = 1;
-          reload();
-          break;
-
-        case ChildTaskStatus.failed:
-          if (heartbeat.isActive) {
-            heartbeat.completeError();
-          }
-          break;
-
-        default:
-      }
-    });
-  }
-
-  void reload() async {
+  @override
+  Future<void> reload(Heartbeat heartbeat) async {
     var reloader = HotRestarter(buildPreviewBundleTask, previewApi, stdout_);
-    reloader.reload(heartbeat);
+    await reloader.reload(heartbeat);
   }
 }
