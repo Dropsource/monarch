@@ -47,6 +47,9 @@ void Channels::setUpCallForwarding()
 			else if (call.method_name() == MonarchMethods::setDockSide) {
 				previewWindowManager->setDocking();
 			}
+			else if (call.method_name() == MonarchMethods::willRestartPreview) {
+				previewWindowManager->willRestartPreviewWindow();
+			}
 			else if (call.method_name() == MonarchMethods::restartPreview) {
 				previewWindowManager->restartPreviewWindow();
 			}
@@ -124,8 +127,31 @@ void Channels::unregisterMethodCallHandlers()
 	previewWindowChannel->SetMethodCallHandler(nullptr);
 }
 
+// Handles restartPreview message on the previewApi channel. 
+// It does not forward to previewWindow channel.
+// 
+// We need a new handler because the preview window
+// is not alive during the restart process, thus we cannot forward to it.
+void Channels::registerRestartPreviewMethodCallHandler()
+{
+	previewApiChannel->SetMethodCallHandler(
+		[=](const auto& call, auto callback) {
+
+			callback->Success();
+
+			if (call.method_name() == MonarchMethods::restartPreview) {
+				previewWindowManager->restartPreviewWindow();
+			}
+			else {
+				// no-op
+			}
+		}
+	);
+}
+
 void Channels::restartPreviewChannel(flutter::BinaryMessenger* previewMessenger)
 {
+	previewApiChannel->SetMethodCallHandler(nullptr);
 	previewWindowChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
 		previewMessenger,
 		previewWindowChannelName,

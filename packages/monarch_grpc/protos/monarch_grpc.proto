@@ -19,6 +19,7 @@ service MonarchPreviewApi {
     rpc ToggleVisualDebugFlag(VisualDebugFlagInfo) returns (Empty) {}
 
     rpc HotReload(Empty) returns (ReloadResponse) {}
+    rpc WillRestartPreview(Empty) returns (Empty) {}
     rpc RestartPreview(Empty) returns (Empty) {}
     rpc LaunchDevTools(Empty) returns (Empty) {}
     rpc TrackUserSelection(KindInfo) returns (Empty) {}

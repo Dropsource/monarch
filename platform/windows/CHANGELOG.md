@@ -1,3 +1,8 @@
+## 2.3.0 - 2023-02-20
+- Support hot restart. Closes preview window on willRestartPreview
+  method call. Re-opens preview window on restartPreview method call.
+  
+
 ## 2.2.2 - 2022-12-13
 - Pass empty string to `FlutterEngine::Run` to workaround crash
   (https://github.com/flutter/flutter/issues/116753)

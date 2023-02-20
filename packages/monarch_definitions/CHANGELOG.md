@@ -1,3 +1,6 @@
+### 1.3.0 - 2023-02-20
+- Add method `monarch.willRestartPreview`
+
 ### 1.2.0 - 2022-10-27
 - Added definitions, mappers
 - Upgraded lints package

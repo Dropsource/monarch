@@ -17,6 +17,7 @@ import 'src/config/validator.dart';
 import 'src/config/notifications_reader.dart';
 import 'src/crash_reports/crash_reports.dart';
 import 'src/monarch_ui/monarch_ui_fetcher.dart';
+import 'src/task_runner/notifications.dart';
 import 'src/utils/cli_exit_code.dart';
 import 'src/task_runner/log_stream_stdout_writer.dart';
 import 'src/utils/log_stream_file_writer.dart';
@@ -131,7 +132,7 @@ The monarch_ui directory below is missing. Make sure to add your Flutter SDK pat
   }
 
   final notifications = await notificationsReader.notifications;
-  _showNotifications(notifications);
+  showNotifications(notifications, stdout_default, _analytics);
 
   _grpc = Grpc();
   try {
@@ -288,12 +289,3 @@ Future<CliExitCode> _fetchMonarchUi(ProjectConfig projectConfig,
   return uiFetchExitCode;
 }
 
-void _showNotifications(List<Notification> notifications) {
-  for (var notification in notifications) {
-    stdout_default.writeln();
-    stdout_default.writeln('*' * 80);
-    stdout_default.writeln(notification.message.trim());
-    stdout_default.writeln('*' * 80);
-    _analytics.notification_displayed(notification.id);
-  }
-}
