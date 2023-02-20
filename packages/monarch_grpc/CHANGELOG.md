@@ -1,3 +1,6 @@
+### 2.2.0 - 2023-02-20
+- WillRestartPreview rpc
+
 ### 2.1.0 - 2023-01-27
 - Linux support
 

@@ -228,16 +228,18 @@ void PreviewWindowManager::setDocking(MonarchState state)
 	}
 }
 
-void PreviewWindowManager::restartPreviewWindow()
+void PreviewWindowManager::willRestartPreviewWindow()
 {
 	_channels->sendWillClosePreview();
 	_channels->unregisterMethodCallHandlers();
-
-	auto controllerWindowHandle = _previewWindow->getControllerWindowHandle();
+	_channels->registerRestartPreviewMethodCallHandler();
 
 	_previewWindow->SetQuitOnClose(false);
 	_previewWindow->Destroy();
+}
 
+void PreviewWindowManager::restartPreviewWindow()
+{
 	flutter::DartProject previewProject(to_wstring(_previewWindowBundlePath));
 	std::vector<std::string> previewArguments = { _defaultLogLevelString };
 	previewProject.set_dart_entrypoint_arguments(previewArguments);

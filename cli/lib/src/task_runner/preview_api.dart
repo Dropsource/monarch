@@ -36,6 +36,14 @@ class PreviewApi with Log {
     return response.isSuccessful;
   }
 
+  /// Signals the platform code that the preview will restart.
+  /// Implemented on Windows.
+  /// Assumes [isAvailable] has returned true.
+  Future<void> willRestartPreview() async {
+    var client = await getClient();
+    await client!.willRestartPreview(Empty());
+  }
+
   /// Restars the preview window via platform code.
   /// Assumes [isAvailable] has returned true.
   Future<void> restartPreview() async {

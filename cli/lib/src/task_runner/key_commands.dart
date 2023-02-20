@@ -69,7 +69,7 @@ class HotRestartKeyCommand extends KeyCommand {
     running(() async {
       var heartbeat = Heartbeat(kReloadingStoriesHotRestart, stdout_.writeln);
       heartbeat.start();
-      var reloader = HotRestarter(bundleTask, previewApi);
+      var reloader = HotRestarter(bundleTask, previewApi, stdout_);
       await reloader.reload(heartbeat);
     });
   }
@@ -166,11 +166,13 @@ class GenerateAndHotRestartKeyCommand extends KeyCommand {
   final ProcessTask generateTask;
   final ProcessTask bundleTask;
   final PreviewApi previewApi;
+  final StandardOutput stdout_;
 
   GenerateAndHotRestartKeyCommand({
     required this.generateTask,
     required this.bundleTask,
     required this.previewApi,
+    required this.stdout_,
   });
 
   @override
@@ -182,7 +184,7 @@ class GenerateAndHotRestartKeyCommand extends KeyCommand {
       await generateTask.run();
       await generateTask.done();
 
-      var reloader = HotRestarter(bundleTask, previewApi);
+      var reloader = HotRestarter(bundleTask, previewApi, stdout_);
       await reloader.reload(heartbeat);
     });
   }

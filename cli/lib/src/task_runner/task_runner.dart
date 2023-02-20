@@ -17,6 +17,7 @@ import '../utils/standard_output.dart';
 import 'attach_task.dart';
 import 'monarch_app_stdout.dart';
 import 'monarch_app_stderr.dart';
+import 'notifications.dart';
 import 'task.dart';
 import 'task_runner_exit_codes.dart';
 import 'process_task.dart';
@@ -25,6 +26,7 @@ import 'task_names.dart';
 import 'terminator.dart';
 import 'key_commands.dart';
 import 'tasks_managers.dart';
+import 'reload_crash.dart' as reload_crash;
 
 enum ReloadOption { hotReload, hotRestart, manual }
 
@@ -393,8 +395,20 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
       await Future.delayed(Duration(milliseconds: 50), () {
         var ctrlC =
             valueForPlatform(macos: '⌃C', windows: 'Ctrl+C', linux: 'Ctrl+C');
-        stdout_default
-            .writeln('\nMonarch app terminated. Press $ctrlC to exit CLI.');
+
+        if (reload_crash.hadHotReloadGrpcError) {
+          if (reload_crash.hadUnableToUseClassDartError) {
+            showNotifications([reload_crash.workaroundNotification],
+                stdout_default, analytics);
+          } else {
+            showNotifications([reload_crash.workaroundMaybeNotification],
+                stdout_default, analytics);
+          }
+          stdout_default.writeln('\nPress $ctrlC to exit CLI.');
+        } else {
+          stdout_default
+              .writeln('\nMonarch app terminated. Press $ctrlC to exit CLI.');
+        }
       });
     }
   }
@@ -454,6 +468,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
                   regenTask: _watchToRegenTask!,
                   buildPreviewBundleTask: _buildPreviewBundleTask!,
                   previewApi: previewApi,
+                  stdout_: stdout_default,
                 );
 
           _regenAndReloadManager!.manage();
@@ -501,6 +516,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
           generateTask: _generateStoriesTask!,
           bundleTask: _buildPreviewBundleTask!,
           previewApi: previewApi,
+          stdout_: stdout_default,
         ),
         helpKeyCommand,
         QuitKeyCommand()

@@ -23,6 +23,8 @@ abstract class AbstractChannelMethodsSender {
 
   Future<bool> hotReload();
 
+  void willRestartPreview();
+
   void restartPreview();
 
   void terminatePreview();

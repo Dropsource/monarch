@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:monarch_utils/log.dart';
 
 import 'task_names.dart';
+import 'reload_crash.dart' as reload_crash;
 
 /// This funcion handles scenarios where the platform Window Manager,
 /// the Controller or the Preview write to stderr:
@@ -73,6 +74,12 @@ void onRunMonarchAppStdErrMessage(String message, Logger logger_) {
       logger_.info('**ignored-severe** $message');
       return;
     }
+  }
+
+  var unableToUseRegex =
+      RegExp(r'.*object\.cc.*Unable to use class.*which is not loaded yet');
+  if (unableToUseRegex.hasMatch(message)) {
+    reload_crash.hadUnableToUseClassDartError = true;
   }
 
   // if the message is multi-line
