@@ -1,5 +1,6 @@
-## 3.0.1 - 2023-02-17
+## 3.0.1 - 2023-02-20
 - Detect hot reload crash and notify user of workaround
+- Use monarch_grpc 2.2.0
 
 ## 3.0.0 - 2023-01-27
 - Linux support
