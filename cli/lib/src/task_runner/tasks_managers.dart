@@ -81,11 +81,13 @@ class RegenRebundleAndHotRestart extends TasksManager {
   final ProcessParentReadyTask regenTask;
   final ProcessTask buildPreviewBundleTask;
   final PreviewApi previewApi;
+  final StandardOutput stdout_;
 
   RegenRebundleAndHotRestart({
     required this.regenTask,
     required this.buildPreviewBundleTask,
     required this.previewApi,
+    required this.stdout_,
   });
 
   @override
@@ -124,7 +126,7 @@ class RegenRebundleAndHotRestart extends TasksManager {
   }
 
   void reload() async {
-    var reloader = HotRestarter(buildPreviewBundleTask, previewApi);
+    var reloader = HotRestarter(buildPreviewBundleTask, previewApi, stdout_);
     reloader.reload(heartbeat);
   }
 }

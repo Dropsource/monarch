@@ -53,8 +53,9 @@ class HotReloader extends Reloader {
 class HotRestarter extends Reloader {
   final PreviewApi previewApi;
   final ProcessTask bundleTask;
+  final StandardOutput stdout_;
 
-  HotRestarter(this.bundleTask, this.previewApi);
+  HotRestarter(this.bundleTask, this.previewApi, this.stdout_);
 
   /// It restarts the Monarch Preview. Restarts the Preview by closing the existing
   /// Preview window and opening a new one.
@@ -83,23 +84,28 @@ class HotRestarter extends Reloader {
       return;
     }
 
-    log.shout('WILL RESTART');
+    if (Platform.isWindows) {
+      // On Windows, we have to close the preview window before we re-bundle.
+      // Otherwise, copying the new bundle will fail.
+      // This message is to inform the user that the preview window
+      // will re-open.
+      stdout_.writeln('Preview window will re-open.');
+    }
 
+    log.info('Calling previewApi.willRestartPreview');
     await previewApi.willRestartPreview();
 
-    log.shout('WILL RESTART DONE. Bundling...');
-
+    log.info('Bundling');
     await bundleTask.run();
     await bundleTask.done();
 
-    log.shout('Bundling done');
 
     if (bundleTask.status == TaskStatus.failed) {
       heartbeat.completeError();
       return;
     }
 
-    log.shout('Sending restartPreview request to preview_api');
+    log.info('Calling previewApi.restartPreview');
     await previewApi.restartPreview();
 
     heartbeat.complete();

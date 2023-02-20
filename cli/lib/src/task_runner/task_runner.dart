@@ -468,6 +468,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
                   regenTask: _watchToRegenTask!,
                   buildPreviewBundleTask: _buildPreviewBundleTask!,
                   previewApi: previewApi,
+                  stdout_: stdout_default,
                 );
 
           _regenAndReloadManager!.manage();
@@ -515,6 +516,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
           generateTask: _generateStoriesTask!,
           bundleTask: _buildPreviewBundleTask!,
           previewApi: previewApi,
+          stdout_: stdout_default,
         ),
         helpKeyCommand,
         QuitKeyCommand()
