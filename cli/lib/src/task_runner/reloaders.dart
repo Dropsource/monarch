@@ -72,12 +72,6 @@ class HotRestarter extends Reloader {
   ///   relaunch the preview window
   @override
   Future<void> reload(Heartbeat heartbeat) async {
-    if (Platform.isLinux) {
-      log.warning('Hot restart not implemented on Linux.');
-      heartbeat.completeError();
-      return;
-    }
-
     if (!await previewApi.isAvailable()) {
       log.warning('Unable to hot restart. The preview_api is not available.');
       heartbeat.completeError();
