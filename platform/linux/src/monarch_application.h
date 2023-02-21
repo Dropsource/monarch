@@ -13,4 +13,6 @@ MonarchApplication* monarch_application_new();
 
 void monarch_application_update_preview_window(MonarchApplication* application);
 
+void monarch_application_restart_preview_window(MonarchApplication* application);
+
 #endif // MONARCH_APPLICATION_H_

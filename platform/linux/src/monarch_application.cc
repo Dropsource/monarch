@@ -350,3 +350,23 @@ void monarch_application_update_preview_window(MonarchApplication* self) {
 
   delete get_state_data;
 }
+
+void monarch_application_restart_preview_window(MonarchApplication* self) {
+  monarch_channels_send_will_close_preview(self->channels);
+  gtk_widget_destroy(GTK_WIDGET(self->preview_window));
+  // g_clear_object(&self->preview_view);
+
+  g_autoptr(FlDartProject) preview_project =
+      init_dart_project(get_preview_window_bundle_path(self));
+  set_preview_args(self, preview_project);
+  self->preview_view = fl_view_new(preview_project);
+  self->preview_window = init_preview_window(G_APPLICATION(self));
+
+  monarch_channels_restart_preview_channel(
+      self->channels,
+      fl_engine_get_binary_messenger(
+          fl_view_get_engine(self->preview_api_view)),
+      fl_engine_get_binary_messenger(fl_view_get_engine(self->preview_view)));
+
+  show_window(self->preview_window, self->preview_view);
+}
