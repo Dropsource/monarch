@@ -230,8 +230,8 @@ void monarch_channels_restart_preview_channel(
     MonarchChannels* self, FlBinaryMessenger* preview_api_messenger,
     FlBinaryMessenger* preview_messenger) {
 
-  // g_clear_object(&self->preview_channel);
-  // g_clear_object(&self->preview_api_channel);
+  g_clear_object(&self->preview_channel);
+  g_clear_object(&self->preview_api_channel);
 
   g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
 
