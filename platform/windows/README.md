@@ -56,7 +56,7 @@ If the change you need to make is simple, then these workflow may suffice:
 You can use Visual Studio to debug the Monarch Windows code. To debug with 
 Visual Studio you will attach to a running instance of Monarch.
 
-Run `dart tools\build_platform.dart` to build your changes. 
+Use `dart tools\build_platform.dart` to build your changes. 
 This command generates a `platform\windows\build\flutter_windows_*` 
 directory, where the `*` represents every flutter version you have declared in `tools\local_settings.yaml`. 
 The `flutter_windows_*` directory will have a `monarch_windows_app.sln` 
