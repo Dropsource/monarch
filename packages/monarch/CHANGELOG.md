@@ -1,5 +1,5 @@
-## 3.0.1 - 2023-02-23
-- Set upper flutter sdk version as 3.8.0-0.0.pre. This version of Flutter
+## 3.0.1 - 2023-02-24
+- Flutter sdk version 3.8.0-0.0.pre
   introduces a new API for WidgetsBinding which is not compatible with this
   version of the monarch package. 
 - The monarch package version 3.0.x will support flutter versions prior to 
@@ -7,6 +7,7 @@
 - The monarch package version 3.3 and above will support flutter sdk versions 
   greater than or equal to 3.8.0-0.0.pre.
 - Update vm_service dependency to 11.1.0
+- Set upper dart sdk version as 4.0.0.
 
 ## 3.0.0 - 2022-11-14
 - Releasing monarch package 3.0.0 compatible with Monarch 2.x and Flutter 3.x
