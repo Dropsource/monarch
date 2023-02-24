@@ -39,7 +39,8 @@ void _startMonarchPreview(ProjectData Function() getProjectData) async {
   });
 
   Timer.run(() {
-    monarchBinding.attachRootWidget(MonarchPreview());
+    monarchBinding
+        .attachRootWidget(monarchBinding.wrapWithDefaultView(MonarchPreview()));
   });
   monarchBinding.scheduleWarmUpFrame();
 

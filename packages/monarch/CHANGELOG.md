@@ -1,3 +1,6 @@
+## 3.3.0 - 2023-02-24
+- Compatible with flutter sdk version 3.8.0-0.0.pre or greater.
+
 ## 3.0.1 - 2023-02-24
 - Flutter sdk version 3.8.0-0.0.pre
   introduces a new API for WidgetsBinding which is not compatible with this
