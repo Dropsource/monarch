@@ -7,9 +7,9 @@ _document provides an overview of the Monarch Window Manager. The sections below
 _more details of the Window Manager on Linux._
 
 ## The Monarch Window Manager on Linux
-- Is a windowless native process
+- Is a native process
 - Uses C++, GTK APIs and Flutter Linux libraries.
-- Launches the Controller and Preview windows using the platform APIs.
+- Launches the Controller and Preview windows using the GTK APIs.
 - Handles the native window interactions like resize, move, docking, window title, etc.
 - The source code is built using multiple Flutter versions. For each Flutter version, 
   there will be an executable `monarch_linux_app`, which is distributed to the
@@ -175,7 +175,7 @@ Be careful to only edit files that are part of the src directory.
 
 ### Debugging the startup
 The process above won't let you debug the Linux startup code which launches the 
-Monarch windows manager. If you need to debug the startup code, you can try adding a timer 
+Monarch window manager. If you need to debug the startup code, you can try adding a timer 
 to the main function, which should give you enough time to attach to the 
 `monarch_linux_app` process.
 
