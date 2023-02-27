@@ -7,9 +7,9 @@ _document provides an overview of the Monarch Window Manager. The sections below
 _more details of the Window Manager on Windows._
 
 ## The Monarch Window Manager on Windows
-- Is a windowless native process
+- Is a native process
 - Uses C++, Win32 APIs and Flutter Windows libraries.
-- Launches the Controller and Preview windows using the platform APIs.
+- Launches the Controller and Preview windows using the Win32 APIs.
 - Handles the native window interactions like resize, move, docking, window title, etc.
 - The source code is built using multiple Flutter versions. For each Flutter version, 
   there will be an executable monarch_windows_app.exe, which is distributed to the
@@ -29,22 +29,14 @@ build script. Do not modify these directories by hand.
 The `src` directory is where the Monarch source code for Windows lives. Source 
 files in the `src` directory include sources in the `gen` directory. 
 
-## Monarch Windows version and app icon
-To modify the Monarch Windows version or the app icon, go to 
-`platform\windows\build_settings.yaml`.
+## Contributing
+You can set up your local development environment following this
+[guide](https://github.com/Dropsource/monarch/wiki/Setting-up-your-local-development-environment)
 
-The build script uses the values in build_settings.yaml to set the expected version and 
-app icon.
+You can use Visual Studio Code to make changes to the Monarch Windows code. 
+If you need intellisense or debugging you will need to use Visual Studio.
 
-## Modify the app icon
-- Get a PNG of the monarch logo at 256x256
-- Then use ffmpeg to generate an ico file from it. The macos ico format does not work, 
-  thus use ffmpeg.
-- `ffmpeg -i icon_256x256.png monarch_icon.ico`
-- Then copy the output file and use it to replace `platform\windows\src\resources\monarch_app_icon.ico
-
-
-## Contributing simple changes
+### Contributing simple changes
 If the change you need to make is simple, then these workflow may suffice:
 
 - Modify the source files that need changes inside the src directory
@@ -52,11 +44,26 @@ If the change you need to make is simple, then these workflow may suffice:
 - Then include `out\monarch\bin` in your path and run monarch using a test project
 - Test your changes
 
+
+### Monarch Windows version and app icon
+To modify the Monarch Windows version or the app icon, go to 
+`platform\windows\build_settings.yaml`.
+
+The build script uses the values in build_settings.yaml to set the expected version and 
+app icon.
+
+### Modify the app icon
+- Get a PNG of the monarch logo at 256x256
+- Then use ffmpeg to generate an ico file from it. The macos ico format does not work, 
+  thus use ffmpeg.
+- `ffmpeg -i icon_256x256.png monarch_icon.ico`
+- Then copy the output file and use it to replace `platform\windows\src\resources\monarch_app_icon.ico
+
 ## Debugging
 You can use Visual Studio to debug the Monarch Windows code. To debug with 
 Visual Studio you will attach to a running instance of Monarch.
 
-Run `dart tools\build_platform.dart` to build your changes. 
+Use `dart tools\build_platform.dart` to build your changes. 
 This command generates a `platform\windows\build\flutter_windows_*` 
 directory, where the `*` represents every flutter version you have declared in `tools\local_settings.yaml`. 
 The `flutter_windows_*` directory will have a `monarch_windows_app.sln` 

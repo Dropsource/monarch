@@ -278,9 +278,14 @@ static void monarch_application_dispose(GObject* object) {
   MonarchApplication* self = MONARCH_APPLICATION(object);
   g_clear_pointer(&self->command_line_arguments, g_strfreev);
   g_clear_object(&self->channels);
-  g_clear_object(&self->preview_api_view);
-  g_clear_object(&self->preview_view);
-  g_clear_object(&self->controller_view);
+
+  /** 
+   * @GOTCHA: calling g_clear_object on FLView* instance members 
+   * (preview_api_view, preview_view or controller_view) causes
+   * error message when app exits:
+   * (monarch_linux_app:167905): GLib-GObject-CRITICAL **: 15:03:46.169: g_object_unref: assertion 'G_IS_OBJECT (object)' failed
+  */
+  
   G_OBJECT_CLASS(monarch_application_parent_class)->dispose(object);
 }
 
@@ -349,4 +354,24 @@ void monarch_application_update_preview_window(MonarchApplication* self) {
   g_main_loop_run(get_state_data->loop);
 
   delete get_state_data;
+}
+
+void monarch_application_restart_preview_window(MonarchApplication* self) {
+  monarch_channels_send_will_close_preview(self->channels);
+  gtk_widget_destroy(GTK_WIDGET(self->preview_window));
+
+  g_autoptr(FlDartProject) preview_project =
+      init_dart_project(get_preview_window_bundle_path(self));
+  set_preview_args(self, preview_project);
+  self->preview_view = fl_view_new(preview_project);
+  self->preview_window = init_preview_window(G_APPLICATION(self));
+
+  monarch_channels_restart_preview_channel(
+      self->channels,
+      fl_engine_get_binary_messenger(
+          fl_view_get_engine(self->preview_api_view)),
+      fl_engine_get_binary_messenger(fl_view_get_engine(self->preview_view)));
+
+  show_window(self->preview_window, self->preview_view);
+  monarch_application_update_preview_window(self);
 }

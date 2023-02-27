@@ -17,7 +17,13 @@ MonarchChannels* monarch_channels_new(FlBinaryMessenger* preview_api_messenger,
 
 void monarch_channels_set_up_call_forwarding(MonarchChannels* channels);
 
-FlMethodChannel* monarch_channels_get_preview_api_channel(MonarchChannels* channels);
+FlMethodChannel* monarch_channels_get_preview_api_channel(
+    MonarchChannels* channels);
+
+void monarch_channels_send_will_close_preview(MonarchChannels* channels);
+void monarch_channels_restart_preview_channel(
+    MonarchChannels* channels, FlBinaryMessenger* preview_api_messenger,
+    FlBinaryMessenger* preview_messenger);
 
 constexpr char preview_api_channel_name[] = "monarch.previewApi";
 constexpr char preview_channel_name[] = "monarch.previewWindow";

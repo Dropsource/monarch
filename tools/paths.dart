@@ -97,7 +97,11 @@ String get_flutter_channel(String flutter_sdk) {
     print(result.stderr);
   }
   var channel = result.stdout.trim();
-  return channel;
+  if (channel == 'stable' || channel == 'beta' || channel == 'master') {
+    return channel;
+  } else {
+    return 'unknown';
+  }
 }
 
 String gen_seed_flutter_id(String platform_gen_seed, String flutter_sdk) =>

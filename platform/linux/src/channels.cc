@@ -186,7 +186,8 @@ static void forward_method_call_from_preview_api(FlMethodChannel* channel,
   } else if (strcmp(method, MonarchMethods::setDockSide) == 0) {
     // TODO: implement docking
   } else if (strcmp(method, MonarchMethods::restartPreview) == 0) {
-    // TODO: implement restart preview
+    monarch_application_restart_preview_window(
+        monarch_channels->monarch_application);
   } else if (strcmp(method, MonarchMethods::terminatePreview) == 0) {
     // TODO: implement terminate preview (not sure if really needed)
   } else {
@@ -214,4 +215,31 @@ FlMethodChannel* monarch_channels_get_preview_api_channel(
     MonarchChannels* self) {
   g_return_val_if_fail(MONARCH_IS_CHANNELS(self), nullptr);
   return self->preview_api_channel;
+}
+
+void monarch_channels_send_will_close_preview(MonarchChannels* self) {
+  fl_method_channel_invoke_method(self->preview_channel,
+                                  MonarchMethods::willClosePreview, nullptr,
+                                  nullptr, nullptr, nullptr);
+  fl_method_channel_invoke_method(self->preview_api_channel,
+                                  MonarchMethods::willClosePreview, nullptr,
+                                  nullptr, nullptr, nullptr);
+}
+
+void monarch_channels_restart_preview_channel(
+    MonarchChannels* self, FlBinaryMessenger* preview_api_messenger,
+    FlBinaryMessenger* preview_messenger) {
+
+  g_clear_object(&self->preview_channel);
+  g_clear_object(&self->preview_api_channel);
+
+  g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
+
+  self->preview_api_channel = fl_method_channel_new(
+      preview_api_messenger, preview_api_channel_name, FL_METHOD_CODEC(codec));
+
+  self->preview_channel = fl_method_channel_new(
+      preview_messenger, preview_channel_name, FL_METHOD_CODEC(codec));
+
+  monarch_channels_set_up_call_forwarding(self);
 }
