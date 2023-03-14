@@ -294,7 +294,7 @@ target_compile_definitions(\${BINARY_NAME} PRIVATE "MONARCH_WINDOW_API_CREATE")
           '-B',
           p.join('build', flutter_id(flutter_sdk)),
           '-G',
-          'Visual Studio 16 2019'
+          'Visual Studio 17 2022'
         ],
         workingDirectory: repo_paths.platform_windows,
         runInShell: true);
