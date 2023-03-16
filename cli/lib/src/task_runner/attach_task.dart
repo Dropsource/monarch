@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:pub_semver/pub_semver.dart' as pub;
+
 import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:monarch_utils/log.dart';
 
@@ -12,6 +14,7 @@ import 'process_task.dart';
 class AttachTask with Log {
   final String taskName;
   final String flutterExecutablePath;
+  final String flutterVersion;
   final String generatedMainFilePath;
   final String projectDirectoryPath;
   final Analytics analytics;
@@ -19,6 +22,7 @@ class AttachTask with Log {
   AttachTask({
     required this.taskName,
     required this.flutterExecutablePath,
+    required this.flutterVersion,
     required this.generatedMainFilePath,
     required this.projectDirectoryPath,
     required this.analytics,
@@ -82,17 +86,22 @@ class AttachTask with Log {
         ],
         workingDirectory: projectDirectoryPath,
         analytics: analytics,
-        readyMessage: valueForPlatform(
-            macos: 'An Observatory debugger and profiler on macOS is available',
-            windows:
-                'An Observatory debugger and profiler on Windows is available',
-            linux:
-                'An Observatory debugger and profiler on Linux is available'),
+        readyMessage: _getReadyMessage(valueForPlatform(
+            macos: 'macOS', windows: 'Windows', linux: 'Linux')),
         childTaskMessages: ChildTaskMessages(
             running: RegExp(r'(Performing hot restart|Performing hot reload)'),
             done: RegExp(
                 r'(Restarted application|Reloaded \d+ of \d+ libraries|Reloaded \d+ libraries)'),
             failed: 'Try again after fixing the above error(s).'));
+  }
+
+  String _getReadyMessage(String platform) {
+    if (pub.Version.parse(flutterVersion) >=
+        pub.Version(3, 9, 0, pre: '1.0.pre.2')) {
+      return 'A Dart VM Service on $platform is available';
+    } else {
+      return 'An Observatory debugger and profiler on $platform is available';
+    }
   }
 
   void kill() {

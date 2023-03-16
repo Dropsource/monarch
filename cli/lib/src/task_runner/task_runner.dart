@@ -366,6 +366,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
     _attachToReloadTask = AttachTask(
         taskName: TaskNames.attachToHotRestart,
         flutterExecutablePath: config.flutterExecutablePath,
+        flutterVersion: config.flutterSdkId.version,
         generatedMainFilePath: generatedMainFilePath,
         projectDirectoryPath: projectDirectory.path,
         analytics: analytics);
