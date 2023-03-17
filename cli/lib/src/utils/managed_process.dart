@@ -183,14 +183,22 @@ class Downloader extends ThrowsManagedProcess {
 /// Unzips a local zip file into its parent directory. For example, if there is
 /// a zip file at /foo/bar/baz.zip, then this class will unzip baz.zip into
 /// /foo/bar.
+/// It assumes [zipFileName] is inside [zipFileParentDirectory].
 class Unzipper extends ThrowsManagedProcess {
   Unzipper(
       {required String zipFileName, required Directory zipFileParentDirectory})
       : super(
             loggerName: 'Unzipper',
-            executable: valueForPlatform(macos: 'unzip', windows: 'tar'),
+            executable: valueForPlatform(
+              macos: 'unzip',
+              windows: 'tar',
+              linux: 'tar',
+            ),
             arguments: valueForPlatform(
-                macos: ['-q', zipFileName], windows: ['-x', '-f', zipFileName]),
+              macos: ['-q', zipFileName],
+              windows: ['-x', '-f', zipFileName],
+              linux: ['xf', zipFileName],
+            ),
             workingDirectory: zipFileParentDirectory.path);
 
   @override
