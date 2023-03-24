@@ -97,7 +97,7 @@ class AttachTask with Log {
 
   String _getReadyMessage(String platform) {
     if (pub.Version.parse(flutterVersion) >=
-        pub.Version(3, 9, 0, pre: '1.0.pre.2')) {
+        pub.Version(3, 9, 0, pre: '0.1.pre')) {
       return 'A Dart VM Service on $platform is available';
     } else {
       return 'An Observatory debugger and profiler on $platform is available';

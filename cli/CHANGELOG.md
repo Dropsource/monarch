@@ -1,3 +1,6 @@
+## 3.0.3 - 2023-03-24
+- Support Flutter 3.9.0-x.x.pre
+
 ## 3.0.2 - 2023-03-17
 - Command to extract monarch linux tarball
 
