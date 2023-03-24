@@ -34,5 +34,11 @@ void main() {
       isLessThan('2.3.2');
       isLessThan('2.4.2');
     });
+
+    test('comparison with pre.x version', () {
+      var flutter_390_01pre = pub.Version.parse('3.9.0-0.1.pre'); 
+      expect(pub.Version.parse('3.9.0-0.2.pre') > flutter_390_01pre, isTrue);
+      expect(pub.Version.parse('3.9.0-1.0.pre.2') > flutter_390_01pre, isTrue);
+    });
   });
 }
