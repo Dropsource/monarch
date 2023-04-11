@@ -7,6 +7,11 @@ import 'builder_helper.dart';
 
 class MetaStoriesBuilder implements Builder {
   @override
+  Map<String, List<String>> get buildExtensions => const {
+        '.dart': ['.meta_stories.g.dart']
+      };
+
+  @override
   FutureOr<void> build(BuildStep buildStep) async {
     log.fine('Processing ${buildStep.inputId}');
 
@@ -59,7 +64,7 @@ class MetaStoriesBuilder implements Builder {
 
       /// Potential story function found. It is a potential story because we are not
       /// resolving the return type element, which would be expensive. Since we are
-      /// not resolving the return type element, then we cannot check it is of type Widget.
+      /// not resolving the return type element, then we cannot check if it is of type Widget.
       /// Instead, we will do a runtime check in [ProjectDataManager.load].
 
       var returnTypeName = returnType.name.name;
@@ -79,11 +84,6 @@ class MetaStoriesBuilder implements Builder {
 
     await buildStep.writeAsString(outputId, output);
   }
-
-  @override
-  Map<String, List<String>> get buildExtensions => const {
-        '.dart': ['.meta_stories.g.dart']
-      };
 
   String _outputContents(String pathToStoriesFile, AssetId storiesAssetId,
       List<String> storiesNames, Map<String, String> storiesMap) {
