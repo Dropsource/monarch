@@ -15,7 +15,8 @@ class ProjectDataManager with Log {
   void load(ProjectData Function() getData) {
     var data = getData();
 
-    var validatedMetaStories = _validateAndFilterMetaStories(data.metaStoriesMap);
+    var validatedMetaStories =
+        _validateAndFilterMetaStories(data.metaStoriesMap);
 
     var validatedMetaLocalizations =
         _validateAndFilterMetaLocalizations(data.metaLocalizations);
@@ -27,25 +28,33 @@ class ProjectDataManager with Log {
     activeTheme.setMetaThemes([..._data!.metaThemes, ...standardMetaThemes]);
   }
 
-  Map<String, MetaStories> _validateAndFilterMetaStories(Map<String, MetaStories> metaStoriesMap) {
+  Map<String, MetaStories> _validateAndFilterMetaStories(
+      Map<String, MetaStories> metaStoriesMap) {
+    var map = <String, MetaStories>{};
+
     for (var entry in metaStoriesMap.entries) {
       var metaStories = entry.value;
-      metaStories.storiesMap.removeWhere((key, value) {
-        if (value == null) {
+      _validationMessages.add(metaStories.storiesMap.length.toString());
+      metaStories.storiesMap.removeWhere((storyName, storyFunction) {
+        if (storyFunction == null) {
           _validationMessages.add('''
 $monarchWarningBegin
-Function `$key` is not of a story function of type `Widget Function()`. It will be ignored.
+Function `$storyName` is not of a story function of type `Widget Function()`. It will be ignored.
 $monarchWarningEnd
 ''');
+          metaStories.storiesNames.removeWhere((element) => element == storyName);
+          return true;
+        } else {
+          log.fine('Valid story found: ${metaStories.path} > $storyName');
           return false;
         }
-        else {
-          log.fine('Valid story found: ${metaStories.path} > $key');
-          return true;
-        }
       });
+      _validationMessages.add(metaStories.storiesMap.length.toString());
+
+      map[entry.key] = metaStories;
+      _validationMessages.add(map[entry.key]!.storiesMap.length.toString());
     }
-    return metaStoriesMap;
+    return map;
   }
 
   List<MetaLocalization> _validateAndFilterMetaLocalizations(
