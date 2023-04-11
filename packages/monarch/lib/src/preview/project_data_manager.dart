@@ -30,11 +30,8 @@ class ProjectDataManager with Log {
 
   Map<String, MetaStories> _validateAndFilterMetaStories(
       Map<String, MetaStories> metaStoriesMap) {
-    var map = <String, MetaStories>{};
-
     for (var entry in metaStoriesMap.entries) {
       var metaStories = entry.value;
-      _validationMessages.add(metaStories.storiesMap.length.toString());
       metaStories.storiesMap.removeWhere((storyName, storyFunction) {
         if (storyFunction == null) {
           _validationMessages.add('''
@@ -42,19 +39,16 @@ $monarchWarningBegin
 Function `$storyName` is not of a story function of type `Widget Function()`. It will be ignored.
 $monarchWarningEnd
 ''');
-          metaStories.storiesNames.removeWhere((element) => element == storyName);
+          metaStories.storiesNames
+              .removeWhere((element) => element == storyName);
           return true;
         } else {
           log.fine('Valid story found: ${metaStories.path} > $storyName');
           return false;
         }
       });
-      _validationMessages.add(metaStories.storiesMap.length.toString());
-
-      map[entry.key] = metaStories;
-      _validationMessages.add(map[entry.key]!.storiesMap.length.toString());
     }
-    return map;
+    return metaStoriesMap;
   }
 
   List<MetaLocalization> _validateAndFilterMetaLocalizations(

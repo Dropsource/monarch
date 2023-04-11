@@ -28,6 +28,11 @@ class MetaStoriesBuilder implements Builder {
       var returnType = declaration.returnType;
       var parameters = declaration.functionExpression.parameters;
 
+      if (Identifier.isPrivateName(functionName)) {
+        log.fine('Skipping: function `$functionName` is private.');
+        continue;
+      }
+
       if (returnType == null) {
         log.fine(
             'Skipping: function `$functionName` does not have a return type.');
