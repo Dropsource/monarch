@@ -17,7 +17,5 @@ Builder metaThemesBuilder(BuilderOptions options) =>
         generatedExtension: '.meta_themes.g.dart', allowSyntaxErrors: true);
 
 Builder metaStoriesBuilder(BuilderOptions options) => MetaStoriesBuilder();
-// LibraryBuilder(MetaStoriesGenerator(),
-//     generatedExtension: '.meta_stories.g.dart', allowSyntaxErrors: true);
 
 Builder mainBuilder(BuilderOptions options) => MainBuilder(options);

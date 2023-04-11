@@ -15,14 +15,37 @@ class ProjectDataManager with Log {
   void load(ProjectData Function() getData) {
     var data = getData();
 
+    var validatedMetaStories = _validateAndFilterMetaStories(data.metaStoriesMap);
+
     var validatedMetaLocalizations =
         _validateAndFilterMetaLocalizations(data.metaLocalizations);
     var validatedMetaThemes = _validateAndFilterMetaThemes(data.metaThemes);
 
     _data = ProjectData(data.packageName, validatedMetaLocalizations,
-        validatedMetaThemes, data.metaStoriesMap);
+        validatedMetaThemes, validatedMetaStories);
 
     activeTheme.setMetaThemes([..._data!.metaThemes, ...standardMetaThemes]);
+  }
+
+  Map<String, MetaStories> _validateAndFilterMetaStories(Map<String, MetaStories> metaStoriesMap) {
+    for (var entry in metaStoriesMap.entries) {
+      var metaStories = entry.value;
+      metaStories.storiesMap.removeWhere((key, value) {
+        if (value == null) {
+          _validationMessages.add('''
+$monarchWarningBegin
+Function `$key` is not of a story function of type `Widget Function()`. It will be ignored.
+$monarchWarningEnd
+''');
+          return false;
+        }
+        else {
+          log.fine('Valid story found: ${metaStories.path} > $key');
+          return true;
+        }
+      });
+    }
+    return metaStoriesMap;
   }
 
   List<MetaLocalization> _validateAndFilterMetaLocalizations(
