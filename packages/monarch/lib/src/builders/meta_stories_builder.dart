@@ -5,10 +5,12 @@ import 'package:build/build.dart';
 
 import 'builder_helper.dart';
 
+const metaStoriesExtension = '.meta_stories.g.dart';
+
 class MetaStoriesBuilder implements Builder {
   @override
   Map<String, List<String>> get buildExtensions => const {
-        '.dart': ['.meta_stories.g.dart']
+        '.dart': [metaStoriesExtension]
       };
 
   @override
@@ -18,9 +20,8 @@ class MetaStoriesBuilder implements Builder {
     var storiesNames = <String>[];
     var storiesMap = <String, String>{};
 
-    var resolver = buildStep.resolver;
-    var unit = await resolver.compilationUnitFor(buildStep.inputId,
-        allowSyntaxErrors: true);
+    var unit = await buildStep.resolver
+        .compilationUnitFor(buildStep.inputId, allowSyntaxErrors: true);
 
     for (var declaration in unit.declarations) {
       if (declaration is! FunctionDeclaration) {
@@ -80,7 +81,7 @@ class MetaStoriesBuilder implements Builder {
     final output = _outputContents(
         pathToStoriesFile, buildStep.inputId, storiesNames, storiesMap);
 
-    var outputId = buildStep.inputId.changeExtension('.meta_stories.g.dart');
+    var outputId = buildStep.inputId.changeExtension(metaStoriesExtension);
 
     await buildStep.writeAsString(outputId, output);
   }
@@ -88,11 +89,7 @@ class MetaStoriesBuilder implements Builder {
   String _outputContents(String pathToStoriesFile, AssetId storiesAssetId,
       List<String> storiesNames, Map<String, String> storiesMap) {
     return '''
-// GENERATED CODE - DO NOT MODIFY BY HAND
-
-// **************************************************************************
-// MetaStoriesBuilder - monarch
-// **************************************************************************
+${generatedCodeHeader('MetaStoriesBuilder')}
 
 import 'package:monarch/monarch.dart';
 import '$pathToStoriesFile';
