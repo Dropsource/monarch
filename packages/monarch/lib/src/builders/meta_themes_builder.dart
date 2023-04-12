@@ -9,7 +9,7 @@ import 'builder_helper.dart';
 
 const metaThemesExtension = '.meta_themes.g.dart';
 
-class MetaThemesBuilder extends Builder {
+class MetaThemesBuilder implements Builder {
   @override
   Map<String, List<String>> get buildExtensions => const {
         '.dart': [metaThemesExtension]
@@ -27,8 +27,8 @@ class MetaThemesBuilder extends Builder {
     }
 
     /// Calling `resolver.libraryFor` is expensive.
-    /// Therefore, we are only calling it on dart libraries that have
-    /// a `@MonarchTheme` string.
+    /// Therefore, we are only calling it on dart libraries that we suspect
+    /// have a monarch annotation.
     var libraryElement = await buildStep.resolver
         .libraryFor(buildStep.inputId, allowSyntaxErrors: true);
     var library = LibraryReader(libraryElement);
