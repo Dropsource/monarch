@@ -8,4 +8,5 @@ environment:
 dev_dependencies:
   test_process:
   path:
+  async:
   
