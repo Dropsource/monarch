@@ -48,6 +48,19 @@ void main() async {
   results.add(await _runPackageTests('monarch_io_utils', 'dart'));
   results.add(await _runPackageTests('monarch_utils', 'dart'));
 
+  {
+    print('''
+
+#### Running integration tests''');
+    var process = await Process.start('dart', ['test', '.'],
+        workingDirectory: local_repo_paths.test,
+        runInShell: Platform.isWindows);
+    stdout.addStream(process.stdout);
+    stderr.addStream(process.stderr);
+    var exitCode = await process.exitCode;
+    results.add(TestResult('integration', exitCode));
+  }
+
   print('''
 
 #### Test Results''');

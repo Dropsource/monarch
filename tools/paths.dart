@@ -19,6 +19,7 @@ class RepoPaths {
   String get packages => p.join(root, 'packages');
   String get platform => p.join(root, 'platform');
   String get tools => p.join(root, 'tools');
+  String get test => p.join(root, 'test');
 
   String get platform_macos => p.join(platform, 'macos');
   String get platform_windows => p.join(platform, 'windows');
