@@ -53,7 +53,7 @@ void main() async {
 
 #### Running integration tests''');
     var process = await Process.start('dart', ['test', '.'],
-        workingDirectory: local_repo_paths.test,
+        workingDirectory: local_repo_paths.test_integration,
         runInShell: Platform.isWindows);
     stdout.addStream(process.stdout);
     stderr.addStream(process.stderr);

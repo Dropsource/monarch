@@ -6,6 +6,9 @@ import 'package:test/test.dart';
 import 'package:monarch_utils/timers.dart';
 import 'package:path/path.dart' as p;
 
+String monarch_exe = 'monarch';
+String flutter_exe = 'flutter';
+
 Future<Directory> createWorkingDirectory() async {
   var workingDir = await Directory.systemTemp.createTemp('monarch_test_');
   print_('''
@@ -25,6 +28,11 @@ Writing processes output to:
   ${testLogFile.path}
 ''');
   return logSink;
+}
+
+Future<void> killMonarch() async {
+  await Process.run('pkill', ['Monarch']);
+  await Process.run('pkill', ['-f', 'bin/cache/dart-sdk/bin/dart']);
 }
 
 String prettyCommand(String executable, Iterable<String> arguments) =>

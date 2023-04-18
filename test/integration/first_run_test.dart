@@ -7,9 +7,6 @@ import 'package:monarch_utils/timers.dart';
 
 import 'test_utils.dart';
 
-String monarch_exe = 'monarch';
-String flutter_exe = 'flutter';
-
 void main() async {
   late Directory workingDir;
   late IOSink logSink;
@@ -22,6 +19,7 @@ void main() async {
   });
 
   tearDown(() async {
+    await killMonarch();
     logSink.close();
   });
 
@@ -59,10 +57,4 @@ void main() async {
     await monarchRun!.shouldExit();
     heartbeat.complete();
   }, timeout: Timeout(Duration(minutes: 2)));
-
-  tearDown(() async {
-    await Process.run('pkill', ['Monarch']);
-    await Process.run('pkill', ['-f', 'bin/cache/dart-sdk/bin/dart']);
-    logSink.close();
-  });
 }
