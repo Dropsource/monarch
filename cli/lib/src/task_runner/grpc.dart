@@ -19,9 +19,9 @@ class Grpc with Log {
 
   ClientChannel? _discoveryApiClientChannel;
 
-  Future<void> setUpDiscoveryApiServer() async {
+  Future<void> setUpDiscoveryApiServer(int? port) async {
     _discoveryApiServer = Server([DiscoveryApiService()]);
-    await _discoveryApiServer!.serve(port: 0);
+    await _discoveryApiServer!.serve(port: port ?? 0);
     log.info(
         'discovery_api grpc server (discovery api service) started on port $discoveryApiServerPort');
   }

@@ -98,7 +98,10 @@ class RunCommand extends Command {
           negatable: false,
           help: hardWrap(
               'When set, Monarch will generate stories that support non-null safe '
-              'libraries. Use this flag if your code has disabled sound null safety.'));
+              'libraries. Use this flag if your code has disabled sound null safety.'))
+      ..addOption('discovery-api-port',
+          help: hardWrap(
+              'The port for the Monarch Discovery API. Used for testing.'));
   }
 
   @override
@@ -109,13 +112,24 @@ class RunCommand extends Command {
         argResults!['delete-conflicting-outputs'];
     final bool noSoundNullSafety = argResults!['no-sound-null-safety'];
     final String reload = argResults!['reload'];
+    final String? discoveryApiPortString = argResults!['discovery-api-port'];
+
+    int? discoveryApiPort;
+    if (discoveryApiPortString != null) {
+      try {
+        discoveryApiPort = int.parse(discoveryApiPortString);
+      } on FormatException {
+        throw 'Could not parse --discovery-api-port';
+      }
+    }
 
     executeTaskRunner(
         isVerbose: isVerbose,
         isCrashDebug: isCrashDebug,
         isDeleteConflictingOutputs: isDeleteConflictingOutputs,
         noSoundNullSafety: noSoundNullSafety,
-        reloadOption: reload);
+        reloadOption: reload,
+        discoveryApiPort: discoveryApiPort);
   }
 }
 

@@ -22,6 +22,7 @@ dev_dependencies:
   test_process: 
   async:
   test:
+  monarch_grpc:
 
 flutter:
   uses-material-design: true

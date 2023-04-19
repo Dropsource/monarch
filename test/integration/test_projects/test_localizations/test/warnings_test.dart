@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 
@@ -18,8 +19,11 @@ void main() async {
     await Process.run(flutter_exe, ['clean']);
     await Process.run(flutter_exe, ['pub', 'get']);
 
-    monarchRun =
-        await TestProcess.start('monarch', ['run', '-v'], forwardStdio: false);
+    var discoverApiPort = 55445;
+
+    monarchRun = await TestProcess.start('monarch',
+        ['run', '-v', '--discovery-api-port', discoverApiPort.toString()],
+        forwardStdio: false);
 
     // expect 4 monarch warnings
     await verifyStreamMessages(monarchRun!.stdout, [
@@ -29,6 +33,23 @@ void main() async {
       emitsThrough(contains('MONARCH WARNING')),
       emitsThrough(startsWith('Launching Monarch app completed')),
     ]);
+
+    // NEXT: refactor
+    var discoveryChannel = constructClientChannel(discoverApiPort);
+    var discoveryApi = MonarchDiscoveryApiClient(discoveryChannel);
+    var previewApiServerInfo = await discoveryApi.getPreviewApi(Empty());
+    expect(previewApiServerInfo.hasPort(), isTrue);
+    var previewApiChannel = constructClientChannel(previewApiServerInfo.port);
+    var previewApi = MonarchPreviewApiClient(previewApiChannel);
+
+    var projectDataInfo = await previewApi.getProjectData(Empty());
+    expect(projectDataInfo.localizations, hasLength(3));
+    expect(
+        projectDataInfo.localizations
+            .map((e) => e.localeLanguageTags)
+            .expand((element) => element)
+            .toList(),
+        containsAll(['en-US', 'es-US', 'fr-FR']));
 
     monarchRun!.kill();
     await monarchRun!.shouldExit();
