@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/src/log/write_line_function.dart';
@@ -31,7 +32,19 @@ Writing processes output to:
   return logSink;
 }
 
+/// 250ms delay.
 Future<void> get briefly => Future.delayed(const Duration(milliseconds: 250));
+
+/// Returns random number in the range 50000 to 55000, which could be use 
+/// for a port number.
+/// We could use platform APIs if we need a more precise way to get a port number.
+/// Or if we need to make sure the port is not already in use.
+int getRandomPort() {
+  var random = Random();
+  return random.nextInt(5000) + 50000;
+}
+
+Matcher errorPattern() => matches(RegExp(r'.*error.*', caseSensitive: false));
 
 Future<void> killMonarch() async {
   await Process.run('pkill', ['Monarch']);

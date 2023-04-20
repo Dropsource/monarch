@@ -19,15 +19,16 @@ void main() async {
     await Process.run(flutter_exe, ['clean']);
     await Process.run(flutter_exe, ['pub', 'get']);
 
-    var discoveryApiPort = 55445;
+    var discoveryApiPort = getRandomPort();
 
     monarchRun = await TestProcess.start('monarch',
         ['run', '-v', '--discovery-api-port', discoveryApiPort.toString()],
         forwardStdio: false);
     var heartbeat = TestProcessHeartbeat(monarchRun!)..start();
 
-    // expect 4 monarch warnings
+    // expect 5 monarch warnings
     var stdout_ = monarchRun!.stdout;
+    await expectLater(stdout_, emitsThrough(contains('MONARCH WARNING')));
     await expectLater(stdout_, emitsThrough(contains('MONARCH WARNING')));
     await expectLater(stdout_, emitsThrough(contains('MONARCH WARNING')));
     await expectLater(stdout_, emitsThrough(contains('MONARCH WARNING')));
@@ -85,5 +86,12 @@ Type of `badLocalizationsDelegate` doesn't extend `LocalizationsDelegate<T>`. It
 `@MonarchLocalizations` annotation on `emptyDelegate` doesn't declare any locales. It will 
 be ignored.
 ════════════════════════════════════════════════════════════════════════════════════════════════════'''));
+
+    expect(output, contains('''
+══╡ MONARCH WARNING ╞═══════════════════════════════════════════════════════════════════════════════
+`MonarchLocalizations` annotation on library stories/localizations_outkast.dart will not be used.
+The `MonarchLocalizations` annotation should be used in libraries inside the lib directory.
+════════════════════════════════════════════════════════════════════════════════════════════════════'''));
+
   }, timeout: const Timeout(Duration(minutes: 1)));
 }

@@ -64,8 +64,7 @@ void main() async {
     expect(projectDataInfo.themes, hasLength(0));
     expect(projectDataInfo.localizations, hasLength(0));
 
-    expectLater(stdout_,
-        neverEmits(matches(RegExp(r'.*error.*', caseSensitive: false))));
+    expectLater(stdout_, neverEmits(errorPattern()));
 
     Future<void> setStoryAndVerify(String storyName) async {
       await previewApi.setStory(StoryIdInfo(
@@ -88,12 +87,14 @@ void main() async {
     expect(referenceDataInfo.standardThemes, hasLength(2));
     var someDeviceInfo = referenceDataInfo.devices[9];
     var someThemeInfo = referenceDataInfo.standardThemes[1];
-    var scale125Info = referenceDataInfo.scales.firstWhere((element) => element.scale == 1.25);
+    var scale125Info =
+        referenceDataInfo.scales.firstWhere((element) => element.scale == 1.25);
     await previewApi.setDevice(someDeviceInfo);
     await previewApi.setTheme(someThemeInfo);
     await previewApi.setTextScaleFactor(TextScaleFactorInfo(scale: 1.5));
     await previewApi.setScale(scale125Info);
-    await previewApi.toggleVisualDebugFlag(VisualDebugFlagInfo(name: 'showGuidelines', isEnabled: true));
+    await previewApi.toggleVisualDebugFlag(
+        VisualDebugFlagInfo(name: 'showGuidelines', isEnabled: true));
     await briefly;
 
     var selections = await previewApi.getSelectionsState(Empty());
