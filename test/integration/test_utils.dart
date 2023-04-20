@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:async/async.dart';
+import 'package:monarch_grpc/monarch_grpc.dart';
+import 'package:monarch_utils/src/log/write_line_function.dart';
 import 'package:test_process/test_process.dart';
 import 'package:test/test.dart';
 import 'package:monarch_utils/timers.dart';
@@ -38,7 +39,11 @@ Future<void> killMonarch() async {
 String prettyCommand(String executable, Iterable<String> arguments) =>
     '$executable ${arguments.join(' ')}';
 
-void print_(String message) => null; //print(message);
+void print_(String message) {
+  if (Platform.environment.containsKey('VERBOSE')) {
+    print(message);
+  }
+}
 
 Future<void> runProcess(
   String executable,
@@ -78,10 +83,37 @@ Future<TestProcess> startTestProcess(
   return testProcess;
 }
 
-Future<void> verifyStreamMessages(
-    StreamQueue<String> stream, List<StreamMatcher> matchers) async {
-  for (var matcher in matchers) {
-    await expectLater(stream, matcher);
-    print_('verified: ${matcher.description}');
-  }
+Future<MonarchPreviewApiClient> getPreviewApi(int discoveryApiPort) async {
+  var discoveryChannel = constructClientChannel(discoveryApiPort);
+  var discoveryApi = MonarchDiscoveryApiClient(discoveryChannel);
+  var previewApiServerInfo = await discoveryApi.getPreviewApi(Empty());
+  expect(previewApiServerInfo.hasPort(), isTrue);
+  var previewApiChannel = constructClientChannel(previewApiServerInfo.port);
+  return MonarchPreviewApiClient(previewApiChannel);
+}
+
+Future<void> runFlutterCreate(String projectName,
+    {required String workingDirectory, required IOSink sink}) async {
+  var process = await startTestProcess(flutter_exe, ['create', 'zeta'],
+      workingDirectory: workingDirectory, sink: sink);
+  var heartbeat = Heartbeat('`${process.description}`', print_)..start();
+  await expectLater(process.stdout, emitsThrough('All done!'));
+  await process.shouldExit();
+  heartbeat.complete();
+}
+
+Future<void> runMonarchInit(String projectName,
+    {required String workingDirectory, required IOSink sink}) async {
+  var process = await startTestProcess(monarch_exe, ['init', '-v'],
+      workingDirectory: workingDirectory, sink: sink);
+  var heartbeat = Heartbeat('`${process.description}`', print_)..start();
+  await expectLater(process.stdout,
+      emitsThrough('Monarch successfully initialized in this project.'));
+  await process.shouldExit();
+  heartbeat.complete();
+}
+
+class TestProcessHeartbeat extends Heartbeat {
+  TestProcessHeartbeat(TestProcess process)
+      : super('`${process.description}`', print_);
 }

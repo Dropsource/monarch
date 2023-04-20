@@ -10,3 +10,4 @@ dev_dependencies:
   path:
   async:
   monarch_utils:
+  monarch_grpc:

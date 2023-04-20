@@ -19,29 +19,24 @@ void main() async {
     await Process.run(flutter_exe, ['clean']);
     await Process.run(flutter_exe, ['pub', 'get']);
 
-    var discoverApiPort = 55445;
+    var discoveryApiPort = 55445;
 
     monarchRun = await TestProcess.start('monarch',
-        ['run', '-v', '--discovery-api-port', discoverApiPort.toString()],
+        ['run', '-v', '--discovery-api-port', discoveryApiPort.toString()],
         forwardStdio: false);
+    var heartbeat = TestProcessHeartbeat(monarchRun!)..start();
 
     // expect 4 monarch warnings
-    await verifyStreamMessages(monarchRun!.stdout, [
-      emitsThrough(contains('MONARCH WARNING')),
-      emitsThrough(contains('MONARCH WARNING')),
-      emitsThrough(contains('MONARCH WARNING')),
-      emitsThrough(contains('MONARCH WARNING')),
-      emitsThrough(startsWith('Launching Monarch app completed')),
-    ]);
+    var stdout_ = monarchRun!.stdout;
+    await expectLater(stdout_, emitsThrough(contains('MONARCH WARNING')));
+    await expectLater(stdout_, emitsThrough(contains('MONARCH WARNING')));
+    await expectLater(stdout_, emitsThrough(contains('MONARCH WARNING')));
+    await expectLater(stdout_, emitsThrough(contains('MONARCH WARNING')));
+    await expectLater(
+        stdout_, emitsThrough(startsWith('Launching Monarch app completed')));
 
-    // NEXT: refactor
-    var discoveryChannel = constructClientChannel(discoverApiPort);
-    var discoveryApi = MonarchDiscoveryApiClient(discoveryChannel);
-    var previewApiServerInfo = await discoveryApi.getPreviewApi(Empty());
-    expect(previewApiServerInfo.hasPort(), isTrue);
-    var previewApiChannel = constructClientChannel(previewApiServerInfo.port);
-    var previewApi = MonarchPreviewApiClient(previewApiChannel);
-
+    // verify locales using preview-api
+    var previewApi = await getPreviewApi(discoveryApiPort);
     var projectDataInfo = await previewApi.getProjectData(Empty());
     expect(projectDataInfo.localizations, hasLength(3));
     expect(
@@ -53,6 +48,7 @@ void main() async {
 
     monarchRun!.kill();
     await monarchRun!.shouldExit();
+    heartbeat.complete();
 
     StringBuffer outputBuffer = StringBuffer();
     await monarchRun!.stdoutStream().forEach(outputBuffer.writeln);

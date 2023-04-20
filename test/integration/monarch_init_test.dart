@@ -12,7 +12,7 @@ String flutter_exe = 'flutter';
 void main() async {
   late Directory workingDir;
   late IOSink logSink;
-  
+
   TestProcess? monarchInit;
 
   setUp(() async {
@@ -25,53 +25,72 @@ void main() async {
   });
 
   test('monarch init success', () async {
-    await runProcess(flutter_exe, ['create', 'zeta'],
+    await runFlutterCreate('zeta',
         workingDirectory: workingDir.path, sink: logSink);
 
     var zeta = p.join(workingDir.path, 'zeta');
 
     monarchInit = await startTestProcess(monarch_exe, ['init'],
         workingDirectory: zeta, sink: logSink);
+    var heartbeat = TestProcessHeartbeat(monarchInit!)..start();
 
-    await verifyStreamMessages(monarchInit!.stdout, [
-      emits(startsWith('Using flutter sdk at')),
-      emitsThrough('## Stay in touch'),
-      emits('- GitHub: https://github.com/Dropsource/monarch'),
-      emits('- Twitter: https://twitter.com/monarch_app'),
-      emits('- Newsletter: https://monarchapp.io/docs/community'),
-      emitsThrough('## Initializing zeta with Monarch'),
-      emits('Adding dev_dependencies `monarch` and `build_runner`...'),
-      emits('Setting up build.yaml...'),
-      emits('Creating sample stories in stories directory...'),
-      emits('Adding .monarch directory to .gitignore...'),
-      emits('Running "flutter pub get" in zeta...'),
-      emitsThrough('Monarch successfully initialized in this project.'),
-      emitsThrough('Now you can: '),
-      emits(
-          '- run Monarch using "monarch run" to see a few sample stories, or '),
-      emits(
-          '- write your first story (https://monarchapp.io/docs/write-first-story).'),
-    ]);
+    var stdout_ = monarchInit!.stdout;
+    await expectLater(stdout_, emits(startsWith('Using flutter sdk at')));
+    await expectLater(stdout_, emitsThrough('## Stay in touch'));
+    await expectLater(
+        stdout_, emits('- GitHub: https://github.com/Dropsource/monarch'));
+    await expectLater(
+        stdout_, emits('- Twitter: https://twitter.com/monarch_app'));
+    await expectLater(
+        stdout_, emits('- Newsletter: https://monarchapp.io/docs/community'));
+    await expectLater(
+        stdout_, emitsThrough('## Initializing zeta with Monarch'));
+    await expectLater(stdout_,
+        emits('Adding dev_dependencies `monarch` and `build_runner`...'));
+    await expectLater(stdout_, emits('Setting up build.yaml...'));
+    await expectLater(
+        stdout_, emits('Creating sample stories in stories directory...'));
+    await expectLater(
+        stdout_, emits('Adding .monarch directory to .gitignore...'));
+    await expectLater(stdout_, emits('Running "flutter pub get" in zeta...'));
+    await expectLater(stdout_,
+        emitsThrough('Monarch successfully initialized in this project.'));
+    await expectLater(stdout_, emitsThrough('Now you can: '));
+    await expectLater(
+        stdout_,
+        emits(
+            '- run Monarch using "monarch run" to see a few sample stories, or '));
+    await expectLater(
+        stdout_,
+        emits(
+            '- write your first story (https://monarchapp.io/docs/write-first-story).'));
 
     await monarchInit!.shouldExit();
+    heartbeat.complete();
   });
 
   test('monarch init in non-flutter directory', () async {
-    await runProcess(flutter_exe, ['create', 'yankee'],
+    await runFlutterCreate('yankee',
         workingDirectory: workingDir.path, sink: logSink);
 
     monarchInit = await startTestProcess(monarch_exe, ['init'],
         workingDirectory: workingDir.path, sink: logSink);
+    var heartbeat = TestProcessHeartbeat(monarchInit!)..start();
 
-    await verifyStreamMessages(monarchInit!.stdout, [
-      emits('Found configuration errors:'),
-      emits(
-          '- Could not find pubspec.yaml, make sure this is a flutter project directory'),
-      emits(
-          '- Could not find .dart_tool/package_config.json file, make sure to run `flutter pub get` first'),
-      emits('- Could not parse lockfile pubspec.lock.'),
-    ]);
+    var stdout_ = monarchInit!.stdout;
+    await expectLater(stdout_, emits('Found configuration errors:'));
+    await expectLater(
+        stdout_,
+        emits(
+            '- Could not find pubspec.yaml, make sure this is a flutter project directory'));
+    await expectLater(
+        stdout_,
+        emits(
+            '- Could not find .dart_tool/package_config.json file, make sure to run `flutter pub get` first'));
+    await expectLater(
+        stdout_, emits('- Could not parse lockfile pubspec.lock.'));
 
     await monarchInit!.shouldExit();
+    heartbeat.complete();
   });
 }

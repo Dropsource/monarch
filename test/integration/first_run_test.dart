@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 import 'package:path/path.dart' as p;
-import 'package:monarch_utils/timers.dart';
 
 import 'test_utils.dart';
 
@@ -24,36 +24,43 @@ void main() async {
   });
 
   test('flutter create, monarch init, monarch run', () async {
-    await runProcess(flutter_exe, ['create', 'zeta'],
+    await runFlutterCreate('zeta',
         workingDirectory: workingDir.path, sink: logSink);
 
     var zeta = p.join(workingDir.path, 'zeta');
-    await runProcess(monarch_exe, ['init', '-v'],
+    await runMonarchInit('zeta', workingDirectory: zeta, sink: logSink);
+
+    var discoveryApiPort = 56778;
+    monarchRun = await startTestProcess(monarch_exe,
+        ['run', '-v', '--discovery-api-port', discoveryApiPort.toString()],
         workingDirectory: zeta, sink: logSink);
+    var heartbeat = TestProcessHeartbeat(monarchRun!)..start();
 
-    monarchRun = await startTestProcess(monarch_exe, ['run', '-v'],
-        workingDirectory: zeta, sink: logSink);
-    var heartbeat = Heartbeat(
-        '`${prettyCommand(monarch_exe, ['run', '-v'])}`', print_,
-        checkInterval: Duration(seconds: 5))
-      ..start();
+    var stdout_ = monarchRun!.stdout;
+    await expectLater(
+        stdout_, emits(startsWith('Writing application logs to')));
+    await expectLater(stdout_, emitsThrough('Starting Monarch.'));
+    await expectLater(stdout_, emitsThrough('Preparing stories...'));
+    await expectLater(stdout_, emitsThrough('Launching Monarch app...'));
+    await expectLater(stdout_, emitsThrough('Attaching to stories...'));
+    await expectLater(stdout_, emitsThrough('Setting up stories watch...'));
+    await expectLater(stdout_, emitsThrough('Monarch key commands:'));
+    await expectLater(stdout_, emitsThrough(startsWith('Monarch is ready.')));
 
-    await verifyStreamMessages(monarchRun!.stdout, [
-      emits(startsWith('Writing application logs to')),
-      emitsThrough('Starting Monarch.'),
-      emitsThrough('Preparing stories...'),
-      emitsThrough('Launching Monarch app...'),
-      emitsThrough('Attaching to stories...'),
-      emitsThrough('Setting up stories watch...'),
-      emitsThrough('Monarch key commands:'),
-      emitsThrough(startsWith('Monarch is ready.')),
-    ]);
-
-    await Future.delayed(Duration(milliseconds: 500));
+    var previewApi = await getPreviewApi(discoveryApiPort);
+    var projectDataInfo = await previewApi.getProjectData(Empty());
+    var sampleStoriesKey =
+        'zeta|stories/sample_button_stories.meta_stories.g.dart';
+    expect(projectDataInfo.storiesMap.containsKey(sampleStoriesKey), isTrue);
+    expect(projectDataInfo.storiesMap, hasLength(1));
+    expect(
+        projectDataInfo.storiesMap[sampleStoriesKey]!.package, equals('zeta'));
+    expect(projectDataInfo.storiesMap[sampleStoriesKey]!.path,
+        equals('stories/sample_button_stories.dart'));
+    expect(projectDataInfo.storiesMap[sampleStoriesKey]!.storiesNames,
+        containsAll(['primary', 'secondary', 'disabled']));
 
     monarchRun!.kill();
-
-    await Future.delayed(Duration(milliseconds: 500));
     await monarchRun!.shouldExit();
     heartbeat.complete();
   }, timeout: Timeout(Duration(minutes: 2)));

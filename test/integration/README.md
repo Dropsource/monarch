@@ -12,3 +12,13 @@ The Monarch integration tests can:
 dart tool/run_tests.dart
 dart test test/first_run_test.dart
 ```
+
+Run test in verbose mode to see log messages and heartbeats.
+```
+VERBOSE=1 dart test monarch_init_test.dart
+```
+
+Run using 1 thread (1 job)
+```
+dart test . -j 1
+```
