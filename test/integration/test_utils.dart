@@ -46,9 +46,9 @@ int getRandomPort() {
 
 Matcher errorPattern() => matches(RegExp(r'.*error.*', caseSensitive: false));
 
-Future<void> killMonarch() async {
+Future<void> killMonarch(String projectName) async {
   await Process.run('pkill', ['Monarch']);
-  await Process.run('pkill', ['-f', 'bin/cache/dart-sdk/bin/dart']);
+  await Process.run('pkill', ['-f', '.dart_tool/build/generated/$projectName/lib/main_monarch.g.dart']);
 }
 
 String prettyCommand(String executable, Iterable<String> arguments) =>

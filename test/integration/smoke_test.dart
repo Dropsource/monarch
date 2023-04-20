@@ -19,7 +19,7 @@ void main() async {
   });
 
   tearDown(() async {
-    await killMonarch();
+    await killMonarch('zeta');
     logSink.close();
   });
 

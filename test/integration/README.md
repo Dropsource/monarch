@@ -21,4 +21,5 @@ VERBOSE=1 dart test monarch_init_test.dart
 Run using 1 thread (1 job)
 ```
 dart test . -j 1
+dart test -j 1
 ```

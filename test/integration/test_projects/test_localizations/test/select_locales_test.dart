@@ -12,7 +12,7 @@ void main() async {
   setUp(() async {});
 
   tearDown(() async {
-    await killMonarch();
+    await killMonarch('test_localizations');
   });
 
   test('select locales', () async {
