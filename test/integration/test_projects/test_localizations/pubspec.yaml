@@ -1,5 +1,5 @@
 name: test_localizations
-description: Used to test monarch localizations annotations
+description: Tests monarch localizations annotations.
 publish_to: 'none' 
 
 version: 1.0.0+1
