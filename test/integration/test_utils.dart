@@ -31,6 +31,8 @@ Writing processes output to:
   return logSink;
 }
 
+Future<void> get briefly => Future.delayed(const Duration(milliseconds: 250));
+
 Future<void> killMonarch() async {
   await Process.run('pkill', ['Monarch']);
   await Process.run('pkill', ['-f', 'bin/cache/dart-sdk/bin/dart']);
