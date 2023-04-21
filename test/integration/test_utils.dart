@@ -2,13 +2,17 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:monarch_grpc/monarch_grpc.dart';
-import 'package:monarch_utils/src/log/write_line_function.dart';
 import 'package:test_process/test_process.dart';
 import 'package:test/test.dart';
 import 'package:monarch_utils/timers.dart';
 import 'package:path/path.dart' as p;
 
+/// The monarch exe should be sourced in the environment PATH
+/// before running these tests.
 String monarch_exe = 'monarch';
+
+/// The flutter exe should be sourced in the environment PATH
+/// before running these tests.
 String flutter_exe = 'flutter';
 
 Future<Directory> createWorkingDirectory() async {
