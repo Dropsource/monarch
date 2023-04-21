@@ -52,7 +52,7 @@ void main() async {
     print('''
 
 #### Running integration tests''');
-    var process = await Process.start('dart', ['test', '.'],
+    var process = await Process.start('dart', ['test', '*_test.dart', '-j', '1'],
         workingDirectory: local_repo_paths.test_integration,
         runInShell: Platform.isWindows);
     stdout.addStream(process.stdout);

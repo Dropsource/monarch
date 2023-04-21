@@ -1,3 +1,3 @@
 # test_localizations
 
-A Monarch test project used to test monarch localizations annotations.
+Flutter project to test monarch localizations annotations.

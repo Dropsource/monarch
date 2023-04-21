@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 import 'package:path/path.dart' as p;
 
-import 'test_utils.dart';
+import '../utils/test_utils.dart';
 
 void main() async {
   late Directory workingDir;

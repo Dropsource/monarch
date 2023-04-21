@@ -1,5 +1,5 @@
-name: monarch_test_create
-description: Monarch integration tests to test new projects.
+name: monarch_test_utils
+description: Utils for Monarch integration tests.
 version: 
 
 environment:
@@ -8,5 +8,6 @@ environment:
 dev_dependencies:
   test_process:
   path:
+  async:
   monarch_utils:
   monarch_grpc:

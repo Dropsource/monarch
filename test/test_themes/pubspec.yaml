@@ -1,5 +1,5 @@
 name: test_themes
-description: Tests monarch themes annotations.
+description: Flutter project to test monarch themes annotations.
 publish_to: 'none' 
 
 version: 1.0.0+1

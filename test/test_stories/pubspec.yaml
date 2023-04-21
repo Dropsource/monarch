@@ -1,5 +1,5 @@
 name: test_stories
-description: Tests monarch stories code generation.
+description: Flutter project to test monarch stories code generation.
 publish_to: 'none' 
 
 version: 1.0.0+1
