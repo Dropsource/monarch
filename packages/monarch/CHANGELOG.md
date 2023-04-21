@@ -1,3 +1,7 @@
+## 3.1.0 - 2023-04-20
+- Faster code generation
+- Update vm_service dependency to `>=9.4.0`
+
 ## 3.0.1 - 2023-02-24
 - Flutter sdk version 3.8.0-0.0.pre
   introduces a new API for WidgetsBinding which is not compatible with this
