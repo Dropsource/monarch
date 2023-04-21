@@ -36,8 +36,6 @@ class RepoPaths {
   String get platform_linux_gen => p.join(platform_linux, 'gen');
   String get platform_linux_build => p.join(platform_linux, 'build');
   String get platform_linux_src => p.join(platform_linux, 'src');
-  
-  String get test_integration => p.join(test, 'integration');
 }
 
 class LocalOutPaths {

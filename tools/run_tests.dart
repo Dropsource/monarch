@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
+import 'package:monarch_utils/timers.dart';
 
 import 'paths.dart';
 
 void main() async {
+  var stopwatch = Stopwatch()..start();
   var results = <TestResult>[];
   print('''
 
@@ -48,18 +50,10 @@ void main() async {
   results.add(await _runPackageTests('monarch_io_utils', 'dart'));
   results.add(await _runPackageTests('monarch_utils', 'dart'));
 
-  {
-    print('''
-
-#### Running integration tests''');
-    var process = await Process.start('dart', ['test', '*_test.dart', '-j', '1'],
-        workingDirectory: local_repo_paths.test_integration,
-        runInShell: Platform.isWindows);
-    stdout.addStream(process.stdout);
-    stderr.addStream(process.stderr);
-    var exitCode = await process.exitCode;
-    results.add(TestResult('integration', exitCode));
-  }
+  results.add(await _runIntegrationTests('test_create'));
+  results.add(await _runIntegrationTests('test_localizations'));
+  results.add(await _runIntegrationTests('test_stories'));
+  results.add(await _runIntegrationTests('test_themes'));
 
   print('''
 
@@ -67,6 +61,9 @@ void main() async {
   for (var result in results) {
     print('- $result');
   }
+
+  print('Tests took ${stopwatch..stop()}.');
+
   if (results.any((element) => element.exitCode != 0)) {
     exit(1);
   } else {
@@ -93,4 +90,25 @@ Future<TestResult> _runPackageTests(String packageName, String command) async {
   stderr.addStream(process.stderr);
   var exitCode = await process.exitCode;
   return TestResult('$packageName package', exitCode);
+}
+
+Future<TestResult> _runIntegrationTests(String testDirectory) async {
+  print('''
+
+#### Running $testDirectory integration tests''');
+  // run integration tests with concurrency of 1
+  var fpg = await Process.start('flutter', ['pub', 'get'],
+      workingDirectory: p.join(local_repo_paths.test, testDirectory),
+      runInShell: Platform.isWindows);
+  stdout.addStream(fpg.stdout);
+  stderr.addStream(fpg.stderr);
+  await fpg.exitCode;
+
+  var process = await Process.start('dart', ['test', '-j', '1'],
+      workingDirectory: p.join(local_repo_paths.test, testDirectory),
+      runInShell: Platform.isWindows);
+  stdout.addStream(process.stdout);
+  stderr.addStream(process.stderr);
+  var exitCode = await process.exitCode;
+  return TestResult(testDirectory, exitCode);
 }

@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 import 'package:path/path.dart' as p;
 
-import '../utils/test_utils.dart';
+import '../../utils/test_utils.dart';
 
 String monarch_exe = 'monarch';
 String flutter_exe = 'flutter';

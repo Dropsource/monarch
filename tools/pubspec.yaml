@@ -9,5 +9,7 @@ dev_dependencies:
   path:
   yaml:
   pub_semver:
+  monarch_utils:
+    path: ../packages/monarch_utils/
   monarch_io_utils:
     path: ../packages/monarch_io_utils/
