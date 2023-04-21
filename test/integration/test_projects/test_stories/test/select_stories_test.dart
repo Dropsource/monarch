@@ -15,7 +15,7 @@ void main() async {
     await killMonarch('test_stories');
   });
 
-  test('select locales', () async {
+  test('select stories', () async {
     await Process.run(flutter_exe, ['pub', 'get']);
 
     var discoveryApiPort = getRandomPort();
