@@ -1,3 +1,9 @@
+.dart_tool/
+pubspec.lock
+.packages
+
+build/
+
 # monarch test_projects ignores
 /*/android
 /*/ios

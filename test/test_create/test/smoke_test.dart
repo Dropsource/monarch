@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 import 'package:path/path.dart' as p;
 
-import '../../utils/test_utils.dart';
+import 'package:monarch_test_utils/test_utils.dart';
 
 void main() async {
   late Directory workingDir;
@@ -32,7 +32,7 @@ void main() async {
     await runMonarchInit('zeta', workingDirectory: zeta, sink: logSink);
 
     var discoveryApiPort = 56778;
-    monarchRun = await startTestProcess(monarch_exe,
+    monarchRun = await startTestProcessFancy(monarch_exe,
         ['run', '-v', '--discovery-api-port', discoveryApiPort.toString()],
         workingDirectory: zeta, sink: logSink);
     var heartbeat = TestProcessHeartbeat(monarchRun!)..start();

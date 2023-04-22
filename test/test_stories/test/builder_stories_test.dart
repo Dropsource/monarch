@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 
-import '../../utils/test_utils.dart';
+import 'package:monarch_test_utils/test_utils.dart';
 
 void main() async {
   TestProcess? buildRunner;
@@ -13,10 +11,10 @@ void main() async {
   tearDown(() => null);
 
   test('stories builder codegen build_runner log messages', () async {
-    await Process.run(flutter_exe, ['clean']);
-    await Process.run(flutter_exe, ['pub', 'get']);
+    await runProcess(flutter_exe, ['clean']);
+    await runProcess(flutter_exe, ['pub', 'get']);
 
-    buildRunner = await TestProcess.start(
+    buildRunner = await startTestProcess(
         flutter_exe, ['pub', 'run', 'build_runner', 'build', '--verbose'],
         forwardStdio: false);
 

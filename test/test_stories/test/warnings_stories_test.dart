@@ -1,10 +1,8 @@
-import 'dart:io';
-
 import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 
-import '../../utils/test_utils.dart';
+import 'package:monarch_test_utils/test_utils.dart';
 
 void main() async {
   TestProcess? monarchRun;
@@ -16,12 +14,12 @@ void main() async {
   });
 
   test('monarch stories warnings', () async {
-    // await Process.run(flutter_exe, ['clean']);
-    await Process.run(flutter_exe, ['pub', 'get']);
+    // await runProcess(flutter_exe, ['clean']);
+    await runProcess(flutter_exe, ['pub', 'get']);
 
     var discoveryApiPort = getRandomPort();
 
-    monarchRun = await TestProcess.start(monarch_exe,
+    monarchRun = await startTestProcess(monarch_exe,
         ['run', '-v', '--discovery-api-port', discoveryApiPort.toString()],
         forwardStdio: false);
     var heartbeat = TestProcessHeartbeat(monarchRun!)..start();

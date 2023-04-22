@@ -5,6 +5,7 @@ import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:test_process/test_process.dart';
 import 'package:test/test.dart';
 import 'package:monarch_utils/timers.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:path/path.dart' as p;
 
 /// Returns the monarch exe path as set by environment variable
@@ -54,11 +55,28 @@ Matcher errorPattern() =>
     matches(RegExp(r'.*(error|severe).*', caseSensitive: false));
 
 Future<void> killMonarch(String projectName) async {
-  await Process.run('pkill', ['Monarch']);
-  await Process.run('pkill', [
-    '-f',
-    '.dart_tool/build/generated/$projectName/lib/main_monarch.g.dart'
-  ]);
+  await futureForPlatform(
+    macos: () async {
+      await runProcess('pkill', ['Monarch']);
+      await runProcess('pkill', [
+        '-f',
+        '.dart_tool/build/generated/$projectName/lib/main_monarch.g.dart'
+      ]);
+    },
+    windows: () async {
+      await runProcess(
+          'taskkill', ['/F', '/IM', 'monarch_windows_app.exe', '/T']);
+      await runProcess('taskkill', ['/F', '/IM', 'monarch.exe', '/T']);
+    },
+    linux: () async {
+      await runProcess('pkill', ['-f', 'monarch_linux_app']);
+      await runProcess('pkill', ['-f', 'monarch.run']);
+      await runProcess('pkill', [
+        '-f',
+        '.dart_tool/build/generated/$projectName/lib/main_monarch.g.dart'
+      ]);
+    },
+  );
 }
 
 String prettyCommand(String executable, Iterable<String> arguments) =>
@@ -70,7 +88,17 @@ void print_(String message) {
   }
 }
 
-Future<void> runProcess(
+Future<ProcessResult> runProcess(String executable, List<String> arguments,
+        {String? workingDirectory,
+        Map<String, String>? environment,
+        bool includeParentEnvironment = true}) =>
+    Process.run(executable, arguments,
+        workingDirectory: workingDirectory,
+        environment: environment,
+        includeParentEnvironment: includeParentEnvironment,
+        runInShell: Platform.isWindows);
+
+Future<void> runProcessFancy(
   String executable,
   List<String> arguments, {
   required String workingDirectory,
@@ -84,12 +112,27 @@ Future<void> runProcess(
   sink.writeln('${workingDirectory}\$ $prettyCommand_');
   sink.writeln();
   var result = await Process.run(executable, arguments,
-      workingDirectory: workingDirectory);
+      workingDirectory: workingDirectory, runInShell: Platform.isWindows);
   sink.write(result.stdout);
   heartbeat.complete();
 }
 
 Future<TestProcess> startTestProcess(
+        String executable, Iterable<String> arguments,
+        {String? workingDirectory,
+        Map<String, String>? environment,
+        bool includeParentEnvironment = true,
+        bool runInShell = false,
+        String? description,
+        bool forwardStdio = false}) =>
+    TestProcess.start(executable, arguments,
+        workingDirectory: workingDirectory,
+        includeParentEnvironment: includeParentEnvironment,
+        runInShell: Platform.isWindows,
+        description: description,
+        forwardStdio: forwardStdio);
+
+Future<TestProcess> startTestProcessFancy(
   String executable,
   Iterable<String> arguments, {
   required String workingDirectory,
@@ -100,7 +143,9 @@ Future<TestProcess> startTestProcess(
   sink.writeln('${workingDirectory}\$ $prettyCommand_');
   sink.writeln();
   var testProcess = await TestProcess.start(executable, arguments,
-      workingDirectory: workingDirectory, forwardStdio: false);
+      workingDirectory: workingDirectory,
+      forwardStdio: false,
+      runInShell: Platform.isWindows);
 
   var byteStream =
       testProcess.stdoutStream().map((event) => "$event\n".codeUnits);
@@ -119,7 +164,7 @@ Future<MonarchPreviewApiClient> getPreviewApi(int discoveryApiPort) async {
 
 Future<void> runFlutterCreate(String projectName,
     {required String workingDirectory, required IOSink sink}) async {
-  var process = await startTestProcess(flutter_exe, ['create', 'zeta'],
+  var process = await startTestProcessFancy(flutter_exe, ['create', 'zeta'],
       workingDirectory: workingDirectory, sink: sink);
   var heartbeat = Heartbeat('`${process.description}`', print_)..start();
   await expectLater(process.stdout, emitsThrough('All done!'));
@@ -129,7 +174,7 @@ Future<void> runFlutterCreate(String projectName,
 
 Future<void> runMonarchInit(String projectName,
     {required String workingDirectory, required IOSink sink}) async {
-  var process = await startTestProcess(monarch_exe, ['init', '-v'],
+  var process = await startTestProcessFancy(monarch_exe, ['init', '-v'],
       workingDirectory: workingDirectory, sink: sink);
   var heartbeat = Heartbeat('`${process.description}`', print_)..start();
   await expectLater(process.stdout,

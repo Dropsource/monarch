@@ -1,10 +1,10 @@
 import 'dart:io';
 
+import 'package:monarch_test_utils/test_utils.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 import 'package:path/path.dart' as p;
 
-import '../../utils/test_utils.dart';
 
 void main() async {
   late Directory workingDir;
@@ -27,7 +27,7 @@ void main() async {
 
     var zeta = p.join(workingDir.path, 'zeta');
 
-    monarchInit = await startTestProcess(monarch_exe, ['init'],
+    monarchInit = await startTestProcessFancy(monarch_exe, ['init'],
         workingDirectory: zeta, sink: logSink);
     var heartbeat = TestProcessHeartbeat(monarchInit!)..start();
 
@@ -70,7 +70,7 @@ void main() async {
     await runFlutterCreate('yankee',
         workingDirectory: workingDir.path, sink: logSink);
 
-    monarchInit = await startTestProcess(monarch_exe, ['init'],
+    monarchInit = await startTestProcessFancy(monarch_exe, ['init'],
         workingDirectory: workingDir.path, sink: logSink);
     var heartbeat = TestProcessHeartbeat(monarchInit!)..start();
 
