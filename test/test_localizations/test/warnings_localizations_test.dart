@@ -21,7 +21,7 @@ void main() async {
 
     var discoveryApiPort = getRandomPort();
 
-    monarchRun = await TestProcess.start('monarch',
+    monarchRun = await TestProcess.start(monarch_exe,
         ['run', '-v', '--discovery-api-port', discoveryApiPort.toString()],
         forwardStdio: false);
     var heartbeat = TestProcessHeartbeat(monarchRun!)..start();

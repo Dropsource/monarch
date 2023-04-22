@@ -7,13 +7,15 @@ import 'package:test/test.dart';
 import 'package:monarch_utils/timers.dart';
 import 'package:path/path.dart' as p;
 
-/// The monarch exe should be sourced in the environment PATH
-/// before running these tests.
-String monarch_exe = 'monarch';
+/// Returns the monarch exe path as set by environment variable
+/// MONARCH_EXE; if not set, then the monarch exe should be
+/// sourced in the environment PATH before running these tests.
+String monarch_exe = Platform.environment['MONARCH_EXE'] ?? 'monarch';
 
-/// The flutter exe should be sourced in the environment PATH
-/// before running these tests.
-String flutter_exe = 'flutter';
+/// Returns the flutter exe path as set by environment variables
+/// FLUTTER_EXE; if not set, then the flutter exe should be sourced
+/// in the environment PATH before running these tests.
+String flutter_exe = Platform.environment['FLUTTER_EXE'] ?? 'flutter';
 
 Future<Directory> createWorkingDirectory() async {
   var workingDir = await Directory.systemTemp.createTemp('monarch_test_');
@@ -39,7 +41,7 @@ Writing processes output to:
 /// 250ms delay.
 Future<void> get briefly => Future.delayed(const Duration(milliseconds: 250));
 
-/// Returns random number in the range 50000 to 55000, which could be use 
+/// Returns random number in the range 50000 to 55000, which could be use
 /// for a port number.
 /// We could use platform APIs if we need a more precise way to get a port number.
 /// Or if we need to make sure the port is not already in use.
@@ -48,11 +50,15 @@ int getRandomPort() {
   return random.nextInt(5000) + 50000;
 }
 
-Matcher errorPattern() => matches(RegExp(r'.*error.*', caseSensitive: false));
+Matcher errorPattern() =>
+    matches(RegExp(r'.*(error|severe).*', caseSensitive: false));
 
 Future<void> killMonarch(String projectName) async {
   await Process.run('pkill', ['Monarch']);
-  await Process.run('pkill', ['-f', '.dart_tool/build/generated/$projectName/lib/main_monarch.g.dart']);
+  await Process.run('pkill', [
+    '-f',
+    '.dart_tool/build/generated/$projectName/lib/main_monarch.g.dart'
+  ]);
 }
 
 String prettyCommand(String executable, Iterable<String> arguments) =>

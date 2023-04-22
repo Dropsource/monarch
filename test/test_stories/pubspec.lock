@@ -395,7 +395,7 @@ packages:
   monarch:
     dependency: "direct dev"
     description:
-      path: "../../../../packages/monarch"
+      path: "../../packages/monarch"
       relative: true
     source: path
     version: "3.1.0"

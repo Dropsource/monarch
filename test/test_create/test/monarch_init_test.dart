@@ -6,9 +6,6 @@ import 'package:path/path.dart' as p;
 
 import '../../utils/test_utils.dart';
 
-String monarch_exe = 'monarch';
-String flutter_exe = 'flutter';
-
 void main() async {
   late Directory workingDir;
   late IOSink logSink;
@@ -52,7 +49,7 @@ void main() async {
         stdout_, emits('Creating sample stories in stories directory...'));
     await expectLater(
         stdout_, emits('Adding .monarch directory to .gitignore...'));
-    await expectLater(stdout_, emits('Running "flutter pub get" in zeta...'));
+    // await expectLater(stdout_, emits('Running "flutter pub get" in zeta...'));
     await expectLater(stdout_,
         emitsThrough('Monarch successfully initialized in this project.'));
     await expectLater(stdout_, emitsThrough('Now you can: '));

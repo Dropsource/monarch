@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:monarch_grpc/monarch_grpc.dart';
@@ -42,6 +43,14 @@ void main() async {
     await expectLater(stdout_, emitsThrough('Starting Monarch.'));
     await expectLater(stdout_, emitsThrough('Preparing stories...'));
     await expectLater(stdout_, emitsThrough('Launching Monarch app...'));
+    try {
+      await expectLater(stdout_,
+              emitsThrough(startsWith('Launching Monarch app completed')))
+          .timeout(const Duration(seconds: 10));
+    } on TimeoutException {
+      fail(
+          '"Launching Monarch app" took too long to complete, possible error.');
+    }
     await expectLater(stdout_, emitsThrough('Attaching to stories...'));
     await expectLater(stdout_, emitsThrough('Setting up stories watch...'));
     await expectLater(stdout_, emitsThrough('Monarch key commands:'));
@@ -113,5 +122,5 @@ void main() async {
     monarchRun!.kill();
     await monarchRun!.shouldExit();
     heartbeat.complete();
-  }, timeout: Timeout(Duration(minutes: 2)));
+  }, timeout: Timeout(Duration(minutes: 1)));
 }
