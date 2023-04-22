@@ -37,3 +37,15 @@ Run using 1 thread (1 job)
 dart test . -j 1
 dart test -j 1
 ```
+
+### Run tests on Windows 
+For example, to pass environment variables needed by the test_create tests,
+using Powershell, go to the test_create directory and run:
+```
+PS C:\PATH\TO\monarch\test\test_create> $env:FLUTTER_EXE='C:\PATH\TO\bin\flutter'; $env:MONARCH_EXE='C:\PATH\TP\monarch\out\monarch\bin\monarch.exe'; dart test .\test\smoke_test.dart
+```
+
+Run in verbose mode:
+```
+PS > $env:VERBOSE=1; dart test -j 1
+```

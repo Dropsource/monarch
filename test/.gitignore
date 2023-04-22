@@ -2,7 +2,7 @@
 pubspec.lock
 .packages
 
-build/
+/*/build/
 
 # monarch test_projects ignores
 /*/android

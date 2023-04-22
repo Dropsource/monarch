@@ -73,7 +73,9 @@ void main() async {
     expect(projectDataInfo.themes, hasLength(0));
     expect(projectDataInfo.localizations, hasLength(0));
 
-    expectLater(stdout_, neverEmits(errorPattern()));
+    /// neverEmits doesn't work on Windows because on Windows the stream 
+    /// is not closed after killing the process
+    if (!Platform.isWindows) expectLater(stdout_, neverEmits(errorPattern()));
 
     Future<void> setStoryAndVerify(String storyName) async {
       await previewApi.setStory(StoryIdInfo(
