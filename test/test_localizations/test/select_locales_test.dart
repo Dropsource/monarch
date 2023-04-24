@@ -49,21 +49,25 @@ void main() async {
         'test_localizations|stories/localized_sample_button_stories.meta_stories.g.dart';
     var sampleStoriesPath = 'stories/localized_sample_button_stories.dart';
 
-    await previewApi.setStory(StoryIdInfo(
+    previewApi.setStory(StoryIdInfo(
         storiesMapKey: sampleStoriesKey,
         package: 'test_localizations',
         path: sampleStoriesPath,
         storyName: 'primary'));
 
-    await previewApi.setLocale(LocaleInfo(languageTag: 'fr-FR'));
-    await previewApi.setLocale(LocaleInfo(languageTag: 'en-US'));
-    await previewApi.setLocale(LocaleInfo(languageTag: 'es-US'));
+    previewApi.setLocale(LocaleInfo(languageTag: 'fr-FR'));
+    previewApi.setLocale(LocaleInfo(languageTag: 'en-US'));
+    previewApi.setLocale(LocaleInfo(languageTag: 'es-US'));
 
-    await briefly;
+    await expectLater(
+        notifications.selectionsStateStream,
+        emitsThrough(predicate<SelectionsStateInfo>(
+            (selections) => selections.storyId.storyName == 'primary')));
 
-    var selections = await previewApi.getSelectionsState(Empty());
-    expect(selections.storyId.storyName, equals('primary'));
-    expect(selections.locale.languageTag, 'es-US');
+    await expectLater(
+        notifications.selectionsStateStream,
+        emitsThrough(predicate<SelectionsStateInfo>(
+            (selections) => selections.locale.languageTag == 'es-US')));
 
     monarchRun!.kill();
     await monarchRun!.shouldExit();
