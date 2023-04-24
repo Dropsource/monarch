@@ -41,6 +41,8 @@ void main() async {
     await expectLater(
         stdout_, emits(startsWith('Writing application logs to')));
     await expectLater(stdout_, emitsThrough('Starting Monarch.'));
+    var notifications = await setUpTestNotificationsApi(discoveryApiPort);
+
     await expectLater(stdout_, emitsThrough('Preparing stories...'));
     await expectLater(stdout_, emitsThrough('Launching Monarch app...'));
     try {
@@ -74,15 +76,15 @@ void main() async {
     expect(projectDataInfo.localizations, hasLength(0));
 
     Future<void> setStoryAndVerify(String storyName) async {
-      await previewApi.setStory(StoryIdInfo(
+      previewApi.setStory(StoryIdInfo(
           storiesMapKey: sampleStoriesKey,
           package: 'zeta',
           path: sampleStoriesPath,
           storyName: storyName));
 
-      var selections = await previewApi.getSelectionsState(Empty());
-      expect(selections.storyId.storyName, equals(storyName));
-      await briefly;
+      await expectLater(notifications.selectionsStateStream, 
+        emitsThrough(predicate<SelectionsStateInfo>(
+            (selections) => selections.storyId.storyName == storyName)));
     }
 
     await setStoryAndVerify('disabled');

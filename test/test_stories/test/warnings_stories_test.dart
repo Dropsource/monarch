@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
@@ -28,20 +30,12 @@ void main() async {
     var stdout_ = monarchRun!.stdout;
     await expectLater(stdout_, emitsThrough(contains('MONARCH WARNING')));
     await expectLater(
-        stdout_, emitsThrough(startsWith('Launching Monarch app completed')));
-
-    // verify stories using preview-api
-    var previewApi = await getPreviewApi(discoveryApiPort);
-    var projectDataInfo = await previewApi.getProjectData(Empty());
-    expect(projectDataInfo.storiesMap, hasLength(2));
-    expect(
-        projectDataInfo.storiesMap.values
-            .expand((element) => element.storiesNames),
-        containsAll(['ggg', 'hhh', 'primary', 'secondary', 'disabled']));
+        stdout_, emitsThrough(startsWith('Attaching to stories completed')));
 
     monarchRun!.kill();
     await monarchRun!.shouldExit();
     heartbeat.complete();
+    if (Platform.isWindows) killMonarch('test_localizations');
 
     StringBuffer outputBuffer = StringBuffer();
     await monarchRun!.stdoutStream().forEach(outputBuffer.writeln);

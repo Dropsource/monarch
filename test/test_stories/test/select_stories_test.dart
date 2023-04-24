@@ -24,16 +24,26 @@ void main() async {
     var heartbeat = TestProcessHeartbeat(monarchRun!)..start();
 
     var stdout_ = monarchRun!.stdout;
+
+    await expectLater(stdout_, emitsThrough(startsWith('Starting Monarch.')));
+    var notifications = await setUpTestNotificationsApi(discoveryApiPort);
+
     await expectLater(
         stdout_, emitsThrough(startsWith('Launching Monarch app completed')));
 
+    await expectLater(notifications.projectDataStream,
+        emitsThrough(predicate<ProjectDataInfo>((projectData) {
+      if (projectData.storiesMap.length != 2) return false;
+      var stories = projectData.storiesMap.values
+          .expand((element) => element.storiesNames);
+      return stories.contains('ggg') &&
+          stories.contains('hhh') &&
+          stories.contains('primary') &&
+          stories.contains('secondary') &&
+          stories.contains('disabled');
+    })));
+
     var previewApi = await getPreviewApi(discoveryApiPort);
-    var projectDataInfo = await previewApi.getProjectData(Empty());
-    expect(projectDataInfo.storiesMap, hasLength(2));
-    expect(
-        projectDataInfo.storiesMap.values
-            .expand((element) => element.storiesNames),
-        containsAll(['ggg', 'hhh', 'primary', 'secondary', 'disabled']));
 
     var sampleStoriesKey =
         'test_stories|stories/sample_button_stories.meta_stories.g.dart';
@@ -43,38 +53,38 @@ void main() async {
         'test_stories|stories/funky_stories.meta_stories.g.dart';
     var funkyStoriesPath = 'stories/funky_stories.dart';
 
+    var projectDataInfo = await previewApi.getProjectData(Empty());
     expect(projectDataInfo.storiesMap.containsKey(sampleStoriesKey), isTrue);
     expect(projectDataInfo.storiesMap.containsKey(funkyStoriesKey), isTrue);
 
-    Future<void> setFunkyStory(String storyName) async {
-      await previewApi.setStory(StoryIdInfo(
-          storiesMapKey: funkyStoriesKey,
-          package: 'test_stories',
-          path: funkyStoriesPath,
-          storyName: storyName));
-      await briefly;
-    }
+    Future<void> setFunkyStory(String storyName) =>
+        previewApi.setStory(StoryIdInfo(
+            storiesMapKey: funkyStoriesKey,
+            package: 'test_stories',
+            path: funkyStoriesPath,
+            storyName: storyName));
 
-    Future<void> setSampleStory(String storyName) async {
-      await previewApi.setStory(StoryIdInfo(
-          storiesMapKey: sampleStoriesKey,
-          package: 'test_stories',
-          path: sampleStoriesPath,
-          storyName: storyName));
-      await briefly;
-    }
+    Future<void> setSampleStory(String storyName) =>
+        previewApi.setStory(StoryIdInfo(
+            storiesMapKey: sampleStoriesKey,
+            package: 'test_stories',
+            path: sampleStoriesPath,
+            storyName: storyName));
 
-    await setFunkyStory('hhh');
-    await setSampleStory('secondary');
-    await setFunkyStory('ggg');
-    await setSampleStory('primary');
-    await setFunkyStory('hhh');
+    setFunkyStory('hhh');
+    setSampleStory('secondary');
+    setFunkyStory('ggg');
+    setSampleStory('primary');
+    setFunkyStory('hhh');
 
-    var selections = await previewApi.getSelectionsState(Empty());
-    expect(selections.storyId.storyName, equals('hhh'));
-    expect(selections.storyId.package, equals('test_stories'));
-    expect(selections.storyId.path, equals(funkyStoriesPath));
-    expect(selections.storyId.storiesMapKey, equals(funkyStoriesKey));
+    await expectLater(notifications.selectionsStateStream,
+        emitsThrough(predicate<SelectionsStateInfo>((selections) {
+      var storyId = selections.storyId;
+      return storyId.storyName == 'hhh' &&
+          storyId.package == 'test_stories' &&
+          storyId.path == funkyStoriesPath &&
+          storyId.storiesMapKey == funkyStoriesKey;
+    })));
 
     monarchRun!.kill();
     await monarchRun!.shouldExit();

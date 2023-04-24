@@ -13,6 +13,18 @@ Future<void> main(List<String> arguments) async {
   var flutter_exe_ = arguments[0];
   var monarch_exe_ = arguments[1];
 
+  var results = await runTests(flutter_exe_, monarch_exe_);
+
+  if (results.any((result) => !result.passed)) {
+    exit(1);
+  }
+  else {
+    exit(0);
+  }
+}
+
+Future<List<TestResult>> runTests(String flutter_exe_, String monarch_exe_) async {
+
   var stopwatch = Stopwatch()..start();
   var results = <TestResult>[];
 
@@ -129,7 +141,7 @@ $testArgumentsPrint''');
     results.add(await runIntegrationTests('test_themes'));
   }
 
-  print(testArgumentsPrint);
+  print('\n$testArgumentsPrint');
 
   print('''
 
@@ -144,17 +156,16 @@ $testArgumentsPrint''');
 ===============================================================================
 ''');
 
-  if (results.any((element) => element.exitCode != 0)) {
-    exit(1);
-  } else {
-    exit(0);
-  }
+  return results;
 }
 
 class TestResult {
   final String module;
   final int exitCode;
+  bool get passed => exitCode == 0;
+
   TestResult(this.module, this.exitCode);
+  
   @override
   String toString() => '$module tests ${exitCode == 0 ? 'passed' : 'FAILED'}';
 }
