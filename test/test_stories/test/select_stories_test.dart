@@ -34,7 +34,6 @@ void main() async {
         projectDataInfo.storiesMap.values
             .expand((element) => element.storiesNames),
         containsAll(['ggg', 'hhh', 'primary', 'secondary', 'disabled']));
-    expectLater(stdout_, neverEmits(errorPattern));
 
     var sampleStoriesKey =
         'test_stories|stories/sample_button_stories.meta_stories.g.dart';

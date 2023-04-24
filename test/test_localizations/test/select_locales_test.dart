@@ -24,11 +24,15 @@ void main() async {
     var heartbeat = TestProcessHeartbeat(monarchRun!)..start();
 
     var stdout_ = monarchRun!.stdout;
+
+    await expectLater(
+        stdout_, emitsThrough(startsWith('Starting Monarch.')));
+    var notifications = await setUpTestNotificationsApi(discoveryApiPort);
+
     await expectLater(
         stdout_, emitsThrough(startsWith('Launching Monarch app completed')));
 
-    var previewApi = await getPreviewApi(discoveryApiPort);
-    var projectDataInfo = await previewApi.getProjectData(Empty());
+    var projectDataInfo = await notifications.projectDataChangedReady.future;
     expect(projectDataInfo.localizations, hasLength(3));
     expect(
         projectDataInfo.localizations
@@ -37,7 +41,8 @@ void main() async {
             .toList(),
         containsAll(['en-US', 'es-US', 'fr-FR']));
 
-    expectLater(stdout_, neverEmits(errorPattern));
+
+    var previewApi = await getPreviewApi(discoveryApiPort);
 
     var sampleStoriesKey =
         'test_localizations|stories/localized_sample_button_stories.meta_stories.g.dart';

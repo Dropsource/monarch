@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:grpc/grpc.dart';
 
 import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:test_process/test_process.dart';
@@ -7,6 +8,8 @@ import 'package:test/test.dart';
 import 'package:monarch_utils/timers.dart';
 import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:path/path.dart' as p;
+
+import 'test_preview_notifications_api_service.dart';
 
 /// Returns the monarch exe path as set by environment variable
 /// MONARCH_EXE; if not set, then the monarch exe should be
@@ -153,13 +156,41 @@ Future<TestProcess> startTestProcessFancy(
   return testProcess;
 }
 
+Future<TestPreviewNotificationsApiService> setUpTestNotificationsApi(
+    int discoveryApiPort) async {
+  var notifications = TestPreviewNotificationsApiService();
+  var server = Server([notifications]);
+  await server.serve(port: 0);
+
+  var discoveryChannel = constructClientChannel(discoveryApiPort);
+  var discoveryApi = MonarchDiscoveryApiClient(discoveryChannel);
+  await discoveryApi
+      .registerPreviewNotificationsApi(ServerInfo(port: server.port!));
+
+  return notifications;
+}
+
 Future<MonarchPreviewApiClient> getPreviewApi(int discoveryApiPort) async {
   var discoveryChannel = constructClientChannel(discoveryApiPort);
   var discoveryApi = MonarchDiscoveryApiClient(discoveryChannel);
-  var previewApiServerInfo = await discoveryApi.getPreviewApi(Empty());
-  expect(previewApiServerInfo.hasPort(), isTrue);
-  var previewApiChannel = constructClientChannel(previewApiServerInfo.port);
-  return MonarchPreviewApiClient(previewApiChannel);
+  const maxRetries = 10;
+
+  Future<int> getPreviewApiPort() async {
+    var serverInfo = await discoveryApi.getPreviewApi(Empty());
+    return serverInfo.hasPort() ? serverInfo.port : -1;
+  }
+
+  for (var i = 0; i < maxRetries; i++) {
+    int port = await getPreviewApiPort();
+    if (port > -1) {
+      var channel = constructClientChannel(port);
+      return MonarchPreviewApiClient(channel);
+    }
+    await Future.delayed(const Duration(milliseconds: 50));
+  }
+
+  fail(
+      'Test could not get Preview API port from the Discovery API after $maxRetries attemps.');
 }
 
 Future<void> runFlutterCreate(String projectName,

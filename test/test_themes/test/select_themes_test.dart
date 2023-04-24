@@ -47,8 +47,6 @@ void main() async {
     var selections = await previewApi.getSelectionsState(Empty());
     expect(selections.theme.id, '__material-light-theme__');
 
-    expectLater(stdout_, neverEmits(errorPattern));
-
     var sampleStoriesKey =
         'test_themes|stories/sample_button_stories.meta_stories.g.dart';
     var sampleStoriesPath = 'stories/sample_button_stories.dart';

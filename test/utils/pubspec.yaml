@@ -12,3 +12,4 @@ dev_dependencies:
   monarch_utils:
   monarch_io_utils:
   monarch_grpc:
+  grpc: ^3.1.0
