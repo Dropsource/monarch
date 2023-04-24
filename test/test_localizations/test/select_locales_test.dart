@@ -25,22 +25,23 @@ void main() async {
 
     var stdout_ = monarchRun!.stdout;
 
-    await expectLater(
-        stdout_, emitsThrough(startsWith('Starting Monarch.')));
+    await expectLater(stdout_, emitsThrough(startsWith('Starting Monarch.')));
     var notifications = await setUpTestNotificationsApi(discoveryApiPort);
 
     await expectLater(
         stdout_, emitsThrough(startsWith('Launching Monarch app completed')));
 
-    var projectDataInfo = await notifications.projectDataChangedReady.future;
-    expect(projectDataInfo.localizations, hasLength(3));
-    expect(
-        projectDataInfo.localizations
-            .map((e) => e.localeLanguageTags)
-            .expand((element) => element)
-            .toList(),
-        containsAll(['en-US', 'es-US', 'fr-FR']));
-
+    await expectLater(notifications.projectDataStream,
+        emitsThrough(predicate<ProjectDataInfo>((projectData) {
+      if (projectData.localizations.length != 3) return false;
+      var languageTags = projectData.localizations
+          .map((e) => e.localeLanguageTags)
+          .expand((element) => element)
+          .toList();
+      return languageTags.contains('en-US') &&
+          languageTags.contains('es-US') &&
+          languageTags.contains('fr-FR');
+    })));
 
     var previewApi = await getPreviewApi(discoveryApiPort);
 
@@ -49,10 +50,10 @@ void main() async {
     var sampleStoriesPath = 'stories/localized_sample_button_stories.dart';
 
     await previewApi.setStory(StoryIdInfo(
-          storiesMapKey: sampleStoriesKey,
-          package: 'test_localizations',
-          path: sampleStoriesPath,
-          storyName: 'primary'));
+        storiesMapKey: sampleStoriesKey,
+        package: 'test_localizations',
+        path: sampleStoriesPath,
+        storyName: 'primary'));
 
     await previewApi.setLocale(LocaleInfo(languageTag: 'fr-FR'));
     await previewApi.setLocale(LocaleInfo(languageTag: 'en-US'));

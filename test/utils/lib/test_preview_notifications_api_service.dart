@@ -3,12 +3,17 @@ import 'dart:async';
 import 'package:grpc/grpc.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
 
-
 class TestPreviewNotificationsApiService
     extends MonarchPreviewNotificationsApiServiceBase {
+  final _projectDataStreamController =
+      StreamController<ProjectDataInfo>.broadcast();
+  Stream<ProjectDataInfo> get projectDataStream =>
+      _projectDataStreamController.stream;
 
-  Completer<ProjectDataInfo> projectDataChangedReady = Completer();
-  Completer<SelectionsStateInfo> selectionsStateChangedReady = Completer();
+  final _selectionsStateStreamController =
+      StreamController<SelectionsStateInfo>.broadcast();
+  Stream<SelectionsStateInfo> get selectionsStateStream =>
+      _selectionsStateStreamController.stream;
 
   TestPreviewNotificationsApiService();
 
@@ -20,16 +25,14 @@ class TestPreviewNotificationsApiService
 
   @override
   Future<Empty> projectDataChanged(ServiceCall call, ProjectDataInfo request) {
-    projectDataChangedReady.complete(request);
-    projectDataChangedReady = new Completer();
+    _projectDataStreamController.add(request);
     return Future.value(Empty());
   }
 
   @override
   Future<Empty> selectionsStateChanged(
       ServiceCall call, SelectionsStateInfo request) {
-    selectionsStateChangedReady.complete(request);
-    selectionsStateChangedReady = new Completer();
+    _selectionsStateStreamController.add(request);
     return Future.value(Empty());
   }
 
