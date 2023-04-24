@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
@@ -26,8 +24,23 @@ void main() async {
     var heartbeat = TestProcessHeartbeat(monarchRun!)..start();
 
     var stdout_ = monarchRun!.stdout;
+
+    await expectLater(stdout_, emitsThrough(startsWith('Starting Monarch.')));
+    var notifications = await setUpTestNotificationsApi(discoveryApiPort);
+
     await expectLater(
         stdout_, emitsThrough(startsWith('Launching Monarch app completed')));
+
+    await expectLater(notifications.projectDataStream,
+        emitsThrough(predicate<ProjectDataInfo>((projectData) {
+      if (projectData.themes.length != 3) return false;
+      var languageTags = projectData.themes
+          .map((e) => e.name)
+          .toList();
+      return languageTags.contains('Theme Getter - Dark') &&
+          languageTags.contains('Theme Variable - Dark') &&
+          languageTags.contains('Theme Final Variable - Light');
+    })));
 
     var previewApi = await getPreviewApi(discoveryApiPort);
 
@@ -35,27 +48,13 @@ void main() async {
     expect(referenceDataInfo.standardThemes, hasLength(2));
 
     var projectDataInfo = await previewApi.getProjectData(Empty());
-    expect(projectDataInfo.themes, hasLength(3));
-    expect(
-        projectDataInfo.themes.map((e) => e.name).toList(),
-        containsAll([
-          'Theme Getter - Dark',
-          'Theme Variable - Dark',
-          'Theme Final Variable - Light'
-        ]));
-
+    
     var selections = await previewApi.getSelectionsState(Empty());
     expect(selections.theme.id, '__material-light-theme__');
 
     var sampleStoriesKey =
         'test_themes|stories/sample_button_stories.meta_stories.g.dart';
     var sampleStoriesPath = 'stories/sample_button_stories.dart';
-
-    await previewApi.setStory(StoryIdInfo(
-        storiesMapKey: sampleStoriesKey,
-        package: 'test_themes',
-        path: sampleStoriesPath,
-        storyName: 'primary'));
 
     var themeGetterDark = projectDataInfo.themes
         .firstWhere((element) => element.name == 'Theme Getter - Dark');
@@ -64,15 +63,24 @@ void main() async {
     var themeFinalVariableLight = projectDataInfo.themes.firstWhere(
         (element) => element.name == 'Theme Final Variable - Light');
 
-    await previewApi.setTheme(themeGetterDark);
-    await previewApi.setTheme(themeVariableDark);
-    await previewApi.setTheme(themeFinalVariableLight);
+    previewApi.setStory(StoryIdInfo(
+        storiesMapKey: sampleStoriesKey,
+        package: 'test_themes',
+        path: sampleStoriesPath,
+        storyName: 'primary'));
+    previewApi.setTheme(themeGetterDark);
+    previewApi.setTheme(themeVariableDark);
+    previewApi.setTheme(themeFinalVariableLight);
 
-    await briefly;
+    await expectLater(
+        notifications.selectionsStateStream,
+        emitsThrough(predicate<SelectionsStateInfo>(
+            (selections) => selections.storyId.storyName == 'primary')));
 
-    selections = await previewApi.getSelectionsState(Empty());
-    expect(selections.storyId.storyName, equals('primary'));
-    expect(selections.theme.id, themeFinalVariableLight.id);
+    await expectLater(
+        notifications.selectionsStateStream,
+        emitsThrough(predicate<SelectionsStateInfo>(
+            (selections) => selections.theme.id == themeFinalVariableLight.id)));
 
     monarchRun!.kill();
     await monarchRun!.shouldExit();
