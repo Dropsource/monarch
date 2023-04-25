@@ -1,20 +1,43 @@
-import 'package:build/build.dart';
-import 'package:source_gen/source_gen.dart';
-import 'package:analyzer/dart/element/element.dart';
+import 'dart:async';
 
+import 'package:analyzer/dart/element/element.dart';
+import 'package:build/build.dart';
 import 'package:monarch_annotations/monarch_annotations.dart';
+import 'package:source_gen/source_gen.dart';
 
 import 'builder_helper.dart';
 
-const TypeChecker monarchLocalizationsTypeChecker =
-    TypeChecker.fromRuntime(MonarchLocalizations);
+const metaLocalizationsExtension = '.meta_localizations.g.dart';
 
-class MetaLocalizationsGenerator extends Generator {
+class MetaLocalizationsBuilder implements Builder {
   @override
-  String? generate(LibraryReader library, BuildStep buildStep) {
+  Map<String, List<String>> get buildExtensions => const {
+        '.dart': [metaLocalizationsExtension]
+      };
+
+  @override
+  FutureOr<void> build(BuildStep buildStep) async {
+    /// @GOTCHA: Optimization:
+    /// This is a quick-and-rough way to check for the presence of an annotation.
+    /// The proper way is to resolve the compilation unit. However, that is
+    /// slow to do on every file in the user's project.
+    var contents = await buildStep.readAsString(buildStep.inputId);
+    if (!contents.contains('@MonarchLocalizations')) {
+      return;
+    }
+
+    /// Calling `resolver.libraryFor` is expensive.
+    /// Therefore, we are only calling it on dart libraries that we suspect
+    /// have a monarch annotation.
+    var libraryElement = await buildStep.resolver
+        .libraryFor(buildStep.inputId, allowSyntaxErrors: true);
+    var library = LibraryReader(libraryElement);
+    var monarchLocalizationsTypeChecker =
+        TypeChecker.fromRuntime(MonarchLocalizations);
+
     final annotations = library.annotatedWith(monarchLocalizationsTypeChecker);
     if (annotations.isEmpty) {
-      return null;
+      return;
     }
 
     final expressions = <String>[];
@@ -82,7 +105,10 @@ $monarchWarningEnd
     }
 
     if (isInLib(buildStep.inputId)) {
-      return _outputContents(buildStep.inputId.uri.toString(), expressions);
+      var output = _outputContents(buildStep.inputId.uri.toString(), expressions);
+      var outputId = buildStep.inputId.changeExtension(metaLocalizationsExtension);
+
+      await buildStep.writeAsString(outputId, output);
     } else {
       // Could not compute import URI to file with MonarchLocalizations annotation
       // outside of lib directory.
@@ -92,13 +118,15 @@ $monarchWarningBegin
 The `@MonarchLocalizations` annotation should be used in libraries inside the lib directory.
 $monarchWarningEnd
 ''');
-      return null;
+      return;
     }
   }
 
   String _outputContents(String pathToLocalizationsFile,
       List<String> metaLocalizationExpressions) {
     return '''
+${generatedCodeHeader('MetaLocalizationsBuilder')}
+
 import 'dart:ui';
 import 'package:monarch/monarch.dart';
 import '$pathToLocalizationsFile';
