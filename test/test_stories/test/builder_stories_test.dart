@@ -6,14 +6,13 @@ import 'package:monarch_test_utils/test_utils.dart';
 void main() async {
   TestProcess? buildRunner;
 
-  setUp(() => null);
+  setUp(() async {
+    await runFlutterCleanUpgradeGet();
+  });
 
   tearDown(() => null);
 
   test('stories builder codegen build_runner log messages', () async {
-    await runProcess(flutter_exe, ['clean']);
-    await runProcess(flutter_exe, ['pub', 'get']);
-
     buildRunner = await startTestProcess(
         flutter_exe, ['pub', 'run', 'build_runner', 'build', '--verbose'],
         forwardStdio: false);

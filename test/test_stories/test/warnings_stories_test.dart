@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 
@@ -9,15 +8,15 @@ import 'package:monarch_test_utils/test_utils.dart';
 void main() async {
   TestProcess? monarchRun;
 
-  setUp(() async {});
+  setUp(() async {
+    await runFlutterCleanUpgradeGet();
+  });
 
   tearDown(() async {
     await killMonarch('test_stories');
   });
 
   test('monarch stories warnings', () async {
-    // await runProcess(flutter_exe, ['clean']);
-    await runProcess(flutter_exe, ['pub', 'get']);
 
     var discoveryApiPort = getRandomPort();
 

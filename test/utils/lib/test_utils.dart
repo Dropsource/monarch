@@ -14,7 +14,8 @@ import 'test_preview_notifications_api_service.dart';
 /// Returns the monarch exe path as set by environment variable
 /// MONARCH_EXE; if not set, then the monarch exe should be
 /// sourced in the environment PATH before running these tests.
-String monarch_exe = Platform.environment['MONARCH_EXE'] ?? '/Users/fertrig/development/monarch_product/monarch/out/monarch/bin/monarch';
+String monarch_exe = Platform.environment['MONARCH_EXE'] ??
+    '/Users/fertrig/development/monarch_product/monarch/out/monarch/bin/monarch';
 
 /// Returns the flutter exe path as set by environment variables
 /// FLUTTER_EXE; if not set, then the flutter exe should be sourced
@@ -193,6 +194,12 @@ Future<MonarchPreviewApiClient> getPreviewApi(int discoveryApiPort) async {
       'Test could not get Preview API port from the Discovery API after $maxRetries attemps.');
 }
 
+Future<void> runFlutterCleanUpgradeGet() async {
+  await runProcess(flutter_exe, ['clean']);
+  await runProcess(flutter_exe, ['pub', 'upgrade']);
+  await runProcess(flutter_exe, ['pub', 'get']);
+}
+
 Future<void> runFlutterCreate(String projectName,
     {required String workingDirectory, required IOSink sink}) async {
   var process = await startTestProcessFancy(flutter_exe, ['create', 'zeta'],
@@ -205,7 +212,7 @@ Future<void> runFlutterCreate(String projectName,
 
 Future<void> runMonarchInit(String projectName,
     {required String workingDirectory, required IOSink sink}) async {
-  await setEmailCapturedFlag(); 
+  await setEmailCapturedFlag();
   var process = await startTestProcessFancy(monarch_exe, ['init', '-v'],
       workingDirectory: workingDirectory, sink: sink);
   var heartbeat = Heartbeat('`${process.description}`', print_)..start();

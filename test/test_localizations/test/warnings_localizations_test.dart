@@ -8,16 +8,15 @@ import 'package:monarch_test_utils/test_utils.dart';
 void main() async {
   TestProcess? monarchRun;
 
-  setUp(() async {});
+  setUp(() async {
+    await runFlutterCleanUpgradeGet();
+  });
 
   tearDown(() async {
     await killMonarch('test_localizations');
   });
 
   test('monarch localizations warnings', () async {
-    await runProcess(flutter_exe, ['clean']);
-    await runProcess(flutter_exe, ['pub', 'get']);
-
     var discoveryApiPort = getRandomPort();
 
     monarchRun = await startTestProcess(monarch_exe,

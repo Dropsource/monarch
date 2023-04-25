@@ -7,15 +7,15 @@ import 'package:monarch_test_utils/test_utils.dart';
 void main() async {
   TestProcess? monarchRun;
 
-  setUp(() async {});
+  setUp(() async {
+    await runFlutterCleanUpgradeGet();
+  });
 
   tearDown(() async {
     await killMonarch('test_stories');
   });
 
   test('select stories', () async {
-    await runProcess(flutter_exe, ['pub', 'get']);
-
     var discoveryApiPort = getRandomPort();
 
     monarchRun = await startTestProcess(monarch_exe,
@@ -28,7 +28,7 @@ void main() async {
     await expectLater(stdout_, emitsThrough(startsWith('Starting Monarch.')));
     var notifications = await setUpTestNotificationsApi(discoveryApiPort);
 
-    expectLater(notifications.projectDataStream,
+    var projectDataNotification = expectLater(notifications.projectDataStream,
         emitsThrough(predicate<ProjectDataInfo>((projectData) {
       if (projectData.storiesMap.length != 2) return false;
       var stories = projectData.storiesMap.values
@@ -45,6 +45,8 @@ void main() async {
 
     var previewApi = await getPreviewApi(discoveryApiPort);
 
+    await projectDataNotification;
+    
     var sampleStoriesKey =
         'test_stories|stories/sample_button_stories.meta_stories.g.dart';
     var sampleStoriesPath = 'stories/sample_button_stories.dart';

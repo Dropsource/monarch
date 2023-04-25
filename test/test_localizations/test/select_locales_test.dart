@@ -7,15 +7,15 @@ import 'package:monarch_test_utils/test_utils.dart';
 void main() async {
   TestProcess? monarchRun;
 
-  setUp(() async {});
+  setUp(() async {
+    await runFlutterCleanUpgradeGet();
+  });
 
   tearDown(() async {
     await killMonarch('test_localizations');
   });
 
   test('select locales', () async {
-    await runProcess(flutter_exe, ['pub', 'get']);
-
     var discoveryApiPort = getRandomPort();
 
     monarchRun = await startTestProcess(monarch_exe,
@@ -28,7 +28,7 @@ void main() async {
     await expectLater(stdout_, emitsThrough(startsWith('Starting Monarch.')));
     var notifications = await setUpTestNotificationsApi(discoveryApiPort);
 
-    expectLater(notifications.projectDataStream,
+    var projectDataNotification = expectLater(notifications.projectDataStream,
         emitsThrough(predicate<ProjectDataInfo>((projectData) {
       if (projectData.localizations.length != 3) return false;
       var languageTags = projectData.localizations
@@ -44,6 +44,8 @@ void main() async {
         stdout_, emitsThrough(startsWith('Launching Monarch app completed')));
 
     var previewApi = await getPreviewApi(discoveryApiPort);
+
+    await projectDataNotification;
 
     var sampleStoriesKey =
         'test_localizations|stories/localized_sample_button_stories.meta_stories.g.dart';

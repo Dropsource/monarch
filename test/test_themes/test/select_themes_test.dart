@@ -7,20 +7,20 @@ import 'package:monarch_test_utils/test_utils.dart';
 void main() async {
   TestProcess? monarchRun;
 
-  setUp(() async {});
+  setUp(() async {
+    await runFlutterCleanUpgradeGet();
+  });
 
   tearDown(() async {
     await killMonarch('test_themes');
   });
 
   test('select themes', () async {
-    await runProcess(flutter_exe, ['pub', 'get']);
-
     var discoveryApiPort = getRandomPort();
 
     monarchRun = await startTestProcess(monarch_exe,
         ['run', '-v', '--discovery-api-port', discoveryApiPort.toString()],
-        forwardStdio: true);
+        forwardStdio: false);
     var heartbeat = TestProcessHeartbeat(monarchRun!)..start();
 
     var stdout_ = monarchRun!.stdout;
@@ -28,7 +28,7 @@ void main() async {
     await expectLater(stdout_, emitsThrough(startsWith('Starting Monarch.')));
     var notifications = await setUpTestNotificationsApi(discoveryApiPort);
 
-    expectLater(notifications.projectDataStream,
+    var projectDataNotification = expectLater(notifications.projectDataStream,
         emitsThrough(predicate<ProjectDataInfo>((projectData) {
       if (projectData.themes.length != 3) return false;
       var languageTags = projectData.themes.map((e) => e.name).toList();
@@ -41,6 +41,8 @@ void main() async {
         stdout_, emitsThrough(startsWith('Launching Monarch app completed')));
 
     var previewApi = await getPreviewApi(discoveryApiPort);
+
+    await projectDataNotification;
 
     var referenceDataInfo = await previewApi.getReferenceData(Empty());
     expect(referenceDataInfo.standardThemes, hasLength(2));
