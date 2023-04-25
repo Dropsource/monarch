@@ -28,10 +28,7 @@ void main() async {
     await expectLater(stdout_, emitsThrough(startsWith('Starting Monarch.')));
     var notifications = await setUpTestNotificationsApi(discoveryApiPort);
 
-    await expectLater(
-        stdout_, emitsThrough(startsWith('Launching Monarch app completed')));
-
-    await expectLater(notifications.projectDataStream,
+    expectLater(notifications.projectDataStream,
         emitsThrough(predicate<ProjectDataInfo>((projectData) {
       if (projectData.localizations.length != 3) return false;
       var languageTags = projectData.localizations
@@ -42,6 +39,9 @@ void main() async {
           languageTags.contains('es-US') &&
           languageTags.contains('fr-FR');
     })));
+
+    await expectLater(
+        stdout_, emitsThrough(startsWith('Launching Monarch app completed')));
 
     var previewApi = await getPreviewApi(discoveryApiPort);
 
@@ -61,13 +61,9 @@ void main() async {
 
     await expectLater(
         notifications.selectionsStateStream,
-        emitsThrough(predicate<SelectionsStateInfo>(
-            (selections) => selections.storyId.storyName == 'primary')));
-
-    await expectLater(
-        notifications.selectionsStateStream,
-        emitsThrough(predicate<SelectionsStateInfo>(
-            (selections) => selections.locale.languageTag == 'es-US')));
+        emitsThrough(predicate<SelectionsStateInfo>((selections) =>
+            selections.storyId.storyName == 'primary' &&
+            selections.locale.languageTag == 'es-US')));
 
     monarchRun!.kill();
     await monarchRun!.shouldExit();

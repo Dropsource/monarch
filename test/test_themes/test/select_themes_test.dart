@@ -20,7 +20,7 @@ void main() async {
 
     monarchRun = await startTestProcess(monarch_exe,
         ['run', '-v', '--discovery-api-port', discoveryApiPort.toString()],
-        forwardStdio: false);
+        forwardStdio: true);
     var heartbeat = TestProcessHeartbeat(monarchRun!)..start();
 
     var stdout_ = monarchRun!.stdout;
@@ -28,19 +28,17 @@ void main() async {
     await expectLater(stdout_, emitsThrough(startsWith('Starting Monarch.')));
     var notifications = await setUpTestNotificationsApi(discoveryApiPort);
 
-    await expectLater(
-        stdout_, emitsThrough(startsWith('Launching Monarch app completed')));
-
-    await expectLater(notifications.projectDataStream,
+    expectLater(notifications.projectDataStream,
         emitsThrough(predicate<ProjectDataInfo>((projectData) {
       if (projectData.themes.length != 3) return false;
-      var languageTags = projectData.themes
-          .map((e) => e.name)
-          .toList();
+      var languageTags = projectData.themes.map((e) => e.name).toList();
       return languageTags.contains('Theme Getter - Dark') &&
           languageTags.contains('Theme Variable - Dark') &&
           languageTags.contains('Theme Final Variable - Light');
     })));
+
+    await expectLater(
+        stdout_, emitsThrough(startsWith('Launching Monarch app completed')));
 
     var previewApi = await getPreviewApi(discoveryApiPort);
 
@@ -48,7 +46,7 @@ void main() async {
     expect(referenceDataInfo.standardThemes, hasLength(2));
 
     var projectDataInfo = await previewApi.getProjectData(Empty());
-    
+
     var selections = await previewApi.getSelectionsState(Empty());
     expect(selections.theme.id, '__material-light-theme__');
 
@@ -74,13 +72,9 @@ void main() async {
 
     await expectLater(
         notifications.selectionsStateStream,
-        emitsThrough(predicate<SelectionsStateInfo>(
-            (selections) => selections.storyId.storyName == 'primary')));
-
-    await expectLater(
-        notifications.selectionsStateStream,
-        emitsThrough(predicate<SelectionsStateInfo>(
-            (selections) => selections.theme.id == themeFinalVariableLight.id)));
+        emitsThrough(predicate<SelectionsStateInfo>((selections) =>
+            selections.storyId.storyName == 'primary' &&
+            selections.theme.id == themeFinalVariableLight.id)));
 
     monarchRun!.kill();
     await monarchRun!.shouldExit();

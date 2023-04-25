@@ -14,7 +14,7 @@ import 'test_preview_notifications_api_service.dart';
 /// Returns the monarch exe path as set by environment variable
 /// MONARCH_EXE; if not set, then the monarch exe should be
 /// sourced in the environment PATH before running these tests.
-String monarch_exe = Platform.environment['MONARCH_EXE'] ?? 'monarch';
+String monarch_exe = Platform.environment['MONARCH_EXE'] ?? '/Users/fertrig/development/monarch_product/monarch/out/monarch/bin/monarch';
 
 /// Returns the flutter exe path as set by environment variables
 /// FLUTTER_EXE; if not set, then the flutter exe should be sourced

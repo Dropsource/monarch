@@ -28,10 +28,7 @@ void main() async {
     await expectLater(stdout_, emitsThrough(startsWith('Starting Monarch.')));
     var notifications = await setUpTestNotificationsApi(discoveryApiPort);
 
-    await expectLater(
-        stdout_, emitsThrough(startsWith('Launching Monarch app completed')));
-
-    await expectLater(notifications.projectDataStream,
+    expectLater(notifications.projectDataStream,
         emitsThrough(predicate<ProjectDataInfo>((projectData) {
       if (projectData.storiesMap.length != 2) return false;
       var stories = projectData.storiesMap.values
@@ -42,6 +39,9 @@ void main() async {
           stories.contains('secondary') &&
           stories.contains('disabled');
     })));
+
+    await expectLater(
+        stdout_, emitsThrough(startsWith('Launching Monarch app completed')));
 
     var previewApi = await getPreviewApi(discoveryApiPort);
 
