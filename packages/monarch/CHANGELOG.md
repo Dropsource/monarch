@@ -1,5 +1,15 @@
+## 3.4.0 - 2023-04-25
+- Faster code generation
+- Update vm_service dependency to `>=9.4.0`
+- Compatible with Flutter 3.8 or greater
+
 ## 3.3.0 - 2023-02-24
 - Compatible with flutter sdk version 3.8.0-0.0.pre or greater.
+
+## 3.1.0 - 2023-04-20
+- Faster code generation
+- Update vm_service dependency to `>=9.4.0`
+- Compatible with Flutter 3.7
 
 ## 3.0.1 - 2023-02-24
 - Flutter sdk version 3.8.0-0.0.pre

@@ -5,7 +5,7 @@ typedef StoryFunction = Widget Function();
 
 class MetaStories extends MetaStoriesDefinition {
   /// Maps story name to its function
-  final Map<String, StoryFunction> storiesMap;
+  final Map<String, StoryFunction?> storiesMap;
 
   MetaStories(
     String package,
@@ -13,6 +13,15 @@ class MetaStories extends MetaStoriesDefinition {
     List<String> storiesNames,
     this.storiesMap,
   ) : super(package: package, path: path, storiesNames: storiesNames);
+
+  MetaStories.user(
+    String package,
+    String path,
+    List<String> storiesNames,
+    Map<String, dynamic> dynamicStoriesMap,
+  )   : storiesMap = dynamicStoriesMap.map((key, value) =>
+            MapEntry(key, value is StoryFunction ? value : null)),
+        super(package: package, path: path, storiesNames: storiesNames);
 }
 
 class MetaTheme extends MetaThemeDefinition {

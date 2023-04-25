@@ -1,17 +1,39 @@
-import 'package:build/build.dart';
-import 'package:source_gen/source_gen.dart';
-import 'package:analyzer/dart/element/element.dart';
+import 'dart:async';
 
+import 'package:analyzer/dart/element/element.dart';
+import 'package:build/build.dart';
 import 'package:monarch_annotations/monarch_annotations.dart';
+import 'package:source_gen/source_gen.dart';
 
 import 'builder_helper.dart';
 
-const TypeChecker monarchThemeTypeChecker =
-    TypeChecker.fromRuntime(MonarchTheme);
+const metaThemesExtension = '.meta_themes.g.dart';
 
-class MetaThemesGenerator extends Generator {
+class MetaThemesBuilder implements Builder {
   @override
-  String? generate(LibraryReader library, BuildStep buildStep) {
+  Map<String, List<String>> get buildExtensions => const {
+        '.dart': [metaThemesExtension]
+      };
+
+  @override
+  FutureOr<void> build(BuildStep buildStep) async {
+    /// @GOTCHA: Optimization:
+    /// This is a quick-and-rough way to check for the presence of an annotation.
+    /// The proper way is to resolve the compilation unit. However, that is
+    /// slow to do on every file in the user's project.
+    var contents = await buildStep.readAsString(buildStep.inputId);
+    if (!contents.contains('@MonarchTheme')) {
+      return;
+    }
+
+    /// Calling `resolver.libraryFor` is expensive.
+    /// Therefore, we are only calling it on dart libraries that we suspect
+    /// have a monarch annotation.
+    var libraryElement = await buildStep.resolver
+        .libraryFor(buildStep.inputId, allowSyntaxErrors: true);
+    var library = LibraryReader(libraryElement);
+    var monarchThemeTypeChecker = TypeChecker.fromRuntime(MonarchTheme);
+
     final annotations = library.annotatedWith(monarchThemeTypeChecker);
     if (annotations.isEmpty) {
       return null;
@@ -75,12 +97,17 @@ $monarchWarningEnd
 
     var pathToThemeFile = getImportUriOrRelativePath(buildStep.inputId);
 
-    return _outputContents(pathToThemeFile, expressions);
+    var output = _outputContents(pathToThemeFile, expressions);
+    var outputId = buildStep.inputId.changeExtension(metaThemesExtension);
+
+    await buildStep.writeAsString(outputId, output);
   }
 
   String _outputContents(
       String pathToThemeFile, List<String> metaThemeExpressions) {
     return '''
+${generatedCodeHeader('MetaThemesBuilder')}
+
 import 'package:monarch/monarch.dart';
 import '$pathToThemeFile';
 
