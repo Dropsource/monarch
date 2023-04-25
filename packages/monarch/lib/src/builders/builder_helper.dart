@@ -36,3 +36,11 @@ const monarchWarningBegin =
 
 const monarchWarningEnd =
     '════════════════════════════════════════════════════════════════════════════════════════════════════';
+
+String generatedCodeHeader(String builderName) => '''
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+// **************************************************************************
+// $builderName - monarch
+// **************************************************************************
+''';
