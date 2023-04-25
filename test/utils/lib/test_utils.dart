@@ -205,6 +205,7 @@ Future<void> runFlutterCreate(String projectName,
 
 Future<void> runMonarchInit(String projectName,
     {required String workingDirectory, required IOSink sink}) async {
+  await setEmailCapturedFlag(); 
   var process = await startTestProcessFancy(monarch_exe, ['init', '-v'],
       workingDirectory: workingDirectory, sink: sink);
   var heartbeat = Heartbeat('`${process.description}`', print_)..start();
@@ -213,6 +214,25 @@ Future<void> runMonarchInit(String projectName,
   await process.shouldExit();
   heartbeat.complete();
 }
+
+Future<void> setEmailCapturedFlag() =>
+    emailCapturedFile.writeAsString('1', mode: FileMode.write);
+
+Future<void> resetEmailCapturedFlag() => emailCapturedFile.delete();
+
+String get userDirectoryEnvironmentVariable =>
+    valueForPlatform(macos: 'HOME', windows: 'USERPROFILE', linux: 'HOME');
+
+String? get userDirectoryPath =>
+    Platform.environment[userDirectoryEnvironmentVariable];
+
+String get dataDirectoryRelativePath => valueForPlatform(
+    macos: 'Library/Application Support/com.dropsource.monarch/data',
+    windows: r'AppData\Local\Monarch\data',
+    linux: '.config/monarch/data');
+
+File get emailCapturedFile => File(p.join(
+    userDirectoryPath!, dataDirectoryRelativePath, 'email_captured.info'));
 
 class TestProcessHeartbeat extends Heartbeat {
   TestProcessHeartbeat(TestProcess process)

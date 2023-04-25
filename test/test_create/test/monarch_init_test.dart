@@ -15,6 +15,7 @@ void main() async {
   setUp(() async {
     workingDir = await createWorkingDirectory();
     logSink = await createLogFile(workingDir);
+    await setEmailCapturedFlag();
   });
 
   tearDown(() async {
