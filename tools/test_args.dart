@@ -3,6 +3,7 @@ import 'package:path/path.dart' as p;
 import 'package:monarch_utils/timers.dart';
 
 import 'paths.dart';
+import 'test_result.dart';
 
 /// Runs Monarch tests with these arguments:
 /// - Path to the flutter exe
@@ -88,7 +89,7 @@ $testArgumentsPrint''');
 
 ### Running $packageName package tests''');
       var xpg = await Process.start(command, ['pub', 'get'],
-          workingDirectory: local_repo_paths.controller,
+          workingDirectory: p.join(local_repo_paths.packages, packageName),
           runInShell: Platform.isWindows);
       stdout.addStream(xpg.stdout);
       stderr.addStream(xpg.stderr);
@@ -157,15 +158,4 @@ $testArgumentsPrint''');
 ''');
 
   return results;
-}
-
-class TestResult {
-  final String module;
-  final int exitCode;
-  bool get passed => exitCode == 0;
-
-  TestResult(this.module, this.exitCode);
-  
-  @override
-  String toString() => '$module tests ${exitCode == 0 ? 'passed' : 'FAILED'}';
 }

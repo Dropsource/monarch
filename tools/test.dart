@@ -1,6 +1,7 @@
 import 'package:monarch_utils/timers.dart';
 import 'utils_local.dart' as local_utils;
-import 'run_tests_args.dart' as run_tests_args;
+import 'test_args.dart' as run_test_args;
+import 'test_result.dart';
 
 import 'paths.dart';
 
@@ -8,7 +9,7 @@ void main() async {
   var stopwatch = Stopwatch()..start();
   print('''
 
-### run_tests.dart
+### test.dart
 
 Monarch binaries:
   ${local_out_paths.out}
@@ -20,10 +21,10 @@ Flutter SDKs:''');
 
   print('');
 
-  var resultsMap = <String, List<run_tests_args.TestResult>>{};
+  var resultsMap = <String, List<TestResult>>{};
 
   for (var flutter_sdk in local_utils.read_flutter_sdks()) {
-    var results = await run_tests_args.runTests(
+    var results = await run_test_args.runTests(
         flutter_exe(flutter_sdk), local_out_paths.out_bin_monarch_exe);
     resultsMap[flutter_sdk] = results;
   }
@@ -31,7 +32,7 @@ Flutter SDKs:''');
   print('''
 
 
-### run_tests.dart results
+### test.dart results
 
 Results per Flutter SDK:''');
   for (var flutter_sdk in local_utils.read_flutter_sdks()) {

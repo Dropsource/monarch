@@ -19,7 +19,7 @@ The Monarch integration tests can:
 - test_themes: Flutter project to test monarch themes annotations.
 - utils: Utils for Monarch integration tests.
 
-### Run all the tests using run_tests.dart 
+### Run all the tests using test.dart 
 Before running the tests, make sure you have build the monarch binaries:
 ```
 $ dart tools/build.dart
@@ -28,7 +28,7 @@ The command above will output the monarch binaries to the `out` directory.
 
 To run all the test in the Monarch repo (unit tests and integration tests), run:
 ```
-$ dart tools/run_tests.dart
+$ dart tools/test.dart
 ```
 The dart script above will run the tests using the flutter sdks you have declared 
 in `tools/local_settings.yaml`. And the monarch exe in the `out` directory.
