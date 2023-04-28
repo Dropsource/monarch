@@ -1,0 +1,15 @@
+name: monarch_test_utils
+description: Utils for Monarch integration tests.
+version: 1.0.0
+
+environment:
+  sdk: '>=2.16.1 <3.0.0'
+
+dev_dependencies:
+  test_process:
+  path:
+  async:
+  monarch_utils:
+  monarch_io_utils:
+  monarch_grpc:
+  grpc: ^3.1.0

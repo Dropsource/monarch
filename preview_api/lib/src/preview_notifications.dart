@@ -20,13 +20,6 @@ class PreviewNotifications {
   }
 
   Future<void> _populateClientList() async {
-    if (clientList.length >= 2) {
-      /// As of 2022-10-06, we only expect 2 clients.
-      /// In the future, if we have more notification clients then we can
-      /// increment this threshold or we can get more sophisticated about discovery.
-      return;
-    }
-
     var list = await discoveryApi.getPreviewNotificationsApiList(Empty());
     clientList.clear();
     for (var serverInfo in list.servers) {

@@ -27,7 +27,6 @@ import 'src/task_runner/task_runner_exit_codes.dart';
 import 'src/utils/standard_output.dart';
 import 'src/config/environment_mutations.dart';
 import 'src/version_api/version_api.dart';
-import 'src/version_api/notification.dart';
 import 'src/task_runner/grpc.dart';
 import 'src/config/settings.dart';
 
@@ -47,12 +46,14 @@ final _analytics = AnalyticsImpl(AnalyticsEventBuilder());
 EnvironmentMutations? _mutations;
 Grpc? _grpc;
 
-void executeTaskRunner(
-    {required bool isVerbose,
-    required bool isCrashDebug,
-    required bool isDeleteConflictingOutputs,
-    required bool noSoundNullSafety,
-    required String reloadOption}) async {
+void executeTaskRunner({
+  required bool isVerbose,
+  required bool isCrashDebug,
+  required bool isDeleteConflictingOutputs,
+  required bool noSoundNullSafety,
+  required String reloadOption,
+  int? discoveryApiPort,
+}) async {
   _isVerbose = isVerbose;
   _isCrashDebug = isCrashDebug;
 
@@ -136,7 +137,7 @@ The monarch_ui directory below is missing. Make sure to add your Flutter SDK pat
 
   _grpc = Grpc();
   try {
-    await _grpc!.setUpDiscoveryApiServer();
+    await _grpc!.setUpDiscoveryApiServer(discoveryApiPort);
   } catch (e) {
     await _exit(TaskRunnerExitCodes.cliGrpcServerStartError);
     return;
@@ -288,4 +289,3 @@ Future<CliExitCode> _fetchMonarchUi(ProjectConfig projectConfig,
   _analytics.ui_fetch_end(uiFetchExitCode, uiFetcher.duration);
   return uiFetchExitCode;
 }
-

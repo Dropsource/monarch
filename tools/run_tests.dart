@@ -1,83 +1,57 @@
-import 'dart:io';
-import 'package:path/path.dart' as p;
+import 'package:monarch_utils/timers.dart';
+import 'utils_local.dart' as local_utils;
+import 'run_tests_args.dart' as run_tests_args;
 
 import 'paths.dart';
 
 void main() async {
-  var results = <TestResult>[];
+  var stopwatch = Stopwatch()..start();
   print('''
 
-### run_tests.dart''');
+### run_tests.dart
 
-  {
-    print('''
+Monarch binaries:
+  ${local_out_paths.out}
 
-#### Running cli tests''');
-    var process = await Process.start('dart', ['test'],
-        workingDirectory: local_repo_paths.cli, runInShell: Platform.isWindows);
-    stdout.addStream(process.stdout);
-    stderr.addStream(process.stderr);
-    var exitCode = await process.exitCode;
-    results.add(TestResult('cli', exitCode));
+Flutter SDKs:''');
+  for (var flutter_sdk in local_utils.read_flutter_sdks()) {
+    print('- $flutter_sdk');
   }
 
-  {
-    try {
-      Process.runSync('flutter', ['--version'], runInShell: Platform.isWindows);
-    } on ProcessException {
-      print(
-          'ERROR: Could not run flutter command. Make sure the flutter command is in your PATH.');
-      exit(1);
+  print('');
+
+  var resultsMap = <String, List<run_tests_args.TestResult>>{};
+
+  for (var flutter_sdk in local_utils.read_flutter_sdks()) {
+    var results = await run_tests_args.runTests(
+        flutter_exe(flutter_sdk), local_out_paths.out_bin_monarch_exe);
+    resultsMap[flutter_sdk] = results;
+  }
+
+  print('''
+
+
+### run_tests.dart results
+
+Results per Flutter SDK:''');
+  for (var flutter_sdk in local_utils.read_flutter_sdks()) {
+    var results = resultsMap[flutter_sdk]!;
+    if (results.every((result) => result.passed)) {
+      print('- PASSED: $flutter_sdk');
+    }
+    else {
+      print('- FAILED: $flutter_sdk');
+      for (var result in results.where((result) => !result.passed)) {
+        print ('  - $result');
+      }
     }
   }
 
-  {
-    print('''
-
-#### Running controller tests''');
-    var process = await Process.start('flutter', ['test'],
-        workingDirectory: local_repo_paths.controller,
-        runInShell: Platform.isWindows);
-    stdout.addStream(process.stdout);
-    stderr.addStream(process.stderr);
-    var exitCode = await process.exitCode;
-    results.add(TestResult('controller', exitCode));
-  }
-
-  results.add(await _runPackageTests('monarch', 'flutter'));
-  results.add(await _runPackageTests('monarch_io_utils', 'dart'));
-  results.add(await _runPackageTests('monarch_utils', 'dart'));
 
   print('''
 
-#### Test Results''');
-  for (var result in results) {
-    print('- $result');
-  }
-  if (results.any((element) => element.exitCode != 0)) {
-    exit(1);
-  } else {
-    exit(0);
-  }
-}
+Tested with monarch binaries:
+  ${local_out_paths.out}
 
-class TestResult {
-  final String module;
-  final int exitCode;
-  TestResult(this.module, this.exitCode);
-  @override
-  String toString() => '$module tests ${exitCode == 0 ? 'passed' : 'FAILED'}';
-}
-
-Future<TestResult> _runPackageTests(String packageName, String command) async {
-  print('''
-
-#### Running $packageName package tests''');
-  var process = await Process.start(command, ['test'],
-      workingDirectory: p.join(local_repo_paths.packages, packageName),
-      runInShell: Platform.isWindows);
-  stdout.addStream(process.stdout);
-  stderr.addStream(process.stderr);
-  var exitCode = await process.exitCode;
-  return TestResult('$packageName package', exitCode);
+All tests took ${stopwatch..stop()}.''');
 }
