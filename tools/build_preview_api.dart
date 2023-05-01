@@ -1,34 +1,96 @@
+import 'dart:io';
 import 'package:path/path.dart' as p;
 
 import 'paths.dart';
 import 'utils.dart' as utils;
 import 'utils_local.dart' as local_utils;
-import 'build_preview_api_args.dart' as build_preview_api_args;
 
-/// Builds Monarch Preview API artifacts for each Flutter SDK
-/// declared in local_settings.yaml.
-void main() {
+/// Builds Monarch Preview API artifacts with these arguments:
+/// - Path to the root of the Monarch repo
+/// - Path to the Flutter SDK to use
+/// - Path to the monarch_ui/{flutter_id} output directory
+void buildPreviewApi(String repo_root, String flutter_sdk, String out_ui_flutter_id) {
+  var repo_paths = RepoPaths(repo_root);
+
   print('''
-
-### build_preview_api.dart
+===============================================================================
+Building Monarch Preview API using these arguments:
+- Monarch repository: 
+  $repo_root
+- Flutter SDK: 
+  $flutter_sdk
+  Flutter version ${get_flutter_version(flutter_sdk)}, ${get_flutter_channel(flutter_sdk)} channel.
+- Output directory:
+  $out_ui_flutter_id
 ''');
 
-  utils.createDirectoryIfNeeded(local_out_paths.out_ui);
+  var out_ui_flutter_id_preview_api =
+      p.join(out_ui_flutter_id, 'monarch_preview_api');
+  var out_preview_api_dir = Directory(out_ui_flutter_id_preview_api);
+  if (out_preview_api_dir.existsSync())
+    out_preview_api_dir.deleteSync(recursive: true);
+  out_preview_api_dir.createSync(recursive: true);
 
-  for (final flutter_sdk in local_utils.read_flutter_sdks()) {
-    var out_ui_flutter_id_ =
-        out_ui_flutter_id(local_out_paths.out_ui, flutter_sdk);
-    utils.createDirectoryIfNeeded(out_ui_flutter_id_);
-
-    build_preview_api_args
-        .main([local_repo_paths.root, flutter_sdk, out_ui_flutter_id_]);
+  {
+    print('''
+Running `flutter pub get` in:
+  ${repo_paths.preview_api}
+''');
+    var result = Process.runSync(flutter_exe(flutter_sdk), ['pub', 'get'],
+        workingDirectory: repo_paths.preview_api,
+        runInShell: Platform.isWindows);
+    utils.exitIfNeeded(result, 'Error running `flutter pub get`');
   }
 
-  var version =
-      utils.readPubspecVersion(p.join(local_repo_paths.preview_api, 'pubspec.yaml'));
-  version = local_utils.getVersionSuffix(version);
+  {
+    print('''
+Building monarch preview_api flutter bundle. Will output to:
+  $out_ui_flutter_id_preview_api
+''');
 
-  local_utils.writeInternalFile('preview_api_version.txt', version);
+    var result = Process.runSync(
+        flutter_exe(flutter_sdk),
+        [
+          'build',
+          'bundle',
+          '-t',
+          'lib/main.dart',
+          '--debug',
+          '--target-platform',
+          local_utils.read_target_platform(),
+          '--asset-dir',
+          p.join(out_ui_flutter_id_preview_api, 'flutter_assets'),
+          '--verbose'
+        ],
+        workingDirectory: repo_paths.preview_api,
+        runInShell: Platform.isWindows);
 
-  print('Monarch preview_api build finished. Version $version');
+    utils.exitIfNeeded(
+        result, 'Error building monarch preview_api flutter bundle');
+  }
+
+  {
+    var icudtl_dat_ = icudtl_dat(flutter_sdk, local_utils.read_target_platform());
+
+    if (Platform.isWindows) {
+      var result = Process.runSync(
+          'copy', [icudtl_dat_, out_ui_flutter_id_preview_api],
+          runInShell: true);
+      utils.exitIfNeeded(
+          result, 'Error copying icudtl.dat to monarch_preview_api directory');
+    }
+    if (Platform.isLinux) {
+      var result =
+          Process.runSync('cp', [icudtl_dat_, out_ui_flutter_id_preview_api]);
+      utils.exitIfNeeded(
+          result, 'Error copying icudtl.dat to monarch_preview_api directory');
+    }
+  }
+
+  print('Monarch preview_api build finished.');
+
+  print('''
+===============================================================================
+''');
 }
+

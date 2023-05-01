@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'paths.dart';
 
-void main() {
+void clean() {
   print('''
 
 ### clean.dart

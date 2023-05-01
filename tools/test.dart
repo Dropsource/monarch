@@ -6,13 +6,35 @@ import 'utils_local.dart' as local_utils;
 import 'package:path/path.dart' as p;
 import 'paths.dart';
 
+/// Example commands:
+/// 
+/// Run all unit and integration tests in all monarch modules using
+/// the flutter sdk in your PATH:
+/// 
+///   $ dart tools/test.dart
+/// 
+/// Run all tests using all the fluter sdks in local_settings.yaml:
+/// 
+///   $ dart tools/test.dart --all
+/// 
+/// Run tests on a specific module using the flutter sdk in your PATH:
+/// 
+///   $ dart tools/test.dart -m cli
+///   $ dart tools/test.dart -m packages/monarch
+///   $ dart tools/test.dart -m test/test_stories
+/// 
+/// To get more info:
+/// 
+///   $ dart tools/test.dart -h
+/// 
+/// Also see test/README.md
 void main(List<String> arguments) async {
   var parser = ArgParser();
 
-  parser.addOption('flutter_exe',
+  parser.addOption('flutter-sdk',
       abbr: 'f',
       help:
-          'Path to the flutter exe. Defaults to the flutter exe sourced in your PATH.');
+          'Path to the flutter sdk. Defaults to the flutter sdk sourced in your PATH.');
   parser.addOption('module',
       abbr: 'm',
       help:
@@ -21,7 +43,7 @@ void main(List<String> arguments) async {
   parser.addFlag('help', abbr: 'h');
   parser.addFlag('all',
       help:
-          'Where to test using all the flutter sdks listed in local_settings.yaml.');
+          'Whether to test using all the flutter sdks listed in local_settings.yaml.');
 
   var args = parser.parse(arguments);
 
@@ -41,7 +63,7 @@ void main(List<String> arguments) async {
     }
   }
 
-  String flutter_exe_ = args['flutter_exe'] ?? 'flutter';
+  String flutter_exe_ = args['flutter-sdk'] ?? 'flutter';
 
   if (args['module'] == null) {
     var results = await runTestsOnAllModules(flutter_exe_);
