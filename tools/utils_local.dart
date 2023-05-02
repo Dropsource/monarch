@@ -58,9 +58,3 @@ YamlMap readLocalSettingsYaml() {
   var contents = file.readAsStringSync();
   return loadYaml(contents) as YamlMap;
 }
-
-void writeInternalFile(String name, String contents) {
-  utils.createDirectoryIfNeeded(local_out_paths.out_bin_internal);
-  var file = File(p.join(local_out_paths.out_bin_internal, name));
-  file.writeAsStringSync(contents, mode: FileMode.writeOnly);
-}

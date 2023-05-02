@@ -3,54 +3,25 @@ import 'utils.dart' as utils;
 import 'utils_local.dart' as local_utils;
 import 'paths.dart';
 import 'package:path/path.dart' as p;
-import 'package:args/args.dart';
+
 import 'package:yaml/yaml.dart';
 import 'package:monarch_io_utils/monarch_io_utils.dart';
 
-/// Writes monarch/bin/internal files:
-/// - binaries_version.txt
-/// - binaries_revision.txt
-/// - min_flutter_version.txt
-/// - etc.
-void buildInternal(List<String> arguments) {
-  var parser = ArgParser();
-
-  parser.addOption('internal',
-      help: 'Path to the internal directory. Default to out/bin/internal.');
-  parser.addOption('binaries-version',
-      help: 'The version of the Monarch binaries. Defaults to "local"');
-  parser.addOption('revision',
-      help:
-          'The revision git hash. If blank, this script will use `git rev-parse` '
-          'to find the HEAD revision.');
-  parser.addOption('min-flutter-version',
-      help: 'The minimum Flutter verison supported by this Monarch build. '
-          'Defaults to "3.0.0"');
-
-  utils.addArgOptionHelp(parser);
-
-  var args = parser.parse(arguments);
-
-  if (args['help']) {
-    print(parser.usage);
-    exit(0);
-  }
-
-  String internal_ = args['internal'] ?? local_out_paths.out_bin_internal;
-  String binariesVersion = args['binaries-version'] ?? 'local';
-  String minFlutterVersion = args['min-flutter-version'] ?? '3.0.0';
+void writeInternalFiles(
+  String internal_,
+  String binariesVersion,
+  String minFlutterVersion,
+  String? revision,
+) {
+  print('Writing Monarch internal files...');
 
   utils.writeInternalFile(internal_, 'binaries_version.txt', binariesVersion);
-
-  String? revision = args['revision'];
 
   if (revision == null) {
     var result = Process.runSync('git', ['rev-parse', 'HEAD'],
         workingDirectory: local_repo_paths.root);
     if (result.exitCode != 0) {
-      print('Error reading current git commit hash');
-      print(result.stdout);
-      print(result.stderr);
+      utils.exitIfNeeded(result, 'Error reading current git commit hash');
     }
     var hash = result.stdout.toString().trim();
     revision = local_utils.getVersionSuffix(hash);
@@ -65,7 +36,7 @@ void buildInternal(List<String> arguments) {
     var version =
         utils.readPubspecVersion(p.join(local_repo_paths.cli, 'pubspec.yaml'));
     version = local_utils.getVersionSuffix(version);
-    local_utils.writeInternalFile('cli_version.txt', version);
+    utils.writeInternalFile(internal_, 'cli_version.txt', version);
   }
 
   {
@@ -81,7 +52,7 @@ void buildInternal(List<String> arguments) {
         p.join(local_repo_paths.preview_api, 'pubspec.yaml'));
     version = local_utils.getVersionSuffix(version);
 
-    local_utils.writeInternalFile('preview_api_version.txt', version);
+    utils.writeInternalFile(internal_, 'preview_api_version.txt', version);
   }
 
   {
@@ -90,8 +61,13 @@ void buildInternal(List<String> arguments) {
         windows: readWindowsProjectVersion,
         linux: readLinuxProjectVersion);
     version = local_utils.getVersionSuffix(version);
-    local_utils.writeInternalFile('platform_app_version.txt', version);
+    utils.writeInternalFile(internal_, 'platform_app_version.txt', version);
   }
+
+  print('''
+Done. 
+Internal files written to:
+  $internal_''');
 }
 
 String readMacosProjectVersion() {
