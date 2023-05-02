@@ -13,6 +13,18 @@ import 'build_platform.dart';
 import 'build_preview_api.dart';
 import 'build_internal.dart';
 
+/// Build all Monarch modules on your local to the out directory:
+/// 
+///   $ dart tools/build.dart all
+/// 
+/// You can also build a specific Monarch module:
+/// 
+///   $ dart tools/build.dart cli
+///   $ dart tools/build.dart controller
+/// 
+/// To get more details:
+/// 
+///   $ dart tools/build.dart -h
 void main(List<String> arguments) async {
   var runner = CommandRunner('build',
       'Builds Monarch and its modules. By default it will build to the out directory.')

@@ -42,15 +42,13 @@ class LocalOutPaths {
   final String out;
   LocalOutPaths(this.out);
 
-  String get out_bin => p.join(out, 'monarch', 'bin');
+  String get out_monarch => p.join(out, 'monarch');
+  String get out_bin => p.join(out_monarch, 'bin');
   String get out_bin_cache => p.join(out_bin, 'cache');
   String get out_ui => p.join(out_bin_cache, 'monarch_ui');
   String get out_bin_internal => p.join(out_bin, 'internal');
 
-  String get out_bin_monarch_exe => p.join(
-      out_bin,
-      valueForPlatform(
-          macos: 'monarch', windows: 'monarch.exe', linux: 'monarch'));
+  String get out_bin_monarch_exe => p.join(out_bin, monarch_exe_file_name);
 }
 
 String flutter_id(String flutter_sdk) {
@@ -81,6 +79,12 @@ String icudtl_dat(String flutter_sdk, String target_platform) => p.join(
     'icudtl.dat');
 
 String flutter_exe(String flutter_sdk) => p.join(flutter_sdk, 'bin', 'flutter');
+
+String monarch_exe_file_name = valueForPlatform(
+    macos: 'monarch', windows: 'monarch.exe', linux: 'monarch');
+
+String monarch_exe(String monarch_dir) =>
+    p.join(monarch_dir, 'bin', monarch_exe_file_name);
 
 const local_settings_yaml = 'local_settings.yaml';
 

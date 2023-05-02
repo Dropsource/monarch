@@ -6,44 +6,40 @@ import 'utils_local.dart' as local_utils;
 import 'package:path/path.dart' as p;
 import 'paths.dart';
 
-/// Example commands:
-/// 
 /// Run all unit and integration tests in all monarch modules using
-/// the flutter sdk in your PATH:
-/// 
-///   $ dart tools/test.dart
-/// 
-/// Run all tests using all the fluter sdks in local_settings.yaml:
-/// 
+/// all the fluter sdks in local_settings.yaml:
+///
 ///   $ dart tools/test.dart --all
-/// 
-/// Run tests on a specific module using the flutter sdk in your PATH:
-/// 
+///
+/// Run tests on a specific module:
+///
 ///   $ dart tools/test.dart -m cli
 ///   $ dart tools/test.dart -m packages/monarch
 ///   $ dart tools/test.dart -m test/test_stories
-/// 
-/// To get more info:
-/// 
+///
+/// To get more details:
+///
 ///   $ dart tools/test.dart -h
-/// 
+///
 /// Also see test/README.md
 void main(List<String> arguments) async {
   var parser = ArgParser();
 
-  parser.addOption('flutter-sdk',
-      abbr: 'f',
-      help:
-          'Path to the flutter sdk. Defaults to the flutter sdk sourced in your PATH.');
+  parser.addFlag('help', abbr: 'h');
   parser.addOption('module',
       abbr: 'm',
       help:
           'The relative path to the monarch module to test; such as: cli, package/monarch, test/test_create, etc. '
           'By default, it will test all modules.');
-  parser.addFlag('help', abbr: 'h');
-  parser.addFlag('all',
+  parser.addOption('flutter-sdk',
+      abbr: 'f',
       help:
-          'Whether to test using all the flutter sdks listed in local_settings.yaml.');
+          'Path to the Flutter SDK to use. If blank, this command will run using '
+          'each Flutter SDK declared in local_settings.yaml.');
+  parser.addOption('monarch-dir',
+      help:
+          'Path to the Monarch binaries directory. Used by integration tests. '
+          'Defaults to out/monarch');
 
   var args = parser.parse(arguments);
 
@@ -52,28 +48,29 @@ void main(List<String> arguments) async {
     exit(0);
   }
 
-  if (args['all']) {
-    if (args['module'] == null) {
-      var results = await runTestsUsingAllFlutterSdksOnAllModules();
+  String? flutter_sdk = args['flutter-sdk'];
+  String? module = args['module'];
+  String monarch_dir = args['monarch-dir'] ?? local_out_paths.out_monarch;
+  String monarch_exe_ = monarch_exe(monarch_dir);
+
+  if (flutter_sdk == null) {
+    if (module == null) {
+      var results = await runTestsUsingAllFlutterSdksOnAllModules(monarch_exe_);
       exit_(results);
     } else {
-      var results =
-          await runTestsUsingAllFlutterSdks(args['module'].toString());
+      var results = await runTestsUsingAllFlutterSdks(module, monarch_exe_);
       exit_(results);
     }
+  } else {
+    String flutter_exe_ = flutter_exe(flutter_sdk);
+    if (module == null) {
+      var results = await runTestsOnAllModules(flutter_exe_, monarch_exe_);
+      exit_(results);
+    } else {
+      var result = await runTest(flutter_exe_, monarch_exe_, module);
+      result.passed ? exit(0) : exit(1);
+    }
   }
-
-  String flutter_exe_ = args['flutter-sdk'] ?? 'flutter';
-
-  if (args['module'] == null) {
-    var results = await runTestsOnAllModules(flutter_exe_);
-    exit_(results);
-  }
-
-  String module = args['module'].toString();
-
-  var result = await runTest(flutter_exe_, module);
-  result.passed ? exit(0) : exit(1);
 }
 
 void exit_(List<TestResult> results) {
@@ -86,12 +83,12 @@ void exit_(List<TestResult> results) {
   }
 }
 
-Future<List<TestResult>> runTestsUsingAllFlutterSdksOnAllModules() async {
+Future<List<TestResult>> runTestsUsingAllFlutterSdksOnAllModules(String monarch_exe_) async {
   var stopwatch = Stopwatch()..start();
   var resultsMap = <String, List<TestResult>>{};
 
   for (var flutter_sdk in local_utils.read_flutter_sdks()) {
-    var results = await runTestsOnAllModules(flutter_exe(flutter_sdk));
+    var results = await runTestsOnAllModules(flutter_exe(flutter_sdk), monarch_exe_);
     resultsMap[flutter_sdk] = results;
   }
 
@@ -100,12 +97,12 @@ Future<List<TestResult>> runTestsUsingAllFlutterSdksOnAllModules() async {
   return resultsMap.values.expand((element) => element).toList();
 }
 
-Future<List<TestResult>> runTestsUsingAllFlutterSdks(String module) async {
+Future<List<TestResult>> runTestsUsingAllFlutterSdks(String module, String monarch_exe_) async {
   var stopwatch = Stopwatch()..start();
   var resultsMap = <String, List<TestResult>>{};
 
   for (var flutter_sdk in local_utils.read_flutter_sdks()) {
-    var results = await runTest(flutter_exe(flutter_sdk), module);
+    var results = await runTest(flutter_exe(flutter_sdk), monarch_exe_, module);
     resultsMap[flutter_sdk] = [results];
   }
 
@@ -114,19 +111,19 @@ Future<List<TestResult>> runTestsUsingAllFlutterSdks(String module) async {
   return resultsMap.values.expand((element) => element).toList();
 }
 
-Future<List<TestResult>> runTestsOnAllModules(String flutter_exe_) async {
+Future<List<TestResult>> runTestsOnAllModules(String flutter_exe_, String monarch_exe_) async {
   var stopwatch = Stopwatch()..start();
   var results = <TestResult>[];
 
-  results.add(await runTest(flutter_exe_, 'cli'));
-  results.add(await runTest(flutter_exe_, 'controller'));
-  results.add(await runTest(flutter_exe_, 'packages/monarch'));
-  results.add(await runTest(flutter_exe_, 'packages/monarch_io_utils'));
-  results.add(await runTest(flutter_exe_, 'packages/monarch_utils'));
-  results.add(await runTest(flutter_exe_, 'test/test_create'));
-  results.add(await runTest(flutter_exe_, 'test/test_localizations'));
-  results.add(await runTest(flutter_exe_, 'test/test_stories'));
-  results.add(await runTest(flutter_exe_, 'test/test_themes'));
+  results.add(await runTest(flutter_exe_, monarch_exe_, 'cli'));
+  results.add(await runTest(flutter_exe_, monarch_exe_, 'controller'));
+  results.add(await runTest(flutter_exe_, monarch_exe_, 'packages/monarch'));
+  results.add(await runTest(flutter_exe_, monarch_exe_, 'packages/monarch_io_utils'));
+  results.add(await runTest(flutter_exe_, monarch_exe_, 'packages/monarch_utils'));
+  results.add(await runTest(flutter_exe_, monarch_exe_, 'test/test_create'));
+  results.add(await runTest(flutter_exe_, monarch_exe_, 'test/test_localizations'));
+  results.add(await runTest(flutter_exe_, monarch_exe_, 'test/test_stories'));
+  results.add(await runTest(flutter_exe_, monarch_exe_, 'test/test_themes'));
 
   printResults({flutter_exe_: results}, stopwatch);
 
@@ -158,7 +155,8 @@ void printUsingCommand(String command) {
   }
 }
 
-Future<TestResult> runTest(String flutter_exe_, String module) async {
+Future<TestResult> runTest(
+    String flutter_exe_, String monarch_exe_, String module) async {
   print('');
   print('### Running $module tests');
 
@@ -177,7 +175,6 @@ Future<TestResult> runTest(String flutter_exe_, String module) async {
 
   print('');
   print('Running `$command test` in $module...');
-  var monarch_exe_ = local_out_paths.out_bin_monarch_exe;
   var process = await Process.start(command, ['test'],
       workingDirectory: module_path,
       runInShell: Platform.isWindows,
