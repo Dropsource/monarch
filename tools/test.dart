@@ -258,6 +258,7 @@ Future<String> getFlutterVersion(String flutter_exe_) async {
     ['--version'],
     stdoutEncoding: Platform.isWindows ? Utf8Codec() : systemEncoding,
     stderrEncoding: Platform.isWindows ? Utf8Codec() : systemEncoding,
+    runInShell: Platform.isWindows,
   );
   if (result.exitCode == 0) {
     var output = result.stdout.toString().trim();
