@@ -296,7 +296,8 @@ void fine(String message) {
 }
 
 void info(String message) {
-  print(message);
+  if (verbose) print('info:$message');
+  else print(message);
 }
 
 class TestResult {
