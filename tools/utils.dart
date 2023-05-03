@@ -1,25 +1,6 @@
 import 'dart:io';
 
-import 'package:args/args.dart';
 import 'package:path/path.dart' as p;
-
-void addArgOptionFlutterSdk(ArgParser parser) {
-  parser.addOption('flutter-sdk',
-      abbr: 'f',
-      help:
-          'Path to the Flutter SDK to use. If blank, this command will run for '
-          'each Flutter SDK declared in local_settings.yaml.');
-}
-
-void addArgOptionOut(ArgParser parser) {
-  parser.addOption('out',
-      abbr: 'o',
-      help: 'Path to the monarch_ui/{flutter_id} output directory. Required if --flutter-sdk is set');
-}
-
-void addArgOptionHelp(ArgParser parser) {
-  parser.addFlag('help', abbr: 'h');
-}
 
 void createDirectoryIfNeeded(String path) {
   var dir = Directory(path);

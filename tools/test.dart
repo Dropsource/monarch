@@ -1,10 +1,14 @@
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:args/args.dart';
+import 'package:monarch_io_utils/monarch_io_utils.dart';
 import 'package:monarch_utils/timers.dart';
 import 'utils_local.dart' as local_utils;
 import 'package:path/path.dart' as p;
 import 'paths.dart';
+
+bool verbose = false;
 
 /// Run all unit and integration tests in all monarch modules using
 /// all the fluter sdks in local_settings.yaml:
@@ -40,6 +44,8 @@ void main(List<String> arguments) async {
       help:
           'Path to the Monarch binaries directory. Used by integration tests. '
           'Defaults to out/monarch');
+  parser.addFlag('verbose',
+      abbr: 'v', help: 'Runs tests in verbose mode', defaultsTo: false);
 
   var args = parser.parse(arguments);
 
@@ -48,133 +54,118 @@ void main(List<String> arguments) async {
     exit(0);
   }
 
+  verbose = args['verbose'];
   String? flutter_sdk = args['flutter-sdk'];
   String? module = args['module'];
   String monarch_dir = args['monarch-dir'] ?? local_out_paths.out_monarch;
   String monarch_exe_ = monarch_exe(monarch_dir);
 
+  Map<String, List<TestResult>> results;
+  var stopwatch = Stopwatch()..start();
+
   if (flutter_sdk == null) {
     if (module == null) {
-      var results = await runTestsUsingAllFlutterSdksOnAllModules(monarch_exe_);
-      exit_(results);
+      results = await testAllModulesAllFlutterSdks(monarch_exe_);
     } else {
-      var results = await runTestsUsingAllFlutterSdks(module, monarch_exe_);
-      exit_(results);
+      results = await testSingleModuleAllFlutterSdks(module, monarch_exe_);
     }
   } else {
     String flutter_exe_ = flutter_exe(flutter_sdk);
     if (module == null) {
-      var results = await runTestsOnAllModules(flutter_exe_, monarch_exe_);
-      exit_(results);
+      results =
+          await testAllModulesSingleFlutterSdk(flutter_exe_, monarch_exe_);
     } else {
-      var result = await runTest(flutter_exe_, monarch_exe_, module);
-      result.passed ? exit(0) : exit(1);
+      results = await testSingleModuleSingleFlutterSdk(
+          flutter_exe_, monarch_exe_, module);
     }
   }
+
+  printResults(results, stopwatch);
+  exit_(results);
 }
 
-void exit_(List<TestResult> results) {
-  if (results.every((element) => element.passed)) {
-    print('All tests passed.');
-    exit(0);
-  } else {
-    print('Some tests FAILED.');
-    exit(1);
-  }
-}
-
-Future<List<TestResult>> runTestsUsingAllFlutterSdksOnAllModules(String monarch_exe_) async {
-  var stopwatch = Stopwatch()..start();
+Future<Map<String, List<TestResult>>> testAllModulesAllFlutterSdks(
+    String monarch_exe_) async {
   var resultsMap = <String, List<TestResult>>{};
 
   for (var flutter_sdk in local_utils.read_flutter_sdks()) {
-    var results = await runTestsOnAllModules(flutter_exe(flutter_sdk), monarch_exe_);
-    resultsMap[flutter_sdk] = results;
+    var results = await testAllModulesSingleFlutterSdk(
+        flutter_exe(flutter_sdk), monarch_exe_);
+    resultsMap[flutter_sdk] = results[flutter_sdk]!;
   }
 
-  printResults(resultsMap, stopwatch);
-
-  return resultsMap.values.expand((element) => element).toList();
+  return resultsMap;
 }
 
-Future<List<TestResult>> runTestsUsingAllFlutterSdks(String module, String monarch_exe_) async {
-  var stopwatch = Stopwatch()..start();
+Future<Map<String, List<TestResult>>> testSingleModuleAllFlutterSdks(
+    String module, String monarch_exe_) async {
   var resultsMap = <String, List<TestResult>>{};
 
   for (var flutter_sdk in local_utils.read_flutter_sdks()) {
-    var results = await runTest(flutter_exe(flutter_sdk), monarch_exe_, module);
+    var results = await _test(flutter_exe(flutter_sdk), monarch_exe_, module);
     resultsMap[flutter_sdk] = [results];
   }
 
-  printResults(resultsMap, stopwatch);
-
-  return resultsMap.values.expand((element) => element).toList();
+  return resultsMap;
 }
 
-Future<List<TestResult>> runTestsOnAllModules(String flutter_exe_, String monarch_exe_) async {
-  var stopwatch = Stopwatch()..start();
+Future<Map<String, List<TestResult>>> testAllModulesSingleFlutterSdk(
+    String flutter_exe_, String monarch_exe_) async {
   var results = <TestResult>[];
 
-  results.add(await runTest(flutter_exe_, monarch_exe_, 'cli'));
-  results.add(await runTest(flutter_exe_, monarch_exe_, 'controller'));
-  results.add(await runTest(flutter_exe_, monarch_exe_, 'packages/monarch'));
-  results.add(await runTest(flutter_exe_, monarch_exe_, 'packages/monarch_io_utils'));
-  results.add(await runTest(flutter_exe_, monarch_exe_, 'packages/monarch_utils'));
-  results.add(await runTest(flutter_exe_, monarch_exe_, 'test/test_create'));
-  results.add(await runTest(flutter_exe_, monarch_exe_, 'test/test_localizations'));
-  results.add(await runTest(flutter_exe_, monarch_exe_, 'test/test_stories'));
-  results.add(await runTest(flutter_exe_, monarch_exe_, 'test/test_themes'));
+  results.add(await _test(flutter_exe_, monarch_exe_, 'cli'));
+  results.add(await _test(flutter_exe_, monarch_exe_, 'controller'));
+  results.add(await _test(flutter_exe_, monarch_exe_, 'packages/monarch'));
+  results.add(
+      await _test(flutter_exe_, monarch_exe_, 'packages/monarch_io_utils'));
+  results
+      .add(await _test(flutter_exe_, monarch_exe_, 'packages/monarch_utils'));
+  results.add(await _test(flutter_exe_, monarch_exe_, 'test/test_create'));
+  results
+      .add(await _test(flutter_exe_, monarch_exe_, 'test/test_localizations'));
+  results.add(await _test(flutter_exe_, monarch_exe_, 'test/test_stories'));
+  results.add(await _test(flutter_exe_, monarch_exe_, 'test/test_themes'));
 
-  printResults({flutter_exe_: results}, stopwatch);
-
-  return results;
+  return {flutter_exe_: results};
 }
 
-void printResults(
-    Map<String, List<TestResult>> resultsMap, Stopwatch stopwatch) {
-  print('''
-
-### Test Results''');
-  for (var key in resultsMap.keys) {
-    print('');
-    printUsingCommand(key);
-    for (var result in resultsMap[key]!) {
-      print('- $result');
-    }
-  }
-
-  print('');
-  print('Tests took ${stopwatch..stop()}.');
-}
-
-void printUsingCommand(String command) {
-  if (command == 'dart' || command == 'flutter') {
-    print('Using $command exe from PATH');
-  } else {
-    print('Using $command');
-  }
-}
-
-Future<TestResult> runTest(
+Future<Map<String, List<TestResult>>> testSingleModuleSingleFlutterSdk(
     String flutter_exe_, String monarch_exe_, String module) async {
-  print('');
-  print('### Running $module tests');
+  var result = await _test(flutter_exe_, monarch_exe_, module);
+
+  return {
+    flutter_exe_: [result]
+  };
+}
+
+Future<TestResult> _test(
+    String flutter_exe_, String monarch_exe_, String module) async {
+  fine('');
+  fine('### Running $module tests');
+  var stopwatch = Stopwatch()..start();
 
   var module_path = p.join(local_repo_paths.root, module);
   var command = dartOrFlutter(module_path, flutter_exe_);
 
   printUsingCommand(command);
 
-  print('');
-  print('Running `$command pub get` in $module...');
+  var sdkVersion = isFlutter(module_path, flutter_exe_) || module.startsWith('test')
+      ? await getFlutterVersion(flutter_exe_)
+      : await getDartVersion(command);
+  info('Testing $module using $sdkVersion...');
+
+  fine('');
+  fine('Running `$command pub get` in $module...');
   var xpg = await Process.start(command, ['pub', 'get'],
       workingDirectory: module_path, runInShell: Platform.isWindows);
-  stdout.addStream(xpg.stdout);
-  stderr.addStream(xpg.stderr);
+  if (verbose) {
+    stdout.addStream(xpg.stdout);
+    stderr.addStream(xpg.stderr);
+  }
   await xpg.exitCode;
 
-  print('');
-  print('Running `$command test` in $module...');
+  fine('');
+  fine('Running `$command test` in $module...');
   var process = await Process.start(command, ['test'],
       workingDirectory: module_path,
       runInShell: Platform.isWindows,
@@ -184,30 +175,128 @@ Future<TestResult> runTest(
       });
 
   if (module.startsWith('test')) {
-    print('Integration tests environment variables:');
-    print('  - MONARCH_EXE: $monarch_exe_');
-    print('  - FLUTTER_EXE: $flutter_exe_');
+    fine('Integration tests environment variables:');
+    fine('  - MONARCH_EXE: $monarch_exe_');
+    fine('  - FLUTTER_EXE: $flutter_exe_');
   }
 
-  stdout.addStream(process.stdout);
-  stderr.addStream(process.stderr);
+  if (verbose) {
+    stdout.addStream(process.stdout);
+    stderr.addStream(process.stderr);
+  }
   var exitCode = await process.exitCode;
   var result = TestResult(module, exitCode);
 
-  print('$module tests ${result.passed ? 'PASSED' : 'FAILED'}.');
+  if (result.passed) {
+    info('PASSED: $module using $sdkVersion. Took ${stopwatch..stop()}.');
+  } else {
+    info('FAILED: $module using $sdkVersion. Took ${stopwatch..stop()}.');
+  }
+
   return result;
 }
 
 String dartOrFlutter(String module_path, String flutter_exe_) {
+  if (isFlutter(module_path, flutter_exe_)) {
+    return flutter_exe_;
+  } else {
+    return 'dart';
+  }
+}
+
+bool isFlutter(String module_path, String flutter_exe_) {
   var pubspecFile = File(p.join(module_path, 'pubspec.yaml'));
   if (!pubspecFile.existsSync()) {
     throw 'pubspec.yaml of $module_path does not exist';
   }
   if (pubspecFile.readAsStringSync().contains('sdk: flutter')) {
-    return flutter_exe_;
+    return true;
   } else {
-    return 'dart';
+    return false;
   }
+}
+
+void printResults(
+    Map<String, List<TestResult>> resultsMap, Stopwatch stopwatch) {
+  fine('''
+
+### Test Results''');
+  for (var key in resultsMap.keys) {
+    fine('');
+    printUsingCommand(key);
+    for (var result in resultsMap[key]!) {
+      fine('- $result');
+    }
+  }
+
+  fine('');
+  fine('Tests took ${stopwatch..stop()}.');
+}
+
+void exit_(Map<String, List<TestResult>> results) {
+  var results_ = results.values.expand((element) => element).toList();
+  if (results_.every((element) => element.passed)) {
+    info('All tests passed.');
+    exit(0);
+  } else {
+    info('Some tests FAILED.');
+    exit(1);
+  }
+}
+
+void printUsingCommand(String command) {
+  if (command == 'dart' || command == 'flutter') {
+    fine('Using $command exe from PATH');
+  } else {
+    fine('Using $command');
+  }
+}
+
+Future<String> getFlutterVersion(String flutter_exe_) async {
+  var result = await Process.run(
+    flutter_exe_,
+    ['--version'],
+    stdoutEncoding: Platform.isWindows ? Utf8Codec() : systemEncoding,
+    stderrEncoding: Platform.isWindows ? Utf8Codec() : systemEncoding,
+  );
+  if (result.exitCode == 0) {
+    var output = result.stdout.toString().trim();
+    var id = FlutterSdkId.parseFlutterVersionOutput(
+        output, Platform.operatingSystem);
+    return 'Flutter ${id.version} (${id.channel})';
+  } else {
+    throw '`flutter --version` did not exit successfully';
+  }
+}
+
+Future<String> getDartVersion(String dart_exe_) async {
+  var result = await Process.run(
+    dart_exe_,
+    ['--version'],
+  );
+  if (result.exitCode == 0) {
+    var output = result.stdout.toString().trim();
+    var pattern = RegExp(r'^Dart SDK version:\s(\S+)\s\((\w+)\)');
+    if (pattern.hasMatch(output)) {
+      var match = pattern.firstMatch(output)!;
+      if (match.groupCount == 2) {
+        var _version = match.group(1)!;
+        var _channel = match.group(2)!;
+        return 'Dart $_version ($_channel)';
+      }
+    }
+    throw 'Could not parse version and channel from "dart --version" command output';
+  } else {
+    throw '`dart --version` did not exit successfully';
+  }
+}
+
+void fine(String message) {
+  if (verbose) print(message);
+}
+
+void info(String message) {
+  print(message);
 }
 
 class TestResult {

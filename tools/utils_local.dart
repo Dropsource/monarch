@@ -5,7 +5,6 @@ import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 import 'paths.dart';
-import 'utils.dart' as utils;
 
 List<String> read_flutter_sdks() {
   var yaml = readLocalSettingsYaml();
