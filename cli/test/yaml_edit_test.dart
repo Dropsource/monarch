@@ -164,7 +164,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-dev_dependencies: 
+dev_dependencies:
   monarch: ^0.0.4
 
 flutter:

@@ -79,7 +79,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-dev_dependencies: 
+dev_dependencies:
   x: ^0.0.3
 ''');
       });
