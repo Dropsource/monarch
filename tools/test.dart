@@ -149,7 +149,9 @@ Future<TestResult> _test(
 
   printUsingCommand(command);
 
-  var sdkVersion = isFlutter(module_path, flutter_exe_) || module.startsWith('test')
+  bool isIntegrationTest = module.startsWith('test');
+
+  var sdkVersion = isFlutter(module_path, flutter_exe_) || isIntegrationTest
       ? await getFlutterVersion(flutter_exe_)
       : await getDartVersion(command);
   info('Testing $module using $sdkVersion...');
@@ -166,7 +168,8 @@ Future<TestResult> _test(
 
   fine('');
   fine('Running `$command test` in $module...');
-  var process = await Process.start(command, ['test'],
+  var process = await Process.start(
+      command, ['test', if (isIntegrationTest) '--concurrency=1'],
       workingDirectory: module_path,
       runInShell: Platform.isWindows,
       environment: {
@@ -174,7 +177,7 @@ Future<TestResult> _test(
         'FLUTTER_EXE': flutter_exe_,
       });
 
-  if (module.startsWith('test')) {
+  if (isIntegrationTest) {
     fine('Integration tests environment variables:');
     fine('  - MONARCH_EXE: $monarch_exe_');
     fine('  - FLUTTER_EXE: $flutter_exe_');
@@ -297,8 +300,10 @@ void fine(String message) {
 }
 
 void info(String message) {
-  if (verbose) print('info:$message');
-  else print(message);
+  if (verbose)
+    print('info:$message');
+  else
+    print(message);
 }
 
 class TestResult {
