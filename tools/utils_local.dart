@@ -47,7 +47,7 @@ String read_target_platform() {
 
 String getVersionSuffix(String version) {
   var deployment = read_deployment();
-  return deployment == 'prod' ? version : '$version-$deployment';
+  return deployment == 'local' ? '$version-local' : version;
 }
 
 YamlMap readLocalSettingsYaml() {
