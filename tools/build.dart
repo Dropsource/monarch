@@ -14,16 +14,16 @@ import 'build_preview_api.dart';
 import 'build_internal.dart';
 
 /// Build all Monarch modules on your local to the out directory:
-/// 
+///
 ///   $ dart tools/build.dart all
-/// 
+///
 /// You can also build a specific Monarch module:
-/// 
+///
 ///   $ dart tools/build.dart cli
 ///   $ dart tools/build.dart controller
-/// 
+///
 /// To get more details:
-/// 
+///
 ///   $ dart tools/build.dart -h
 void main(List<String> arguments) async {
   var runner = CommandRunner('build',
@@ -83,9 +83,16 @@ class BuildCliCommand extends Command {
   @override
   String get name => 'cli';
 
+  BuildCliCommand() {
+    argParser.addOption('out-monarch-bin',
+        help: 'Path to the monarch bin directory. '
+            'Defaults to out/monarch/bin.');
+  }
+
   @override
   Future<void> run() async {
-    buildCli();
+    var monarchBin = argResults?['out-monarch-bin'] ?? local_out_paths.out_bin;
+    buildCli(monarchBin);
   }
 }
 
@@ -95,11 +102,11 @@ abstract class BuildWithFlutterCommand extends Command {
         abbr: 'f',
         help:
             'Path to the Flutter SDK to use. If blank, this command will run using '
-            'each Flutter SDK declared in local_settings.yaml.');
-    argParser.addOption('out-ui',
-        abbr: 'o',
-        help:
-            'Path to the monarch_ui/{flutter_id} output directory. Required if --flutter-sdk is set.');
+            'each Flutter SDK declared in local_settings.yaml. '
+            'And it will output to the out/monarch/bin/cache/monarch_ui directory.');
+    argParser.addOption('out-monarch-ui-flutter-id',
+        help: 'Path to the monarch_ui/{flutter-id} directory. '
+            'Only used when flutter-sdk is set.');
   }
 
   @override
@@ -116,9 +123,9 @@ abstract class BuildWithFlutterCommand extends Command {
       }
     } else {
       String flutter_sdk = argResults!['flutter-sdk'];
-      String? out_ui_flutter_id_ = argResults!['out-ui'];
+      String? out_ui_flutter_id_ = argResults!['out-monarch-ui-flutter-id'];
       if (out_ui_flutter_id_ == null) {
-        throw '--out-ui must be provided if --flutter-sdk is set';
+        throw '--out-monarch-ui-flutter-id must be provided if --flutter-sdk is set';
       }
       buildWithFlutter(local_repo_paths.root, flutter_sdk, out_ui_flutter_id_);
     }
@@ -181,7 +188,8 @@ class BuildInternalCommand extends Command {
 
   BuildInternalCommand() {
     argParser.addOption('internal-dir',
-        help: 'Path to the internal directory to write to. Defaults to out/bin/internal.');
+        help:
+            'Path to the internal directory to write to. Defaults to out/bin/internal.');
     argParser.addOption('binaries-version',
         help: 'The version of the Monarch binaries. Defaults to "local".');
     argParser.addOption('revision',
