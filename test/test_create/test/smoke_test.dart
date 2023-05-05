@@ -24,7 +24,7 @@ void main() async {
     logSink.close();
   });
 
-  test('flutter create, monarch init, monarch run', () async {
+  test('smoke: flutter create, monarch init, monarch run', () async {
     await runFlutterCreate('zeta',
         workingDirectory: workingDir.path, sink: logSink);
 

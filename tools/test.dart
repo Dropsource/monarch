@@ -9,6 +9,7 @@ import 'package:path/path.dart' as p;
 import 'paths.dart';
 
 bool verbose = false;
+String? namePattern;
 
 /// Run all unit and integration tests in all monarch modules using
 /// all the fluter sdks in local_settings.yaml:
@@ -35,6 +36,10 @@ void main(List<String> arguments) async {
       help:
           'The relative path to the monarch module to test; such as: cli, package/monarch, test/test_create, etc. '
           'By default, it will test all modules.');
+  parser.addOption('name',
+      abbr: 'n',
+      help:
+          'A substring of the name of the test to run. Regular expression syntax is supported.');
   parser.addOption('flutter-sdk',
       abbr: 'f',
       help:
@@ -55,6 +60,7 @@ void main(List<String> arguments) async {
   }
 
   verbose = args['verbose'];
+  namePattern = args['name'];
   String? flutter_sdk = args['flutter-sdk'];
   String? module = args['module'];
   String monarch_dir = args['monarch-dir'] ?? local_out_paths.out_monarch;
@@ -169,7 +175,13 @@ Future<TestResult> _test(
   fine('');
   fine('Running `$command test` in $module...');
   var process = await Process.start(
-      command, ['test', if (isIntegrationTest) '--concurrency=1'],
+      command,
+      <String>[
+        'test',
+        if (isIntegrationTest) '--concurrency=1',
+        if (namePattern != null) '--name',
+        if (namePattern != null) namePattern!,
+      ],
       workingDirectory: module_path,
       runInShell: Platform.isWindows,
       environment: {
