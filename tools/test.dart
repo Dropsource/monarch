@@ -14,7 +14,7 @@ String? namePattern;
 /// Run all unit and integration tests in all monarch modules using
 /// all the fluter sdks in local_settings.yaml:
 ///
-///   $ dart tools/test.dart --all
+///   $ dart tools/test.dart
 ///
 /// Run tests on a specific module:
 ///
