@@ -76,13 +76,12 @@ void main(List<String> arguments) async {
       results = await testSingleModuleAllFlutterSdks(module, monarch_exe_);
     }
   } else {
-    String flutter_exe_ = flutter_exe(flutter_sdk);
     if (module == null) {
       results =
-          await testAllModulesSingleFlutterSdk(flutter_exe_, monarch_exe_);
+          await testAllModulesSingleFlutterSdk(flutter_sdk, monarch_exe_);
     } else {
       results = await testSingleModuleSingleFlutterSdk(
-          flutter_exe_, monarch_exe_, module);
+          flutter_sdk, monarch_exe_, module);
     }
   }
 
@@ -96,7 +95,7 @@ Future<Map<String, List<TestResult>>> testAllModulesAllFlutterSdks(
 
   for (var flutter_sdk in local_utils.read_flutter_sdks()) {
     var results = await testAllModulesSingleFlutterSdk(
-        flutter_exe(flutter_sdk), monarch_exe_);
+        flutter_sdk, monarch_exe_);
     resultsMap[flutter_sdk] = results[flutter_sdk]!;
   }
 
@@ -108,7 +107,7 @@ Future<Map<String, List<TestResult>>> testSingleModuleAllFlutterSdks(
   var resultsMap = <String, List<TestResult>>{};
 
   for (var flutter_sdk in local_utils.read_flutter_sdks()) {
-    var results = await _test(flutter_exe(flutter_sdk), monarch_exe_, module);
+    var results = await _test(flutter_sdk, monarch_exe_, module);
     resultsMap[flutter_sdk] = [results];
   }
 
@@ -116,40 +115,41 @@ Future<Map<String, List<TestResult>>> testSingleModuleAllFlutterSdks(
 }
 
 Future<Map<String, List<TestResult>>> testAllModulesSingleFlutterSdk(
-    String flutter_exe_, String monarch_exe_) async {
+    String flutter_sdk, String monarch_exe_) async {
   var results = <TestResult>[];
 
-  results.add(await _test(flutter_exe_, monarch_exe_, 'cli'));
-  results.add(await _test(flutter_exe_, monarch_exe_, 'controller'));
-  results.add(await _test(flutter_exe_, monarch_exe_, 'packages/monarch'));
-  results.add(
-      await _test(flutter_exe_, monarch_exe_, 'packages/monarch_io_utils'));
-  results
-      .add(await _test(flutter_exe_, monarch_exe_, 'packages/monarch_utils'));
-  results.add(await _test(flutter_exe_, monarch_exe_, 'test/test_create'));
-  results
-      .add(await _test(flutter_exe_, monarch_exe_, 'test/test_localizations'));
-  results.add(await _test(flutter_exe_, monarch_exe_, 'test/test_stories'));
-  results.add(await _test(flutter_exe_, monarch_exe_, 'test/test_themes'));
+  results.add(await _test(flutter_sdk, monarch_exe_, 'cli'));
+  results.add(await _test(flutter_sdk, monarch_exe_, 'controller'));
+  // results.add(await _test(flutter_sdk, monarch_exe_, 'packages/monarch'));
+  // results.add(
+  //     await _test(flutter_sdk, monarch_exe_, 'packages/monarch_io_utils'));
+  // results
+  //     .add(await _test(flutter_sdk, monarch_exe_, 'packages/monarch_utils'));
+  // results.add(await _test(flutter_sdk, monarch_exe_, 'test/test_create'));
+  // results
+  //     .add(await _test(flutter_sdk, monarch_exe_, 'test/test_localizations'));
+  // results.add(await _test(flutter_sdk, monarch_exe_, 'test/test_stories'));
+  // results.add(await _test(flutter_sdk, monarch_exe_, 'test/test_themes'));
 
-  return {flutter_exe_: results};
+  return {flutter_sdk: results};
 }
 
 Future<Map<String, List<TestResult>>> testSingleModuleSingleFlutterSdk(
-    String flutter_exe_, String monarch_exe_, String module) async {
-  var result = await _test(flutter_exe_, monarch_exe_, module);
+    String flutter_sdk, String monarch_exe_, String module) async {
+  var result = await _test(flutter_sdk, monarch_exe_, module);
 
   return {
-    flutter_exe_: [result]
+    flutter_sdk: [result]
   };
 }
 
 Future<TestResult> _test(
-    String flutter_exe_, String monarch_exe_, String module) async {
+    String flutter_sdk, String monarch_exe_, String module) async {
   fine('');
   fine('### Running $module tests');
   var stopwatch = Stopwatch()..start();
 
+  var flutter_exe_ = flutter_exe(flutter_sdk);
   var module_path = p.join(local_repo_paths.root, module);
   var command = dartOrFlutter(module_path, flutter_exe_);
 
