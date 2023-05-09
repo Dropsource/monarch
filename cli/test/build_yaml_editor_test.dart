@@ -12,7 +12,7 @@ targets:
       - stories/**''';
 
 const expected2 = r'''
-targets: 
+targets:
   $default:
     sources:
       - $package$
@@ -22,7 +22,7 @@ targets:
 
 const expected3 = r'''
 targets:
-  $default: 
+  $default:
     sources:
       - $package$
       - lib/**
@@ -32,7 +32,7 @@ targets:
 const expected4 = r'''
 targets:
   $default:
-    sources: 
+    sources:
       - $package$
       - lib/**
       - stories/**

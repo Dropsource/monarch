@@ -5,7 +5,6 @@ import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 import 'paths.dart';
-import 'utils.dart' as utils;
 
 List<String> read_flutter_sdks() {
   var yaml = readLocalSettingsYaml();
@@ -48,7 +47,7 @@ String read_target_platform() {
 
 String getVersionSuffix(String version) {
   var deployment = read_deployment();
-  return deployment == 'prod' ? version : '$version-$deployment';
+  return deployment == 'local' ? '$version-local' : version;
 }
 
 YamlMap readLocalSettingsYaml() {
@@ -57,10 +56,4 @@ YamlMap readLocalSettingsYaml() {
     throw 'Make sure you create $local_settings_yaml inside the tools directory';
   var contents = file.readAsStringSync();
   return loadYaml(contents) as YamlMap;
-}
-
-void writeInternalFile(String name, String contents) {
-  utils.createDirectoryIfNeeded(local_out_paths.out_bin_internal);
-  var file = File(p.join(local_out_paths.out_bin_internal, name));
-  file.writeAsStringSync(contents, mode: FileMode.writeOnly);
 }

@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:path/path.dart' as p;
+
 void createDirectoryIfNeeded(String path) {
   var dir = Directory(path);
   if (!dir.existsSync()) dir.createSync(recursive: true);
@@ -40,4 +42,10 @@ void exitIfNeededCMake(ProcessResult result, String errorMessage) {
     print(result.stderr);
     exit(1);
   }
+}
+
+void writeInternalFile(String internal, String name, String contents) {
+  createDirectoryIfNeeded(internal);
+  var file = File(p.join(internal, name));
+  file.writeAsStringSync(contents, mode: FileMode.writeOnly);
 }
