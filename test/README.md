@@ -19,10 +19,18 @@ The Monarch integration tests can:
 - test_themes: Flutter project to test monarch themes annotations.
 - utils: Utils for Monarch integration tests.
 
-### Run all the tests using test.dart 
+### Run tests using tools/test.dart 
+The tools/test.dart makes it easy to run all monarch tests. With the tools/test.dart 
+script you can:
+
+- Run tests from all Monarch modules using all Flutter SDKs on your local
+- Run tests from a single Monarch module using all Flutter SDKs on your local
+- Run tests form all Monarch modules using a single Flutter SDK
+- Run tests from a single Monarch module using a single Flutter SDK
+
 Before running the tests, make sure you have build the monarch binaries:
 ```
-$ dart tools/build.dart
+$ dart tools/build.dart all
 ```
 The command above will output the monarch binaries to the `out` directory.
 
@@ -33,9 +41,19 @@ $ dart tools/test.dart
 The dart script above will run the tests using the flutter sdks you have declared 
 in `tools/local_settings.yaml`. And the monarch exe in the `out` directory.
 
-### Run a single integration test
-If you want to run a single test or a group of tests, there are a few things to
-keep in mind:
+You can also use test.dart to run tests on a single module or flutter sdk:
+```
+$ dart tools/test.dart -m packages/monarch
+$ dart tools/test.dart -m controller
+
+$ dart tools/test.dart -m cli -f /path/to/some/flutter/sdk
+```
+
+To get more details run `dart tools/test.dart -h`
+
+### Run tests using `dart test`
+If you would like more control over how to run the Monarch tests, then you can 
+use `dart test`. If you use `dart test`, there are a few things to keep in mind:
 
 - The flutter and monarch executables to test need to be sourced in your PATH or 
   they need to be set as environment variables FLUTTER_EXE and MONARCH_EXE
