@@ -120,16 +120,16 @@ Future<Map<String, List<TestResult>>> testAllModulesSingleFlutterSdk(
 
   results.add(await _test(flutter_sdk, monarch_exe_, 'cli'));
   results.add(await _test(flutter_sdk, monarch_exe_, 'controller'));
-  // results.add(await _test(flutter_sdk, monarch_exe_, 'packages/monarch'));
-  // results.add(
-  //     await _test(flutter_sdk, monarch_exe_, 'packages/monarch_io_utils'));
-  // results
-  //     .add(await _test(flutter_sdk, monarch_exe_, 'packages/monarch_utils'));
-  // results.add(await _test(flutter_sdk, monarch_exe_, 'test/test_create'));
-  // results
-  //     .add(await _test(flutter_sdk, monarch_exe_, 'test/test_localizations'));
-  // results.add(await _test(flutter_sdk, monarch_exe_, 'test/test_stories'));
-  // results.add(await _test(flutter_sdk, monarch_exe_, 'test/test_themes'));
+  results.add(await _test(flutter_sdk, monarch_exe_, 'packages/monarch'));
+  results.add(
+      await _test(flutter_sdk, monarch_exe_, 'packages/monarch_io_utils'));
+  results
+      .add(await _test(flutter_sdk, monarch_exe_, 'packages/monarch_utils'));
+  results.add(await _test(flutter_sdk, monarch_exe_, 'test/test_create'));
+  results
+      .add(await _test(flutter_sdk, monarch_exe_, 'test/test_localizations'));
+  results.add(await _test(flutter_sdk, monarch_exe_, 'test/test_stories'));
+  results.add(await _test(flutter_sdk, monarch_exe_, 'test/test_themes'));
 
   return {flutter_sdk: results};
 }
