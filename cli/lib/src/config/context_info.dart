@@ -271,7 +271,7 @@ class ContextInfo with Log {
         log.warning(
             '"cmake --version" command did not exit successfully, got exit code: ${result.exitCode}');
       }
-    } catch (e, s) {
+    } catch (_) {
       log.warning('could not read CMake version');
     }
   }

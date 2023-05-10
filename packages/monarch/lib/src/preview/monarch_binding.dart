@@ -9,7 +9,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'dart:ui' as ui;
 
 import 'package:monarch_definitions/monarch_definitions.dart';
 
@@ -26,6 +25,11 @@ class MonarchBinding extends BindingBase
         SemanticsBinding,
         RendererBinding,
         WidgetsBinding {
+  MonarchBinding()
+      : platformDispatcher = TestPlatformDispatcher(
+          platformDispatcher: PlatformDispatcher.instance,
+        );
+
   @override
   void initInstances() {
     super.initInstances();
@@ -49,17 +53,17 @@ class MonarchBinding extends BindingBase
   }
 
   @override
-  TestWindow get window => _window;
-  final _window = TestWindow(window: ui.window);
+  final TestPlatformDispatcher platformDispatcher;
 
   void _onDeviceChanged(DeviceDefinition device) {
-    window.physicalSizeTestValue = Size(
-        device.logicalResolution.width * window.devicePixelRatio,
-        device.logicalResolution.height * window.devicePixelRatio);
+    var view = platformDispatcher.implicitView!;
+    view.physicalSize = Size(
+        device.logicalResolution.width * view.devicePixelRatio,
+        device.logicalResolution.height * view.devicePixelRatio);
   }
 
   void _onTextScaleFactorChanged(double factor) {
-    window.platformDispatcher.textScaleFactorTestValue = factor;
+    platformDispatcher.textScaleFactorTestValue = factor;
   }
 
   final _willReassembleStreamController = StreamController<void>.broadcast();
