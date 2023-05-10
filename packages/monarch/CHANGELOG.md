@@ -1,3 +1,7 @@
+## 3.5.0 - 2023-05-10
+- MonarchBinding now uses TestPlatformDispatcher instead of deprecated TestWindow
+- The change above was introduced in Flutter 3.9
+- Compatible with Flutter 3.9 or greater
 
 ## 3.4.0 - 2023-04-25
 - Faster code generation
