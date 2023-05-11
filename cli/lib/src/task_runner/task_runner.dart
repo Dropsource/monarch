@@ -185,9 +185,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
   void _createInitialTasks() {
     _generateStoriesTask = ProcessTask(
         taskName: TaskNames.generateMetaStories,
-        executable: config.flutterExecutablePath,
+        executable: config.dartExecutablePath,
         arguments: [
-          'pub',
           'run',
           'build_runner',
           'build',
@@ -373,9 +372,8 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
 
     _watchToRegenTask = ProcessParentReadyTask(
         taskName: TaskNames.watchToRegenMetaStories,
-        executable: config.flutterExecutablePath,
+        executable: config.dartExecutablePath,
         arguments: [
-          'pub',
           'run',
           'build_runner',
           'watch',

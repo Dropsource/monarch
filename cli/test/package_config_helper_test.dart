@@ -75,11 +75,13 @@ void main() {
         final helper = FlutterPackageHelper(r'C:\foo\bar\packages\floating');
         expect(helper.endsWithTrailingDirs, isFalse);
       });
-      test('gets flutter executable path', () {
+      test('gets flutter and dart executable path', () {
         final path = r'C:\Users\foo\development\flutter-sdk\packages\flutter';
         final helper = FlutterPackageHelper(path);
-        expect(helper.getExecutablePath(),
+        expect(helper.getFlutterExePath(),
             r'C:\Users\foo\development\flutter-sdk\bin\flutter');
+        expect(helper.getDartExePath(),
+            r'C:\Users\foo\development\flutter-sdk\bin\dart');
       });
     }, testOn: 'windows');
 
@@ -93,11 +95,13 @@ void main() {
             FlutterPackageHelper(r'/Users/foo/bar/packages/floating');
         expect(helper.endsWithTrailingDirs, isFalse);
       });
-      test('gets flutter executable path', () {
+      test('gets flutter and dart executable path', () {
         final path = r'/Users/foo/development/flutter-sdk/packages/flutter';
         final helper = FlutterPackageHelper(path);
-        expect(helper.getExecutablePath(),
+        expect(helper.getFlutterExePath(),
             r'/Users/foo/development/flutter-sdk/bin/flutter');
+        expect(helper.getDartExePath(),
+            r'/Users/foo/development/flutter-sdk/bin/dart');
       });
     }, testOn: 'mac-os');
   });

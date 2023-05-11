@@ -48,6 +48,14 @@ class ProjectConfig extends Validator with Log {
     return _flutterExecutablePath!;
   }
 
+  String? _dartExecutablePath;
+  String get dartExecutablePath {
+    if (_dartExecutablePath == null) {
+      throw ProjectConfigStateError.getterNotNull('dartExecutablePath');
+    }
+    return _dartExecutablePath!;
+  }
+
   String get flutterSdkBinDirectory => p.dirname(flutterExecutablePath);
   String get flutterSdkDirectory => p.dirname(flutterSdkBinDirectory);
 
@@ -141,14 +149,19 @@ class ProjectConfig extends Validator with Log {
       return;
     }
 
-    _flutterExecutablePath = helper.getExecutablePath();
-
+    _flutterExecutablePath = helper.getFlutterExePath();
     if (!await File(flutterExecutablePath).exists()) {
       errors.add('Flutter executable not found at $flutterExecutablePath');
       return;
     }
-
     log.info('Found flutter executable at $flutterExecutablePath');
+
+    _dartExecutablePath = helper.getDartExePath();
+    if (!await File(dartExecutablePath).exists()) {
+      errors.add('Dart executable not found at $dartExecutablePath');
+      return;
+    }
+    log.info('Found dart executable at $dartExecutablePath');
   }
 
   Future<void> _setFlutterSdkId(List<String> errors) async {

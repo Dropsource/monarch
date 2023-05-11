@@ -37,6 +37,15 @@ class PackageConfigHelper with Log {
   }
 }
 
+/// Computes the flutter exe and dart exe paths given the 
+/// "flutter" package rootUri path in .dart_tool/package_config.json
+/// 
+/// It expects the "flutter" package path to be like:
+///   file:///path/to/some-flutter-sdk/packages/flutter"
+/// 
+/// It then assumes that the flutter exe and dart exe will be at:
+///   /path/to/some-flutter-sdk/bin/flutter
+///   /path/to/some-flutter-sdk/bin/dart 
 class FlutterPackageHelper {
   final String flutterPackageRootPath;
   FlutterPackageHelper(this.flutterPackageRootPath);
@@ -46,9 +55,13 @@ class FlutterPackageHelper {
 
   List<String> trailingDirs = ['packages', 'flutter'];
 
-  String getExecutablePath() {
+  String getFlutterSdkPath() {
     final parts = p.split(flutterPackageRootPath);
     parts.removeRange(parts.length - trailingDirs.length, parts.length);
-    return p.join(p.joinAll(parts), 'bin', 'flutter');
+    return p.joinAll(parts);
   }
+
+  String getFlutterExePath() => p.join(getFlutterSdkPath(), 'bin', 'flutter');
+  
+  String getDartExePath() => p.join(getFlutterSdkPath(), 'bin', 'dart');
 }
