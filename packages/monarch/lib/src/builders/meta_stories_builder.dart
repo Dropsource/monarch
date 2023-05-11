@@ -68,7 +68,7 @@ class MetaStoriesBuilder implements Builder {
       /// not resolving the return type element, then we cannot check if it is of type Widget.
       /// Instead, we will do a runtime check in [ProjectDataManager.load].
 
-      var returnTypeName = returnType.name.name;
+      var returnTypeName = returnType.name2.lexeme;
       var storyName = functionName;
       var storyNameInSingleQuotes = "'$storyName'";
       log.fine('Found potential story `$returnTypeName $storyName()`.');
