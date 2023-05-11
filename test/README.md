@@ -55,7 +55,7 @@ To get more details run `dart tools/test.dart -h`
 If you would like more control over how to run the Monarch tests, then you can 
 use `dart test`. If you use `dart test`, there are a few things to keep in mind:
 
-- The flutter and monarch executables to test need to be sourced in your PATH or 
+- The dart, flutter and monarch executables to test need to be sourced in your PATH or 
   they need to be set as environment variables FLUTTER_EXE and MONARCH_EXE
 - The integration tests need to be run sequentially, use the `-j 1` flag. 
   Example: `dart test -j 1`

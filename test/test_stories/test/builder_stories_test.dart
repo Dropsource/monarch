@@ -14,7 +14,7 @@ void main() async {
 
   test('stories builder codegen build_runner log messages', () async {
     buildRunner = await startTestProcess(
-        flutter_exe, ['pub', 'run', 'build_runner', 'build', '--verbose'],
+        dart_exe, ['run', 'build_runner', 'build', '--verbose'],
         forwardStdio: false);
 
     expectLaterEndsWith(String message) =>

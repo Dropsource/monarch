@@ -1,3 +1,7 @@
+## 3.5.1 - 2023-05-11
+- MetaStoriesBuilder: Use `NamedType.name2.lexeme` instead of 
+  deprecated `NamedType.name.name`.
+
 ## 3.5.0 - 2023-05-10
 - MonarchBinding now uses TestPlatformDispatcher instead of deprecated TestWindow
 - The change above was introduced in Flutter 3.9

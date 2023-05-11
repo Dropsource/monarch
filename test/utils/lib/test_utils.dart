@@ -21,6 +21,18 @@ String monarch_exe = Platform.environment['MONARCH_EXE'] ?? 'monarch';
 /// in the environment PATH before running these tests.
 String flutter_exe = Platform.environment['FLUTTER_EXE'] ?? 'flutter';
 
+/// Returns the dart exe path. If the FLUTTER_EXE environment variable
+/// is set, then it will return the dart exe located in the same 
+/// directory. Otherwise, the dart exe should be sourced
+/// in the environment PATH before running these tests.
+String get dart_exe {
+  if (flutter_exe == 'flutter') {
+    return 'dart';
+  } else {
+    return p.join(p.dirname(flutter_exe), 'dart');
+  }
+}
+
 Future<Directory> createWorkingDirectory() async {
   var workingDir = await Directory.systemTemp.createTemp('monarch_test_');
   print_('''
