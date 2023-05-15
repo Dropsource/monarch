@@ -1,6 +1,10 @@
+## 3.5.2 - 2023-05-15
+- Update analyzer dependency to `^5.12.0`. Changes in previous version 
+  require analyzer `^5.12.0`.
+
 ## 3.5.1 - 2023-05-11
-- MetaStoriesBuilder: Use `NamedType.name2.lexeme` instead of 
-  deprecated `NamedType.name.name`.
+- analyzer package deprecated `NamedType.name.name`.
+  MetaStoriesBuilder should use `NamedType.name2.lexeme` instead.
 
 ## 3.5.0 - 2023-05-10
 - MonarchBinding now uses TestPlatformDispatcher instead of deprecated TestWindow
