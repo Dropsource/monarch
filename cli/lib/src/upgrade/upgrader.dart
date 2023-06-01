@@ -105,6 +105,20 @@ was a fresh install: https://monarchapp.io/docs/install.
       stdout_default.writeln('\nUpgrade terminated.');
       return finish(CliExitCodes.userTerminated);
     } on ProcessFailedException {
+      if (Platform.isLinux) {
+        var result = await Process.run('which', ['curl']);
+        if (result.exitCode == 0 && result.stdout.toString().contains('snap')) {
+          stdout_default.writeln();
+          stdout_default.writeln('''
+You are using _snap_ curl which has known issues. Please use _apt_ curl instead.
+See https://askubuntu.com/a/1387286
+
+Alternatively, you can re-install Monarch: https://monarchapp.io/docs/install
+''');
+          return finish(UpgradeExitCodes.downloadError);
+        }
+      }
+
       stdout_default.writeln(
           'Error downloading Monarch installation bundle. Please try `monarch upgrade` again.');
       return finish(UpgradeExitCodes.downloadError);
