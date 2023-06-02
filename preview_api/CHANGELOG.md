@@ -1,3 +1,6 @@
+## 2.3.0 - 2023-06-02
+- Update list of device definitions
+
 ## 2.2.0 - 2023-02-20
 - Adds willRestartPreview api function, which sends channel method with same name, 
   which is handled by Windows platform.
