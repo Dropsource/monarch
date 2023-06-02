@@ -1,6 +1,3 @@
-## 3.5.3 - 2023-06-02
-- Use latest `monarch_definitions` version which has a new default device definition
-
 ## 3.5.2 - 2023-05-15
 - Update analyzer dependency to `^5.12.0`. Changes in previous version 
   require analyzer `^5.12.0`.
