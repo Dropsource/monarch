@@ -8,23 +8,25 @@ class PreviewNotifications {
 
   PreviewNotifications(this.discoveryApi);
 
-  List<MonarchPreviewNotificationsApiClient> clientList = [];
+  Map<int, MonarchPreviewNotificationsApiClient> clientList = {};
 
   Future<void> _notifyClients(
       void Function(MonarchPreviewNotificationsApiClient client)
           notificationFn) async {
     await _populateClientList();
-    for (var client in clientList) {
+    for (var client in clientList.values) {
       notificationFn(client);
     }
   }
 
   Future<void> _populateClientList() async {
     var list = await discoveryApi.getPreviewNotificationsApiList(Empty());
-    clientList.clear();
-    for (var serverInfo in list.servers) {
-      var channel = constructClientChannel(serverInfo.port);
-      clientList.add(MonarchPreviewNotificationsApiClient(channel));
+
+    for (var server in list.servers) {
+      clientList.putIfAbsent(
+          server.port,
+          () => MonarchPreviewNotificationsApiClient(
+              constructClientChannel(server.port)));
     }
   }
 
