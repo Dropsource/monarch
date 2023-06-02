@@ -1,3 +1,7 @@
+### 1.3.1 - 2023-06-02
+- Deprecated `iPhone13DeviceDefinition`
+- Updated `defaultDeviceDefinition` to iPhone 14 data
+
 ### 1.3.0 - 2023-02-20
 - Add method `monarch.willRestartPreview`
 

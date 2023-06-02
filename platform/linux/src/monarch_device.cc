@@ -90,7 +90,7 @@ const gchar* monarch_device_get_title(MonarchDevice* self) {
 }
 
 MonarchDevice* monarch_device_get_default_device() {
-  return monarch_device_new("ios-iphone-13", "iPhone 13",
+  return monarch_device_new("ios-iphone-14", "iPhone 14",
                             monarch_logical_resolution_new(390.0, 844.0), 3.0,
                             MONARCH_TARGET_PLATFORM_IOS);
 }

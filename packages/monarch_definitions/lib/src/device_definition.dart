@@ -2,6 +2,7 @@ import 'standard_mapper.dart';
 import 'target_platform.dart';
 import 'logical_resolution.dart';
 
+@Deprecated('Use `defaultDeviceDefinition` instead. Deprecated with version 1.3.1.')
 const iPhone13DeviceDefinition = DeviceDefinition(
   id: 'ios-iphone-13',
   name: 'iPhone 13',
@@ -15,7 +16,16 @@ const iPhone13DeviceDefinition = DeviceDefinition(
 
 /// @GOTCHA: The default device is also defined in the platform code.
 /// If you change it here, change it in the platform code as well.
-const defaultDeviceDefinition = iPhone13DeviceDefinition;
+const defaultDeviceDefinition = DeviceDefinition(
+  id: 'ios-iphone-14',
+  name: 'iPhone 14',
+  logicalResolution: LogicalResolution(
+    height: 844,
+    width: 390,
+  ),
+  devicePixelRatio: 3.0,
+  targetPlatform: MonarchTargetPlatform.iOS,
+);
 
 class DeviceDefinition {
   const DeviceDefinition({

@@ -44,8 +44,8 @@ std::string DeviceDefinition::title()
 }
 
 DeviceDefinition defaultDeviceDefinition = DeviceDefinition{
-	"ios-iphone-13", 
-	"iPhone 13", 
+	"ios-iphone-14", 
+	"iPhone 14", 
 	LogicalResolution{390.0, 844.0},
 	3.0,
 	TargetPlatform::ios };

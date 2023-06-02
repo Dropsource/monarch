@@ -1,7 +1,6 @@
 import 'package:monarch_definitions/monarch_definitions.dart';
 
 /// iOS logical resolutions can be found here:
-/// - https://www.dimensions.com/collection/apple-ipad
 /// - https://ios-resolution.com/
 ///
 /// Android: Use this calculator to get logical resolutions and device pixel ratios:
@@ -47,7 +46,6 @@ const deviceDefinitions = [
     devicePixelRatio: 3.0,
     targetPlatform: MonarchTargetPlatform.iOS,
   ),
-
   DeviceDefinition(
     id: 'ios-iphone-13',
     name: 'iPhone 13',
@@ -178,7 +176,6 @@ const deviceDefinitions = [
     devicePixelRatio: 2.0,
     targetPlatform: MonarchTargetPlatform.iOS,
   ),
-  
   DeviceDefinition(
       id: 'ios-ipad-10th-gen',
       name: 'iPad (10th generation)',
@@ -275,7 +272,7 @@ const deviceDefinitions = [
     ),
     devicePixelRatio: 2.0,
     targetPlatform: MonarchTargetPlatform.iOS,
-  ),  
+  ),
   DeviceDefinition(
     id: 'ios-ipad-pro-4th-gen',
     name: 'iPad Pro (4th generation, 11")',
@@ -296,22 +293,6 @@ const deviceDefinitions = [
     devicePixelRatio: 2.0,
     targetPlatform: MonarchTargetPlatform.iOS,
   ),
-
-  /// Google Pixel 7
-  /// Google Pixel 7a
-  /// Google Pixel 7 Pro
-  /// Google Pixel 6
-  /// Google Pixel 6a
-  /// Google Pixel 6 Pro
-  /// Samsung Galaxy S23
-  /// Samsung Galaxy S23 Plus
-  /// Samsung Galaxy S23 Ultra
-  /// Samsung Galaxy S22
-  /// Samsung Galaxy A54 5G
-  /// Asus ZenFone 9
-  /// OnePlus 11
-  /// OnePlus 10 Pro
-
   DeviceDefinition(
     id: 'android-pixel-7',
     name: 'Google Pixel 7',
@@ -342,7 +323,6 @@ const deviceDefinitions = [
     devicePixelRatio: 3.2,
     targetPlatform: MonarchTargetPlatform.android,
   ),
-
   DeviceDefinition(
     id: 'android-pixel-6',
     name: 'Google Pixel 6',
@@ -373,7 +353,6 @@ const deviceDefinitions = [
     devicePixelRatio: 3.2,
     targetPlatform: MonarchTargetPlatform.android,
   ),
-
   DeviceDefinition(
     id: 'android-pixel-5a',
     name: 'Google Pixel 5a',
@@ -404,7 +383,6 @@ const deviceDefinitions = [
     devicePixelRatio: 2.7,
     targetPlatform: MonarchTargetPlatform.android,
   ),
-
   DeviceDefinition(
     id: 'android-samsung-galaxy-s23',
     name: 'Samsung Galaxy S23',
@@ -435,7 +413,6 @@ const deviceDefinitions = [
     devicePixelRatio: 3.13,
     targetPlatform: MonarchTargetPlatform.android,
   ),
-
   DeviceDefinition(
     id: 'android-samsung-galaxy-s22',
     name: 'Samsung Galaxy S22',
@@ -466,8 +443,6 @@ const deviceDefinitions = [
     devicePixelRatio: 3.13,
     targetPlatform: MonarchTargetPlatform.android,
   ),
-
-
   DeviceDefinition(
     id: 'android-samsung-galaxy-s21',
     name: 'Samsung Galaxy S21',
@@ -498,7 +473,6 @@ const deviceDefinitions = [
     devicePixelRatio: 3.28,
     targetPlatform: MonarchTargetPlatform.android,
   ),
-
   DeviceDefinition(
     id: 'android-samsung-galaxy-a54-5g',
     name: 'Samsung Galaxy A54 5G',
@@ -509,7 +483,6 @@ const deviceDefinitions = [
     devicePixelRatio: 2.5,
     targetPlatform: MonarchTargetPlatform.android,
   ),
-
   DeviceDefinition(
     id: 'android-samsung-galaxy-note-20-ultra',
     name: 'Samsung Galaxy Note 20 Ultra',
@@ -530,7 +503,6 @@ const deviceDefinitions = [
     devicePixelRatio: 2.45,
     targetPlatform: MonarchTargetPlatform.android,
   ),
-
   DeviceDefinition(
     id: 'asus-zenfone-9',
     name: 'Asus ZenFone 9',
@@ -541,7 +513,6 @@ const deviceDefinitions = [
     devicePixelRatio: 2.78,
     targetPlatform: MonarchTargetPlatform.android,
   ),
-
   DeviceDefinition(
     id: 'android-oneplus-11',
     name: 'OnePlus 11',
@@ -562,7 +533,6 @@ const deviceDefinitions = [
     devicePixelRatio: 3.28,
     targetPlatform: MonarchTargetPlatform.android,
   ),
-
   DeviceDefinition(
     id: 'android-oneplus-9-pro',
     name: 'OnePlus 9 Pro',
@@ -583,7 +553,6 @@ const deviceDefinitions = [
     devicePixelRatio: 3.2,
     targetPlatform: MonarchTargetPlatform.android,
   ),
-  
   DeviceDefinition(
     id: 'android-moto-g-power-2021',
     name: 'Moto G Power (2021)',

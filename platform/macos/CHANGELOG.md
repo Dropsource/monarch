@@ -1,3 +1,6 @@
+## 2.1.1 - 2022-06-02
+- Updated `defaultDeviceDefinition` to iPhone 14 data
+
 ## 2.1.0 - 2022-09-17
 - Controller window close and minimize buttons
 - Closing either window terminates the app
