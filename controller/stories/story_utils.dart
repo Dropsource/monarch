@@ -1,7 +1,16 @@
 import 'package:monarch_definitions/monarch_definitions.dart';
 
 const deviceDefinitions = [
-  iPhone13DeviceDefinition,
+  DeviceDefinition(
+    id: 'ios-iphone-13',
+    name: 'iPhone 13',
+    logicalResolution: LogicalResolution(
+      height: 844,
+      width: 390,
+    ),
+    devicePixelRatio: 3.0,
+    targetPlatform: MonarchTargetPlatform.iOS,
+  ),
   DeviceDefinition(
     id: 'ios-iphone-13-mini',
     name: 'iPhone 13 Mini',

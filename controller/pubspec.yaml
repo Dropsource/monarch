@@ -3,7 +3,7 @@ description: Monarch Controller UI
 
 publish_to: 'none'
 
-version: 1.3.0
+version: 1.3.1
 
 environment:
   sdk: '>=2.16.1 <3.0.0'
@@ -18,7 +18,7 @@ dependencies:
     sdk: flutter
   intl: any
   monarch_annotations: ^1.0.2
-  monarch_definitions: ^1.2.0
+  monarch_definitions: ^1.3.1
   monarch_io_utils: ^1.3.0
   monarch_utils: ^1.1.0
   grpc: ^3.1.0

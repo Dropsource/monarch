@@ -1,7 +1,9 @@
+## 2.3.1 - 2022-06-02
+- Updated `defaultDeviceDefinition` to iPhone 14 data
+
 ## 2.3.0 - 2023-02-20
 - Support hot restart. Closes preview window on willRestartPreview
   method call. Re-opens preview window on restartPreview method call.
-  
 
 ## 2.2.2 - 2022-12-13
 - Pass empty string to `FlutterEngine::Run` to workaround crash

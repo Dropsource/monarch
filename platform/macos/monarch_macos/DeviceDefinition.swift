@@ -50,13 +50,9 @@ extension DeviceDefinition : InboundChannelArgument {
     }
 }
 
-let iPhone13DeviceDefinition: DeviceDefinition = DeviceDefinition.init(
-    id: "ios-iphone-13",
-    name: "iPhone 13",
+let defaultDeviceDefinition: DeviceDefinition = DeviceDefinition.init(
+    id: "ios-iphone-14",
+    name: "iPhone 14",
     logicalResolution: LogicalResolution.init(width: 390, height: 844),
     devicePixelRatio: 3.0,
     targetPlatform: .ios)
-
-let defaultDeviceDefinition = iPhone13DeviceDefinition
-
-

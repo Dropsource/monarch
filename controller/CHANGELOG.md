@@ -1,3 +1,7 @@
+## 1.3.1 - 2023-06-02
+- Do not use deprecated `iPhone13DeviceDefinition` from `monarch_definitions` package
+- Use latest `monarch_definitions` version which has a new default device definition
+
 ## 1.3.0 - 2023-01-27
 - Linux support
 - Hide dock side on linux
