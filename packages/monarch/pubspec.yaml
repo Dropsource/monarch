@@ -1,11 +1,25 @@
 name: monarch
 description: Code generator for Monarch. Monarch is a tool for building Flutter widgets in isolation. It makes it easy to build, test and debug complex UIs.
-version: 3.5.2
+version: 3.5.3
 homepage: https://monarchapp.io
 repository: https://github.com/Dropsource/monarch
 issue_tracker: https://github.com/Dropsource/monarch/issues
 documentation: https://monarchapp.io/docs/introduction
+topics:
+  - tool
+  - ui
+  - monarch
+  - stories
 
+screenshots:
+  - description: Write stories to isolate your widgets. Then preview stories without running your app or backend.
+    path: screenshots/01-stories-fs8.png
+  - description: See your widgets in different modes. Make sure your UI works across multiple devices, text scales, languages, and themes.
+    path: screenshots/02-devices-fs8.png
+  - description: Debug widgets in isolation. Fine-tune animations, fix layout issues, align text. Find images using too much memory.
+    path: screenshots/03-debug-fs8.png
+  - description: Find and fix bugs with ease. Stories render edge cases with little effort.
+    path: screenshots/04-find-bugs-fs8.png
 
 environment:
   sdk: '>=2.12.0 <4.0.0'

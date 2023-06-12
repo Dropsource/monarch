@@ -1,3 +1,6 @@
+## 1.0.3 - 2023-06-12
+- Add topics to pubspec
+
 ## 1.0.2 - 2022-01-20
 - pubspec description update.
 

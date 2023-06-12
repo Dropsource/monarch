@@ -1,3 +1,6 @@
+## 3.5.3 - 2023-06-12
+- Add screenshots and topics to pubspec
+
 ## 3.5.2 - 2023-05-15
 - Update analyzer dependency to `^5.12.0`. Changes in previous version 
   require analyzer `^5.12.0`.
