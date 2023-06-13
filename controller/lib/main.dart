@@ -54,7 +54,8 @@ void setUpChannels(int discoveryServerPort) async {
   var channel = constructClientChannel(discoveryServerPort);
   var discoveryClient = MonarchDiscoveryApiClient(channel);
 
-  var server = Server([PreviewNotificationsApiService(manager)]);
+  var server =
+      Server.create(services: [PreviewNotificationsApiService(manager)]);
   await server.serve(port: 0);
   var previewNotificationsApiPort = server.port!;
   _logger.info(

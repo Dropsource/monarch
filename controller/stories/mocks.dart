@@ -122,4 +122,9 @@ class MockMonarchPreviewApiClient implements MonarchPreviewApiClient {
       {CallOptions? options}) {
     return FakeResponseFuture<Empty>();
   }
+  
+  @override
+  ResponseFuture<Empty> willRestartPreview(Empty request, {CallOptions? options}) {
+    return FakeResponseFuture<Empty>();
+  }
 }

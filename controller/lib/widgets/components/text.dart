@@ -40,7 +40,7 @@ class TextHeadline1 extends TextWidget {
 
   @override
   TextStyle? style(BuildContext context) =>
-      Theme.of(context).textTheme.headline1;
+      Theme.of(context).textTheme.displayLarge;
 }
 
 class TextHeadline2 extends TextWidget {
@@ -80,7 +80,7 @@ class TextHeadline2 extends TextWidget {
 
   @override
   TextStyle? style(BuildContext context) =>
-      Theme.of(context).textTheme.headline2;
+      Theme.of(context).textTheme.displayMedium;
 }
 
 class TextHeadline3 extends TextWidget {
@@ -120,7 +120,7 @@ class TextHeadline3 extends TextWidget {
 
   @override
   TextStyle? style(BuildContext context) =>
-      Theme.of(context).textTheme.headline3;
+      Theme.of(context).textTheme.displaySmall;
 }
 
 class TextHeadline4 extends TextWidget {
@@ -160,7 +160,7 @@ class TextHeadline4 extends TextWidget {
 
   @override
   TextStyle? style(BuildContext context) =>
-      Theme.of(context).textTheme.headline4;
+      Theme.of(context).textTheme.headlineMedium;
 }
 
 class TextHeadline5 extends TextWidget {
@@ -200,7 +200,7 @@ class TextHeadline5 extends TextWidget {
 
   @override
   TextStyle? style(BuildContext context) =>
-      Theme.of(context).textTheme.headline5;
+      Theme.of(context).textTheme.headlineSmall;
 }
 
 class TextHeadline6 extends TextWidget {
@@ -240,7 +240,7 @@ class TextHeadline6 extends TextWidget {
 
   @override
   TextStyle? style(BuildContext context) =>
-      Theme.of(context).textTheme.headline6;
+      Theme.of(context).textTheme.titleLarge;
 }
 
 class TextSubtitle1 extends TextWidget {
@@ -280,7 +280,7 @@ class TextSubtitle1 extends TextWidget {
 
   @override
   TextStyle? style(BuildContext context) =>
-      Theme.of(context).textTheme.subtitle1;
+      Theme.of(context).textTheme.titleMedium;
 }
 
 class TextSubtitle2 extends TextWidget {
@@ -320,7 +320,7 @@ class TextSubtitle2 extends TextWidget {
 
   @override
   TextStyle? style(BuildContext context) =>
-      Theme.of(context).textTheme.subtitle2;
+      Theme.of(context).textTheme.titleSmall;
 }
 
 class TextBody1 extends TextWidget {
@@ -360,7 +360,7 @@ class TextBody1 extends TextWidget {
 
   @override
   TextStyle? style(BuildContext context) =>
-      Theme.of(context).textTheme.bodyText1;
+      Theme.of(context).textTheme.bodyLarge;
 }
 
 class TextBody2 extends TextWidget {
@@ -400,7 +400,7 @@ class TextBody2 extends TextWidget {
 
   @override
   TextStyle? style(BuildContext context) =>
-      Theme.of(context).textTheme.bodyText2;
+      Theme.of(context).textTheme.bodyMedium;
 }
 
 class TextCaption extends TextWidget {
@@ -439,7 +439,7 @@ class TextCaption extends TextWidget {
         );
 
   @override
-  TextStyle? style(BuildContext context) => Theme.of(context).textTheme.caption;
+  TextStyle? style(BuildContext context) => Theme.of(context).textTheme.bodySmall;
 }
 
 class TextOverline extends TextWidget {
@@ -479,7 +479,7 @@ class TextOverline extends TextWidget {
 
   @override
   TextStyle? style(BuildContext context) =>
-      Theme.of(context).textTheme.overline;
+      Theme.of(context).textTheme.labelSmall;
 }
 
 class ButtonText extends TextWidget {
@@ -518,7 +518,7 @@ class ButtonText extends TextWidget {
         );
 
   @override
-  TextStyle? style(BuildContext context) => Theme.of(context).textTheme.button;
+  TextStyle? style(BuildContext context) => Theme.of(context).textTheme.labelLarge;
 }
 
 abstract class TextWidget extends StatelessWidget {
