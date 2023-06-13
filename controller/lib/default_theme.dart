@@ -20,7 +20,10 @@ ThemeData get theme => StockholmThemeData.dark().copyWith(
       primaryColor: blue,
       splashColor: Colors.transparent,
       visualDensity: VisualDensity.compact,
-      colorScheme: StockholmThemeData.dark().colorScheme.copyWith(error: red, background: dark,),
+      colorScheme: StockholmThemeData.dark().colorScheme.copyWith(
+            error: red,
+            background: dark,
+          ),
       scaffoldBackgroundColor: dark,
       textTheme: const TextTheme(
         displayLarge: TextStyle(

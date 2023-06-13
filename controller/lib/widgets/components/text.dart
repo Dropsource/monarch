@@ -439,7 +439,8 @@ class TextCaption extends TextWidget {
         );
 
   @override
-  TextStyle? style(BuildContext context) => Theme.of(context).textTheme.bodySmall;
+  TextStyle? style(BuildContext context) =>
+      Theme.of(context).textTheme.bodySmall;
 }
 
 class TextOverline extends TextWidget {
@@ -518,7 +519,8 @@ class ButtonText extends TextWidget {
         );
 
   @override
-  TextStyle? style(BuildContext context) => Theme.of(context).textTheme.labelLarge;
+  TextStyle? style(BuildContext context) =>
+      Theme.of(context).textTheme.labelLarge;
 }
 
 abstract class TextWidget extends StatelessWidget {
