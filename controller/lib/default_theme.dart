@@ -20,88 +20,90 @@ ThemeData get theme => StockholmThemeData.dark().copyWith(
       primaryColor: blue,
       splashColor: Colors.transparent,
       visualDensity: VisualDensity.compact,
-      errorColor: red,
+      colorScheme: StockholmThemeData.dark().colorScheme.copyWith(
+            error: red,
+            background: dark,
+          ),
       scaffoldBackgroundColor: dark,
       textTheme: const TextTheme(
-        headline1: TextStyle(
+        displayLarge: TextStyle(
           fontFamily: 'San Francisco',
           fontSize: 30.0,
           color: fontPrimaryColor,
           fontWeight: FontWeight.w500,
         ),
-        headline2: TextStyle(
+        displayMedium: TextStyle(
           fontFamily: 'San Francisco',
           fontSize: 28.0,
           color: fontPrimaryColor,
           fontWeight: FontWeight.w500,
         ),
-        headline3: TextStyle(
+        displaySmall: TextStyle(
           fontFamily: 'San Francisco',
           fontSize: 26.0,
           color: fontPrimaryColor,
           fontWeight: FontWeight.w500,
         ),
-        headline4: TextStyle(
+        headlineMedium: TextStyle(
           fontFamily: 'San Francisco',
           fontSize: 24.0,
           color: fontPrimaryColor,
           fontWeight: FontWeight.w500,
         ),
-        headline5: TextStyle(
+        headlineSmall: TextStyle(
           fontFamily: 'San Francisco',
           fontSize: 13.0,
           color: fontPrimaryColor,
           fontWeight: FontWeight.w600,
         ),
-        headline6: TextStyle(
+        titleLarge: TextStyle(
           fontFamily: 'San Francisco',
           color: fontPrimaryColor,
           fontWeight: FontWeight.bold,
           fontSize: 20,
         ),
-        bodyText1: TextStyle(
+        bodyLarge: TextStyle(
           fontFamily: 'San Francisco',
           color: fontPrimaryColor,
           fontWeight: FontWeight.w500,
           fontSize: 12,
         ),
-        bodyText2: TextStyle(
+        bodyMedium: TextStyle(
           fontFamily: 'San Francisco',
           color: fontPrimaryColor,
           fontWeight: FontWeight.w500,
           fontSize: 12,
         ),
-        subtitle1: TextStyle(
+        titleMedium: TextStyle(
           fontFamily: 'San Francisco',
           color: fontPrimaryColor,
           fontWeight: FontWeight.w500,
           fontSize: 12,
         ),
-        subtitle2: TextStyle(
+        titleSmall: TextStyle(
           fontFamily: 'San Francisco',
           color: fontPrimaryColor,
           fontWeight: FontWeight.w500,
           fontSize: 14,
         ),
-        caption: TextStyle(
+        bodySmall: TextStyle(
           fontFamily: 'San Francisco',
           color: fontPrimaryColor,
           fontWeight: FontWeight.w500,
           fontSize: 9,
         ),
-        overline: TextStyle(
+        labelSmall: TextStyle(
           fontFamily: 'San Francisco',
           color: fontPrimaryColor,
           fontWeight: FontWeight.w500,
           fontSize: 11,
           letterSpacing: 1.1,
         ),
-        button: TextStyle(
+        labelLarge: TextStyle(
           fontFamily: 'San Francisco',
           color: fontPrimaryColor,
           fontSize: 15.0,
           fontWeight: FontWeight.w500,
         ),
       ),
-      backgroundColor: dark,
     );

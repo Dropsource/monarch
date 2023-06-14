@@ -22,7 +22,7 @@ String monarch_exe = Platform.environment['MONARCH_EXE'] ?? 'monarch';
 String flutter_exe = Platform.environment['FLUTTER_EXE'] ?? 'flutter';
 
 /// Returns the dart exe path. If the FLUTTER_EXE environment variable
-/// is set, then it will return the dart exe located in the same 
+/// is set, then it will return the dart exe located in the same
 /// directory. Otherwise, the dart exe should be sourced
 /// in the environment PATH before running these tests.
 String get dart_exe {
@@ -171,7 +171,7 @@ Future<TestProcess> startTestProcessFancy(
 Future<TestPreviewNotificationsApiService> setUpTestNotificationsApi(
     int discoveryApiPort) async {
   var notifications = TestPreviewNotificationsApiService();
-  var server = Server([notifications]);
+  var server = Server.create(services: [notifications]);
   await server.serve(port: 0);
 
   var discoveryChannel = constructClientChannel(discoveryApiPort);

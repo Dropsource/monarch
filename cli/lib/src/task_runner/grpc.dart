@@ -20,7 +20,7 @@ class Grpc with Log {
   ClientChannel? _discoveryApiClientChannel;
 
   Future<void> setUpDiscoveryApiServer(int? port) async {
-    _discoveryApiServer = Server([DiscoveryApiService()]);
+    _discoveryApiServer = Server.create(services: [DiscoveryApiService()]);
     await _discoveryApiServer!.serve(port: port ?? 0);
     log.info(
         'discovery_api grpc server (discovery api service) started on port $discoveryApiServerPort');
@@ -36,8 +36,8 @@ class Grpc with Log {
       MonarchDiscoveryApiClient discoveryApiClient,
       TaskRunner taskRunner,
       Analytics analytics) async {
-    _previewNotificationsApiServer =
-        Server([PreviewNotificationsApiService(taskRunner, analytics)]);
+    _previewNotificationsApiServer = Server.create(
+        services: [PreviewNotificationsApiService(taskRunner, analytics)]);
     await _previewNotificationsApiServer!.serve(port: 0);
     log.info(
         'preview_notifications_api grpc server (preview notifications api service) started on port $previewNotificationsApiServerPort');

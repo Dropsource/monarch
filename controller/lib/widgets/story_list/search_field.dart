@@ -24,8 +24,8 @@ class SearchField extends StatelessWidget {
     return CupertinoTextField(
       controller: controller,
       autofocus: true,
-      style: Theme.of(context).textTheme.bodyText2,
-      placeholderStyle: Theme.of(context).textTheme.bodyText2,
+      style: Theme.of(context).textTheme.bodyMedium,
+      placeholderStyle: Theme.of(context).textTheme.bodyMedium,
       onChanged: (value) => onChanged?.call(value),
       placeholder: hint,
       focusNode: focusNode,
