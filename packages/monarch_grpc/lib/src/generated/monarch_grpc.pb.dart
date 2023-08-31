@@ -1381,6 +1381,7 @@ class UserSelectionData extends $pb.GeneratedMessage {
     ..aOB(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'showBaselinesEnabled', protoName: 'showBaselinesEnabled')
     ..aOB(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'highlightRepaintsEnabled', protoName: 'highlightRepaintsEnabled')
     ..aOB(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'highlightOversizedImagesEnabled', protoName: 'highlightOversizedImagesEnabled')
+    ..aOB(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'showPerformanceOverlayEnabled', protoName: 'showPerformanceOverlayEnabled')
     ..hasRequiredFields = false
   ;
 
@@ -1399,6 +1400,7 @@ class UserSelectionData extends $pb.GeneratedMessage {
     $core.bool? showBaselinesEnabled,
     $core.bool? highlightRepaintsEnabled,
     $core.bool? highlightOversizedImagesEnabled,
+    $core.bool? showPerformanceOverlayEnabled,
   }) {
     final _result = create();
     if (kind != null) {
@@ -1439,6 +1441,9 @@ class UserSelectionData extends $pb.GeneratedMessage {
     }
     if (highlightOversizedImagesEnabled != null) {
       _result.highlightOversizedImagesEnabled = highlightOversizedImagesEnabled;
+    }
+    if (showPerformanceOverlayEnabled != null) {
+      _result.showPerformanceOverlayEnabled = showPerformanceOverlayEnabled;
     }
     return _result;
   }
@@ -1579,5 +1584,14 @@ class UserSelectionData extends $pb.GeneratedMessage {
   $core.bool hasHighlightOversizedImagesEnabled() => $_has(12);
   @$pb.TagNumber(13)
   void clearHighlightOversizedImagesEnabled() => clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.bool get showPerformanceOverlayEnabled => $_getBF(13);
+  @$pb.TagNumber(14)
+  set showPerformanceOverlayEnabled($core.bool v) { $_setBool(13, v); }
+  @$pb.TagNumber(14)
+  $core.bool hasShowPerformanceOverlayEnabled() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearShowPerformanceOverlayEnabled() => clearField(14);
 }
 

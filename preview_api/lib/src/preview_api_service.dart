@@ -237,6 +237,8 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
           .visualDebugFlags[VisualDebugFlags.highlightOversizedImages],
       showBaselinesEnabled:
           selectionsState.visualDebugFlags[VisualDebugFlags.showBaselines],
+      showPerformanceOverlayEnabled: 
+          selectionsState.visualDebugFlags[VisualDebugFlags.performanceOverlay],
     ));
     return Future.value(Empty());
   }

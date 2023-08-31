@@ -20,5 +20,6 @@
   "dev_tools.show_guideliness": "Show Guideliness",
   "dev_tools.highlight_oversized_images": "Highlight Oversized Images",
   "dev_tools.show_baseliness": "Show Baseliness",
+  "dev_tools.show_performanc_overlay": "Show Performance Overlay",
   "window.title": "Monarch"
 }
