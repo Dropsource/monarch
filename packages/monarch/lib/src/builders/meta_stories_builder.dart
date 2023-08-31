@@ -30,6 +30,11 @@ class MetaStoriesBuilder implements Builder {
         continue;
       }
 
+      String? metaName;
+      var pragma = declaration.metadata.where((annotation) => annotation.name.name == 'pragma');
+      if (pragma.isNotEmpty) {
+        metaName = pragma.first.arguments?.arguments.first.toString();
+      }
       var functionName = declaration.name.lexeme;
       var returnType = declaration.returnType;
       var parameters = declaration.functionExpression.parameters;
@@ -73,8 +78,8 @@ class MetaStoriesBuilder implements Builder {
       var storyNameInSingleQuotes = "'$storyName'";
       log.fine('Found potential story `$returnTypeName $storyName()`.');
 
-      storiesNames.add(storyNameInSingleQuotes);
-      storiesMap[storyNameInSingleQuotes] = storyName;
+      storiesNames.add(metaName ?? storyNameInSingleQuotes);
+      storiesMap[metaName ?? storyNameInSingleQuotes] = storyName;
     }
 
     final pathToStoriesFile = getImportUriOrRelativePath(buildStep.inputId);
