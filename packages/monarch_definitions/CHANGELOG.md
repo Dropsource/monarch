@@ -1,5 +1,5 @@
 ### 1.3.2 - 2023-08-31
-- added `VisualDebugFlags.performanceOverlay` to debug options
+- Added `VisualDebugFlags.performanceOverlay`
 
 ### 1.3.1 - 2023-06-02
 - Deprecated `iPhone13DeviceDefinition`
