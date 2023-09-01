@@ -1,4 +1,4 @@
-### 1.3.2 - 2023-08-31
+### 1.4.0 - 2023-08-31
 - Added `VisualDebugFlags.performanceOverlay`
 
 ### 1.3.1 - 2023-06-02
