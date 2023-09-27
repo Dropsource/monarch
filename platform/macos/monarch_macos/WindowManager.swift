@@ -66,7 +66,7 @@ class WindowManager {
         controllerProject.dartEntrypointArguments = [
             logLevelToString(level: defaultLogLevel), cliGrpcServerPort!]
         
-        let previewApi = FlutterEngine.init(
+        previewApi = FlutterEngine.init(
             name: "monarch-preview-api",
             project: previewApiProject,
             allowHeadlessExecution: true)
@@ -74,7 +74,7 @@ class WindowManager {
         let controllerViewController = FlutterViewController.init(project: controllerProject)
         
         channels = Channels.init(
-            previewApiMessenger: previewApi.binaryMessenger,
+            previewApiMessenger: previewApi!.binaryMessenger,
             previewWindowMessenger: previewViewController.engine.binaryMessenger,
             windowManager: self)
         channels!.setUpCallForwarding()
@@ -83,7 +83,7 @@ class WindowManager {
         
         /// Run the preview api in its own isolate. Make sure to run it after launching the windows to make sure
         /// devtools inspects the preview widget tree. See [_launchFlutterWindows] below.
-        if (!previewApi.run(withEntrypoint: nil)) {
+        if (!previewApi!.run(withEntrypoint: nil)) {
             fatalError("FlutterEngine.run for preview_api was not successful")
         }
         
