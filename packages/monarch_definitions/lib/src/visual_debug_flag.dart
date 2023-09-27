@@ -13,6 +13,7 @@ class VisualDebugFlags {
   static const showBaselines = 'showBaselines';
   static const highlightRepaints = 'highlightRepaints';
   static const highlightOversizedImages = 'highlightOversizedImages';
+  static const performanceOverlay = 'performanceOverlay';
 }
 
 const defaultVisualDebugFlags = <String, bool>{
@@ -21,15 +22,16 @@ const defaultVisualDebugFlags = <String, bool>{
   VisualDebugFlags.showBaselines: false,
   VisualDebugFlags.highlightRepaints: false,
   VisualDebugFlags.highlightOversizedImages: false,
+  VisualDebugFlags.performanceOverlay: false,
 };
 
 class VisualDebugExtensionMethods {
   static const timeDilation = 'ext.flutter.timeDilation';
   static const debugPaint = 'ext.flutter.debugPaint';
-  static const debugPaintBaselinesEnabled =
-      'ext.flutter.debugPaintBaselinesEnabled';
+  static const debugPaintBaselinesEnabled = 'ext.flutter.debugPaintBaselinesEnabled';
   static const repaintRainbow = 'ext.flutter.repaintRainbow';
   static const invertOversizedImages = 'ext.flutter.invertOversizedImages';
+  static const performanceOverlay = 'ext.flutter.showPerformanceOverlay';
 }
 
 class VisualDebugTimeDilationValues {
