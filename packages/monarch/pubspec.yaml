@@ -33,7 +33,7 @@ dependencies:
   build: ^2.0.0
   source_gen: ^1.0.0
   dart_style: ^2.0.0
-  monarch_definitions: ^1.2.0
+  monarch_definitions: ^1.4.0
   monarch_annotations: ^1.0.0
   monarch_utils: ^1.0.0
   glob: ^2.0.1

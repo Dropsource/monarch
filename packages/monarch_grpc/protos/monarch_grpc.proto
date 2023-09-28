@@ -173,4 +173,5 @@ message UserSelectionData {
     bool showBaselinesEnabled = 11;
     bool highlightRepaintsEnabled = 12;
     bool highlightOversizedImagesEnabled = 13;
+    bool showPerformanceOverlayEnabled = 14;
 }
