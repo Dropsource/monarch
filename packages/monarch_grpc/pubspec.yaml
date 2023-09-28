@@ -1,6 +1,6 @@
 name: monarch_grpc
 description: gRPC interfaces for Monarch. Monarch is a tool for building Flutter widgets in isolation. It makes it easy to build, test and debug complex UIs.
-version: 2.2.0
+version: 2.3.0
 homepage: https://monarchapp.io
 repository: https://github.com/Dropsource/monarch
 issue_tracker: https://github.com/Dropsource/monarch/issues
@@ -12,7 +12,7 @@ environment:
 dependencies:
   grpc: ^3.1.0
   protobuf: ^2.1.0
-  monarch_definitions: ^1.2.0
+  monarch_definitions: ^1.4.0
 
 dev_dependencies:
   lints: ^2.0.1

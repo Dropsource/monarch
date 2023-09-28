@@ -1,3 +1,6 @@
+### 2.3.0 - 2023-09-27
+- Add rpc support for performance overlay in monarch preview
+
 ### 2.2.0 - 2023-02-20
 - WillRestartPreview rpc
 
