@@ -12,6 +12,8 @@ String getVisualDebugFlagLabel(String name) {
       return 'dev_tools.highlight_repaints';
     case VisualDebugFlags.highlightOversizedImages:
       return 'dev_tools.highlight_oversized_images';
+    case VisualDebugFlags.performanceOverlay:
+      return 'dev_tools.show_performanc_overlay';
     default:
       throw 'Unexpected visual debug flag name $name';
   }
@@ -29,6 +31,8 @@ String getVisualDebugFlagToggledKey(String name) {
       return 'highlight_repaints_toggled';
     case VisualDebugFlags.highlightOversizedImages:
       return 'highlight_oversized_images_toggled';
+    case VisualDebugFlags.performanceOverlay:
+      return 'performance_overlay_toggled';
     default:
       throw 'Unexpected visual debug flag name $name';
   }
