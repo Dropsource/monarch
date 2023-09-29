@@ -25,6 +25,8 @@ class WindowManager {
     var previewWindow: NSWindow?
     var channels: Channels?
     
+    var previewViewController: FlutterViewController?
+    
     var observers: [NSObjectProtocol] = []
     
     var selectedDockSide: DockSide = defaultDockSide
@@ -70,16 +72,16 @@ class WindowManager {
             name: "monarch-preview-api",
             project: previewApiProject,
             allowHeadlessExecution: true)
-        let previewViewController = FlutterViewController.init(project: previewWindowProject)
+        previewViewController = FlutterViewController.init(project: previewWindowProject)
         let controllerViewController = FlutterViewController.init(project: controllerProject)
         
         channels = Channels.init(
             previewApiMessenger: previewApi!.binaryMessenger,
-            previewWindowMessenger: previewViewController.engine.binaryMessenger,
+            previewWindowMessenger: previewViewController!.engine.binaryMessenger,
             windowManager: self)
         channels!.setUpCallForwarding()
         
-        _launchFlutterWindows(previewViewController, controllerViewController)
+        _launchFlutterWindows(previewViewController!, controllerViewController)
         
         /// Run the preview api in its own isolate. Make sure to run it after launching the windows to make sure
         /// devtools inspects the preview widget tree. See [_launchFlutterWindows] below.
@@ -126,23 +128,25 @@ class WindowManager {
     func restartPreviewWindow() {
         _tearDownObservers()
         channels!.sendWillClosePreview()
+        previewViewController!.engine.shutDownEngine()
         previewWindow!.close()
         let previewWindowProject = _initDartProject(previewWindowBundlePath!)
         previewWindowProject.dartEntrypointArguments = [
             logLevelToString(level: defaultLogLevel)]
-        let previewWindowViewController = FlutterViewController.init(project: previewWindowProject)
+        previewViewController = FlutterViewController.init(project: previewWindowProject)
         channels!.restartPreviewChannel(
-            previewWindowMessenger: previewWindowViewController.engine.binaryMessenger)
+            previewWindowMessenger: previewViewController!.engine.binaryMessenger)
         previewWindow = NSWindow()
-        _setUpPreviewWindow(previewWindowViewController, previewWindow!)
+        _setUpPreviewWindow(previewViewController!, previewWindow!)
         _setUpObservers(controllerWindow!, previewWindow!)
         resizePreviewWindow()
     }
     
     func terminate() {
-        controllerWindow!.close()
-        previewWindow!.close()
-        previewApi!.shutDownEngine()
+        controllerWindow?.close()
+        previewViewController?.engine.shutDownEngine()
+        previewWindow?.close()
+        previewApi?.shutDownEngine()
     }
     
     func _setUpControllerWindow(_ controllerFVC: FlutterViewController, _ controllerWindow: NSWindow) {
