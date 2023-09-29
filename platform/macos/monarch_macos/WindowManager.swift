@@ -14,6 +14,8 @@ import os.log
 
 class WindowManager {
     
+    let flutterAppDelegate: FlutterAppDelegate
+    
     var previewApiBundlePath: String?
     var previewWindowBundlePath: String?
     var controllerBundlePath: String?
@@ -32,6 +34,10 @@ class WindowManager {
     var selectedDockSide: DockSide = defaultDockSide
     
     let logger: Logger = Logger("WindowManager")
+    
+    init(flutterAppDelete: FlutterAppDelegate) {
+        self.flutterAppDelegate = flutterAppDelete
+    }
     
     func launchWindows() {
          self.checkCommandLineArguments()
@@ -126,20 +132,28 @@ class WindowManager {
     }
     
     func restartPreviewWindow() {
+        NSApp.hide(self)
+        
         _tearDownObservers()
         channels!.sendWillClosePreview()
         previewViewController!.engine.shutDownEngine()
+        flutterAppDelegate.removeApplicationLifecycleDelegate(previewViewController!.engine)
         previewWindow!.close()
+        
         let previewWindowProject = _initDartProject(previewWindowBundlePath!)
         previewWindowProject.dartEntrypointArguments = [
             logLevelToString(level: defaultLogLevel)]
         previewViewController = FlutterViewController.init(project: previewWindowProject)
+        
         channels!.restartPreviewChannel(
             previewWindowMessenger: previewViewController!.engine.binaryMessenger)
+        
         previewWindow = NSWindow()
         _setUpPreviewWindow(previewViewController!, previewWindow!)
         _setUpObservers(controllerWindow!, previewWindow!)
         resizePreviewWindow()
+        
+        NSApp.activate(ignoringOtherApps: true)
     }
     
     func terminate() {

@@ -16,8 +16,12 @@ class AppDelegate: FlutterAppDelegate {
         // setbuf(__stdoutp, nil);
         // https://stackoverflow.com/questions/24171362/swift-how-to-flush-stdout-after-println
         
-        let windowManager = WindowManager.init()
+        
+        let windowManager = WindowManager.init(flutterAppDelete: self)
         windowManager.launchWindows()
+        
+        
+        self.mainFlutterWindow?.close()
     }
     
     override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
