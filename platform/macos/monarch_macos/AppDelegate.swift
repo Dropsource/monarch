@@ -8,16 +8,17 @@
 import Cocoa
 import FlutterMacOS
 
+
+#if USE_FLUTTER_APP_DELEGATE
 @main
 class AppDelegate: FlutterAppDelegate {
 
     override func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // disables buffering so calls to println are flushed automatically
-        // setbuf(__stdoutp, nil);
-        // https://stackoverflow.com/questions/24171362/swift-how-to-flush-stdout-after-println
         
-        let windowManager = WindowManager.init()
+        let windowManager = WindowManager.init(flutterAppDelete: self)
         windowManager.launchWindows()
+        
+        self.mainFlutterWindow?.close()
     }
     
     override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -25,4 +26,19 @@ class AppDelegate: FlutterAppDelegate {
     }
 
 }
+#else
+@main
+class AppDelegate: NSObject, NSApplicationDelegate {
 
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+    
+        let windowManager = WindowManager.init()
+        windowManager.launchWindows()
+    }
+    
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        return true
+    }
+
+}
+#endif
