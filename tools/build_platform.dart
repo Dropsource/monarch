@@ -7,14 +7,14 @@ import 'paths.dart';
 import 'utils.dart' as utils;
 import 'utils_local.dart' as local_utils;
 
-
 /// Builds Monarch Platform artifacts with these arguments:
 /// - Path to the root of the Monarch repo
 /// - Path to the Flutter SDK to use
 /// - Path to the monarch_ui/{flutter_id} output directory
 ///
 /// This script is used by local builds and by the monarch automation.
-void buildPlatform(String repo_root, String flutter_sdk, String out_ui_flutter_id) {
+void buildPlatform(
+    String repo_root, String flutter_sdk, String out_ui_flutter_id) {
   var repo_paths = RepoPaths(repo_root);
 
   print('''
@@ -82,13 +82,31 @@ void buildMacOs(
 Building $monarch_macos with xcodebuild. Will output to:
   ${out_ui_flutter_id_monarch_macos_app(out_ui_flutter_id)}''');
 
+  /// The Flutter macOS API changed between versions. Here we use preprocessor
+  /// directives to compile our code with different Flutter versions.
+  ///
+  /// In flutter version 3.14.0-0.1.pre, the flutter team fixed an issue
+  /// in the flutter engine. As a result, we don't have to use FlutterAppDelegate
+  /// anymore. Monarch macOS works better if we don't use FlutterAppDelegate.
+  /// 
+  /// See monarch PR: https://github.com/Dropsource/monarch/pull/124
+  /// See flutter PR: https://github.com/flutter/flutter/issues/124829
+  var flutterVersion = pub.Version.parse(get_flutter_version(flutter_sdk));
+  var flutterVersionWithFlutterAppDelegateChange =
+      pub.Version(3, 14, 0, pre: '0.1.pre');
+
+  var useFlutterAppDelegate =
+      flutterVersion < flutterVersionWithFlutterAppDelegateChange;
+
   result = Process.runSync(
       'xcodebuild',
       [
         '-scheme',
         '$monarch_macos',
         'CONFIGURATION_BUILD_DIR=$out_ui_flutter_id',
-        'build'
+        'build',
+        if (useFlutterAppDelegate)
+          'SWIFT_ACTIVE_COMPILATION_CONDITIONS=USE_FLUTTER_APP_DELEGATE'
       ],
       workingDirectory: repo_paths.platform_macos);
   utils.exitIfNeeded(result, 'Error running xcodebuild');

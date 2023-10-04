@@ -13,8 +13,9 @@ import FlutterMacOS
 import os.log
 
 class WindowManager {
-    
+#if USE_FLUTTER_APP_DELEGATE
     let flutterAppDelegate: FlutterAppDelegate
+#endif
     
     var previewApiBundlePath: String?
     var previewWindowBundlePath: String?
@@ -35,11 +36,16 @@ class WindowManager {
     
     let logger: Logger = Logger("WindowManager")
     
+#if USE_FLUTTER_APP_DELEGATE
     init(flutterAppDelete: FlutterAppDelegate) {
         self.flutterAppDelegate = flutterAppDelete
     }
+#endif
     
     func launchWindows() {
+#if USE_FLUTTER_APP_DELEGATE
+        logger.info("Using swift compilation condition (i.e. preprocessor directive): USE_FLUTTER_APP_DELEGATE")
+#endif
          self.checkCommandLineArguments()
     }
     
@@ -132,12 +138,16 @@ class WindowManager {
     }
     
     func restartPreviewWindow() {
+#if USE_FLUTTER_APP_DELEGATE
         NSApp.hide(self)
+#endif
         
         _tearDownObservers()
         channels!.sendWillClosePreview()
         previewViewController!.engine.shutDownEngine()
+#if USE_FLUTTER_APP_DELEGATE
         flutterAppDelegate.removeApplicationLifecycleDelegate(previewViewController!.engine)
+#endif
         previewWindow!.close()
         
         let previewWindowProject = _initDartProject(previewWindowBundlePath!)
@@ -152,8 +162,10 @@ class WindowManager {
         _setUpPreviewWindow(previewViewController!, previewWindow!)
         _setUpObservers(controllerWindow!, previewWindow!)
         resizePreviewWindow()
-        
+
+#if USE_FLUTTER_APP_DELEGATE
         NSApp.activate(ignoringOtherApps: true)
+#endif
     }
     
     func terminate() {
