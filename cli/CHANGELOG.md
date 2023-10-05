@@ -1,3 +1,6 @@
+## 3.0.4 - 2023-10-05
+- Update monarch package compatibility to 3.6.0
+
 ## 3.0.3 - 2023-03-24
 - Support Flutter 3.9.0-x.x.pre
 
