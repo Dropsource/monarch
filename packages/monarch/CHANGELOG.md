@@ -1,3 +1,7 @@
+## 3.6.0 - 2023-10-05
+- Use latest monarch_definitions package.
+- Support show-performance-overlay visual debug flag.
+
 ## 3.5.3 - 2023-06-12
 - Add screenshots and topics to pubspec
 
