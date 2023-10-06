@@ -1,4 +1,5 @@
 import '../utils/standard_output.dart';
+import 'performance_overlay_messages.dart' as performance_overlay_messages;
 
 /// Scrapes messages written to the stdout stream of the `runMonarchAppTask` process.
 /// Those messages can be from the Preview, the Controller or the Window Manager.
@@ -20,6 +21,13 @@ void onMonarchAppStdoutMessage(String message) {
   for (var line in lines) {
     if (line.startsWith(errLineMarker)) {
       _process(line, errLineMarker, stdout_default.writeln);
+
+      if (line
+          .contains(performance_overlay_messages.unexpectedVisualDebugFlag)) {
+        stdout_default
+            .writeln(performance_overlay_messages.monarchPackageUpgrade);
+        return;
+      }
     } else {
       // no match, nothing to process
     }
