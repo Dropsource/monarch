@@ -1,3 +1,6 @@
+## 2.3.1 - 2023-10-06
+- Use grpc 3.2.4
+
 ## 2.3.0 - 2023-06-02
 - Update list of device definitions
 

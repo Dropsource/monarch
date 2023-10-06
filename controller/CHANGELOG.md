@@ -1,3 +1,6 @@
+## 1.3.2 - 2023-10-06
+- Use grpc 3.2.4
+
 ## 1.3.1 - 2023-06-02
 - Do not use deprecated `iPhone13DeviceDefinition` from `monarch_definitions` package
 - Use latest `monarch_definitions` version which has a new default device definition
