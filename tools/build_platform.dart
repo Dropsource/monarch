@@ -88,15 +88,20 @@ Building $monarch_macos with xcodebuild. Will output to:
   /// In flutter version 3.14.0-0.1.pre, the flutter team fixed an issue
   /// in the flutter engine. As a result, we don't have to use FlutterAppDelegate
   /// anymore. Monarch macOS works better if we don't use FlutterAppDelegate.
-  /// 
+  ///
   /// See monarch PR: https://github.com/Dropsource/monarch/pull/124
   /// See flutter PR: https://github.com/flutter/flutter/issues/124829
   var flutterVersion = pub.Version.parse(get_flutter_version(flutter_sdk));
   var flutterVersionWithFlutterAppDelegateChange =
       pub.Version(3, 14, 0, pre: '0.1.pre');
+  var flutterVersionWithApplicationLifecycleMethods =
+      pub.Version(3, 11, 0, pre: '17.0.pre');
 
   var useFlutterAppDelegate =
       flutterVersion < flutterVersionWithFlutterAppDelegateChange;
+
+  var useApplicationLifecycleMethods =
+      flutterVersion >= flutterVersionWithApplicationLifecycleMethods;
 
   result = Process.runSync(
       'xcodebuild',
@@ -106,7 +111,9 @@ Building $monarch_macos with xcodebuild. Will output to:
         'CONFIGURATION_BUILD_DIR=$out_ui_flutter_id',
         'build',
         if (useFlutterAppDelegate)
-          'SWIFT_ACTIVE_COMPILATION_CONDITIONS=USE_FLUTTER_APP_DELEGATE'
+          'SWIFT_ACTIVE_COMPILATION_CONDITIONS=USE_FLUTTER_APP_DELEGATE',
+        if (useFlutterAppDelegate && useApplicationLifecycleMethods)
+          'SWIFT_ACTIVE_COMPILATION_CONDITIONS=USE_FLUTTER_APP_DELEGATE USE_APPLICATION_LIFECYCLE_METHODS'
       ],
       workingDirectory: repo_paths.platform_macos);
   utils.exitIfNeeded(result, 'Error running xcodebuild');

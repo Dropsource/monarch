@@ -145,7 +145,7 @@ class WindowManager {
         _tearDownObservers()
         channels!.sendWillClosePreview()
         previewViewController!.engine.shutDownEngine()
-#if USE_FLUTTER_APP_DELEGATE
+#if USE_FLUTTER_APP_DELEGATE && USE_APPLICATION_LIFECYCLE_METHODS
         flutterAppDelegate.removeApplicationLifecycleDelegate(previewViewController!.engine)
 #endif
         previewWindow!.close()
