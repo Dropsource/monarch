@@ -42,6 +42,12 @@ Future<void> toggleFlagViaVmServiceExtension(
           {'enabled': isEnabled});
       break;
 
+    case VisualDebugFlags.performanceOverlay:
+      await vmServiceClient.callServiceExtension(
+          VisualDebugExtensionMethods.performanceOverlay,
+          {'enabled': isEnabled});
+      break;
+
     default:
       throw 'Unexpected visual debug flag name, got $name';
   }
@@ -93,6 +99,12 @@ void handleVmServiceExtensionEvent(vm_service.Event event) {
         case VisualDebugExtensionMethods.invertOversizedImages:
           channelMethodsSender.sendToggleVisualDebugFlag(VisualDebugFlag(
               name: VisualDebugFlags.highlightOversizedImages,
+              isEnabled: value == $true));
+          break;
+
+        case VisualDebugExtensionMethods.performanceOverlay:
+          channelMethodsSender.sendToggleVisualDebugFlag(VisualDebugFlag(
+              name: VisualDebugFlags.performanceOverlay,
               isEnabled: value == $true));
           break;
 

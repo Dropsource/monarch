@@ -1,6 +1,6 @@
 name: monarch
 description: Code generator for Monarch. Monarch is a tool for building Flutter widgets in isolation. It makes it easy to build, test and debug complex UIs.
-version: 3.1.0
+version: 3.1.1
 homepage: https://monarchapp.io
 repository: https://github.com/Dropsource/monarch
 issue_tracker: https://github.com/Dropsource/monarch/issues
@@ -19,7 +19,7 @@ dependencies:
   build: ^2.0.0
   source_gen: ^1.0.0
   dart_style: ^2.0.0
-  monarch_definitions: ^1.2.0
+  monarch_definitions: ^1.4.0
   monarch_annotations: ^1.0.0
   monarch_utils: ^1.0.0
   glob: ^2.0.1

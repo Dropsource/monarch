@@ -1,6 +1,11 @@
+## 3.1.1 - 2023-10-06
+- Use monarch_definitions ^1.4.0.
+- Support show-performance-overlay visual debug flag.
+
 ## 3.1.0 - 2023-04-20
 - Faster code generation
 - Update vm_service dependency to `>=9.4.0`
+- Compatible with Flutter 3.7
 
 ## 3.0.1 - 2023-02-24
 - Flutter sdk version 3.8.0-0.0.pre
