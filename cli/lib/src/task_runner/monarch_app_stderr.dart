@@ -4,6 +4,7 @@ import 'package:monarch_utils/log.dart';
 
 import 'task_names.dart';
 import 'reload_crash.dart' as reload_crash;
+import 'performance_overlay_messages.dart' as performance_overlay_messages;
 
 /// This funcion handles scenarios where the platform Window Manager,
 /// the Controller or the Preview write to stderr:
@@ -80,6 +81,12 @@ void onRunMonarchAppStdErrMessage(String message, Logger logger_) {
       RegExp(r'.*object\.cc.*Unable to use class.*which is not loaded yet');
   if (unableToUseRegex.hasMatch(message)) {
     reload_crash.hadUnableToUseClassDartError = true;
+  }
+
+  if (message
+      .contains(performance_overlay_messages.unexpectedVisualDebugFlag)) {
+    logger_.shout(performance_overlay_messages.monarchPackageUpgrade);
+    return;
   }
 
   // if the message is multi-line
