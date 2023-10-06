@@ -1,0 +1,23 @@
+diff --git a/preview_api/lib/main.dart b/preview_api/lib/main.dart
+index 4fdef15..5a1d8ca 100644
+--- a/preview_api/lib/main.dart
++++ b/preview_api/lib/main.dart
+@@ -70,4 +70,4 @@ void setUpChannels(int discoveryServerPort) async {
+ }
+ 
+ Server createServer(List<Service> services) =>
+-    Server.create(services: services);
++    Server(services);
+diff --git a/preview_api/pubspec.yaml b/preview_api/pubspec.yaml
+index ba083cc..fff4b06 100644
+--- a/preview_api/pubspec.yaml
++++ b/preview_api/pubspec.yaml
+@@ -14,7 +14,7 @@ dependencies:
+   monarch_io_utils: ^1.3.0
+   monarch_definitions: ^1.4.0
+   monarch_grpc: ^2.3.0
+-  grpc: ^3.2.4
++  grpc: ^3.1.0
+ 
+ dev_dependencies:
+   flutter_test:
