@@ -46,6 +46,9 @@ class WindowManager {
 #if USE_FLUTTER_APP_DELEGATE
         logger.info("Using swift compilation condition (i.e. preprocessor directive): USE_FLUTTER_APP_DELEGATE")
 #endif
+#if USE_APPLICATION_LIFECYCLE_METHODS
+        logger.info("Using swift compilation condition (i.e. preprocessor directive): USE_APPLICATION_LIFECYCLE_METHODS")
+#endif
          self.checkCommandLineArguments()
     }
     
