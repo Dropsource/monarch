@@ -29,3 +29,23 @@ issues during Monarch builds.
 cd controller
 monarch run
 ```
+
+### Patch for grpc 3.1.0
+_Notes as of 20231006._
+grpc 3.2.0 introduced `Server.create` and it required Dart 3.0. These changes present 
+an issue for Flutter versions that use Dart 2.x (i.e. flutter versions prior to 3.8). 
+Thus, the build script now applies a patch to use grpc 3.1.0 with older flutter versions.
+
+The patch changes pubspec.yaml and lib/main.dart. If you need to change any of those 
+files, then you will need to regenerate the git patch. To do so:
+
+- first make your changes as normal and test them with a newer flutter version
+- once your changes are good, commit your changes
+- make sure your git directory is clean, i.e. you don't have any pending (not staged) changes
+- now you can manually re-edit the changes to main.dart and pubspec.yaml so you can 
+  regenerate the patch, take a look at the patch to see the changes we need
+- write the diff to a new patch `git diff > grpc_310_x.patch`
+- rename `grpc_310_x.patch` to `grpc_310.patch`
+- git restore changes to main.dart and pubspec.yaml
+- run the build scripts using older flutter version, anything before flutter 3.8 works
+- commit grpc_310.patch

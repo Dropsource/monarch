@@ -1,3 +1,6 @@
+## 3.0.5 - 2023-10-06
+- Use monarch_grpc 2.3.1
+
 ## 3.0.4 - 2023-10-05
 - Update monarch package compatibility to 3.6.0
 

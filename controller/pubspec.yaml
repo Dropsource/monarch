@@ -22,7 +22,7 @@ dependencies:
   monarch_io_utils: ^1.3.0
   monarch_utils: ^1.1.0
   grpc: ^3.2.4
-  monarch_grpc: ^2.3.0
+  monarch_grpc: ^2.3.1
   stockholm:
     git:
       url: https://github.com/serverpod/stockholm/
