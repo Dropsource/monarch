@@ -46,6 +46,9 @@ class WindowManager {
 #if USE_FLUTTER_APP_DELEGATE
         logger.info("Using swift compilation condition (i.e. preprocessor directive): USE_FLUTTER_APP_DELEGATE")
 #endif
+#if USE_APPLICATION_LIFECYCLE_METHODS
+        logger.info("Using swift compilation condition (i.e. preprocessor directive): USE_APPLICATION_LIFECYCLE_METHODS")
+#endif
          self.checkCommandLineArguments()
     }
     
@@ -145,7 +148,7 @@ class WindowManager {
         _tearDownObservers()
         channels!.sendWillClosePreview()
         previewViewController!.engine.shutDownEngine()
-#if USE_FLUTTER_APP_DELEGATE
+#if USE_FLUTTER_APP_DELEGATE && USE_APPLICATION_LIFECYCLE_METHODS
         flutterAppDelegate.removeApplicationLifecycleDelegate(previewViewController!.engine)
 #endif
         previewWindow!.close()
