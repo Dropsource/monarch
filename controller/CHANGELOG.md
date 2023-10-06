@@ -1,5 +1,8 @@
 ## 1.3.2 - 2023-10-06
 - Use grpc 3.2.4
+- grpc 3.2.0 introduced `Server.create` and it required Dart 3.0. These changes are 
+  an issue for Flutter versions that use Dart 2.x. Thus, the build script now applies 
+  a patch to use grpc 3.1.0 with older flutter versions.
 
 ## 1.3.1 - 2023-06-02
 - Do not use deprecated `iPhone13DeviceDefinition` from `monarch_definitions` package
