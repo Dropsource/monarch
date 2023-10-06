@@ -1,3 +1,6 @@
+### 2.3.1 - 2023-10-06
+- Use grpc version 3.2.4
+
 ### 2.3.0 - 2023-09-27
 - Add rpc support for performance overlay in monarch preview
 

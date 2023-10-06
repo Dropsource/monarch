@@ -54,7 +54,7 @@ void setUpChannels(int discoveryServerPort) async {
   var previewNotifications = PreviewNotifications(discoveryClient);
   var channelMethodsSender = ChannelMethodsSender();
 
-  var server = Server.create(services: [
+  var server = createServer([
     PreviewApiService(projectDataManager, selectionsStateManager,
         previewNotifications, channelMethodsSender)
   ]);
@@ -68,3 +68,6 @@ void setUpChannels(int discoveryServerPort) async {
       selectionsStateManager, previewNotifications, channelMethodsSender);
   channelMethodsReceiver.setUp();
 }
+
+Server createServer(List<Service> services) =>
+    Server.create(services: services);

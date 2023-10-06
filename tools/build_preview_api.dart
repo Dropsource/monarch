@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
+import 'package:pub_semver/pub_semver.dart' as pub;
 
 import 'paths.dart';
 import 'utils.dart' as utils;
@@ -30,6 +31,16 @@ Building Monarch Preview API using these arguments:
   if (out_preview_api_dir.existsSync())
     out_preview_api_dir.deleteSync(recursive: true);
   out_preview_api_dir.createSync(recursive: true);
+
+
+  var flutterVersion = pub.Version.parse(get_flutter_version(flutter_sdk));
+  var flutterVersionWithDart3 = pub.Version(3, 8, 0, pre: '10.1.pre');
+
+  var useGrpc310 = flutterVersion < flutterVersionWithDart3;
+  if (useGrpc310) {
+    print('Running `git apply grpc_310.patch`\n');
+    utils.gitApplyPatch(repo_paths.preview_api, 'grpc_310.patch');
+  }
 
   {
     print('''
@@ -85,6 +96,11 @@ Building monarch preview_api flutter bundle. Will output to:
       utils.exitIfNeeded(
           result, 'Error copying icudtl.dat to monarch_preview_api directory');
     }
+  }
+
+  if (useGrpc310) {
+    print('Running `git apply -R grpc_310.patch`\n');
+    utils.gitRevertPatch(repo_paths.preview_api, 'grpc_310.patch');
   }
 
   print('Monarch preview_api build finished.');

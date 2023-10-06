@@ -49,3 +49,19 @@ void writeInternalFile(String internal, String name, String contents) {
   var file = File(p.join(internal, name));
   file.writeAsStringSync(contents, mode: FileMode.writeOnly);
 }
+
+void gitApplyPatch(String workingDirectory, String patch) {
+  var result = Process.runSync('git', ['apply', patch],
+      workingDirectory: workingDirectory, runInShell: Platform.isWindows);
+  if (result.exitCode != 0) {
+    exitIfNeeded(result, 'Error running: git apply $patch');
+  }
+}
+
+void gitRevertPatch(String workingDirectory, String patch) {
+  var result = Process.runSync('git', ['apply', '-R', patch],
+      workingDirectory: workingDirectory, runInShell: Platform.isWindows);
+  if (result.exitCode != 0) {
+    exitIfNeeded(result, 'Error running: git apply -R $patch');
+  }
+}

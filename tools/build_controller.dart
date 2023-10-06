@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
+import 'package:pub_semver/pub_semver.dart' as pub;
 
 import 'paths.dart';
 import 'utils.dart' as utils;
@@ -31,6 +32,15 @@ Building Monarch Controller using these arguments:
   if (out_controller_dir.existsSync())
     out_controller_dir.deleteSync(recursive: true);
   out_controller_dir.createSync(recursive: true);
+
+  var flutterVersion = pub.Version.parse(get_flutter_version(flutter_sdk));
+  var flutterVersionWithDart3 = pub.Version(3, 8, 0, pre: '10.1.pre');
+
+  var useGrpc310 = flutterVersion < flutterVersionWithDart3;
+  if (useGrpc310) {
+    print('Running `git apply grpc_310.patch`\n');
+    utils.gitApplyPatch(repo_paths.controller, 'grpc_310.patch');
+  }
 
   {
     print('''
@@ -87,6 +97,11 @@ Building monarch controller flutter bundle. Will output to:
       utils.exitIfNeeded(
           result, 'Error copying icudtl.dat to monarch_controller directory');
     }
+  }
+
+  if (useGrpc310) {
+    print('Running `git apply -R grpc_310.patch`\n');
+    utils.gitRevertPatch(repo_paths.controller, 'grpc_310.patch');
   }
 
   print('Monarch controller build finished.');

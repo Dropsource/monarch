@@ -54,8 +54,7 @@ void setUpChannels(int discoveryServerPort) async {
   var channel = constructClientChannel(discoveryServerPort);
   var discoveryClient = MonarchDiscoveryApiClient(channel);
 
-  var server =
-      Server.create(services: [PreviewNotificationsApiService(manager)]);
+  var server = createServer([PreviewNotificationsApiService(manager)]);
   await server.serve(port: 0);
   var previewNotificationsApiPort = server.port!;
   _logger.info(
@@ -91,3 +90,6 @@ class MonarchControllerApp extends StatelessWidget {
         supportedLocales: localizationDelegate.supportedLocales);
   }
 }
+
+Server createServer(List<Service> services) =>
+    Server.create(services: services);
