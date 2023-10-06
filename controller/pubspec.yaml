@@ -21,7 +21,7 @@ dependencies:
   monarch_definitions: ^1.4.0
   monarch_io_utils: ^1.3.0
   monarch_utils: ^1.1.0
-  grpc: ^3.1.0
+  grpc: ^3.2.4
   monarch_grpc: ^2.3.0
   stockholm:
     git:
@@ -42,3 +42,4 @@ flutter:
   assets:
     - locale/i18n_en.json
     - locale/i18n_es.json
+
