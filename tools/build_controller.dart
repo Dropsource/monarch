@@ -33,10 +33,10 @@ Building Monarch Controller using these arguments:
     out_controller_dir.deleteSync(recursive: true);
   out_controller_dir.createSync(recursive: true);
 
-  var flutterVersion = pub.Version.parse(get_flutter_version(flutter_sdk));
-  var flutterVersionWithDart3 = pub.Version(3, 8, 0, pre: '10.1.pre');
+  var dartVersion = pub.Version.parse(get_dart_version(flutter_sdk));
+  var dart3 = pub.Version(3, 0, 0);
 
-  var useGrpc310 = flutterVersion < flutterVersionWithDart3;
+  var useGrpc310 = dartVersion < dart3;
   if (useGrpc310) {
     print('Running `git apply grpc_310.patch`\n');
     utils.gitApplyPatch(repo_paths.controller, 'grpc_310.patch');

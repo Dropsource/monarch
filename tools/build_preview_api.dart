@@ -10,7 +10,8 @@ import 'utils_local.dart' as local_utils;
 /// - Path to the root of the Monarch repo
 /// - Path to the Flutter SDK to use
 /// - Path to the monarch_ui/{flutter_id} output directory
-void buildPreviewApi(String repo_root, String flutter_sdk, String out_ui_flutter_id) {
+void buildPreviewApi(
+    String repo_root, String flutter_sdk, String out_ui_flutter_id) {
   var repo_paths = RepoPaths(repo_root);
 
   print('''
@@ -32,11 +33,10 @@ Building Monarch Preview API using these arguments:
     out_preview_api_dir.deleteSync(recursive: true);
   out_preview_api_dir.createSync(recursive: true);
 
+  var dartVersion = pub.Version.parse(get_dart_version(flutter_sdk));
+  var dart3 = pub.Version(3, 0, 0);
 
-  var flutterVersion = pub.Version.parse(get_flutter_version(flutter_sdk));
-  var flutterVersionWithDart3 = pub.Version(3, 8, 0, pre: '10.1.pre');
-
-  var useGrpc310 = flutterVersion < flutterVersionWithDart3;
+  var useGrpc310 = dartVersion < dart3;
   if (useGrpc310) {
     print('Running `git apply grpc_310.patch`\n');
     utils.gitApplyPatch(repo_paths.preview_api, 'grpc_310.patch');
@@ -81,7 +81,8 @@ Building monarch preview_api flutter bundle. Will output to:
   }
 
   {
-    var icudtl_dat_ = icudtl_dat(flutter_sdk, local_utils.read_target_platform());
+    var icudtl_dat_ =
+        icudtl_dat(flutter_sdk, local_utils.read_target_platform());
 
     if (Platform.isWindows) {
       var result = Process.runSync(
@@ -109,4 +110,3 @@ Building monarch preview_api flutter bundle. Will output to:
 ===============================================================================
 ''');
 }
-

@@ -114,3 +114,9 @@ String gen_seed_flutter_id(String platform_gen_seed, String flutter_sdk) =>
 
 String build_flutter_id(String build, String flutter_sdk) =>
     p.join(build, flutter_id(flutter_sdk));
+
+String get_dart_version(String flutter_sdk) {
+  var version = File(p.join(flutter_sdk, 'bin', 'cache', 'dart-sdk', 'version'))
+      .readAsStringSync();
+  return version.trim();
+}
