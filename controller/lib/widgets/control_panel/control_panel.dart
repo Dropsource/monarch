@@ -137,7 +137,7 @@ class ControlPanel extends StatelessWidget {
                 width: 87,
               ),
               SizedBox(
-                width: 140,
+                width: 150,
                 child: StockholmButton(
                   onPressed: actions.launchDevTools,
                   child: const TextBody1('dev_tools.launch',
