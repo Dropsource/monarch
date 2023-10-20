@@ -2,18 +2,28 @@ import 'standard_mapper.dart';
 
 const materialLightThemeDefinition = MetaThemeDefinition(
     id: '__material-light-theme__',
-    name: 'Material Light Theme',
+    name: 'Material 2 Light Theme',
     isDefault: true);
 const materialDarkThemeDefinition = MetaThemeDefinition(
     id: '__material-dark-theme__',
-    name: 'Material Dark Theme',
+    name: 'Material 2 Dark Theme',
+    isDefault: false);
+const material3LightThemeDefinition = MetaThemeDefinition(
+    id: '__material-3-light-theme__',
+    name: 'Material 3 Light Theme',
+    isDefault: false);
+const material3DarkThemeDefinition = MetaThemeDefinition(
+    id: '__material-3-dark-theme__',
+    name: 'Material 3 Dark Theme',
     isDefault: false);
 
 const defaultThemeDefinition = materialLightThemeDefinition;
 
 const standardMetaThemeDefinitions = [
   materialLightThemeDefinition,
-  materialDarkThemeDefinition
+  materialDarkThemeDefinition,
+  material3LightThemeDefinition,
+  material3DarkThemeDefinition,
 ];
 
 class MetaThemeDefinition {

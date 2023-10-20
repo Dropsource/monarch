@@ -4,6 +4,7 @@ class MonarchTheme {
   final String name;
 
   /// Whether this theme is the default theme for all stories.
+  @Deprecated('This flag is deprecated.')
   final bool isDefault;
 
   /// Marks a variable as a theme that Monarch should use.
