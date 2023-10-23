@@ -4,7 +4,9 @@ class MonarchTheme {
   final String name;
 
   /// Whether this theme is the default theme for all stories.
-  @Deprecated('This flag is deprecated.')
+  /// 
+  /// This flag is deprecated. It will be replaced by a new feature 
+  /// and it will be removed in a future version of Monarch.
   final bool isDefault;
 
   /// Marks a variable as a theme that Monarch should use.
@@ -16,7 +18,11 @@ class MonarchTheme {
   /// @MonarchTheme('My Theme', isDefault: true)
   /// final myTheme = ThemeData(...);
   /// ```
-  const MonarchTheme(this.name, {this.isDefault = false});
+  const MonarchTheme(this.name,
+      {@Deprecated(
+          'It will be replaced by a new feature '
+          'and it will be removed in a future version of Monarch.')
+      this.isDefault = false});
 }
 
 /// Class for the `@MonarchLocalizations` annotation.

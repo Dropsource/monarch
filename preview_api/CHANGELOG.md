@@ -1,3 +1,6 @@
+## 2.4.0 - 2023-10-23
+- Use monarch_definitions `^1.5.0` which contains new Material 3 standard themes.
+
 ## 2.3.1 - 2023-10-06
 - Use grpc 3.2.4.
 - grpc 3.2.0 introduced `Server.create` and it required Dart 3.0. These changes are 
