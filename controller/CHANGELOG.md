@@ -1,3 +1,7 @@
+## 1.4.0 - 2023-10-23
+- Handle `FlutterError.onError` to log controller flutter errors to stdout
+- Use latest monarch dependencies: monarch_definitions ^1.5.0, monarch_annotations ^1.0.4.
+
 ## 1.3.2 - 2023-10-06
 - Use grpc 3.2.4
 - grpc 3.2.0 introduced `Server.create` and it required Dart 3.0. These changes are 

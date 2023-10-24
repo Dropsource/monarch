@@ -37,6 +37,11 @@ void main(List<String> arguments) async {
     exit(1);
   }
 
+  FlutterError.onError = (FlutterErrorDetails details) {
+    _logger.severe(
+        'FlutterError in Monarch Controller', details.exception, details.stack);
+  };
+
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MonarchControllerApp());
   setUpChannels(discoveryServerPort);

@@ -11,7 +11,7 @@ flutter test
 
 ### Building the Controller
 ```
-dart tools/build_controller.dart
+dart tools/build.dart controller
 ```
 
 ### Running the Controller stories in Monarch
