@@ -1,3 +1,7 @@
+## 2.4.1 - 2023-11-02
+- Use point versions for monarch_* packages.
+- Using monarch_definitions `1.5.1` which rolls back Material 3 standard themes.
+
 ## 2.4.0 - 2023-10-23
 - Use monarch_definitions `^1.5.0` which contains new Material 3 standard themes.
 

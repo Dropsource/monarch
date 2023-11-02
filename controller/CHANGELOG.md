@@ -1,3 +1,6 @@
+## 1.4.1 - 2023-11-02
+- Use point versions for monarch_* packages.
+
 ## 1.4.0 - 2023-10-23
 - Handle `FlutterError.onError` to log controller flutter errors to stdout
 - Use latest monarch dependencies: monarch_definitions ^1.5.0, monarch_annotations ^1.0.4.
