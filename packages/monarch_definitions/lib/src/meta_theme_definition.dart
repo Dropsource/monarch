@@ -22,8 +22,8 @@ const defaultThemeDefinition = materialLightThemeDefinition;
 const standardMetaThemeDefinitions = [
   materialLightThemeDefinition,
   materialDarkThemeDefinition,
-  material3LightThemeDefinition,
-  material3DarkThemeDefinition,
+  // material3LightThemeDefinition,
+  // material3DarkThemeDefinition,
 ];
 
 class MetaThemeDefinition {

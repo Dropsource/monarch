@@ -1,3 +1,7 @@
+### 1.5.1
+2023-08-25
+- Rollback Material 3 standard themes.
+
 ### 1.5.0 
 2023-08-23
 - Add Material 3 standard themes.
