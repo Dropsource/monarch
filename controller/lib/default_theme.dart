@@ -15,7 +15,7 @@ const Color primaryButtonBackground = Color(0xFF2a2d52);
 const Color blue = Color(0xFF2D407F);
 const Color searchHighlightColor = Colors.amber;
 
-@MonarchTheme('Default Theme', isDefault: true)
+@MonarchTheme('Default Theme')
 ThemeData get theme => StockholmThemeData.dark().copyWith(
       primaryColor: blue,
       splashColor: Colors.transparent,
