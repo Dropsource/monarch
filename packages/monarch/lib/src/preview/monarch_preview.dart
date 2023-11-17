@@ -73,9 +73,12 @@ class MonarchMaterialApp extends StatelessWidget {
   final Locale? locale;
   final Widget home;
 
-  MonarchMaterialApp(
-      {Key? key, required this.scale, required this.locale, required this.home})
-      : super(key: key);
+  MonarchMaterialApp({
+    super.key,
+    required this.scale,
+    required this.locale,
+    required this.home,
+  });
 
   @override
   Widget build(BuildContext context) {

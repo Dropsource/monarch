@@ -51,7 +51,7 @@ class VmServiceClient with Log {
     _client = await vmServiceConnectUri(webSocketUri, log: VmServiceLog());
     log.fine('Connected to vm service socket $webSocketUri');
     _isDisconnected = false;
-    _isolateId = developer.Service.getIsolateID(Isolate.current);
+    _isolateId = developer.Service.getIsolateId(Isolate.current);
     log.fine('Got isolateId=$_isolateId');
 
     _onClientDone();
