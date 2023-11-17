@@ -1,3 +1,12 @@
+### 3.8.0
+2023-11-17
+- Support Flutter 3.17.0-0.0.pre, or greater, which pins vm_service dependency to `13.0.0`.
+- Update sdk min to `3.2.0`.
+- Update vm_service dependency to `>=9.4.0 <14.0.0`.
+- Update lints dependency to `^3.0.0`.
+- Use `Service.getIsolateId` instead of deprecated `Service.getIsolateID`.
+- Use super initializer `super.key`.
+
 ### 3.7.0
 2023-10-23
 - Add Material 3 standard themes objects.
