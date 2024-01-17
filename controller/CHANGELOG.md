@@ -1,3 +1,6 @@
+## 1.4.2 - 2024-01-17
+- Use latest version of stockholm via fork
+
 ## 1.4.1 - 2023-11-02
 - Use point versions for monarch_* packages.
 
