@@ -42,8 +42,8 @@ class _NumberedSlideState extends State<NumberedSlider> {
     return Focus(
       focusNode: _focusNode,
       onFocusChange: (focused) => setState(() => _focused = focused),
-      onKey: (node, event) {
-        if (event is! RawKeyDownEvent) {
+      onKeyEvent: (node, event) {
+        if (event is! KeyDownEvent) {
           return KeyEventResult.ignored;
         }
 

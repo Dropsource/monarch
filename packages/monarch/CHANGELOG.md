@@ -1,3 +1,7 @@
+### 3.8.1
+2024-05-16
+- Update vm_service dependency to `>=9.4.0 <15.0.0`.
+
 ### 3.8.0
 2023-11-17
 - Support Flutter 3.17.0-0.0.pre, or greater, which pins vm_service dependency to `13.0.0`.
