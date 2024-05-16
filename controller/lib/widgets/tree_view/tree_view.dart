@@ -58,8 +58,8 @@ class TreeViewState extends State<TreeView> {
       focusNode: widget.focusNode,
       onFocusChange: (focused) =>
           setState(() => _controller.hasFocus = focused),
-      onKey: (node, event) {
-        if (event is! RawKeyDownEvent) {
+      onKeyEvent: (node, event) {
+        if (event is! KeyDownEvent) {
           return KeyEventResult.ignored;
         }
         if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
@@ -79,7 +79,7 @@ class TreeViewState extends State<TreeView> {
   }
 
   KeyEventResult _handleKeyEvent(node, event, bool Function() test) {
-    if (event is! RawKeyDownEvent) {
+    if (event is! KeyDownEvent) {
       return KeyEventResult.ignored;
     }
     final result = test();

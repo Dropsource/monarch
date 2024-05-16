@@ -22,7 +22,7 @@ ThemeData get theme => StockholmThemeData.dark().copyWith(
       visualDensity: VisualDensity.compact,
       colorScheme: StockholmThemeData.dark().colorScheme.copyWith(
             error: red,
-            background: dark,
+            surface: dark,
           ),
       scaffoldBackgroundColor: dark,
       textTheme: const TextTheme(
