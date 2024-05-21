@@ -59,6 +59,7 @@ Building Monarch Platform using these arguments:
 void buildMacOs(
     RepoPaths repo_paths, String flutter_sdk, String out_ui_flutter_id) {
   const monarch_macos = 'monarch_macos';
+  var flutterVersion = pub.Version.parse(get_flutter_version(flutter_sdk));
 
   var ephemeral_dir = Directory(repo_paths.platform_macos_ephemeral);
   if (ephemeral_dir.existsSync()) ephemeral_dir.deleteSync(recursive: true);
@@ -66,9 +67,14 @@ void buildMacOs(
 
   print('Copying darwin flutter framework bundle to ephemeral directory...');
 
+  var flutterVersionWithXcFrameworkChange = pub.Version(3, 22, 0);
+  var useXcFramework = flutterVersion >= flutterVersionWithXcFrameworkChange;
+
   var result = Process.runSync('cp', [
     '-R',
-    darwin_flutter_framework(flutter_sdk),
+    useXcFramework
+        ? darwin_flutter_xcframework(flutter_sdk)
+        : darwin_flutter_framework(flutter_sdk),
     repo_paths.platform_macos_ephemeral
   ]);
   utils.exitIfNeeded(result, 'Error copying darwin flutter framework bundle');
@@ -84,12 +90,12 @@ Building $monarch_macos with xcodebuild. Will output to:
 
   /// The Flutter macOS API changed between versions. Here we use preprocessor
   /// directives to compile our code with different Flutter versions.
-  /// 
-  /// In flutter version 3.11.0-17.0.pre, the flutter team introduced 
-  /// FlutterAppDelegate lifecycle methods which is when the embedder error may 
+  ///
+  /// In flutter version 3.11.0-17.0.pre, the flutter team introduced
+  /// FlutterAppDelegate lifecycle methods which is when the embedder error may
   /// have started. Also, we have to use the lifecycle methods to avoid the embedder error.
   /// However, those methods are only available after the flutter version above.
-  /// - https://github.com/flutter/engine/pull/42418  
+  /// - https://github.com/flutter/engine/pull/42418
   /// - https://github.com/Dropsource/monarch/pull/127
   ///
   /// In flutter version 3.14.0-0.1.pre, the flutter team fixed an issue
@@ -98,7 +104,6 @@ Building $monarch_macos with xcodebuild. Will output to:
   /// - https://github.com/flutter/flutter/issues/124829
   /// - https://github.com/flutter/engine/pull/43425
   /// - https://github.com/Dropsource/monarch/pull/124
-  var flutterVersion = pub.Version.parse(get_flutter_version(flutter_sdk));
   var flutterVersionWithFlutterAppDelegateChange =
       pub.Version(3, 14, 0, pre: '0.1.pre');
   var flutterVersionWithApplicationLifecycleMethods =
