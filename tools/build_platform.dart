@@ -67,7 +67,7 @@ void buildMacOs(
 
   print('Copying darwin flutter framework bundle to ephemeral directory...');
 
-  var flutterVersionWithXcFrameworkChange = pub.Version(3, 22, 0);
+  var flutterVersionWithXcFrameworkChange = pub.Version(3, 20, 0);
   var useXcFramework = flutterVersion >= flutterVersionWithXcFrameworkChange;
 
   var result = Process.runSync('cp', [
