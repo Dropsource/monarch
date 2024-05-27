@@ -99,7 +99,7 @@ class ControlPanel extends StatelessWidget {
           /// @GOTCHA: Removed because it was broken on Flutter 3.22. See issue #143.
           /// On windows: the status and dock dropdowns crashed the preview window
           /// On macOS: the status dropdown froze afer selection
-          /// 
+          ///
           // LabeledControl(
           //   label: 'controls.scale',
           //   control: DropDown<StoryScaleDefinition>(
@@ -127,7 +127,7 @@ class ControlPanel extends StatelessWidget {
           //     controlWidth: controlWidth,
           //   ),
           // const ControlPanelDivider(),
-          
+
           LabeledControl(
             label: 'controls.visual_debugging',
             control: CheckboxList(
