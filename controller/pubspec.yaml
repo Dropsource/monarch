@@ -27,8 +27,8 @@ dependencies:
     git:
       url: https://github.com/Dropsource/monarch_stockholm/
       ref: monarch_stockholm-1.0.0
-  syncfusion_flutter_core: ^20.1.52
-  syncfusion_flutter_sliders: ^20.1.50
+  syncfusion_flutter_core: ^25.0.0
+  syncfusion_flutter_sliders: ^25.0.0
 
 dev_dependencies:
   build_runner: ^2.1.11
