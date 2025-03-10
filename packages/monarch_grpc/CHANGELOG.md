@@ -1,3 +1,6 @@
+### 2.4.1 - 2025-03-10
+- Upgrades monarch_definitions dep
+
 ### 2.4.0 - 2025-03-06
 - Upgrades major versions of dependencies: grpc, protobuf, lints
 - Sets sdk constraint to ^3.2.0
