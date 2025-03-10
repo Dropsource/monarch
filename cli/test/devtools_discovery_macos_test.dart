@@ -1,4 +1,5 @@
 @TestOn('mac-os')
+library;
 
 import 'package:monarch_cli/src/task_runner/devtools_discovery.dart.dart';
 import 'package:test/test.dart';

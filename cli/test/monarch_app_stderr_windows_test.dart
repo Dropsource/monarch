@@ -1,4 +1,5 @@
 @TestOn('windows')
+library;
 
 import 'package:test/test.dart';
 import 'package:monarch_utils/log.dart';

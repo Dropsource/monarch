@@ -1,3 +1,7 @@
+## 3.1.0 - 2025-03-10
+- Upgrades monarch_* package dependencies
+- Sets dart sdk constraint to ^3.2.0
+
 ## 3.0.5 - 2023-10-06
 - Use monarch_grpc 2.3.1
 - Detect performance overlay error and print solution

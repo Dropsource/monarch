@@ -578,8 +578,6 @@ $monarchIsReady. Project changes will reload automatically with hot restart.''')
         stdout_default.writeln('''
 $monarchIsReady. Press "r" or "R" to reload project changes.''');
         break;
-
-      default:
     }
   }
 }

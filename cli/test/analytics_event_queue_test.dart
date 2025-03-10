@@ -206,7 +206,7 @@ void main() {
 const testRetryDuration = Duration(milliseconds: 100);
 
 class TestAnalyticsEventsQueue extends AnalyticsEventsQueue {
-  TestAnalyticsEventsQueue(AbstractAnalyticsApi api) : super(api);
+  TestAnalyticsEventsQueue(super.api);
   @override
   Duration get timeBetweenRetries => testRetryDuration;
 }
