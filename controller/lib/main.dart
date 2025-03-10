@@ -77,7 +77,7 @@ void setUpChannels(int discoveryServerPort) async {
 }
 
 class MonarchControllerApp extends StatelessWidget {
-  const MonarchControllerApp({Key? key}) : super(key: key);
+  const MonarchControllerApp({super.key});
 
   @override
   Widget build(BuildContext context) {

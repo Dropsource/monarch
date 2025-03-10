@@ -21,9 +21,9 @@ class ControlPanel extends StatelessWidget {
 
   const ControlPanel({
     required this.manager,
-    Key? key,
+    super.key,
     this.width = 353,
-  }) : super(key: key);
+  });
   static const controlWidth = 250.0;
 
   @override
@@ -159,7 +159,7 @@ class ControlPanel extends StatelessWidget {
 }
 
 class ControlPanelDivider extends StatelessWidget {
-  const ControlPanelDivider({Key? key}) : super(key: key);
+  const ControlPanelDivider({super.key});
 
   @override
   Widget build(BuildContext context) {

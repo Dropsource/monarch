@@ -9,9 +9,9 @@ import '../widgets/control_panel/control_panel.dart';
 
 class ControllerScreen extends StatefulWidget {
   const ControllerScreen({
-    Key? key,
+    super.key,
     required this.manager,
-  }) : super(key: key);
+  });
 
   final ControllerManager manager;
 

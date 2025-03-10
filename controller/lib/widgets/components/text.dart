@@ -5,38 +5,22 @@ import '../../../utils/translations.dart';
 
 class TextHeadline1 extends TextWidget {
   const TextHeadline1(
-    String text, {
-    Key? key,
-    List<String>? args,
-    bool? shouldTranslate,
-    bool? shouldBeCopyable,
-    String? copyConfirmationText,
-    TextAlign? textAlign,
-    TextOverflow? overflow,
-    int? maxLines,
-    double? maxFontSize,
-    double? minFontSize,
-    bool? shouldAutoResize,
-    bool? shouldUpperCase,
-    double? fontSizeMultiplier,
-    TextStyle? styles,
-  }) : super(
-          text,
-          key: key,
-          shouldTranslate: shouldTranslate,
-          shouldBeCopyable: shouldBeCopyable,
-          copyConfirmationText: copyConfirmationText,
-          styles: styles,
-          args: args,
-          textAlign: textAlign,
-          overflow: overflow,
-          maxLines: maxLines,
-          maxFontSize: maxFontSize,
-          minFontSize: minFontSize,
-          shouldAutoResize: shouldAutoResize,
-          fontSizeMultiplier: fontSizeMultiplier,
-          shouldUpperCase: shouldUpperCase,
-        );
+    super.text, {
+    super.key,
+    super.args,
+    super.shouldTranslate,
+    super.shouldBeCopyable,
+    super.copyConfirmationText,
+    super.textAlign = null,
+    super.overflow,
+    super.maxLines,
+    super.maxFontSize,
+    super.minFontSize,
+    super.shouldAutoResize,
+    super.shouldUpperCase,
+    super.fontSizeMultiplier,
+    super.styles,
+  });
 
   @override
   TextStyle? style(BuildContext context) =>
@@ -45,38 +29,22 @@ class TextHeadline1 extends TextWidget {
 
 class TextHeadline2 extends TextWidget {
   const TextHeadline2(
-    String text, {
-    Key? key,
-    List<String>? args,
-    bool? shouldTranslate,
-    bool? shouldBeCopyable,
-    String? copyConfirmationText,
-    TextAlign? textAlign,
-    TextOverflow? overflow,
-    int? maxLines,
-    double? maxFontSize,
-    double? minFontSize,
-    bool? shouldAutoResize,
-    bool? shouldUpperCase,
-    double? fontSizeMultiplier,
-    TextStyle? styles,
-  }) : super(
-          text,
-          key: key,
-          shouldTranslate: shouldTranslate,
-          shouldBeCopyable: shouldBeCopyable,
-          copyConfirmationText: copyConfirmationText,
-          styles: styles,
-          args: args,
-          textAlign: textAlign,
-          overflow: overflow,
-          maxLines: maxLines,
-          maxFontSize: maxFontSize,
-          minFontSize: minFontSize,
-          shouldAutoResize: shouldAutoResize,
-          fontSizeMultiplier: fontSizeMultiplier,
-          shouldUpperCase: shouldUpperCase,
-        );
+    super.text, {
+    super.key,
+    super.args,
+    super.shouldTranslate,
+    super.shouldBeCopyable,
+    super.copyConfirmationText,
+    super.textAlign = null,
+    super.overflow,
+    super.maxLines,
+    super.maxFontSize,
+    super.minFontSize,
+    super.shouldAutoResize,
+    super.shouldUpperCase,
+    super.fontSizeMultiplier,
+    super.styles,
+  });
 
   @override
   TextStyle? style(BuildContext context) =>
@@ -85,38 +53,22 @@ class TextHeadline2 extends TextWidget {
 
 class TextHeadline3 extends TextWidget {
   const TextHeadline3(
-    String text, {
-    Key? key,
-    List<String>? args,
-    bool? shouldTranslate,
-    bool? shouldBeCopyable,
-    String? copyConfirmationText,
-    TextAlign? textAlign,
-    TextOverflow? overflow,
-    int? maxLines,
-    double? maxFontSize,
-    double? minFontSize,
-    bool? shouldAutoResize,
-    bool? shouldUpperCase,
-    double? fontSizeMultiplier,
-    TextStyle? styles,
-  }) : super(
-          text,
-          key: key,
-          shouldTranslate: shouldTranslate,
-          shouldBeCopyable: shouldBeCopyable,
-          copyConfirmationText: copyConfirmationText,
-          styles: styles,
-          args: args,
-          textAlign: textAlign,
-          overflow: overflow,
-          maxLines: maxLines,
-          maxFontSize: maxFontSize,
-          minFontSize: minFontSize,
-          shouldAutoResize: shouldAutoResize,
-          fontSizeMultiplier: fontSizeMultiplier,
-          shouldUpperCase: shouldUpperCase,
-        );
+    super.text, {
+    super.key,
+    super.args,
+    super.shouldTranslate,
+    super.shouldBeCopyable,
+    super.copyConfirmationText,
+    super.textAlign = null,
+    super.overflow,
+    super.maxLines,
+    super.maxFontSize,
+    super.minFontSize,
+    super.shouldAutoResize,
+    super.shouldUpperCase,
+    super.fontSizeMultiplier,
+    super.styles,
+  });
 
   @override
   TextStyle? style(BuildContext context) =>
@@ -125,38 +77,22 @@ class TextHeadline3 extends TextWidget {
 
 class TextHeadline4 extends TextWidget {
   const TextHeadline4(
-    String text, {
-    Key? key,
-    List<String>? args,
-    bool? shouldTranslate,
-    bool? shouldBeCopyable,
-    String? copyConfirmationText,
-    TextAlign? textAlign,
-    TextOverflow? overflow,
-    int? maxLines,
-    double? maxFontSize,
-    double? minFontSize,
-    bool? shouldAutoResize,
-    bool? shouldUpperCase,
-    double? fontSizeMultiplier,
-    TextStyle? styles,
-  }) : super(
-          text,
-          key: key,
-          shouldTranslate: shouldTranslate,
-          shouldBeCopyable: shouldBeCopyable,
-          copyConfirmationText: copyConfirmationText,
-          styles: styles,
-          args: args,
-          textAlign: textAlign,
-          overflow: overflow,
-          maxLines: maxLines,
-          maxFontSize: maxFontSize,
-          minFontSize: minFontSize,
-          shouldAutoResize: shouldAutoResize,
-          fontSizeMultiplier: fontSizeMultiplier,
-          shouldUpperCase: shouldUpperCase,
-        );
+    super.text, {
+    super.key,
+    super.args,
+    super.shouldTranslate,
+    super.shouldBeCopyable,
+    super.copyConfirmationText,
+    super.textAlign = null,
+    super.overflow,
+    super.maxLines,
+    super.maxFontSize,
+    super.minFontSize,
+    super.shouldAutoResize,
+    super.shouldUpperCase,
+    super.fontSizeMultiplier,
+    super.styles,
+  });
 
   @override
   TextStyle? style(BuildContext context) =>
@@ -165,38 +101,22 @@ class TextHeadline4 extends TextWidget {
 
 class TextHeadline5 extends TextWidget {
   const TextHeadline5(
-    String text, {
-    Key? key,
-    List<String>? args,
-    bool? shouldTranslate,
-    bool? shouldBeCopyable,
-    String? copyConfirmationText,
-    TextAlign? textAlign,
-    TextOverflow? overflow,
-    int? maxLines,
-    double? maxFontSize,
-    double? minFontSize,
-    bool? shouldAutoResize,
-    bool? shouldUpperCase,
-    double? fontSizeMultiplier,
-    TextStyle? styles,
-  }) : super(
-          text,
-          key: key,
-          shouldTranslate: shouldTranslate,
-          shouldBeCopyable: shouldBeCopyable,
-          copyConfirmationText: copyConfirmationText,
-          styles: styles,
-          args: args,
-          textAlign: textAlign,
-          overflow: overflow,
-          maxLines: maxLines,
-          maxFontSize: maxFontSize,
-          minFontSize: minFontSize,
-          shouldAutoResize: shouldAutoResize,
-          fontSizeMultiplier: fontSizeMultiplier,
-          shouldUpperCase: shouldUpperCase,
-        );
+    super.text, {
+    super.key,
+    super.args,
+    super.shouldTranslate,
+    super.shouldBeCopyable,
+    super.copyConfirmationText,
+    super.textAlign = null,
+    super.overflow,
+    super.maxLines,
+    super.maxFontSize,
+    super.minFontSize,
+    super.shouldAutoResize,
+    super.shouldUpperCase,
+    super.fontSizeMultiplier,
+    super.styles,
+  });
 
   @override
   TextStyle? style(BuildContext context) =>
@@ -205,38 +125,22 @@ class TextHeadline5 extends TextWidget {
 
 class TextHeadline6 extends TextWidget {
   const TextHeadline6(
-    String text, {
-    Key? key,
-    List<String>? args,
-    bool? shouldTranslate,
-    bool? shouldBeCopyable,
-    String? copyConfirmationText,
-    TextAlign? textAlign,
-    TextOverflow? overflow,
-    int? maxLines,
-    double? maxFontSize,
-    double? minFontSize,
-    bool? shouldAutoResize,
-    bool? shouldUpperCase,
-    double? fontSizeMultiplier,
-    TextStyle? styles,
-  }) : super(
-          text,
-          key: key,
-          shouldTranslate: shouldTranslate,
-          shouldBeCopyable: shouldBeCopyable,
-          copyConfirmationText: copyConfirmationText,
-          styles: styles,
-          args: args,
-          textAlign: textAlign,
-          overflow: overflow,
-          maxLines: maxLines,
-          maxFontSize: maxFontSize,
-          minFontSize: minFontSize,
-          shouldAutoResize: shouldAutoResize,
-          fontSizeMultiplier: fontSizeMultiplier,
-          shouldUpperCase: shouldUpperCase,
-        );
+    super.text, {
+    super.key,
+    super.args,
+    super.shouldTranslate,
+    super.shouldBeCopyable,
+    super.copyConfirmationText,
+    super.textAlign = null,
+    super.overflow,
+    super.maxLines,
+    super.maxFontSize,
+    super.minFontSize,
+    super.shouldAutoResize,
+    super.shouldUpperCase,
+    super.fontSizeMultiplier,
+    super.styles,
+  });
 
   @override
   TextStyle? style(BuildContext context) =>
@@ -245,38 +149,22 @@ class TextHeadline6 extends TextWidget {
 
 class TextSubtitle1 extends TextWidget {
   const TextSubtitle1(
-    String text, {
-    Key? key,
-    List<String>? args,
-    bool? shouldTranslate,
-    bool? shouldBeCopyable,
-    String? copyConfirmationText,
-    TextAlign? textAlign,
-    TextOverflow? overflow,
-    int? maxLines,
-    double? maxFontSize,
-    double? minFontSize,
-    bool? shouldAutoResize,
-    bool? shouldUpperCase,
-    double? fontSizeMultiplier,
-    TextStyle? styles,
-  }) : super(
-          text,
-          key: key,
-          shouldTranslate: shouldTranslate,
-          shouldBeCopyable: shouldBeCopyable,
-          copyConfirmationText: copyConfirmationText,
-          styles: styles,
-          args: args,
-          textAlign: textAlign,
-          overflow: overflow,
-          maxLines: maxLines,
-          maxFontSize: maxFontSize,
-          minFontSize: minFontSize,
-          shouldAutoResize: shouldAutoResize,
-          fontSizeMultiplier: fontSizeMultiplier,
-          shouldUpperCase: shouldUpperCase,
-        );
+    super.text, {
+    super.key,
+    super.args,
+    super.shouldTranslate,
+    super.shouldBeCopyable,
+    super.copyConfirmationText,
+    super.textAlign = null,
+    super.overflow,
+    super.maxLines,
+    super.maxFontSize,
+    super.minFontSize,
+    super.shouldAutoResize,
+    super.shouldUpperCase,
+    super.fontSizeMultiplier,
+    super.styles,
+  });
 
   @override
   TextStyle? style(BuildContext context) =>
@@ -285,38 +173,22 @@ class TextSubtitle1 extends TextWidget {
 
 class TextSubtitle2 extends TextWidget {
   const TextSubtitle2(
-    String text, {
-    Key? key,
-    List<String>? args,
-    bool? shouldTranslate,
-    bool? shouldBeCopyable,
-    String? copyConfirmationText,
-    TextAlign? textAlign,
-    TextOverflow? overflow,
-    int? maxLines,
-    double? maxFontSize,
-    double? minFontSize,
-    bool? shouldAutoResize,
-    bool? shouldUpperCase,
-    double? fontSizeMultiplier,
-    TextStyle? styles,
-  }) : super(
-          text,
-          key: key,
-          shouldTranslate: shouldTranslate,
-          shouldBeCopyable: shouldBeCopyable,
-          copyConfirmationText: copyConfirmationText,
-          styles: styles,
-          args: args,
-          textAlign: textAlign,
-          overflow: overflow,
-          maxLines: maxLines,
-          maxFontSize: maxFontSize,
-          minFontSize: minFontSize,
-          shouldAutoResize: shouldAutoResize,
-          fontSizeMultiplier: fontSizeMultiplier,
-          shouldUpperCase: shouldUpperCase,
-        );
+    super.text, {
+    super.key,
+    super.args,
+    super.shouldTranslate,
+    super.shouldBeCopyable,
+    super.copyConfirmationText,
+    super.textAlign = null,
+    super.overflow,
+    super.maxLines,
+    super.maxFontSize,
+    super.minFontSize,
+    super.shouldAutoResize,
+    super.shouldUpperCase,
+    super.fontSizeMultiplier,
+    super.styles,
+  });
 
   @override
   TextStyle? style(BuildContext context) =>
@@ -325,38 +197,22 @@ class TextSubtitle2 extends TextWidget {
 
 class TextBody1 extends TextWidget {
   const TextBody1(
-    String text, {
-    Key? key,
-    List<String>? args,
-    bool? shouldTranslate,
-    bool? shouldBeCopyable,
-    String? copyConfirmationText,
-    TextAlign? textAlign,
-    TextOverflow? overflow,
-    int? maxLines,
-    double? maxFontSize,
-    double? minFontSize,
-    bool? shouldAutoResize,
-    bool? shouldUpperCase,
-    double? fontSizeMultiplier,
-    TextStyle? styles,
-  }) : super(
-          text,
-          key: key,
-          shouldTranslate: shouldTranslate,
-          shouldBeCopyable: shouldBeCopyable,
-          copyConfirmationText: copyConfirmationText,
-          styles: styles,
-          args: args,
-          textAlign: textAlign,
-          overflow: overflow,
-          maxLines: maxLines,
-          maxFontSize: maxFontSize,
-          minFontSize: minFontSize,
-          shouldAutoResize: shouldAutoResize,
-          fontSizeMultiplier: fontSizeMultiplier,
-          shouldUpperCase: shouldUpperCase,
-        );
+    super.text, {
+    super.key,
+    super.args,
+    super.shouldTranslate,
+    super.shouldBeCopyable,
+    super.copyConfirmationText,
+    super.textAlign = null,
+    super.overflow,
+    super.maxLines,
+    super.maxFontSize,
+    super.minFontSize,
+    super.shouldAutoResize,
+    super.shouldUpperCase,
+    super.fontSizeMultiplier,
+    super.styles,
+  });
 
   @override
   TextStyle? style(BuildContext context) =>
@@ -365,38 +221,22 @@ class TextBody1 extends TextWidget {
 
 class TextBody2 extends TextWidget {
   const TextBody2(
-    String text, {
-    Key? key,
-    List<String>? args,
-    bool? shouldTranslate,
-    bool? shouldBeCopyable,
-    String? copyConfirmationText,
-    TextAlign? textAlign,
-    TextOverflow? overflow,
-    int? maxLines,
-    double? maxFontSize,
-    double? minFontSize,
-    bool? shouldAutoResize,
-    bool? shouldUpperCase,
-    double? fontSizeMultiplier,
-    TextStyle? styles,
-  }) : super(
-          text,
-          key: key,
-          shouldTranslate: shouldTranslate,
-          shouldBeCopyable: shouldBeCopyable,
-          copyConfirmationText: copyConfirmationText,
-          styles: styles,
-          args: args,
-          textAlign: textAlign,
-          overflow: overflow,
-          maxLines: maxLines,
-          maxFontSize: maxFontSize,
-          minFontSize: minFontSize,
-          shouldAutoResize: shouldAutoResize,
-          fontSizeMultiplier: fontSizeMultiplier,
-          shouldUpperCase: shouldUpperCase,
-        );
+    super.text, {
+    super.key,
+    super.args,
+    super.shouldTranslate,
+    super.shouldBeCopyable,
+    super.copyConfirmationText,
+    super.textAlign = null,
+    super.overflow,
+    super.maxLines,
+    super.maxFontSize,
+    super.minFontSize,
+    super.shouldAutoResize,
+    super.shouldUpperCase,
+    super.fontSizeMultiplier,
+    super.styles,
+  });
 
   @override
   TextStyle? style(BuildContext context) =>
@@ -405,38 +245,22 @@ class TextBody2 extends TextWidget {
 
 class TextCaption extends TextWidget {
   const TextCaption(
-    String text, {
-    Key? key,
-    List<String>? args,
-    bool? shouldTranslate,
-    bool? shouldBeCopyable,
-    String? copyConfirmationText,
-    TextAlign? textAlign,
-    TextOverflow? overflow,
-    int? maxLines,
-    double? maxFontSize,
-    double? minFontSize,
-    bool? shouldAutoResize,
-    bool? shouldUpperCase,
-    double? fontSizeMultiplier,
-    TextStyle? styles,
-  }) : super(
-          text,
-          key: key,
-          shouldTranslate: shouldTranslate,
-          shouldBeCopyable: shouldBeCopyable,
-          copyConfirmationText: copyConfirmationText,
-          styles: styles,
-          args: args,
-          textAlign: textAlign,
-          overflow: overflow,
-          maxLines: maxLines,
-          maxFontSize: maxFontSize,
-          minFontSize: minFontSize,
-          shouldAutoResize: shouldAutoResize,
-          fontSizeMultiplier: fontSizeMultiplier,
-          shouldUpperCase: shouldUpperCase,
-        );
+    super.text, {
+    super.key,
+    super.args,
+    super.shouldTranslate,
+    super.shouldBeCopyable,
+    super.copyConfirmationText,
+    super.textAlign = null,
+    super.overflow,
+    super.maxLines,
+    super.maxFontSize,
+    super.minFontSize,
+    super.shouldAutoResize,
+    super.shouldUpperCase,
+    super.fontSizeMultiplier,
+    super.styles,
+  });
 
   @override
   TextStyle? style(BuildContext context) =>
@@ -445,38 +269,22 @@ class TextCaption extends TextWidget {
 
 class TextOverline extends TextWidget {
   const TextOverline(
-    String text, {
-    Key? key,
-    List<String>? args,
-    bool? shouldTranslate,
-    bool? shouldBeCopyable,
-    String? copyConfirmationText,
-    TextAlign? textAlign,
-    TextOverflow? overflow,
-    int? maxLines,
-    double? maxFontSize,
-    double? minFontSize,
-    bool? shouldAutoResize,
-    bool? shouldUpperCase,
-    double? fontSizeMultiplier,
-    TextStyle? styles,
-  }) : super(
-          text,
-          key: key,
-          shouldTranslate: shouldTranslate,
-          shouldBeCopyable: shouldBeCopyable,
-          copyConfirmationText: copyConfirmationText,
-          styles: styles,
-          args: args,
-          textAlign: textAlign,
-          overflow: overflow,
-          maxLines: maxLines,
-          maxFontSize: maxFontSize,
-          minFontSize: minFontSize,
-          shouldAutoResize: shouldAutoResize,
-          fontSizeMultiplier: fontSizeMultiplier,
-          shouldUpperCase: shouldUpperCase,
-        );
+    super.text, {
+    super.key,
+    super.args,
+    super.shouldTranslate,
+    super.shouldBeCopyable,
+    super.copyConfirmationText,
+    super.textAlign = null,
+    super.overflow,
+    super.maxLines,
+    super.maxFontSize,
+    super.minFontSize,
+    super.shouldAutoResize,
+    super.shouldUpperCase,
+    super.fontSizeMultiplier,
+    super.styles,
+  });
 
   @override
   TextStyle? style(BuildContext context) =>
@@ -485,38 +293,22 @@ class TextOverline extends TextWidget {
 
 class ButtonText extends TextWidget {
   const ButtonText(
-    String text, {
-    Key? key,
-    List<String>? args,
-    bool? shouldTranslate,
-    bool? shouldBeCopyable,
-    String? copyConfirmationText,
-    TextAlign? textAlign,
-    TextOverflow? overflow,
-    int? maxLines,
-    double? maxFontSize,
-    double? minFontSize,
-    bool? shouldAutoResize,
-    bool? shouldUpperCase,
-    double? fontSizeMultiplier,
-    TextStyle? styles,
-  }) : super(
-          text,
-          key: key,
-          shouldTranslate: shouldTranslate,
-          shouldBeCopyable: shouldBeCopyable,
-          copyConfirmationText: copyConfirmationText,
-          styles: styles,
-          args: args,
-          textAlign: textAlign,
-          overflow: overflow,
-          maxLines: maxLines,
-          maxFontSize: maxFontSize,
-          minFontSize: minFontSize,
-          shouldAutoResize: shouldAutoResize,
-          fontSizeMultiplier: fontSizeMultiplier,
-          shouldUpperCase: shouldUpperCase,
-        );
+    super.text, {
+    super.key,
+    super.args,
+    super.shouldTranslate,
+    super.shouldBeCopyable,
+    super.copyConfirmationText,
+    super.textAlign = null,
+    super.overflow,
+    super.maxLines,
+    super.maxFontSize,
+    super.minFontSize,
+    super.shouldAutoResize,
+    super.shouldUpperCase,
+    super.fontSizeMultiplier,
+    super.styles,
+  });
 
   @override
   TextStyle? style(BuildContext context) =>
@@ -555,8 +347,8 @@ abstract class TextWidget extends StatelessWidget {
     this.args,
     this.textAlign = TextAlign.start,
     this.shouldUpperCase,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   bool get _shouldTranslate => shouldTranslate ?? false;
 

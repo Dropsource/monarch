@@ -1,3 +1,7 @@
+## 1.5.0 - 2025-03-10
+- Upgrades dependencies and sdk
+- Fixes lints
+
 ## 1.4.2 - 2024-01-17
 - Use latest version of stockholm via fork
 

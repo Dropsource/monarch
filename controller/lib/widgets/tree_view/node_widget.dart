@@ -1,4 +1,4 @@
-///Code credits to https://pub.dev/packages/flutter_simple_treeview
+//Code credits to https://pub.dev/packages/flutter_simple_treeview
 
 import 'package:flutter/material.dart';
 
@@ -16,14 +16,14 @@ class NodeWidget extends StatefulWidget {
   final VoidCallback? onFocus;
 
   const NodeWidget({
-    Key? key,
+    super.key,
     required this.treeNode,
     this.indent,
     required this.state,
     this.iconSize,
     this.updateRoot,
     this.onFocus,
-  }) : super(key: key);
+  });
 
   @override
   NodeWidgetState createState() => NodeWidgetState();

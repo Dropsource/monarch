@@ -13,7 +13,7 @@ class StockholmButton extends StatelessWidget {
   final FocusNode? focusNode;
 
   const StockholmButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.child,
     this.padding = const EdgeInsets.symmetric(
@@ -23,7 +23,7 @@ class StockholmButton extends StatelessWidget {
     this.important = false,
     this.enabled = true,
     this.focusNode,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

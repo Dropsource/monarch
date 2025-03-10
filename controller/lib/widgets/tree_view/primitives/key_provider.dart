@@ -1,13 +1,13 @@
-///Code credits to https://pub.dev/packages/flutter_simple_treeview
+//Code credits to https://pub.dev/packages/flutter_simple_treeview
 
 import 'package:flutter/material.dart';
 
 class NodeKey extends ValueKey {
-  const NodeKey(dynamic value) : super(value);
+  const NodeKey(super.value);
 }
 
 class LeafKey extends ValueKey {
-  const LeafKey(dynamic value) : super(value);
+  const LeafKey(super.value);
 }
 
 /// Provides unique keys and verifies duplicates.

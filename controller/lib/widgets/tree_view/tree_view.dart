@@ -1,4 +1,4 @@
-///Code credits to https://pub.dev/packages/flutter_simple_treeview
+//Code credits to https://pub.dev/packages/flutter_simple_treeview
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,15 +28,14 @@ class TreeView extends StatefulWidget {
   final Function(Key)? onNodeChanged;
 
   TreeView({
-    Key? key,
+    super.key,
     required List<TreeNode> nodes,
     this.indent = 40,
     this.iconSize,
     this.focusNode,
     required this.treeController,
     this.onNodeChanged,
-  })  : nodes = copyTreeNodes(nodes, treeController.keyProvider),
-        super(key: key);
+  })  : nodes = copyTreeNodes(nodes, treeController.keyProvider);
 
   @override
   TreeViewState createState() => TreeViewState();
