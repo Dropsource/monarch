@@ -1,3 +1,7 @@
+## 1.2.0 - 2025-03-06
+- Lints
+- Upgrades dependencies and sdk.
+
 ## 1.1.0 - 2022-12-21
 - Add debouncer
 - Create library timers

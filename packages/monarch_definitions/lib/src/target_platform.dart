@@ -9,8 +9,6 @@ String targetPlatformToString(MonarchTargetPlatform platform) {
       return _ios;
     case MonarchTargetPlatform.android:
       return _android;
-    default:
-      throw 'Unexpected target platform value $platform';
   }
 }
 

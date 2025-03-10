@@ -1,4 +1,5 @@
 @TestOn('windows')
+library;
 
 import 'package:test/test.dart';
 

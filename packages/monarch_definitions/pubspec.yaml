@@ -1,15 +1,15 @@
 name: monarch_definitions
 description: Types and channel definitions for Monarch. Monarch is a tool for building Flutter widgets in isolation. It makes it easy to build, test and debug complex UIs.
-version: 1.5.1
+version: 1.6.0
 homepage: https://monarchapp.io
 repository: https://github.com/Dropsource/monarch
 issue_tracker: https://github.com/Dropsource/monarch/issues
 documentation: https://monarchapp.io/docs/introduction
 
 environment:
-  sdk: '>=2.12.0 <4.0.0'
+  sdk: ^3.2.0
 
 dependencies:
 
 dev_dependencies:
-  lints: ^2.0.1
+  lints: ^5.1.1

@@ -1,15 +1,15 @@
 import 'dart:io';
 import 'log.dart';
 
-void logUnsuccessfulProcessResult(ProcessResult result, Log _log) {
+void logUnsuccessfulProcessResult(ProcessResult result, Log log_) {
   final stdout = result.stdout;
   final stderr = result.stderr;
 
   if (stdout is String) {
-    _log.log.severe('stdout output:\n$stdout');
+    log_.log.severe('stdout output:\n$stdout');
   }
 
   if (stderr is String && stderr.isNotEmpty) {
-    _log.log.severe('stderr output:\n$stderr');
+    log_.log.severe('stderr output:\n$stderr');
   }
 }

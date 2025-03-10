@@ -48,11 +48,11 @@ class FlutterSdkId extends Object {
     if (pattern.hasMatch(stringId)) {
       var match = pattern.firstMatch(stringId)!;
       if (match.groupCount == 3) {
-        var _os = match.group(1)!;
-        var _version = match.group(2)!;
-        var _channel = match.group(3)!;
+        var os_ = match.group(1)!;
+        var version_ = match.group(2)!;
+        var channel_ = match.group(3)!;
         return FlutterSdkId(
-            channel: _channel, version: _version, operatingSystem: _os);
+            channel: channel_, version: version_, operatingSystem: os_);
       }
     }
     throw ArgumentError(
@@ -82,11 +82,11 @@ class FlutterSdkId extends Object {
     if (pattern.hasMatch(flutterVersionOutput)) {
       var match = pattern.firstMatch(flutterVersionOutput)!;
       if (match.groupCount == 2) {
-        var _version = match.group(1)!;
-        var _channel = match.group(2)!;
+        var version_ = match.group(1)!;
+        var channel_ = match.group(2)!;
         return FlutterSdkId(
-            channel: _channel,
-            version: _version,
+            channel: channel_,
+            version: version_,
             operatingSystem: operatingSystem);
       }
     }

@@ -1,3 +1,9 @@
+### 3.9.0
+2025-03-06
+- Upgrades dependencies: source_gen, dart_style, analyzer, lints
+- Lints
+- Sets Flutter SDK constraint to greater than 3.22.0-0.1.pre
+
 ### 3.8.1
 2024-05-16
 - Update vm_service dependency to `>=9.4.0 <15.0.0`.

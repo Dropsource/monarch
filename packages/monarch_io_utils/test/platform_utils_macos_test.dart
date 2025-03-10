@@ -1,4 +1,5 @@
 @TestOn('mac-os')
+library;
 
 import 'package:test/test.dart';
 
