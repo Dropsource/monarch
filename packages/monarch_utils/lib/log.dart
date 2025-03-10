@@ -1,4 +1,4 @@
-library log;
+library;
 
 export 'src/log/log.dart';
 export 'src/log/log_process_result.dart';

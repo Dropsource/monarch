@@ -1,3 +1,7 @@
+## 1.3.0 - 2025-03-06
+- Upgrades major versions of dependencies: http, lints
+- Upgrade sdk
+
 ## 1.2.0 - 2022-09-13
 - Renamed lib/utils.dart to lib/monarch_http.dart
 - Publishing to pub.dev

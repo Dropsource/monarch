@@ -1,3 +1,8 @@
+### 1.1.0
+2025-03-06
+- Lints
+- Sets Dart sdk constraint to 3.2.0
+
 ### 1.0.4
 2023-10-23
 - Deprecate MonarchTheme.isDefault flag.

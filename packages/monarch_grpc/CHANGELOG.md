@@ -1,3 +1,7 @@
+### 2.4.0 - 2025-03-06
+- Upgrades major versions of dependencies: grpc, protobuf, lints
+- Sets sdk constraint to ^3.2.0
+
 ### 2.3.1 - 2023-10-06
 - Use grpc version 3.2.4
 

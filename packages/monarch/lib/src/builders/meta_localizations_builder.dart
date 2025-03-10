@@ -66,7 +66,7 @@ class MetaLocalizationsBuilder implements Builder {
 Proposed change:
 ```
 @MonarchLocalizations(...)
-${element.type.getDisplayString(withNullability: false)} get ${element.name} => ...
+${element.type.getDisplayString()} get ${element.name} => ...
 ```
 
 After you make the change, run `monarch run` again.

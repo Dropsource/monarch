@@ -46,7 +46,7 @@ class MainBuilder implements Builder {
         _getMetaItemsStatements(metaThemesIdMap, 'metaThemeItems'),
         _getMetaStoriesMap(metaStoriesIdMap));
 
-    var formatter = DartFormatter();
+    var formatter = DartFormatter(languageVersion: DartFormatter.latestLanguageVersion);
     var formattedOutput = formatter.format(output);
 
     await buildStep.writeAsString(outputId, formattedOutput);

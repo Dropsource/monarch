@@ -1,4 +1,4 @@
-library timers;
+library;
 
 export 'src/timers/stopwatch.dart';
 export 'src/timers/heartbeat.dart';

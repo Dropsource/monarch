@@ -1,3 +1,7 @@
+### 1.6.0
+2025-03-10
+- Update dependencies and sdk.
+
 ### 1.5.1
 2023-08-25
 - Rollback Material 3 standard themes.

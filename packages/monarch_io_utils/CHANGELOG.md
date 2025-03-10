@@ -1,3 +1,7 @@
+## 1.4.0 - 2025-03-06
+- Fixes lints
+- Upgrades dependencies and sdk
+
 ## 1.3.0 - 2023-01-10
 - Linux support in platform_utils function, backwards compatible.
 
