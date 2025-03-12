@@ -1,5 +1,6 @@
-## 2.5.0 - 2025-03-10
+## 2.5.1 - 2025-03-10
 - Upgrades dependencies, dart sdk, and flutter sdk.
+- Reads monarch.yaml
 
 ## 2.4.1 - 2023-11-02
 - Use point versions for monarch_* packages.

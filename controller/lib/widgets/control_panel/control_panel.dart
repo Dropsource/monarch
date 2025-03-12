@@ -1,5 +1,7 @@
 // import 'dart:io';
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:monarch_definitions/monarch_definitions.dart';
 import 'package:stockholm/stockholm.dart';
@@ -96,37 +98,33 @@ class ControlPanel extends StatelessWidget {
           ),
           const ControlPanelDivider(),
 
-          /// @GOTCHA: Removed because it was broken on Flutter 3.22. See issue #143.
-          /// On windows: the status and dock dropdowns crashed the preview window
-          /// On macOS: the status dropdown froze afer selection
-          ///
-          // LabeledControl(
-          //   label: 'controls.scale',
-          //   control: DropDown<StoryScaleDefinition>(
-          //     currentValue: state.currentScale,
-          //     values: state.scaleList.toList(),
-          //     skipTraversal: true,
-          //     onChange: actions.onScaleChanged,
-          //     toStringFunction: (e) => e.name,
-          //   ),
-          //   controlWidth: controlWidth,
-          // ),
-          // const SizedBox(
-          //   height: 8,
-          // ),
-          // if (!Platform.isLinux) // hidden on linux until it supports docking
-          //   LabeledControl(
-          //     label: 'controls.dock',
-          //     control: DropDown<DockDefinition>(
-          //       currentValue: state.currentDock,
-          //       values: state.dockList.toList(),
-          //       skipTraversal: true,
-          //       onChange: actions.onDockSettingsChange,
-          //       toStringFunction: (e) => translations.text(e.name),
-          //     ),
-          //     controlWidth: controlWidth,
-          //   ),
-          // const ControlPanelDivider(),
+          LabeledControl(
+            label: 'controls.scale',
+            control: DropDown<StoryScaleDefinition>(
+              currentValue: state.currentScale,
+              values: state.scaleList.toList(),
+              skipTraversal: true,
+              onChange: actions.onScaleChanged,
+              toStringFunction: (e) => e.name,
+            ),
+            controlWidth: controlWidth,
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          if (!Platform.isLinux) // hidden on linux until it supports docking
+            LabeledControl(
+              label: 'controls.dock',
+              control: DropDown<DockDefinition>(
+                currentValue: state.currentDock,
+                values: state.dockList.toList(),
+                skipTraversal: true,
+                onChange: actions.onDockSettingsChange,
+                toStringFunction: (e) => translations.text(e.name),
+              ),
+              controlWidth: controlWidth,
+            ),
+          const ControlPanelDivider(),
 
           LabeledControl(
             label: 'controls.visual_debugging',

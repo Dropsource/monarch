@@ -1,3 +1,6 @@
+### 3.9.2
+- Upgrades monarch_definitions to 1.7.0
+
 ### 3.9.1
 - Upgrades monarch_* dependencies
 

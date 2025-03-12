@@ -5,6 +5,7 @@ import 'package:monarch_grpc/monarch_grpc.dart';
 import 'package:monarch_utils/log.dart';
 
 import 'package:monarch_utils/log_config.dart';
+import 'package:preview_api/src/monarch_yaml_reader.dart';
 
 import 'src/channel_methods_receiver.dart';
 import 'src/channel_methods_sender.dart';
@@ -20,9 +21,9 @@ final selectionsStateManager = SelectionsStateManager();
 
 void main(List<String> arguments) async {
   _setUpLog();
-  if (arguments.length < 2) {
+  if (arguments.length < 3) {
     _logger.severe(
-        'Expected 2 arguments in this order: default-log-level discovery-server-port');
+        'Expected 3 arguments in this order: default-log-level discovery-server-port project-directory-path');
     exit(1);
   }
 
@@ -35,8 +36,10 @@ void main(List<String> arguments) async {
     exit(1);
   }
 
+  final projectDirectoryPath = arguments[2];
+
   WidgetsFlutterBinding.ensureInitialized();
-  setUpChannels(discoveryServerPort);
+  setUpChannels(discoveryServerPort, projectDirectoryPath);
 }
 
 void _setUpLog() {
@@ -46,17 +49,22 @@ void _setUpLog() {
   logCurrentProcessInformation(_logger, LogLevel.FINE);
 }
 
-void setUpChannels(int discoveryServerPort) async {
+void setUpChannels(int discoveryServerPort, String projectDirectoryPath) async {
   _logger.info('Will use discovery server at port $discoveryServerPort');
+  _logger.info('Will use project directory path: $projectDirectoryPath');
+
   var channel = constructClientChannel(discoveryServerPort);
   var discoveryClient = MonarchDiscoveryApiClient(channel);
 
   var previewNotifications = PreviewNotifications(discoveryClient);
   var channelMethodsSender = ChannelMethodsSender();
 
+  var monarchYamlReader = MonarchYamlReader(projectDirectoryPath);
+  await monarchYamlReader.read();
+
   var server = createServer([
     PreviewApiService(projectDataManager, selectionsStateManager,
-        previewNotifications, channelMethodsSender)
+        previewNotifications, channelMethodsSender, monarchYamlReader)
   ]);
   await server.serve(port: 0);
   var previewApiPort = server.port!;
