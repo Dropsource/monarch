@@ -35,7 +35,7 @@ class TreeView extends StatefulWidget {
     this.focusNode,
     required this.treeController,
     this.onNodeChanged,
-  })  : nodes = copyTreeNodes(nodes, treeController.keyProvider);
+  }) : nodes = copyTreeNodes(nodes, treeController.keyProvider);
 
   @override
   TreeViewState createState() => TreeViewState();

@@ -5,8 +5,7 @@ const _menuPadding = 4.0;
 
 /// StockholmMenu with a ListView child instead of an IntrinsicWidth child.
 class ScrollableStockholmMenu extends StockholmMenu {
-  const ScrollableStockholmMenu(
-      {required super.items, super.width, super.key});
+  const ScrollableStockholmMenu({required super.items, super.width, super.key});
 
   @override
   Widget build(BuildContext context) {

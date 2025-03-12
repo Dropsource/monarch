@@ -97,7 +97,6 @@ class ControlPanel extends StatelessWidget {
             controlWidth: controlWidth,
           ),
           const ControlPanelDivider(),
-
           LabeledControl(
             label: 'controls.scale',
             control: DropDown<StoryScaleDefinition>(
@@ -125,7 +124,6 @@ class ControlPanel extends StatelessWidget {
               controlWidth: controlWidth,
             ),
           const ControlPanelDivider(),
-
           LabeledControl(
             label: 'controls.visual_debugging',
             control: CheckboxList(
