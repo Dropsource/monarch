@@ -19,15 +19,19 @@ class MonarchYamlReader with Log {
 
   Future<void> read() async {
     final monarchYamlFile = File(monarchYamlPath);
+    log.fine('Looking for monarch.yaml at $monarchYamlPath');
     if (!await monarchYamlFile.exists()) {
+      log.fine('monarch.yaml not found');
       _hasYamlFile = false;
       return;
     }
+    log.fine('monarch.yaml found');
     _hasYamlFile = true;
 
     try {
       final contents = await monarchYamlFile.readAsString();
       devices.addAll(getDevicesFromMonarchYaml(contents));
+      log.fine('Found ${devices.length} devices in monarch.yaml');
     } catch (err, stack) {
       log.warning('Error processing monarch.yaml file', err, stack);
     }

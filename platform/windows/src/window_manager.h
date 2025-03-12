@@ -43,7 +43,8 @@ public:
 		std::string previewServerBundlePath,
 		std::string previewWindowBundlePath,
 		std::string defaultLogLevelString,
-		std::string cliGrpcServerPort);
+		std::string cliGrpcServerPort,
+		std::string projectDirectoryPath);
 	~PreviewWindowManager();
 
 	HWND controllerWindowHandle;
@@ -67,6 +68,7 @@ private:
 	std::string _previewApiBundlePath;
 	std::string _defaultLogLevelString;
 	std::string _cliGrpcServerPort;
+	std::string _projectDirectoryPath;
 
 	std::unique_ptr<PreviewWindow> _previewWindow;
 	std::unique_ptr<PreviewApiRunner> _previewApi;

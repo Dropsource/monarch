@@ -357,7 +357,6 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
           defaultLogLevel.name, // log-level
           discoveryServerPort.toString(), // discovery-server-port
           config.pubspecProjectName, // project-name
-          config.projectDirectory.path, // project-directory-path
         ],
         workingDirectory: projectDirectory.path,
         analytics: analytics,
