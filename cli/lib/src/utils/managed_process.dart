@@ -116,15 +116,10 @@ class ManagedProcess {
 /// stdout and stderr streams after the process starts.
 abstract class ThrowsManagedProcess extends ManagedProcess {
   ThrowsManagedProcess(
-      {required String loggerName,
-      required String executable,
-      required List<String> arguments,
-      String? workingDirectory})
-      : super(
-            loggerName: loggerName,
-            executable: executable,
-            arguments: arguments,
-            workingDirectory: workingDirectory);
+      {required super.loggerName,
+      required super.executable,
+      required super.arguments,
+      super.workingDirectory});
 
   @override
   Future<void> start() async {

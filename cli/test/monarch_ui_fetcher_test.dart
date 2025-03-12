@@ -580,17 +580,11 @@ class TestFetcher extends MonarchUiFetcher {
   bool zipFileDeleted = false;
 
   TestFetcher(
-      {required StandardOutput stdout_,
-      required MonarchBinaries monarchBinaries,
-      required String binariesVersionNumber,
-      required FlutterSdkId id,
-      required String userDeviceId})
-      : super(
-            stdout_: stdout_,
-            monarchBinaries: monarchBinaries,
-            binariesVersionNumber: binariesVersionNumber,
-            id: id,
-            userDeviceId: userDeviceId);
+      {required super.stdout_,
+      required super.monarchBinaries,
+      required super.binariesVersionNumber,
+      required super.id,
+      required super.userDeviceId});
 
   @override
   VersionApi getVersionApi(String userDeviceId) => mockVersionApi;

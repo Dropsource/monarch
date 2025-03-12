@@ -85,12 +85,14 @@ PreviewWindowManager::PreviewWindowManager(
 	std::string previewApiBundlePath,
 	std::string previewWindowBundlePath,
 	std::string defaultLogLevelString,
-	std::string cliGrpcServerPort)
+	std::string cliGrpcServerPort,
+	std::string projectDirectoryPath)
 {
 	_previewApiBundlePath = previewApiBundlePath;
 	_previewWindowBundlePath = previewWindowBundlePath;
 	_defaultLogLevelString = defaultLogLevelString;
 	_cliGrpcServerPort = cliGrpcServerPort;
+	_projectDirectoryPath = projectDirectoryPath; 
 
 	_previewApi = nullptr;
 	_previewWindow = nullptr;
@@ -124,7 +126,7 @@ void PreviewWindowManager::launchPreviewWindow()
 void PreviewWindowManager::runPreviewApi()
 {
 	flutter::DartProject previewApiProject(to_wstring(_previewApiBundlePath));
-	std::vector<std::string> apiArguments = { _defaultLogLevelString, _cliGrpcServerPort };
+	std::vector<std::string> apiArguments = { _defaultLogLevelString, _cliGrpcServerPort, _projectDirectoryPath };
 	previewApiProject.set_dart_entrypoint_arguments(apiArguments);
 
 	_previewApi = std::make_unique<PreviewApiRunner>(previewApiProject);

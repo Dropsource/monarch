@@ -9,10 +9,10 @@ class CheckboxList extends StatelessWidget {
   final Function(String, bool)? onFlagToggled;
 
   const CheckboxList({
-    Key? key,
+    super.key,
     required this.visualDebugFlags,
     this.onFlagToggled,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

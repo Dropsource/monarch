@@ -19,15 +19,14 @@ class DropDown<T> extends StatelessWidget {
   T get(String val) => stringfiedValues[val]!;
 
   DropDown({
-    Key? key,
+    super.key,
     required this.currentValue,
     required this.values,
     this.onChange,
     required this.toStringFunction,
     this.horizontalPadding = 16,
     this.skipTraversal = false,
-  })  : stringfiedValues = {for (var e in values) toStringFunction(e): e},
-        super(key: key);
+  }) : stringfiedValues = {for (var e in values) toStringFunction(e): e};
 
   @override
   Widget build(BuildContext context) => StockholmDropdownButton<String>(

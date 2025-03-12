@@ -1,3 +1,7 @@
+### 1.7.0
+2025-03011
+- Adds enum values to `MonarchTargetPlatform`: macos, windows, linux
+
 ### 1.6.0
 2025-03-10
 - Update dependencies and sdk.

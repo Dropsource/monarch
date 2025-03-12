@@ -120,6 +120,7 @@ Future<Map<String, List<TestResult>>> testAllModulesSingleFlutterSdk(
 
   results.add(await _test(flutter_sdk, monarch_exe_, 'cli'));
   results.add(await _test(flutter_sdk, monarch_exe_, 'controller'));
+  results.add(await _test(flutter_sdk, monarch_exe_, 'preview_api'));
   results.add(await _test(flutter_sdk, monarch_exe_, 'packages/monarch'));
   results.add(
       await _test(flutter_sdk, monarch_exe_, 'packages/monarch_io_utils'));

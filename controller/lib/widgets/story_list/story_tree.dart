@@ -14,12 +14,12 @@ class StoryTree extends StatefulWidget {
   final Function(StoryId)? onStorySelected;
 
   const StoryTree({
-    Key? key,
+    super.key,
     required this.filteredStories,
     this.focusNode,
     this.onStorySelected,
     this.query = '',
-  }) : super(key: key);
+  });
 
   @override
   State<StoryTree> createState() => _StoryTreeState();

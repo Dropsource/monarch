@@ -11,7 +11,7 @@ class LabeledControl extends Padding {
   final bool shouldTranslate;
 
   LabeledControl({
-    Key? key,
+    super.key,
     required this.label,
     required this.control,
     this.controlWidth = 340,
@@ -20,7 +20,6 @@ class LabeledControl extends Padding {
     this.horizontalPadding = 0,
     this.shouldTranslate = true,
   }) : super(
-          key: key,
           padding: EdgeInsets.symmetric(
               vertical: verticalPadding, horizontal: horizontalPadding),
           child: Row(

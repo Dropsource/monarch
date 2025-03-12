@@ -11,10 +11,10 @@ class NumberedSlider extends StatefulWidget {
   final Function(double) onChanged;
 
   const NumberedSlider({
-    Key? key,
+    super.key,
     this.initialValue = 1.0,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<NumberedSlider> createState() => _NumberedSlideState();

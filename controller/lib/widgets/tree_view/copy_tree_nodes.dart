@@ -1,4 +1,4 @@
-///Code credits to https://pub.dev/packages/flutter_simple_treeview
+//Code credits to https://pub.dev/packages/flutter_simple_treeview
 
 import 'primitives/key_provider.dart';
 import 'primitives/tree_node.dart';

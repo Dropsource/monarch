@@ -94,6 +94,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
     std::string previewWindowBundlePath = trim_copy(arguments[2]);
     std::string defaultLogLevelString = trim_copy(arguments[3]);
     std::string cliGrpcServerPort = trim_copy(arguments[4]);
+    std::string projectDirectoryPath = trim_copy(arguments[5]);
 
     defaultLogLevel = logLevelFromString(defaultLogLevelString);
 
@@ -103,7 +104,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
       previewApiBundlePath,
       previewWindowBundlePath,
       defaultLogLevelString,
-      cliGrpcServerPort);
+      cliGrpcServerPort,
+      projectDirectoryPath);
     manager.launchPreviewWindow();
     manager.runPreviewApi();
     manager.setUpChannels();

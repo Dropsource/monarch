@@ -1,3 +1,6 @@
+## 2.2.0 - 2025-03-12
+- monarch.yaml: passes project directory path to preview_api.
+
 ## 2.1.1 - 2022-06-02
 - Updated `defaultDeviceDefinition` to iPhone 14 data
 

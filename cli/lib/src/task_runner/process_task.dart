@@ -192,25 +192,16 @@ class ProcessReadyTask extends ProcessTask implements ReadyTask {
   final bool expectReadyMessageOnce;
 
   ProcessReadyTask(
-      {required String taskName,
-      required String executable,
-      required List<String> arguments,
-      required String workingDirectory,
-      required Analytics analytics,
-      RegExp? logLevelRegex,
-      List<int>? successExitCodes,
-      OnStdErrMessageFn? onStdErrMessage,
+      {required super.taskName,
+      required super.executable,
+      required super.arguments,
+      required super.workingDirectory,
+      required super.analytics,
+      super.logLevelRegex,
+      super.successExitCodes,
+      super.onStdErrMessage,
       required this.readyMessage,
-      this.expectReadyMessageOnce = true})
-      : super(
-            taskName: taskName,
-            executable: executable,
-            arguments: arguments,
-            workingDirectory: workingDirectory,
-            analytics: analytics,
-            logLevelRegex: logLevelRegex,
-            onStdErrMessage: onStdErrMessage,
-            successExitCodes: successExitCodes);
+      this.expectReadyMessageOnce = true});
 
   Completer? _readyCompleter;
   final _readyStopwatch = Stopwatch();
@@ -281,24 +272,15 @@ class ProcessParentReadyTask extends ProcessReadyTask {
   StreamSubscription? _childTaskMessagesSubscription;
 
   ProcessParentReadyTask(
-      {required String taskName,
-      required String executable,
-      required List<String> arguments,
-      required String workingDirectory,
-      required Analytics analytics,
-      List<int>? successExitCodes,
-      required String readyMessage,
-      bool expectReadyMessageOnce = true,
-      required this.childTaskMessages})
-      : super(
-            taskName: taskName,
-            executable: executable,
-            arguments: arguments,
-            workingDirectory: workingDirectory,
-            analytics: analytics,
-            readyMessage: readyMessage,
-            expectReadyMessageOnce: expectReadyMessageOnce,
-            successExitCodes: successExitCodes);
+      {required super.taskName,
+      required super.executable,
+      required super.arguments,
+      required super.workingDirectory,
+      required super.analytics,
+      super.successExitCodes,
+      required super.readyMessage,
+      super.expectReadyMessageOnce,
+      required this.childTaskMessages});
 
   @override
   Future run() async {

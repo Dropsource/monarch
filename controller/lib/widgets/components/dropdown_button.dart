@@ -18,8 +18,8 @@ class StockholmDropdownButton<T> extends StatefulWidget {
     ),
     this.width,
     this.skipTraversal = false,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final List<StockholmDropdownItem<T>> items;
   final ValueChanged<T> onChanged;
@@ -122,8 +122,8 @@ class StockholmDropdownItem<T> extends StatelessWidget {
   const StockholmDropdownItem({
     required this.value,
     required this.child,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final T value;
   final Widget child;

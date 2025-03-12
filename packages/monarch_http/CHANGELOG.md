@@ -1,3 +1,6 @@
+## 1.3.1 - 2025-03-10
+- Upgrades monarch_utils dep
+
 ## 1.3.0 - 2025-03-06
 - Upgrades major versions of dependencies: http, lints
 - Upgrade sdk

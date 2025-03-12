@@ -1,4 +1,5 @@
 @TestOn('mac-os')
+library;
 
 import 'package:test/test.dart';
 import 'package:monarch_cli/src/upgrade/upgrade_validator.dart';
