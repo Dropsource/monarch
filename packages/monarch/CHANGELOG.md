@@ -1,5 +1,6 @@
 ### 3.9.2
 - Upgrades monarch_definitions to 1.7.0
+- Removes monarch intro video from readme
 
 ### 3.9.1
 - Upgrades monarch_* dependencies
