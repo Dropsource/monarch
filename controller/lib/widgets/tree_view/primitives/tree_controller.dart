@@ -1,4 +1,4 @@
-///Code credits to https://pub.dev/packages/flutter_simple_treeview
+//Code credits to https://pub.dev/packages/flutter_simple_treeview
 
 import 'package:flutter/foundation.dart';
 import 'package:monarch_controller/widgets/tree_view/primitives/key_provider.dart';

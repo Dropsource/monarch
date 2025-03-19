@@ -317,6 +317,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
           defaultLogLevel.name, // log-level
           discoveryServerPort.toString(), // discovery-server-port
           config.pubspecProjectName, // project-name
+          config.projectDirectory.path, // project-directory-path
         ],
         workingDirectory: projectDirectory.path,
         analytics: analytics,
@@ -336,6 +337,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
           p.join(projectDirectory.path, dotMonarch), // preview-window-bundle
           defaultLogLevel.name, // log-level
           discoveryServerPort.toString(), // discovery-server-port
+          config.projectDirectory.path, // project-directory-path
         ],
         workingDirectory: projectDirectory.path,
         analytics: analytics,
@@ -578,8 +580,6 @@ $monarchIsReady. Project changes will reload automatically with hot restart.''')
         stdout_default.writeln('''
 $monarchIsReady. Press "r" or "R" to reload project changes.''');
         break;
-
-      default:
     }
   }
 }

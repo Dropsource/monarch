@@ -40,7 +40,6 @@ abstract class TasksManager with Log {
           }
           break;
 
-        default:
       }
     });
   }

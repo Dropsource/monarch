@@ -143,7 +143,6 @@ class AttachTask with Log {
         stdout_default.writeln();
         stdout_default.writeln('Could not find DevTools URI.');
         break;
-      default:
     }
   }
 }

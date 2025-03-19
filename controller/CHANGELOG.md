@@ -1,3 +1,8 @@
+## 1.5.1 - 2025-03-10
+- Upgrades dependencies and sdk
+- Fixes lints
+- Puts back dock dropdown
+
 ## 1.4.2 - 2024-01-17
 - Use latest version of stockholm via fork
 

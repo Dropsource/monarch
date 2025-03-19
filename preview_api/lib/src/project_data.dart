@@ -5,12 +5,11 @@ import 'package:monarch_grpc/monarch_grpc.dart';
 
 class ProjectData extends ProjectDataDefinition {
   ProjectData({
-    required String packageName,
+    required super.packageName,
     required Map<String, MetaStoriesDefinition> storiesMap,
     required List<MetaThemeDefinition> themes,
     required List<MetaLocalizationDefinition> localizations,
   }) : super(
-            packageName: packageName,
             metaStoriesDefinitionMap: storiesMap,
             metaThemeDefinitions: themes,
             metaLocalizationDefinitions: localizations);

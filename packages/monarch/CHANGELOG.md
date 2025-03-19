@@ -1,3 +1,9 @@
+### 3.9.2
+- Upgrades monarch_definitions to 1.7.0
+
+### 3.9.1
+- Upgrades monarch_* dependencies
+
 ### 3.9.0
 2025-03-06
 - Upgrades dependencies: source_gen, dart_style, analyzer, lints

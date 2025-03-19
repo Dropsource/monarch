@@ -1,6 +1,7 @@
 import 'package:grpc/grpc.dart';
 import 'package:monarch_definitions/monarch_definitions.dart';
 import 'package:monarch_grpc/monarch_grpc.dart';
+import 'package:preview_api/src/monarch_yaml_reader.dart';
 import 'package:preview_api/src/selections_state.dart';
 import 'channel_methods_sender.dart';
 import 'device_definitions.dart';
@@ -13,12 +14,14 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
   final SelectionsStateManager selectionsStateManager;
   final PreviewNotifications previewNotifications;
   final ChannelMethodsSender channelMethodsSender;
+  final MonarchYamlReader monarchYamlReader;
 
   PreviewApiService(
     this.projectDataManager,
     this.selectionsStateManager,
     this.previewNotifications,
     this.channelMethodsSender,
+    this.monarchYamlReader,
   ) {
     selectionsStateManager.stream
         .listen((state) => previewNotifications.selectionsStateChanged(state));
@@ -70,11 +73,16 @@ class PreviewApiService extends MonarchPreviewApiServiceBase {
   @override
   Future<ReferenceDataInfo> getReferenceData(ServiceCall call, Empty request) =>
       Future.value(ReferenceDataInfo(
-          devices: deviceDefinitions.map((e) => DeviceInfoMapper().toInfo(e)),
+          devices:
+              _getDeviceDefinitions().map((e) => DeviceInfoMapper().toInfo(e)),
           standardThemes: standardMetaThemeDefinitions
               .map((e) => ThemeInfoMapper().toInfo(e)),
           scales:
               storyScaleDefinitions.map((e) => ScaleInfoMapper().toInfo(e))));
+
+  List<DeviceDefinition> _getDeviceDefinitions() => monarchYamlReader.hasDevices
+      ? [defaultDeviceDefinition, ...monarchYamlReader.devices]
+      : deviceDefinitions;
 
   @override
   Future<ProjectDataInfo> getProjectData(ServiceCall call, Empty request) =>

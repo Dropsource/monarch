@@ -1,3 +1,7 @@
+## 2.5.1 - 2025-03-10
+- Upgrades dependencies, dart sdk, and flutter sdk.
+- Reads monarch.yaml
+
 ## 2.4.1 - 2023-11-02
 - Use point versions for monarch_* packages.
 - Using monarch_definitions `1.5.1` which rolls back Material 3 standard themes.

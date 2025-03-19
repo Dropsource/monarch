@@ -1,6 +1,6 @@
-/// Tracks hot reload crash documented here:
-/// - https://github.com/flutter/flutter/issues/120841
-/// - https://github.com/Dropsource/monarch/issues/72
+// Tracks hot reload crash documented here:
+// - https://github.com/flutter/flutter/issues/120841
+// - https://github.com/Dropsource/monarch/issues/72
 
 import '../version_api/notification.dart';
 

@@ -22,6 +22,7 @@ class WindowManager {
     var controllerBundlePath: String?
     var cliGrpcServerPort: String?
     var projectName: String?
+    var projectDirectoryPath: String?
     
     var previewApi: FlutterEngine?
     var controllerWindow: NSWindow?
@@ -57,8 +58,8 @@ class WindowManager {
         
         logger.fine("arguments \(arguments)");
         
-        if (arguments.count < 7) {
-            fatalError("Expected 6 arguments in this order: executable-path preview-api-bundle preview-window-bundle controller-bundle log-level cli-grpc-server-port project-name")
+        if (arguments.count < 8) {
+            fatalError("Expected 7 arguments in this order: executable-path preview-api-bundle preview-window-bundle controller-bundle log-level cli-grpc-server-port project-name project-directory-path")
         }
         
         previewApiBundlePath = arguments[1]
@@ -67,6 +68,7 @@ class WindowManager {
         defaultLogLevel = logLevelFromString(levelString: arguments[4])
         cliGrpcServerPort = arguments[5]
         projectName = arguments[6]
+        projectDirectoryPath = arguments[7]
         
         self._loadWindows()
     }
@@ -77,7 +79,7 @@ class WindowManager {
         let controllerProject = _initDartProject(controllerBundlePath!)
         
         previewApiProject.dartEntrypointArguments = [
-            logLevelToString(level: defaultLogLevel), cliGrpcServerPort!]
+            logLevelToString(level: defaultLogLevel), cliGrpcServerPort!, projectDirectoryPath!]
         previewWindowProject.dartEntrypointArguments = [
             logLevelToString(level: defaultLogLevel)]
         controllerProject.dartEntrypointArguments = [

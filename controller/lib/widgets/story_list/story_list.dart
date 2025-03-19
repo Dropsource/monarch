@@ -10,12 +10,12 @@ import '../components/no_stories_found_text.dart';
 
 class StoryList extends StatefulWidget {
   const StoryList({
-    Key? key,
+    super.key,
     required this.stories,
     required this.projectName,
     required this.manager,
     this.activeStoryId,
-  }) : super(key: key);
+  });
 
   final List<StoryGroup> stories;
   final String projectName;

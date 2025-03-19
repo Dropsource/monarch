@@ -7,8 +7,7 @@ class TextWithHighlight extends StatelessWidget {
   final String text;
 
   const TextWithHighlight(
-      {Key? key, required this.text, this.highlightedText = ''})
-      : super(key: key);
+      {super.key, required this.text, this.highlightedText = ''});
 
   @override
   Widget build(BuildContext context) {
