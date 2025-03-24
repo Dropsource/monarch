@@ -40,6 +40,9 @@ static char* get_cli_grpc_server_port(MonarchApplication* application) {
 static char* get_project_name(MonarchApplication* application) {
   return application->command_line_arguments[5];
 }
+static char* get_project_directory_path(MonarchApplication* application) {
+  return application->command_line_arguments[6];
+}
 
 static FlDartProject* init_dart_project(gchar* bundle_path) {
   // g_message("init project: %s", bundle_path);
@@ -63,6 +66,7 @@ static void set_preview_api_args(MonarchApplication* self,
   g_ptr_array_add(args_array, const_cast<char*>(get_default_log_level(self)));
   g_ptr_array_add(args_array,
                   const_cast<char*>(get_cli_grpc_server_port(self)));
+  g_ptr_array_add(args_array, const_cast<char*>(get_project_directory_path(self)));
   g_ptr_array_add(args_array, nullptr);
   gchar** args = reinterpret_cast<gchar**>(g_ptr_array_free(args_array, false));
 
@@ -248,11 +252,11 @@ static gboolean monarch_application_local_command_line(
     GApplication* application, gchar*** arguments, int* exit_status) {
   MonarchApplication* self = MONARCH_APPLICATION(application);
 
-  if (g_strv_length(*arguments) < 7) {
+  if (g_strv_length(*arguments) < 8) {
     g_warning(
         "Expected 7 arguments in this order: executable-path "
         "preview-api-bundle preview-window-bundle controller-bundle log-level "
-        "cli-grpc-server-port project-name");
+        "cli-grpc-server-port project-name project-directory-path");
     *exit_status = 1;
     return TRUE;
   }

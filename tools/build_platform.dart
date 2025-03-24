@@ -475,13 +475,13 @@ void buildLinux(
 
     {
       // Rename gen/*.cc to *.cc.bak
-      renameToBak(p.join(repo_paths.platform_linux_gen, 'main.cc'));
-      renameToBak(p.join(repo_paths.platform_linux_gen, 'my_application.cc'));
-      renameToBak(p.join(repo_paths.platform_linux_gen, 'my_application.h'));
+      renameToBak(p.join(repo_paths.platform_linux_gen, 'runner', 'main.cc'));
+      renameToBak(p.join(repo_paths.platform_linux_gen, 'runner', 'my_application.cc'));
+      renameToBak(p.join(repo_paths.platform_linux_gen, 'runner', 'my_application.h'));
     }
   }
 
-  var cmakelists_txt = p.join(repo_paths.platform_linux_gen, 'CMakeLists.txt');
+  var cmakelists_txt = p.join(repo_paths.platform_linux_gen, 'runner', 'CMakeLists.txt');
 
   {
     print('Including src files in CMakeLists.txt...');
@@ -494,7 +494,7 @@ void buildLinux(
     srcFiles = srcFiles.where(_isSourceFile).toList();
     var buffer = StringBuffer();
     for (var srcFile in srcFiles) {
-      var _path = p.relative(srcFile.path, from: repo_paths.platform_linux_gen);
+      var _path = p.relative(srcFile.path, from: p.join(repo_paths.platform_linux_gen, 'runner'));
       buffer.writeln('  "$_path"');
     }
 
