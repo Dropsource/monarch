@@ -1,3 +1,7 @@
+## 3.1.1 - 2025-04-01
+- Bumps monarch package compatibility to 3.9.2 due to new 
+  monarch definitions.
+
 ## 3.1.0 - 2025-03-10
 - Upgrades monarch_* package dependencies
 - Sets dart sdk constraint to ^3.2.0

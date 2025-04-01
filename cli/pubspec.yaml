@@ -1,6 +1,6 @@
 name: monarch_cli
 description: Command-line interface for Monarch binaries.
-version: 3.1.0
+version: 3.1.1
 publish_to: none
 
 environment:
