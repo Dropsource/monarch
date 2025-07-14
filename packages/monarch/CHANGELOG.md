@@ -1,3 +1,6 @@
+### 3.9.3
+- Upgrades vm_service dependency to `>=9.4.0 <16.0.0`.
+
 ### 3.9.2
 - Upgrades monarch_definitions to 1.7.0
 - Removes monarch intro video from readme
