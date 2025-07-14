@@ -1,3 +1,6 @@
+### 3.9.4
+- Sets build_runner dependency to `>=2.1.11 <=2.4.15`.
+
 ### 3.9.3
 - Upgrades vm_service dependency to `>=9.4.0 <16.0.0`.
 
