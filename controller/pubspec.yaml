@@ -1,6 +1,6 @@
 name: monarch_controller
 description: Monarch Controller UI
-publish_to: 'none'
+publish_to: "none"
 version: 1.5.1
 
 environment:

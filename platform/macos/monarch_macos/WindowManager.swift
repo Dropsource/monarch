@@ -11,6 +11,8 @@ import Foundation
 import Cocoa
 import FlutterMacOS
 import os.log
+import rive_common
+import rive_native
 
 class WindowManager {
 #if USE_FLUTTER_APP_DELEGATE
@@ -136,6 +138,9 @@ class WindowManager {
         _setUpControllerWindow(controllerFVC, controllerWindow!)
         _setUpPreviewWindow(previewFVC, previewWindow!)
         
+        RivePlugin.register(with: previewFVC.engine.registrar(forPlugin: "RivePlugin"))
+        RiveNativePlugin.register(with: previewFVC.engine.registrar(forPlugin: "RiveNativePlugin"))
+        
         // bring windows to front
         NSApp.activate(ignoringOtherApps: true)
         
@@ -165,6 +170,7 @@ class WindowManager {
         
         previewWindow = NSWindow()
         _setUpPreviewWindow(previewViewController!, previewWindow!)
+        RivePlugin.register(with: previewViewController!.engine.registrar(forPlugin: "RivePlugin"))
         _setUpObservers(controllerWindow!, previewWindow!)
         resizePreviewWindow()
 

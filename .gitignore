@@ -10,3 +10,8 @@ out/
 /controller/.flutter-plugins-dependencies
 /controller/.monarch
 .idea/
+
+# CocoaPods
+Pods/
+Podfile.lock
+*.xcworkspace
