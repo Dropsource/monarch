@@ -1,6 +1,0 @@
-framework module rive_common {
-  umbrella header "rive_common-umbrella.h"
-
-  export *
-  module * { export * }
-}

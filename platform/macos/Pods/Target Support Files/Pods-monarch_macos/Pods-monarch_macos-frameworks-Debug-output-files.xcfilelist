@@ -1,3 +1,0 @@
-${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FlutterMacOS.framework
-${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/rive_common.framework
-${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/rive_native.framework
