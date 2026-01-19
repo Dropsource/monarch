@@ -1,0 +1,6 @@
+framework module rive_native {
+  umbrella header "rive_native-umbrella.h"
+
+  export *
+  module * { export * }
+}

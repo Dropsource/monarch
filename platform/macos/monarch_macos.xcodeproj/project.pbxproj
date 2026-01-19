@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		049CA4F5AC92C1F79B42E6A8 /* Pods_monarch_macos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF993AFD64342745BADEB7DD /* Pods_monarch_macos.framework */; };
 		C82C966627FB8F0E00DC66AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C966527FB8F0E00DC66AA /* AppDelegate.swift */; };
 		C82C966827FB8F0E00DC66AA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82C966727FB8F0E00DC66AA /* ViewController.swift */; };
 		C82C966A27FB8F0F00DC66AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C82C966927FB8F0F00DC66AA /* Assets.xcassets */; };
@@ -30,7 +31,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				C82C968C2805DB1A00DC66AA /* FlutterMacOS.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -38,6 +38,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0EB42B490230D9CB972AC1CC /* Pods-monarch_macos.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-monarch_macos.debug.xcconfig"; path = "Target Support Files/Pods-monarch_macos/Pods-monarch_macos.debug.xcconfig"; sourceTree = "<group>"; };
 		C82C966227FB8F0E00DC66AA /* Monarch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Monarch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C82C966527FB8F0E00DC66AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C82C966727FB8F0E00DC66AA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -56,6 +57,8 @@
 		C82C9691280F41B200DC66AA /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		C85FB9D128298C020062D640 /* MonarchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonarchState.swift; sourceTree = "<group>"; };
 		C85FB9D328298E530062D640 /* ScaleDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleDefinition.swift; sourceTree = "<group>"; };
+		D4E5D50F0D7B090CE98A98ED /* Pods-monarch_macos.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-monarch_macos.release.xcconfig"; path = "Target Support Files/Pods-monarch_macos/Pods-monarch_macos.release.xcconfig"; sourceTree = "<group>"; };
+		EF993AFD64342745BADEB7DD /* Pods_monarch_macos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_monarch_macos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,12 +67,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				C82C968B2805DB1900DC66AA /* FlutterMacOS.framework in Frameworks */,
+				049CA4F5AC92C1F79B42E6A8 /* Pods_monarch_macos.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4970AE3383E595E4A047210B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0EB42B490230D9CB972AC1CC /* Pods-monarch_macos.debug.xcconfig */,
+				D4E5D50F0D7B090CE98A98ED /* Pods-monarch_macos.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		C82C965927FB8F0E00DC66AA = {
 			isa = PBXGroup;
 			children = (
@@ -79,6 +93,7 @@
 				C82C966427FB8F0E00DC66AA /* monarch_macos */,
 				C82C966327FB8F0E00DC66AA /* Products */,
 				C82C968427FE382E00DC66AA /* Frameworks */,
+				4970AE3383E595E4A047210B /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -114,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				C82C968527FE382E00DC66AA /* FlutterMacOS.framework */,
+				EF993AFD64342745BADEB7DD /* Pods_monarch_macos.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -125,10 +141,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C82C967127FB8F0F00DC66AA /* Build configuration list for PBXNativeTarget "monarch_macos" */;
 			buildPhases = (
+				04851C54DFDF2FDBD23EB3E6 /* [CP] Check Pods Manifest.lock */,
 				C82C965E27FB8F0E00DC66AA /* Sources */,
 				C82C965F27FB8F0E00DC66AA /* Frameworks */,
 				C82C966027FB8F0E00DC66AA /* Resources */,
 				C82C968D2805DB1A00DC66AA /* Embed Frameworks */,
+				1E8794610E2BB4C34C37C20D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -183,6 +201,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		04851C54DFDF2FDBD23EB3E6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-monarch_macos-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1E8794610E2BB4C34C37C20D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-monarch_macos/Pods-monarch_macos-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-monarch_macos/Pods-monarch_macos-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-monarch_macos/Pods-monarch_macos-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C82C965E27FB8F0E00DC66AA /* Sources */ = {
@@ -333,14 +393,15 @@
 		};
 		C82C967227FB8F0F00DC66AA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0EB42B490230D9CB972AC1CC /* Pods-monarch_macos.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = monarch_macos/monarch_macos.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CTY49PK23Z;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -365,14 +426,15 @@
 		};
 		C82C967327FB8F0F00DC66AA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D4E5D50F0D7B090CE98A98ED /* Pods-monarch_macos.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = monarch_macos/monarch_macos.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CTY49PK23Z;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

@@ -1,0 +1,4 @@
+${PODS_ROOT}/Target Support Files/Pods-monarch_macos/Pods-monarch_macos-frameworks.sh
+${PODS_ROOT}/FlutterMacOS/FlutterMacOS.framework
+${BUILT_PRODUCTS_DIR}/rive_common/rive_common.framework
+${BUILT_PRODUCTS_DIR}/rive_native/rive_native.framework

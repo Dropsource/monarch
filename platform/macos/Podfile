@@ -1,0 +1,22 @@
+platform :osx, '10.14'
+use_frameworks!
+
+target 'monarch_macos' do
+  pod 'FlutterMacOS'
+  # Link rive pods from local/cache paths
+  pod 'rive_common', :path => '/Users/aesakamar/.pub-cache/hosted/pub.dev/rive_common-0.4.15/macos'
+  pod 'rive_native', :path => '/Users/aesakamar/Code/Aesa/rive_native_local/macos'
+end
+
+post_install do |installer|
+  # This section patches the [CP] Embed Pods Frameworks script to point FlutterMacOS.framework
+  # to the one in the Flutter SDK to ensure version parity.
+  sdk_framework_path = "/Users/aesakamar/fvm/versions/3.24.5/bin/cache/artifacts/engine/darwin-x64/FlutterMacOS.xcframework/macos-arm64_x86_64/FlutterMacOS.framework"
+  
+  script_path = "Pods/Target Support Files/Pods-monarch_macos/Pods-monarch_macos-frameworks.sh"
+  if File.exist?(script_path)
+    contents = File.read(script_path)
+    contents.gsub!(/install_framework "\${PODS_ROOT}\/FlutterMacOS\/FlutterMacOS.framework"/, "install_framework \"#{sdk_framework_path}\"")
+    File.open(script_path, "w") { |file| file.puts contents }
+  end
+end

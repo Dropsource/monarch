@@ -1,0 +1,30 @@
+PODS:
+  - FlutterMacOS (3.16.0)
+  - rive_common (0.0.1):
+    - FlutterMacOS
+  - rive_native (0.0.1):
+    - FlutterMacOS
+
+DEPENDENCIES:
+  - FlutterMacOS
+  - rive_common (from `/Users/aesakamar/.pub-cache/hosted/pub.dev/rive_common-0.4.15/macos`)
+  - rive_native (from `/Users/aesakamar/Code/Aesa/rive_native_local/macos`)
+
+SPEC REPOS:
+  trunk:
+    - FlutterMacOS
+
+EXTERNAL SOURCES:
+  rive_common:
+    :path: "/Users/aesakamar/.pub-cache/hosted/pub.dev/rive_common-0.4.15/macos"
+  rive_native:
+    :path: "/Users/aesakamar/Code/Aesa/rive_native_local/macos"
+
+SPEC CHECKSUMS:
+  FlutterMacOS: e3a770a0491c92e0a818040ef520b21a29defdbc
+  rive_common: ea79040f86acf053a2d5a75a2506175ee39796a5
+  rive_native: 6f146a98daa3a57ed6914102b777786659338ea1
+
+PODFILE CHECKSUM: 6609c52afec01b9a503963bd38a65e774dbce429
+
+COCOAPODS: 1.16.2

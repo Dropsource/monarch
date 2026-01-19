@@ -27,6 +27,7 @@ dependencies:
       ref: monarch_stockholm-1.0.0
   syncfusion_flutter_core: ^28.2.9
   syncfusion_flutter_sliders: ^28.2.9
+  rive: ^0.14.0
 
 dev_dependencies:
   build_runner: ^2.1.11

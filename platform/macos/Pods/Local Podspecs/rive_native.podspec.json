@@ -1,0 +1,36 @@
+{
+  "name": "rive_native",
+  "version": "0.0.1",
+  "summary": "Rive Flutter's native macOS plugin",
+  "description": "Rive Flutter's native macOS plugin",
+  "homepage": "https://rive.app",
+  "license": {
+    "file": "../LICENSE"
+  },
+  "authors": {
+    "Rive": "support@rive.app"
+  },
+  "source": {
+    "path": "."
+  },
+  "source_files": "Classes/**/*",
+  "dependencies": {
+    "FlutterMacOS": []
+  },
+  "platforms": {
+    "osx": "10.11"
+  },
+  "pod_target_xcconfig": {
+    "USER_HEADER_SEARCH_PATHS": "\"$(PODS_TARGET_SRCROOT)/../native/include\"",
+    "LIBRARY_SEARCH_PATHS[config=Release*]": "\"$(PODS_TARGET_SRCROOT)/../native/build/macosx/bin/release\"",
+    "LIBRARY_SEARCH_PATHS[config=Profile*]": "\"$(PODS_TARGET_SRCROOT)/../native/build/macosx/bin/release\"",
+    "LIBRARY_SEARCH_PATHS[config=Debug*]": "\"$(PODS_TARGET_SRCROOT)/../native/build/macosx/bin/release\"",
+    "OTHER_LDFLAGS[config=Release*]": "-Wl,-force_load,$(PODS_TARGET_SRCROOT)/../native/build/macosx/bin/release/librive_native.a -lrive -lrive_pls_renderer -lrive_yoga -lrive_harfbuzz -lrive_sheenbidi -lrive_decoders -llibpng -lzlib -llibjpeg -llibwebp -lrive_scripting_workspace -lluau_vm -lluau_compiler -lluau_analyzer -lstylua_ffi -lminiaudio -lbrotli",
+    "OTHER_LDFLAGS[config=Profile*]": "-Wl,-force_load,$(PODS_TARGET_SRCROOT)/../native/build/macosx/bin/release/librive_native.a -lrive -lrive_pls_renderer -lrive_yoga -lrive_harfbuzz -lrive_sheenbidi -lrive_decoders -llibpng -lzlib -llibjpeg -llibwebp -lrive_scripting_workspace -lluau_vm -lluau_compiler -lluau_analyzer -lstylua_ffi -lminiaudio -lbrotli",
+    "OTHER_LDFLAGS[config=Debug*]": "-Wl,-force_load,$(PODS_TARGET_SRCROOT)/../native/build/macosx/bin/release/librive_native.a -lrive -lrive_pls_renderer -lrive_yoga -lrive_harfbuzz -lrive_sheenbidi -lrive_decoders -llibpng -lzlib -llibjpeg -llibwebp -lrive_scripting_workspace -lluau_vm -lluau_compiler -lluau_analyzer -lstylua_ffi -lminiaudio -lbrotli",
+    "CLANG_CXX_LANGUAGE_STANDARD": "c++17",
+    "CLANG_CXX_LIBRARY": "libc++"
+  },
+  "swift_versions": "5.0",
+  "swift_version": "5.0"
+}

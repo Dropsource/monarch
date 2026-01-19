@@ -84,26 +84,17 @@ void buildMacOs(
   if (monarch_macos_app_dir.existsSync())
     monarch_macos_app_dir.deleteSync(recursive: true);
 
+  print('Running `pod install`...');
+  result = Process.runSync('pod', ['install'],
+      workingDirectory: repo_paths.platform_macos, runInShell: true);
+  utils.exitIfNeeded(result, 'Error running `pod install`');
+
   print('''
 Building $monarch_macos with xcodebuild. Will output to:
   ${out_ui_flutter_id_monarch_macos_app(out_ui_flutter_id)}''');
 
   /// The Flutter macOS API changed between versions. Here we use preprocessor
   /// directives to compile our code with different Flutter versions.
-  ///
-  /// In flutter version 3.11.0-17.0.pre, the flutter team introduced
-  /// FlutterAppDelegate lifecycle methods which is when the embedder error may
-  /// have started. Also, we have to use the lifecycle methods to avoid the embedder error.
-  /// However, those methods are only available after the flutter version above.
-  /// - https://github.com/flutter/engine/pull/42418
-  /// - https://github.com/Dropsource/monarch/pull/127
-  ///
-  /// In flutter version 3.14.0-0.1.pre, the flutter team fixed an issue
-  /// in the flutter engine. As a result, we don't have to use FlutterAppDelegate
-  /// anymore. Monarch macOS works better if we don't use FlutterAppDelegate.
-  /// - https://github.com/flutter/flutter/issues/124829
-  /// - https://github.com/flutter/engine/pull/43425
-  /// - https://github.com/Dropsource/monarch/pull/124
   var flutterVersionWithFlutterAppDelegateChange =
       pub.Version(3, 14, 0, pre: '0.1.pre');
   var flutterVersionWithApplicationLifecycleMethods =
@@ -118,6 +109,8 @@ Building $monarch_macos with xcodebuild. Will output to:
   result = Process.runSync(
       'xcodebuild',
       [
+        '-workspace',
+        '$monarch_macos.xcworkspace',
         '-scheme',
         '$monarch_macos',
         'CONFIGURATION_BUILD_DIR=$out_ui_flutter_id',
