@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:monarch_io_utils/monarch_io_utils.dart';
 
+import 'utils.dart' as utils;
+
 final localRoot = File(Platform.script.toFilePath()).parent.parent.path;
 final os = valueForPlatform(macos: 'macos', windows: 'windows', linux: 'linux');
 
@@ -92,8 +94,10 @@ String monarch_exe(String monarch_dir) =>
 const local_settings_yaml = 'local_settings.yaml';
 
 String get_flutter_version(String flutter_sdk) {
-  var version = File(p.join(flutter_sdk, 'version')).readAsStringSync();
-  return version;
+  var result = Process.runSync('git', ['describe', '--tags'],
+      workingDirectory: flutter_sdk);
+  utils.exitIfNeeded(result, 'Error reading flutter version');
+  return (result.stdout as String).trim();
 }
 
 String get_flutter_channel(String flutter_sdk) {
