@@ -106,7 +106,22 @@ class ProcessTask implements Task {
 
   void _logUsingMessageLogLevel(String message) {
     final logLevel = parseLogLevel(message, logLevelRegex!, LogLevel.FINE);
-    _logger.log(logLevel, message);
+    _logger.log(logLevel, _stripBuildRunnerPrefix(message));
+  }
+
+  /// Strips the build_runner 2.10+ log formatting from a message.
+  /// New build_runner outputs:
+  ///   W monarch:builder on lib/file.dart:\n  line1\n  line2\n
+  /// This strips the header line and the 2-space indentation.
+  static String _stripBuildRunnerPrefix(String message) {
+    // Match single-letter log prefix format: "W ...\n  content"
+    final match = RegExp(r'^[WISF] .+:\n').firstMatch(message);
+    if (match == null) return message;
+    final body = message.substring(match.end);
+    // Remove 2-space indentation from each line
+    return body.splitMapJoin('\n',
+        onNonMatch: (line) =>
+            line.startsWith('  ') ? line.substring(2) : line);
   }
 
   @override

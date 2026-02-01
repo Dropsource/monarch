@@ -32,7 +32,7 @@ class MetaThemesBuilder implements Builder {
     var libraryElement = await buildStep.resolver
         .libraryFor(buildStep.inputId, allowSyntaxErrors: true);
     var library = LibraryReader(libraryElement);
-    var monarchThemeTypeChecker = TypeChecker.fromRuntime(MonarchTheme);
+    var monarchThemeTypeChecker = TypeChecker.typeNamed(MonarchTheme);
 
     final annotations = library.annotatedWith(monarchThemeTypeChecker);
     if (annotations.isEmpty) {
@@ -79,7 +79,7 @@ $monarchWarningEnd
         continue;
       }
 
-      if (element is PropertyAccessorElement && element.isGetter) {
+      if (element is GetterElement) {
         log.fine('Found MonarchTheme annotation on getter: ${element.name}');
         addExpression(annotatedElement);
         continue;

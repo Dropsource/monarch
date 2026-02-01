@@ -5,7 +5,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.2.0
+  sdk: ^3.7.0
 
 dependencies:
   flutter:
@@ -17,7 +17,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-  monarch: ^3.0.0
+  monarch:
+    path: ../../packages/monarch
   build_runner: ^2.1.11
   test_process: 
   async:

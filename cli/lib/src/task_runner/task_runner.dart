@@ -198,7 +198,7 @@ class TaskRunner extends LongRunningCli<CliExitCode> with Log {
         ],
         workingDirectory: projectDirectory.path,
         analytics: analytics,
-        logLevelRegex: RegExp(r'^\[(\w+)\]'));
+        logLevelRegex: RegExp(r'^\[(\w+)\]|^([WISF])\s'));
 
     _buildPreviewBundleTask = ProcessTask(
         taskName: TaskNames.buildPreviewBundle,
