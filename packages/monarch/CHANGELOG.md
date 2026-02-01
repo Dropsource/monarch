@@ -1,3 +1,11 @@
+### 3.10.0
+2026-02-01
+- Upgrades `source_gen` to `^4.0.0`
+- Upgrades `analyzer` to `>=8.1.1 <11.0.0`
+- Upgrades `build` to `^4.0.0`
+- Upgrades Dart SDK constraint to `^3.7.0`
+- Migrates builders to new analyzer/source_gen APIs (`TypeChecker.typeNamed`, `GetterElement`, `name` instead of `name2`)
+
 ### 3.9.3
 - Upgrades vm_service dependency to `>=9.4.0 <16.0.0`.
 

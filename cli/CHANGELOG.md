@@ -1,3 +1,7 @@
+## 3.2.0 - 2026-02-01
+- Updated build_runner log parser to handle both old bracket format (`[WARNING]`) and new single-letter format (`W `) from build_runner 2.10+
+- Strips build_runner prefix and indentation from forwarded warning messages
+
 ## 3.1.1 - 2025-04-01
 - Bumps monarch package compatibility to 3.9.2 due to new 
   monarch definitions.

@@ -11,6 +11,8 @@ If fvm is available, use it.
 - Commits can be one-line, or, if needed, they can be one line and a description
 - The description should be a brief paragraph
 - Do not include Co-Authored-By
+- Document project-wide notes on changes, learnings, and decisions in CHANGELOG.md
+- Document module specific changes in each module's CHANGELOG.md
 
 # Building and testing
 
@@ -30,4 +32,3 @@ If fvm is available, use it.
 ## Testing local monarch package changes
 - Change `test/test_*/pubspec.yaml` to use a path dependency: `monarch: {path: ../../packages/monarch}`
 - This ensures integration tests use local source instead of the pub.dev version
-
