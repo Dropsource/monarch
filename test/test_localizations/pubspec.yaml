@@ -17,8 +17,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-  monarch:
-    path: ../../packages/monarch
+  monarch: ^3.0.0
   build_runner: ^2.1.11
   test_process: 
   async:

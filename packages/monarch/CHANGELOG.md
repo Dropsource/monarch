@@ -4,6 +4,7 @@
 - Upgrades `analyzer` to `>=8.1.1 <11.0.0`
 - Upgrades `build` to `^4.0.0`
 - Upgrades Dart SDK constraint to `^3.7.0`
+- Sets Flutter SDK constraint to `>=3.38.0`
 - Migrates builders to new analyzer/source_gen APIs (`TypeChecker.typeNamed`, `GetterElement`, `name` instead of `name2`)
 
 ### 3.9.3

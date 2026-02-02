@@ -24,6 +24,7 @@ If fvm is available, use it.
 ## Integration tests
 - Located in `test/test_*` directories (test_localizations, test_themes, test_stories, test_create)
 - Run via: `fvm dart tools/test.dart -m test/test_localizations -f /path/to/flutter/sdk`
+- To run all the tests: `fvm dart tools/test.dart`
 - Tests require the built CLI binary (`out/monarch/bin/monarch`)
 - The test script sets `MONARCH_EXE` and `FLUTTER_EXE` env vars; running `dart test` directly won't work
 - Each test launches a full monarch app via `test_process`, so tests are slow (~30s each)

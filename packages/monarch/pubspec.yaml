@@ -23,7 +23,7 @@ screenshots:
 
 environment:
   sdk: ^3.7.0
-  flutter: '>=3.22.0-0.1.pre'
+  flutter: '>=3.38.0'
 
 dependencies:
   flutter:
