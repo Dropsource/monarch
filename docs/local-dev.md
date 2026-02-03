@@ -7,6 +7,10 @@ The build scripts can be run from macOS, Windows, or Linux.
 
 ## Prerequisites
 1. On macOS, make sure you have [Xcode](https://developer.apple.com/xcode/) installed.
+
+   **Note**: The Xcode project is configured with the official Monarch signing identity.
+   To build locally, open `platform/macos/monarch_macos.xcodeproj` and change the Team
+   in Signing & Capabilities to your own Apple Developer account. Don't commit this change.
 2. On Windows, make sure you have [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/) 
    with the “Desktop development with C++” workload installed, including all of its default components.
 3. On Linux, make sure you have the 
