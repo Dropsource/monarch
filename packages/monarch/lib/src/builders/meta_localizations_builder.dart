@@ -33,7 +33,7 @@ class MetaLocalizationsBuilder implements Builder {
         .libraryFor(buildStep.inputId, allowSyntaxErrors: true);
     var library = LibraryReader(libraryElement);
     var monarchLocalizationsTypeChecker =
-        TypeChecker.fromRuntime(MonarchLocalizations);
+        TypeChecker.typeNamed(MonarchLocalizations);
 
     final annotations = library.annotatedWith(monarchLocalizationsTypeChecker);
     if (annotations.isEmpty) {
@@ -90,7 +90,7 @@ $monarchWarningEnd
         continue;
       }
 
-      if (element is PropertyAccessorElement && element.isGetter) {
+      if (element is GetterElement) {
         log.fine('Found MonarchLocalizations on getter: ${element.name}');
         addExpression(annotatedElement);
         continue;

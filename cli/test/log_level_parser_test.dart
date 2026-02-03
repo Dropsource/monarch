@@ -6,7 +6,7 @@ void main() {
   group('parseLogLevel()', () {
     group('extracts log levels ', () {
       test('from builder log messeges', () {
-        final logLevelRegex = RegExp(r'^\[(\w+)\]');
+        final logLevelRegex = RegExp(r'^\[(\w+)\]|^([WISF])\s');
         LogLevel logLevel;
         var fallbackLogLevel = LogLevel.FINE;
 
@@ -30,6 +30,36 @@ void main() {
 
         logLevel = parseLogLevel(
             '[NOT_A_LEVEL] monarch:meta_stories_builder on stories/helper.meta_themes.g.dart:',
+            logLevelRegex,
+            fallbackLogLevel);
+        expect(logLevel, LogLevel.FINE);
+      });
+
+      test('from build_runner 2.10+ short log level format', () {
+        final logLevelRegex = RegExp(r'^\[(\w+)\]|^([WISF])\s');
+        LogLevel logLevel;
+        var fallbackLogLevel = LogLevel.FINE;
+
+        logLevel = parseLogLevel(
+            'W monarch:meta_localizations_builder on lib/localizations.dart:',
+            logLevelRegex,
+            fallbackLogLevel);
+        expect(logLevel, LogLevel.WARNING);
+
+        logLevel = parseLogLevel(
+            'I monarch:meta_stories_builder on lib/main.dart:',
+            logLevelRegex,
+            fallbackLogLevel);
+        expect(logLevel, LogLevel.INFO);
+
+        logLevel = parseLogLevel(
+            'S monarch:meta_stories_builder on lib/main.dart:',
+            logLevelRegex,
+            fallbackLogLevel);
+        expect(logLevel, LogLevel.SEVERE);
+
+        logLevel = parseLogLevel(
+            'F monarch:meta_stories_builder on lib/main.dart:',
             logLevelRegex,
             fallbackLogLevel);
         expect(logLevel, LogLevel.FINE);
